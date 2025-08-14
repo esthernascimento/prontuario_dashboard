@@ -1,0 +1,75 @@
+/* Estilos específicos para a página de pacientes */
+.patients-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .patients-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .patients-header h1 {
+    color: #0023A0;
+    margin: 0;
+  }
+  
+  .patients-header h1 i {
+    margin-right: 10px;
+  }
+  
+  /* Barra de pesquisa e filtros */
+  .search-filters {
+    display: flex;
+    flex-direction: row;
+    width: 450PX;
+    gap: 80px;
+    margin-bottom: 30px;
+  
+  }
+  
+  .search-box {
+    position: relative;
+    flex: 1;
+    min-width: 300px;
+  }
+  
+  .search-box i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+  }
+  
+  .search-box input {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+  }
+  
+  .search-box input:focus {
+    outline: none;
+    border-color: #0023A0;
+    box-shadow: 0 0 0 2px rgba(0, 35, 160, 0.1);
+  }
+  
+  .filters {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .filters select {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: white;
+    cursor: pointer;
+  }
+  

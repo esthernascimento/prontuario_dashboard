@@ -24,3 +24,31 @@ Route::get('/cadastro', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 });
+
+
+Route::get('/', function () {
+    return view('login');
+});
+
+Route::get('/cadastro', function () {
+    return view('cadastro');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
+
+Route::get('/pacientes', function () {
+    return view('pacientes');
+})->name('pacientes');
+
+Route::get('/ajuda', function () {
+    return view('ajuda');
+})->name('ajuda');
+
+Route::get('/seguranca', function () {
+    return view('seguranca');
+})->name('seguranca');
+
+Route::get('/logout', function () {
+})->name('logout');
