@@ -49,6 +49,7 @@ body {
   font-weight: 700;
   font-size: 28px;
   margin-bottom: 20px;
+  margin-left: 50px;
 }
 
 .login-card label {
@@ -56,11 +57,16 @@ body {
   font-weight: 600;
   color: #0618b9;
   margin-top: 10px;
+  margin-left: 50px;
 }
 
 .login-card input {
-  width: 100%;
+  display: flex;
+  width: 70%;
   padding: 10px;
+  justify-content: center;
+  justify-self: center;
+  align-items: center;
   margin-top: 5px;
   border-radius: 20px;
   border: none;

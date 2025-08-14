@@ -6,9 +6,7 @@
   <title>Prontuário+</title>
 
   <link rel="stylesheet" href="{{url('/css/login.css')}}">
-  <link rel="shortcut icon" href="{{url('img/logo-azul')}}" type="image/x-icon" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-
+  <link rel="shortcut icon" href="{{url('img/logo-azul.png')}}" type="image/x-icon" />
 
 </head>
 <body>
@@ -16,7 +14,7 @@
 
     <!-- Lado azul com a logo -->
     <div class="logo-area">
-      <img src="{{asset('img/logo-azul')}}" class="logo">
+      <img src="{{asset('img/logo-branco.png')}}" class="logo">
     </div>
 
     <!-- Card de login -->
