@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-container {
+  flex: 1;
+  display: flex;
+}
+
+.logo-area {
+  background-color: #0618b9;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 80px 80px 0;
+}
+
+.logo-area img {
+  width: 350px;
+  height: auto;
+}
+
+.login-area {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+}
+
+.login-card {
+  background-color: #dcdcf9;
+  padding: 40px;
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 350px;
+}
+
+.login-card h2 {
+  color: #0618b9;
+  font-weight: 700;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.login-card label {
+  display: flex;
+  font-weight: 600;
+  color: #0618b9;
+  margin-top: 10px;
+}
+
+.login-card input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+}
+
+.login-card button {
+  display: flex;
+  justify-self: center;
+  justify-content: center;
+  margin-top: 20px;
+  width: 50%;
+  padding: 10px;
+  background-color: #0618b9;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+a {
+  display: flex;
+  justify-self: center;
+  text-align: center;
+  margin-top: 15px;
+ text-decoration: none;
+}
+
