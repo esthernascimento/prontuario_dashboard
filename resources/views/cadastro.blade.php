@@ -37,6 +37,8 @@
         <input type="password" id="password" name="password" required />
 
         <button class="button" type="submit">CADASTRAR</button>
+        <a href="{{url('/login')}}">Já tem cadastro? <strong>Entrar</strong></a>
+
       </form>
     </div>
 
