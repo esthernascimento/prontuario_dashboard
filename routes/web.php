@@ -17,26 +17,35 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::get('/login', function () {
-    return view('login');
+Route::get('/loginAdm', function () {
+    return view('loginAdm');
 });
 
-Route::get('/cadastro', function () {
-    return view('cadastro');
+Route::get('/loginEnfermeiro', function () {
+    return view('loginEnfermeiro');
+});
+
+Route::get('/loginMedico', function () {
+    return view('loginMedico');
+});
+
+Route::get('/cadastroAdm', function () {
+    return view('cadastroAdm');
+});
+
+Route::get('/cadastroEnfermeiro', function () {
+    return view('cadastroEnfermeiro');
+});
+
+
+Route::get('/cadastroMedico', function () {
+    return view('cadastroMedico');
 });
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 });
 
-
-Route::get('/login', function () {
-    return view('login');
-});
-
-Route::get('/cadastro', function () {
-    return view('cadastro');
-});
 
 Route::get('/dashboard', function () {
     return view('dashboard');

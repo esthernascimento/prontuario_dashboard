@@ -20,15 +20,15 @@
     <!-- Card de login -->
     <div class="login-area">
       <form class="login-card" action="login.php" method="POST">
-        <h2>Login</h2>
-        <label for="email">E-mail</label>
-        <input type="email" id="email" name="email" required />
+        <h2>Enfermeiro(a) Login</h2>
+        <label for="corem">COREM</label>
+        <input type="text" id="corem" name="corem" required />
       
         <label for="senha">Senha</label>
         <input type="password" id="senha" name="senha" required />
       
         <button class="button" type="submit">ENTRAR</button>
       
-        <a href="{{url('/cadastro')}}">Não tem cadastro? <strong>Clique aqui</strong></a>
+        <a href="{{url('/cadastroEnfermeiro')}}">Não tem cadastro? <strong>Clique aqui</strong></a>
       </form>
     </div>      

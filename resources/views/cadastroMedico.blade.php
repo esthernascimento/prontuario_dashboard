@@ -22,7 +22,7 @@
       <form class="cads-card" method="POST" action="/cadastro">
     @csrf
 
-        <h2>Cadastro</h2>
+        <h2>Médico(a) Cadastro</h2>
 
         <label for="name">Nome completo</label>
         <input type="text" id="name" name="name" required />
@@ -37,7 +37,7 @@
         <input type="password" id="password" name="password" required />
 
         <button class="button" type="submit">CADASTRAR</button>
-        <a href="{{url('/login')}}">Já tem cadastro? <strong>Entrar</strong></a>
+        <a href="{{url('/loginMedico')}}">Já tem cadastro? <strong>Entrar</strong></a>
 
       </form>
     </div>
