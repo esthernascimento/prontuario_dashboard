@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Prontuário+</title>
+  <title>Prontuário+ | Admin Login</title>
 
-  <link rel="stylesheet" href="{{url('/css/login.css')}}">
-  <link rel="shortcut icon" href="{{url('img/logo-azul.png')}}" type="image/x-icon" />
+  <link rel="stylesheet" href="{{ url('/css/login.css') }}">
+  <link rel="shortcut icon" href="{{ url('img/logo-azul.png') }}" type="image/x-icon" />
 
 </head>
 <body>
@@ -14,21 +14,37 @@
 
     <!-- Lado azul com a logo -->
     <div class="logo-area">
-      <img src="{{asset('img/logo-branco.png')}}" class="logo">
+      <img src="{{ asset('img/logo-branco.png') }}" class="logo">
     </div>
 
     <!-- Card de login -->
     <div class="login-area">
-      <form class="login-card" action="login.php" method="POST">
+      <!-- O action agora aponta para a rota que criamos -->
+      <form class="login-card" action="{{ route('admin.login') }}" method="POST">
+        <!-- @csrf é ESSENCIAL para segurança em formulários Laravel -->
+        @csrf
+
         <h2>Administrador Login</h2>
-        <label for="email">E-mail</label>
-        <input type="email" id="email" name="email" required />
+
+        <!-- Exibe erros de validação, se houver -->
+        @if($errors->any())
+            <div class="alert-error">
+                {{ $errors->first() }}
+            </div>
+        @endif
+
+        <label for="emailAdmin">E-mail</label>
+        <!-- O 'name' deve corresponder ao que o controller espera -->
+        <input type="email" id="emailAdmin" name="emailAdmin" value="{{ old('emailAdmin') }}" required />
       
-        <label for="senha">Senha</label>
-        <input type="password" id="senha" name="senha" required />
+        <label for="senhaAdmin">Senha</label>
+        <input type="password" id="senhaAdmin" name="senhaAdmin" required />
       
         <button class="button" type="submit">ENTRAR</button>
       
-        <a href="{{url('/cadastroAdm')}}">Não tem cadastro? <strong>Clique aqui</strong></a>
+        <!-- Removi o link de cadastro, já que será feito via tinker -->
       </form>
-    </div>      
+    </div>
+  </main>
+</body>
+</html>
