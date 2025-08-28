@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Prontuário+</title>
 
-  <link rel="stylesheet" href="{{url('/css/login.css')}}">
+  <link rel="stylesheet" href="{{url('/css/loginEnfermeiro.css')}}">
   <link rel="shortcut icon" href="{{url('img/logo-azul.png')}}" type="image/x-icon" />
 
 </head>
@@ -14,7 +14,7 @@
 
     <!-- Lado azul com a logo -->
     <div class="logo-area">
-      <img src="{{asset('img/logo-branco.png')}}" class="logo">
+      <img src="{{asset('img/enfermeiro-logo2.png')}}" class="logo">
     </div>
 
     <!-- Card de login -->

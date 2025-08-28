@@ -15,16 +15,16 @@
         <div class="box-content">
             <div class="content">
                 <h1>Seja Bem-Vindo ao Prontuário+</h1>
+                <a href="{{ url('/loginAdm') }}"><button  class="btn">SOU <p>ADMINISTRADOR</p></button></a>
 
-                <button>SOU <p>ADMINISTRADOR</p></button>
+                <a href="{{ url('/loginEnfermeiro') }}"><button  class="btn">SOU <p>ENFERMEIRO</p></button></a>
 
-                <button>SOU <p>ENFERMEIRO</p></button>
+                <a href="{{ url('/loginMedico') }}"><button  class="btn">SOU <p>MÉDICO</p></button></a>
 
-                <button>SOU <p>MÉDICO</p></button>
             </div>
 
             <div class="img-content">
-                <img src="{{asset('img/logo-azul.png')}}" class="logo">
+                <img src="{{asset('img/medico-logo1.png')}}" class="logo">
             </div>
 
         </div>
