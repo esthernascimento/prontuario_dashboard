@@ -1,69 +1,50 @@
 <?php
 
-namespace App\Models;
+namespace App\Http\Controllers\API;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Usuario;
+use App\Models\Paciente;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
-class Admin extends Authenticatable
+class AdminController extends Controller
 {
-    use HasFactory, Notifiable;
-
-    /**
-     * A tabela associada ao model.
-     *
-     * @var string
-     */
-    protected $table = 'tbAdmin';
-
-    /**
-     * A chave primária da tabela.
-     *
-     * @var string
-     */
-    protected $primaryKey = 'idAdminPK';
-
-    /**
-     * Gerenciamento dos timestamps.
-     * A tabela admin só tem data de cadastro, então desabilitamos a de atualização.
-     *
-     * @var bool
-     */
-    public $timestamps = true;
-
-    /**
-     * Define os nomes das colunas de timestamp personalizadas.
-     */
-    const CREATED_AT = 'dataCadastroAdmin';
-    const UPDATED_AT = null;
-
-    /**
-     * Os atributos que podem ser atribuídos em massa.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'nomeAdmin',
-        'emailAdmin',
-        'senhaAdmin',
-    ];
-
-    /**
-     * Os atributos que devem ser ocultados para serialização.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'senhaAdmin',
-    ];
-
-    /**
-     * Sobrescreve o método para obter o nome da coluna da senha.
-     * Necessário para o sistema de autenticação do Laravel.
-     */
-    public function getAuthPassword()
+    public function registrarPaciente(Request $request)
     {
-        return $this->senhaAdmin;
+        
+        $request->validate([
+            'nomeUsuario' => 'required|string|max:255',
+            'emailUsuario' => 'required|string|email|max:255|unique:tbUsuario',
+            'senhaUsuario' => 'required|string|min:8',
+        ]);
+
+        try {
+            DB::beginTransaction();
+    
+            $usuario = Usuario::create([
+                'nomeUsuario' => $request->nomeUsuario,
+                'emailUsuario' => $request->emailUsuario,
+                'senhaUsuario' => Hash::make($request->senhaUsuario),
+                'statusAtivoUsuario' => true,
+            ]);
+    
+            Paciente::create([
+                'id_usuarioFK' => $usuario->idUsuarioPK,
+                'nomePaciente' => $request->nomeUsuario,
+            ]);
+            
+            DB::commit();
+    
+            return response()->json(['message' => 'Paciente pré-cadastrado com sucesso!'], 201);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Erro ao pré-cadastrar o paciente.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

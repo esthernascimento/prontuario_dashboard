@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
@@ -14,10 +13,11 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+   
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nomePaciente' => 'required|string|max:255',
+            'nomeUsuario' => 'required|string|max:255', 
             'emailUsuario' => 'required|string|email|max:255|unique:tbUsuario',
             'senhaUsuario' => 'required|string|min:8|confirmed',
             'cpfPaciente' => 'required|string|max:14|unique:tbPaciente',
@@ -33,6 +33,7 @@ class AuthController extends Controller
             DB::beginTransaction();
 
             $usuario = Usuario::create([
+                'nomeUsuario' => $request->nomeUsuario, 
                 'emailUsuario' => $request->emailUsuario,
                 'senhaUsuario' => Hash::make($request->senhaUsuario),
                 'statusAtivoUsuario' => true,
@@ -40,7 +41,7 @@ class AuthController extends Controller
 
             $paciente = Paciente::create([
                 'id_usuarioFK' => $usuario->idUsuarioPK,
-                'nomePaciente' => $request->nomePaciente,
+                'nomePaciente' => $request->nomeUsuario,
                 'cpfPaciente' => $request->cpfPaciente,
                 'cartaoSusPaciente' => $request->cartaoSusPaciente,
                 'dataNascPaciente' => $request->dataNascPaciente,
@@ -87,12 +88,18 @@ class AuthController extends Controller
         
         $usuario->tokens()->delete();
         $token = $usuario->createToken('auth_token')->plainTextToken;
+        
+     
+        $paciente = $usuario->paciente;
+        $profileComplete = !is_null($paciente->cpfPaciente);
 
         return response()->json([
             'message' => 'Login realizado com sucesso!',
             'access_token' => $token,
             'token_type' => 'Bearer',
-            'usuario' => $usuario->load('paciente')
+            'usuario' => $usuario,
+            'paciente' => $paciente,
+            'profile_complete' => $profileComplete
         ]);
     }
 
