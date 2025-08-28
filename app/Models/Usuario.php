@@ -17,7 +17,13 @@ class Usuario extends Authenticatable
     const CREATED_AT = 'dataCadastroUsuario';
     const UPDATED_AT = 'dataAtualizacaoUsuario';
 
+    /**
+     * Os atributos que podem ser atribuídos em massa.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
+        'nomeUsuario', 
         'emailUsuario',
         'senhaUsuario',
         'statusAtivoUsuario',
