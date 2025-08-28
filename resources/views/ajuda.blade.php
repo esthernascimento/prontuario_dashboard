@@ -12,12 +12,12 @@
     <div class="sidebar">
     <img src="{{asset('img/logo-branco.png')}}" class="logo">
     <nav>
-        <a href="{{ route('dashboard') }}"><i class="bi bi-house-door-fill"></i></a>
-        <a href="{{ route('pacientes') }}"><i class="bi bi-people-fill"></i></a>
-        <a href="{{ route('ajuda') }}"><i class="bi bi-question-circle-fill"></i></a>
-        <a href="{{ route('seguranca') }}"><i class="bi bi-shield-lock-fill"></i></a>
-        <a href="{{ route('logout') }}"><i class="bi bi-power"></i></a>
-    </nav>
+    <a href="{{ route('admin.dashboard') }}"><i class="bi bi-house-door-fill"></i></a>
+    <a href="{{ route('admin.pacientes') }}"><i class="bi bi-people-fill"></i></a>
+    <a href="{{ route('admin.ajuda') }}"><i class="bi bi-question-circle-fill"></i></a>
+    <a href="{{ route('admin.seguranca') }}"><i class="bi bi-shield-lock-fill"></i></a>
+    <a href="{{ route('admin.logout') }}"><i class="bi bi-power"></i></a>
+</nav>
     </div>
 
     <div class="main-dashboard-wrapper">
