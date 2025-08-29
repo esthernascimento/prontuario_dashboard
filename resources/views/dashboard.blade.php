@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Prontuário+</title>
 
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/dashboardAdm.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   </head>
   <body>
 
   <div class="sidebar">
-    <img src="{{ asset('img/logo-branco.png') }}" alt="Logo Prontuário+" class="logo">
+    <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo Prontuário+" class="logo">
     <nav>
     <a href="{{ route('admin.dashboard') }}"><i class="bi bi-house-door-fill"></i></a>
     <a href="{{ route('admin.pacientes') }}"><i class="bi bi-people-fill"></i></a>

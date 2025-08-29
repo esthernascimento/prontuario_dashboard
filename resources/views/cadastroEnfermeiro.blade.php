@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Prontuário+</title>
   
-  <link rel="stylesheet" href="{{ asset('css/cadastro.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/cadastroEnfermeiro.css') }}">
   
 </head>
 
@@ -14,7 +14,7 @@
 
     <!-- Lado azul com a logo -->
     <div class="logo-area">
-      <img src="{{ asset('img/logo-azul.png') }}" alt="Logo Prontuário" />
+      <img src="{{ asset('img/enfermeiro-logo1.png') }}" alt="Logo Prontuário" />
     </div>
 
     <!-- Card de cadastro -->
@@ -37,7 +37,7 @@
         <input type="password" id="password" name="password" required />
 
         <button class="button" type="submit">CADASTRAR</button>
-        <a href="{{url('/loginEnfermeiro')}}">Já tem cadastro? <strong>Entrar</strong></a>
+        <!--<a href="{{url('/loginEnfermeiro')}}">Já tem cadastro? <strong>Entrar</strong></a>!-->
 
       </form>
     </div>
