@@ -12,7 +12,7 @@
   }
   
   .patients-header h1 {
-    color: #0023A0;
+    color: #131D4F;
     margin: 0;
   }
   
@@ -55,7 +55,7 @@
   
   .search-box input:focus {
     outline: none;
-    border-color: #0023A0;
+    border-color: #131D4F;
     box-shadow: 0 0 0 2px rgba(0, 35, 160, 0.1);
   }
   

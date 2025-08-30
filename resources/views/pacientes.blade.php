@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Pacientes - Prontuário+</title>
  
-  <link rel="stylesheet" href="{{url('/css/dashboard.css')}}">
+  <link rel="stylesheet" href="{{url('/css/dashboardAdm.css')}}">
   <link rel="stylesheet" href="{{url('/css/pacientes.css')}}">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -12,12 +12,13 @@
 <body>
 
 <div class="sidebar">
-    <img src="{{asset('img/logo-branco.png')}}" class="logo">
+    <img src="{{asset('img/adm-logo2.png')}}" class="logo">
     <nav>
     <a href="{{ route('admin.dashboard') }}"><i class="bi bi-house-door-fill"></i></a>
     <a href="{{ route('admin.pacientes') }}"><i class="bi bi-people-fill"></i></a>
     <a href="{{ route('admin.ajuda') }}"><i class="bi bi-question-circle-fill"></i></a>
     <a href="{{ route('admin.seguranca') }}"><i class="bi bi-shield-lock-fill"></i></a>
+    <a href="#"><i class="bi bi-plus-circle-fill"></i></a>
     <a href="{{ route('admin.logout') }}"><i class="bi bi-power"></i></a>
 </nav>
 </div>

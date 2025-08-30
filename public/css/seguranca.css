@@ -5,7 +5,7 @@
   }
   
   .security-container h1 {
-    color: #0023A0;
+    color: #131D4F;
     margin-bottom: 10px;
   }
   
@@ -23,7 +23,7 @@
   }
   
   .security-section h2 {
-    color: #0023A0;
+    color: #131D4F;
     margin-bottom: 20px;
     font-size: 1.3em;
   }
@@ -59,7 +59,7 @@
   
   .form-group input:focus {
     outline: none;
-    border-color: #0023A0;
+    border-color: #131D4F;
     box-shadow: 0 0 0 2px rgba(0, 35, 160, 0.1);
   }
   
@@ -72,7 +72,7 @@
   
   /* Botões */
   .btn-primary {
-    background-color: #0023A0;
+    background-color: #131D4F;
     color: white;
     padding: 12px 24px;
     border: none;
@@ -84,7 +84,7 @@
   }
   
   .btn-primary:hover {
-    background-color: #001a80;
+    background-color: #02040c;
   }
   
   .btn-secondary {
@@ -134,9 +134,9 @@
   
   .btn-outline {
     background-color: transparent;
-    color: #0023A0;
+    color: #131D4F;
     padding: 10px 20px;
-    border: 2px solid #0023A0;
+    border: 2px solid #131D4F;
     border-radius: 8px;
     font-size: 14px;
     cursor: pointer;
@@ -144,7 +144,7 @@
   }
   
   .btn-outline:hover {
-    background-color: #0023A0;
+    background-color: #02061b;
     color: white;
   }
 

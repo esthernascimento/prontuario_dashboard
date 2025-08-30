@@ -6,8 +6,8 @@
   }
 
   .help-container h2 {
-    color: #0023A0;
-    border-bottom: 2px solid #0023A0;
+    color: #131D4F;
+    border-bottom: 2px solid #131D4F;
     padding-bottom: 10px;
     margin-top: 40px;
   }
@@ -38,7 +38,7 @@
   }
   
   details[open] {
-      border-color: #0023A0;
+      border-color: #131D4F;
   }
 
   details p {
@@ -59,7 +59,7 @@
       font-size: 1em;
   }
   .contact-form button {
-      background-color: #0023A0;
+      background-color: #131D4F;
       color: white;
       font-weight: bold;
       cursor: pointer;
