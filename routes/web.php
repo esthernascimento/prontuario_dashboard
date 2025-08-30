@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\SegurancaController;
 
 
 
@@ -54,5 +55,8 @@ Route::middleware('auth:admin')->prefix('admin')->group(function () {
     Route::get('/seguranca', function () {
         return view('seguranca');
     })->name('admin.seguranca');
+
+    Route::post('/alterar-senha', [SegurancaController::class, 'alterarSenha'])
+    ->name('admin.alterarSenha');
 
 });
