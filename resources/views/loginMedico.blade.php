@@ -3,29 +3,17 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- Importante para o AJAX -->
-    <title>Prontuário+</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Prontuário+ :: Login Médico</title>
 
     <link rel="stylesheet" href="{{url('/css/loginMedico.css')}}">
     <link rel="shortcut icon" href="{{url('img/logo-azul.png')}}" type="image/x-icon" />
 
     <style>
-        /* Estilo para a mensagem de notificação */
-        #notification {
-            text-align: center;
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            color: #155724;
-            background-color: #d4edda;
-            border: 1px solid #c3e6cb;
-            display: none; /* Começa escondida */
-        }
-        #notification.error {
-            color: #721c24;
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-        }
+        .notification { text-align: center; padding: 10px; margin-bottom: 15px; border-radius: 5px; display: none; }
+        .notification.success { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; }
+        .notification.error { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+        .notification.info { color: #0c5460; background-color: #d1ecf1; border-color: #bee5eb; }
     </style>
 </head>
 <body>
@@ -35,20 +23,19 @@
         </div>
 
         <div class="login-area">
-            <!-- Damos um ID ao formulário para o JS encontrá-lo -->
-            <form class="login-card" id="medico-login-form">
+            <form class="login-card" id="medico-login-form" method="POST">
                 <h2>Médico(a) Login</h2>
 
-                <!-- Div para a mensagem de notificação -->
-                <div id="notification"></div>
+                <div id="notification" class="notification"></div>
 
-                <label for="crm">CRM</label>
-                <input type="text" id="crm" name="crm" required />
-            
-                <label for="senha">Senha</label>
-                <input type="password" id="senha" name="senha" required />
+                <div id="login-fields">
+                    <label for="crm">CRM</label>
+                    <input type="text" id="crm" name="crm" required />
+                
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" name="senha" required />
+                </div>
 
-                <!-- CAMPO DE ESPECIALIDADE (COMEÇA ESCONDIDO) -->
                 <div id="especialidade-wrapper" style="display: none;">
                     <label for="especialidade">Especialidade</label>
                     <input type="text" id="especialidade" name="especialidade" />
@@ -56,7 +43,7 @@
             
                 <button class="button" type="submit" id="submit-button">ENTRAR</button>
             
-                <a href="{{url('/cadastroMedico')}}">Não tem cadastro? <strong>Clique aqui</strong></a>
+                <a href="#">Não tem cadastro? <strong>Fale com o Administrador</strong></a>
             </form>
         </div>
     </main>
@@ -71,28 +58,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const senhaInput = document.getElementById('senha');
     const especialidadeInput = document.getElementById('especialidade');
     
-    // Variável para guardar o ID do usuário se o perfil estiver incompleto
-    let incompleteUserId = null;
+    let isCompletingProfile = false;
 
     form.addEventListener('submit', async function (event) {
-        event.preventDefault(); // Impede o envio tradicional do formulário
+        event.preventDefault();
 
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         
-        let url = '/api/medico/login/check';
-        let body = {
-            crm: crmInput.value,
-            password: senhaInput.value
-        };
+        let url = isCompletingProfile 
+            ? "{{ route('api.medico.profile.complete') }}"
+            : "{{ route('api.medico.login.check') }}"; 
 
-        // Se estamos na etapa de completar o perfil, mudamos a URL e o corpo da requisição
-        if (incompleteUserId) {
-            url = '/api/medico/profile/complete';
-            body = {
-                user_id: incompleteUserId,
-                especialidade: especialidadeInput.value
-            };
-        }
+        let body = isCompletingProfile
+            ? { crm: crmInput.value, especialidade: especialidadeInput.value }
+            : { crm: crmInput.value, senha: senhaInput.value };
+
+        submitButton.disabled = true;
+        submitButton.textContent = 'Aguarde...';
+        notification.style.display = 'none';
 
         try {
             const response = await fetch(url, {
@@ -105,38 +88,51 @@ document.addEventListener('DOMContentLoaded', function () {
                 body: JSON.stringify(body)
             });
 
-            const data = await response.json();
+            const responseData = await response.json();
 
-            if (response.ok) {
-                if (data.redirect) {
-                    // Perfil completo, redireciona
-                    window.location.href = data.redirect;
-                } else if (data.complete_profile) {
-                    // Perfil incompleto, mostra o campo de especialidade
-                    notification.textContent = data.message;
-                    notification.className = '';
+            if (response.ok) { 
+                if (isCompletingProfile) {
+                    notification.textContent = responseData.message;
+                    notification.className = 'notification success';
                     notification.style.display = 'block';
-                    
-                    especialidadeWrapper.style.display = 'block';
-                    especialidadeInput.required = true;
-                    senhaInput.disabled = true; // Desabilita campo de senha
-                    crmInput.disabled = true; // Desabilita campo de CRM
-                    
-                    submitButton.textContent = 'FINALIZAR CADASTRO';
-                    incompleteUserId = data.user_id; // Guarda o ID para o próximo passo
+                } else {
+                    if (responseData.profile_complete) {
+                        notification.textContent = 'Login realizado com sucesso!';
+                        notification.className = 'notification success';
+                        notification.style.display = 'block';
+                        // Futuramente, redirecionar: window.location.href = responseData.redirect_url;
+                    } else {
+                        isCompletingProfile = true;
+                        notification.textContent = 'Perfil incompleto. Informe sua especialidade para continuar.';
+                        notification.className = 'notification info';
+                        notification.style.display = 'block';
+                        
+                        document.getElementById('login-fields').style.display = 'none';
+                        especialidadeWrapper.style.display = 'block';
+                        especialidadeInput.required = true;
+                        crmInput.readOnly = true;
+
+                        submitButton.textContent = 'FINALIZAR CADASTRO';
+                        submitButton.disabled = false;
+                    }
                 }
             } else {
-                // Erro de login (CRM/Senha inválidos)
-                notification.textContent = data.message || 'Ocorreu um erro.';
-                notification.className = 'error';
+                let errorMessage = responseData.message || 'Ocorreu um erro.';
+                if (responseData.errors) {
+                    errorMessage = Object.values(responseData.errors)[0][0];
+                }
+                notification.textContent = errorMessage;
+                notification.className = 'notification error';
                 notification.style.display = 'block';
+                submitButton.disabled = false;
+                submitButton.textContent = isCompletingProfile ? 'FINALIZAR CADASTRO' : 'ENTRAR';
             }
-
         } catch (error) {
-            console.error('Erro na requisição:', error);
             notification.textContent = 'Erro de conexão. Tente novamente.';
-            notification.className = 'error';
+            notification.className = 'notification error';
             notification.style.display = 'block';
+            submitButton.disabled = false;
+            submitButton.textContent = isCompletingProfile ? 'FINALIZAR CADASTRO' : 'ENTRAR';
         }
     });
 });
@@ -144,3 +140,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
 </body>
 </html>
+

@@ -3,22 +3,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- Importante para a API -->
-    <title>Cadastro de Médico - Admin</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <title>Prontuário+ :: Cadastrar Médico</title>
+    
     <link rel="stylesheet" href="{{ asset('css/cadastroMedico.css') }}">
-    <style>
-        /* Estilo para a mensagem de notificação */
-        #notification {
-            text-align: center; padding: 10px; margin-bottom: 15px; border-radius: 5px;
-            display: none; /* Começa escondida */
-        }
-        #notification.success {
-            color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb;
-        }
-        #notification.error {
-            color: #721c24; background-color: #f8d7da; border-color: #f5c6cb;
-        }
-    </style>
 </head>
 <body>
     <main class="main-container">
@@ -26,14 +15,11 @@
             <img src="{{ asset('img/medico-logo1.png') }}" alt="Logo Prontuário" />
         </div>
         <div class="cads-area">
-            <!-- Damos um ID ao formulário para o JS -->
-            <form class="cads-card" id="cadastro-medico-form">
+            <form class="cads-card" id="cadastroMedicoForm">
                 <h2>Médico(a) Cadastro</h2>
 
-                <!-- Div para a mensagem de notificação -->
-                <div id="notification"></div>
+                <div id="form-messages" class="form-messages" style="display: none;"></div>
 
-                <!-- Os nomes dos campos (name) foram ajustados para o que o Controller espera -->
                 <label for="nomeMedico">Nome completo</label>
                 <input type="text" id="nomeMedico" name="nomeMedico" required />
 
@@ -51,57 +37,71 @@
         </div>
     </main>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('cadastro-medico-form');
-    const notification = document.getElementById('notification');
+    <script>
+        document.getElementById('cadastroMedicoForm').addEventListener('submit', function (event) {
+            event.preventDefault();
 
-    form.addEventListener('submit', async function(event) {
-        event.preventDefault();
+            const form = event.target;
+            const button = form.querySelector('button');
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            const messagesDiv = document.getElementById('form-messages');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            // Desabilita o botão para evitar cliques duplos
+            button.disabled = true;
+            button.textContent = 'Cadastrando...';
 
-        try {
-            // A URL aponta para a rota da API que criamos no AdminController
-            const response = await fetch('/api/admin/register/medico', {
+            messagesDiv.style.display = 'none';
+            messagesDiv.textContent = '';
+            messagesDiv.classList.remove('success', 'error');
+            
+            fetch("{{ route('admin.medicos.register') }}", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
                     'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
                 },
                 body: JSON.stringify(data)
-            });
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.message === 'Médico pré-cadastrado com sucesso!') {
+                    // Exibe a mensagem de sucesso
+                    messagesDiv.textContent = result.message + " Redirecionando...";
+                    messagesDiv.classList.add('success');
+                    messagesDiv.style.display = 'block';
+                    form.reset(); 
 
-            const result = await response.json();
+                    // Redireciona para a página de login do médico após 2 segundos
+                    setTimeout(function() {
+                        window.location.href = "{{ route('medico.login') }}";
+                    }, 2000);
 
-            notification.textContent = result.message;
-            notification.style.display = 'block';
-
-            if (response.ok) {
-                notification.className = 'success';
-                form.reset(); // Limpa o formulário após o sucesso
-            } else {
-                notification.className = 'error';
-                // Se houver erros de validação, você pode exibi-los aqui
-                if (result.errors) {
-                    let errorMessages = [result.message];
-                    for (const key in result.errors) {
-                        errorMessages.push(result.errors[key][0]);
+                } else {
+                    let errorText = result.message || 'Ocorreu um erro.';
+                    if (result.errors) {
+                        errorText = Object.values(result.errors).flat().join(' ');
                     }
-                    notification.innerHTML = errorMessages.join('<br>');
+                    messagesDiv.textContent = errorText;
+                    messagesDiv.classList.add('error');
+                    messagesDiv.style.display = 'block';
+                    // Reabilita o botão em caso de erro
+                    button.disabled = false;
+                    button.textContent = 'CADASTRAR';
                 }
-            }
-
-        } catch (error) {
-            notification.className = 'error';
-            notification.textContent = 'Erro de conexão. Tente novamente.';
-            notification.style.display = 'block';
-        }
-    });
-});
-</script>
+            })
+            .catch(error => {
+                messagesDiv.textContent = 'Ocorreu um erro de comunicação. Tente novamente.';
+                messagesDiv.classList.add('error');
+                messagesDiv.style.display = 'block';
+                // Reabilita o botão em caso de erro
+                button.disabled = false;
+                button.textContent = 'CADASTRAR';
+            });
+        });
+    </script>
 </body>
 </html>
+

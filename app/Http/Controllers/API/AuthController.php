@@ -36,6 +36,7 @@ class AuthController extends Controller
             DB::beginTransaction();
 
             $usuario = Usuario::create([
+                // Define o tipo de usuário para a lógica de login
                 'nomeUsuario' => 'Paciente', 
                 'emailUsuario' => $request->emailUsuario,
                 'senhaUsuario' => Hash::make($request->senhaUsuario),
@@ -44,7 +45,7 @@ class AuthController extends Controller
 
             $paciente = Paciente::create([
                 'id_usuarioFK' => $usuario->idUsuarioPK,
-                'nomePaciente' => $request->nomeUsuario,
+                'nomePaciente' => $request->nomeUsuario, // Usa o nome do formulário
                 'cpfPaciente' => $request->cpfPaciente,
                 'cartaoSusPaciente' => $request->cartaoSusPaciente,
                 'dataNascPaciente' => $request->dataNascPaciente,
@@ -90,6 +91,7 @@ class AuthController extends Controller
 
         DB::transaction(function () use ($request) {
             $usuario = Usuario::create([
+                // Define o tipo de usuário para a lógica de login
                 'nomeUsuario' => 'Médico', 
                 'emailUsuario' => $request->emailUsuario,
                 'senhaUsuario' => Hash::make($request->senhaUsuario),
@@ -164,3 +166,4 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logout realizado com sucesso!']);
     }
 }
+
