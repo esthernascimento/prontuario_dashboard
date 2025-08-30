@@ -1,16 +1,17 @@
 <?php
 
-// GARANTA QUE O NAMESPACE ESTÁ EXATAMENTE ASSIM
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes; 
 
-// GARANTA QUE O NOME DA CLASSE ESTÁ EXATAMENTE ASSIM
+
 class Admin extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes; 
 
     /**
      * A tabela associada ao model.
@@ -37,7 +38,8 @@ class Admin extends Authenticatable
      * Define os nomes das colunas de timestamp personalizadas.
      */
     const CREATED_AT = 'dataCadastroAdmin';
-    const UPDATED_AT = null;
+    const UPDATED_AT = null; // Mantido como null conforme a sua versão
+    const DELETED_AT = 'deleted_at'; // 3. DEFINE A COLUNA DE SOFTDELETE
 
     /**
      * Os atributos que podem ser atribuídos em massa.
@@ -67,3 +69,4 @@ class Admin extends Authenticatable
         return $this->senhaAdmin;
     }
 }
+
