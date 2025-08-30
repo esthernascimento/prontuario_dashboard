@@ -47,6 +47,10 @@ Route::middleware('auth:admin')->prefix('admin')->group(function () {
         return view('pacientes');
     })->name('admin.pacientes');
 
+    Route::get('/manutencaoMedicos', function () {
+        return view('manutencaoMedicos');
+    })->name('admin.manutencaoMedicos');
+
     Route::get('/ajuda', function () {
         return view('ajuda');
     })->name('admin.ajuda');
