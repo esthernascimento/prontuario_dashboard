@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\SoftDeletes; 
 
 class Usuario extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes; 
 
     protected $table = 'tbUsuario';
     protected $primaryKey = 'idUsuarioPK';
@@ -17,13 +18,11 @@ class Usuario extends Authenticatable
     const CREATED_AT = 'dataCadastroUsuario';
     const UPDATED_AT = 'dataAtualizacaoUsuario';
 
-    /**
-     * Os atributos que podem ser atribuídos em massa.
-     *
-     * @var array<int, string>
-     */
+    
+    const DELETED_AT = 'deleted_at';
+
     protected $fillable = [
-        'nomeUsuario', 
+        'nomeUsuario',
         'emailUsuario',
         'senhaUsuario',
         'statusAtivoUsuario',
@@ -36,6 +35,11 @@ class Usuario extends Authenticatable
     public function paciente()
     {
         return $this->hasOne(Paciente::class, 'id_usuarioFK', 'idUsuarioPK');
+    }
+
+    public function medico()
+    {
+        return $this->hasOne(Medico::class, 'id_usuarioFK', 'idUsuarioPK');
     }
 
     public function getAuthPassword()

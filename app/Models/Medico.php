@@ -6,29 +6,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes; // Importa o SoftDeletes
 
-class Paciente extends Model
+class Medico extends Model
 {
     use HasFactory, SoftDeletes; // Usa o SoftDeletes
 
-    protected $table = 'tbPaciente';
-    protected $primaryKey = 'idPacientePK';
-    public $timestamps = true;
-    const CREATED_AT = 'dataCadastroPaciente';
-    const UPDATED_AT = 'dataAtualizacaoPaciente';
-
+    protected $table = 'tbMedico';
+    protected $primaryKey = 'idMedicoPK';
+    public $timestamps = true; // Assumindo que você quer timestamps para tbMedico
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
+    
     // Coluna para o SoftDeletes
     const DELETED_AT = 'deleted_at';
 
     protected $fillable = [
-        'nomePaciente',
-        'cpfPaciente',
-        'cartaoSusPaciente',
-        'dataNascPaciente',
-        'logradouroPaciente',
-        'cidadePaciente',
-        'ufPaciente',
-        'cepPaciente',
-        'alergiasPaciente',
+        'nomeMedico',
+        'crmMedico',
+        'especialidadeMedico',
         'id_usuarioFK',
     ];
 
