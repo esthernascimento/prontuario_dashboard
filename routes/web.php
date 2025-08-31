@@ -73,6 +73,10 @@ Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () 
         return view('editarMedico');
     })->name('admin.editarMedicos');
 
+    Route::get('/desativarMedico', function () {
+        return view('desativarMedico');
+    })->name('admin.desativarMedico');
+
     Route::get('/excluirMedico', function () {
         return view('excluirMedico');
     })->name('admin.excluirMedicos');
