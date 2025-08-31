@@ -83,8 +83,13 @@
     align-items: center;
     margin-bottom: 30px;
     margin-left: 40px;
+    flex-direction: row;
   }
   
+  .medico-header .btn-add-medico{
+    margin-top: 10px;
+  }
+
   .medico-header h1 {
     color: #131D4F;
     margin: 0;
@@ -94,6 +99,25 @@
     margin-right: 10px;
   }
 
+
+  .btn-add-medico {
+    background-color: #131D4F;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .btn-add-medico:hover {
+    background-color: #6c7ae0;
+  }
 
  .box-table {
      background-color: #dcdcf9;

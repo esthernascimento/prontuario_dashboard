@@ -34,65 +34,69 @@
   </div>
 
   <main class="main-dashboard">
-      <div class="medico-container">
-        <div class="medico-header">
-          <h1><i class="bi bi-person-vcard-fill"></i> Gerenciamento de Médicos</h1>
-        </div>
+    <div class="medico-container">
+      <div class="medico-header">
+        <h1><i class="bi bi-person-vcard-fill"></i> Gerenciamento de Médicos</h1>
 
-    <div class="box-table">
-      <table>
-        <thead>
-          <tr>
-            <th>Nome Médico</th>
-            <th>E-mail Médico</th>
-            <th>Senha</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Dra. Maria Souza</td>
-            <td>maria.souza@clinica.com</td>
-            <td>123</td>
-            <td class="actions">
-              <i class="bi bi-pencil"></i>
-              <i class="bi bi-slash-circle"></i>
-              <i class="bi bi-trash"></i>
-            </td>
-          </tr>
-          <tr>
-            <td>Dra. Maria Souza</td>
-            <td>maria.souza@clinica.comm</td>
-            <td>123</td>
-            <td class="actions">
-              <i class="bi bi-pencil"></i>
-              <i class="bi bi-slash-circle"></i>
-              <i class="bi bi-trash"></i>
-            </td>
-          </tr>
-          <tr>
-            <td>Dra. Maria Souza</td>
-            <td>maria.souza@clinica.com</td>
-            <td>123</td>
-            <td class="actions">
-              <i class="bi bi-pencil"></i>
-              <i class="bi bi-slash-circle"></i>
-              <i class="bi bi-trash"></i>
-            </td>
-          </tr>
-          <tr>
-            <td>Dra. Maria Souza</td>
-            <td>maria.souza@clinica.com</td>
-            <td>123</td>
-            <td class="actions">
-              <i class="bi bi-pencil"></i>
-              <i class="bi bi-slash-circle"></i>
-              <i class="bi bi-trash"></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+        <button class="btn-add-medico" onclick='adicionar-medico.php'">
+          <i class=" bi bi-plus-circle"></i> Cadastrar Médico
+        </button>
+      </div>
+
+      <div class="box-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome Médico</th>
+              <th>E-mail Médico</th>
+              <th>Senha</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Dra. Maria Souza</td>
+              <td>maria.souza@clinica.com</td>
+              <td>123</td>
+              <td class="actions">
+                <i class="bi bi-pencil"></i>
+                <i class="bi bi-slash-circle"></i>
+                <i class="bi bi-trash"></i>
+              </td>
+            </tr>
+            <tr>
+              <td>Dra. Maria Souza</td>
+              <td>maria.souza@clinica.comm</td>
+              <td>123</td>
+              <td class="actions">
+                <i class="bi bi-pencil"></i>
+                <i class="bi bi-slash-circle"></i>
+                <i class="bi bi-trash"></i>
+              </td>
+            </tr>
+            <tr>
+              <td>Dra. Maria Souza</td>
+              <td>maria.souza@clinica.com</td>
+              <td>123</td>
+              <td class="actions">
+                <i class="bi bi-pencil"></i>
+                <i class="bi bi-slash-circle"></i>
+                <i class="bi bi-trash"></i>
+              </td>
+            </tr>
+            <tr>
+              <td>Dra. Maria Souza</td>
+              <td>maria.souza@clinica.com</td>
+              <td>123</td>
+              <td class="actions">
+                <i class="bi bi-pencil"></i>
+                <i class="bi bi-slash-circle"></i>
+                <i class="bi bi-trash"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
   </main>
 
 </body>

@@ -75,10 +75,31 @@ body {
     padding: 20px 40px;
   }
 
-  .main-dashboard h1 {
-      color: #0023A0; 
+
+  .medico-container {
+    max-width: 1200px;
+    margin: 0 auto;
   }
   
+  .overview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    margin-left: 40px;
+    flex-direction: row;
+  }
+  
+
+  .overview-header h1 {
+    color: #131D4F;
+    margin: 0;
+  }
+  
+  .overview-header h1 i {
+    margin-right: 10px;
+  }
+
   .metrics {
     display: flex;
     flex-wrap: wrap;
