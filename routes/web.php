@@ -65,6 +65,18 @@ Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () 
         return view('manutencaoMedicos');
     })->name('admin.manutencaoMedicos');
 
+    Route::get('/cadastrarMedico', function () {
+        return view('cadastrarMedico');
+    })->name('admin.cadastrarMedicos');
+
+    Route::get('/editarMedico', function () {
+        return view('editarMedico');
+    })->name('admin.editarMedicos');
+
+    Route::get('/excluirMedico', function () {
+        return view('excluirMedico');
+    })->name('admin.excluirMedicos');
+
     Route::get('/ajuda', function () {
         return view('ajuda');
     })->name('admin.ajuda');

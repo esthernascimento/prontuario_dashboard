@@ -5,6 +5,12 @@
     margin: auto;
   }
 
+
+  .help-container h1{
+      color: #131D4F;
+      margin: 0;
+  }
+
   .help-container h2 {
     color: #131D4F;
     border-bottom: 2px solid #131D4F;

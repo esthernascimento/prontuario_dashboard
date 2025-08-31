@@ -101,37 +101,7 @@
   .btn-secondary:hover {
     background-color: #5a6268;
   }
-  
-  .btn-danger {
-    background-color: #dc3545;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .btn-danger:hover {
-    background-color: #c82333;
-  }
-  
-  .btn-danger-small {
-    background-color: #dc3545;
-    color: white;
-    padding: 6px 12px;
-    border: none;
-    border-radius: 6px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .btn-danger-small:hover {
-    background-color: #c82333;
-  }
-  
+
   .btn-outline {
     background-color: transparent;
     color: #131D4F;
@@ -148,7 +118,6 @@
     color: white;
   }
 
-  
   /* Seção de backup */
   .backup-section {
     display: flex;

@@ -39,6 +39,7 @@
         <h1><i class="bi bi-person-vcard-fill"></i> Gerenciamento de Médicos</h1>
 
         <button class="btn-add-medico" onclick='adicionar-medico.php'">
+       
           <i class=" bi bi-plus-circle"></i> Cadastrar Médico
         </button>
       </div>
