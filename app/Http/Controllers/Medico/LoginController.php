@@ -4,75 +4,66 @@ namespace App\Http\Controllers\Medico;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Usuario;
+use App\Models\Medico;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log; // Importante para usar os logs
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    /**
-     * Verifica as credenciais do médico e o status do perfil.
-     */
+    public function showLoginForm()
+    {
+        return view('loginMedico');
+    }
+
     public function checkLogin(Request $request)
     {
-        $request->validate([
-            'crm' => 'required|string',
-            'password' => 'required|string',
-        ]);
+        $request->validate([ 'crm' => 'required|string', 'senha' => 'required|string', ]);
+        $medico = Medico::where('crmMedico', $request->crm)->first();
 
-        // Encontra o usuário pelo CRM do médico associado
-        $usuario = Usuario::whereHas('medico', function ($query) use ($request) {
-            $query->where('crmMedico', $request->crm);
-        })->first();
-
-        if (!$usuario || !Hash::check($request->password, $usuario->senhaUsuario)) {
-            return response()->json(['success' => false, 'message' => 'CRM ou Senha inválidos.'], 401);
+        if ($medico && $medico->usuario && Hash::check($request->senha, $medico->usuario->senhaUsuario)) {
+            if (!is_null($medico->especialidadeMedico)) {
+                Auth::login($medico->usuario);
+                return response()->json(['success' => true, 'profile_complete' => true, 'redirect_url' => route('medico.dashboard') ]);
+            }
+            return response()->json(['success' => true, 'profile_complete' => false, 'crm' => $medico->crmMedico]);
         }
-
-       
-        $medico = $usuario->medico;
-        if (is_null($medico->especialidadeMedico)) {
-          
-            return response()->json([
-                'success' => true,
-                'complete_profile' => true,
-                'message' => 'Login inicial realizado! Por favor, informe sua especialidade para finalizar o cadastro.',
-                'user_id' => $usuario->idUsuarioPK 
-            ]);
-        }
-
-        
-        Auth::guard('web')->login($usuario);
-
-        return response()->json([
-            'success' => true,
-            'redirect' => url('/medico/dashboard') 
-        ]);
+        return response()->json(['success' => false, 'message' => 'CRM ou Senha inválidos.'], 401);
     }
 
-    /**
-     * Completa o cadastro do médico com a especialidade.
-     */
     public function completeProfile(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required|exists:tbUsuario,idUsuarioPK',
-            'especialidade' => 'required|string|max:255',
-        ]);
+        Log::info('--- Iniciando completeProfile ---');
+        Log::info('Dados recebidos:', $request->all());
 
-        $usuario = Usuario::find($request->user_id);
-        if ($usuario && $usuario->medico) {
-            $usuario->medico->update(['especialidadeMedico' => $request->especialidade]);
+        try {
+            $validated = $request->validate([
+                'crm' => 'required|string|exists:tbMedico,crmMedico',
+                'especialidade' => 'required|string|max:255',
+            ]);
+            Log::info('Validação do perfil passou.', $validated);
 
-        
-            Auth::guard('web')->login($usuario);
+            $medico = Medico::where('crmMedico', $request->crm)->firstOrFail();
+            $medico->especialidadeMedico = $request->especialidade;
+            $medico->save();
+            Log::info('Especialidade salva com sucesso para o médico ID: ' . $medico->idMedicoPK);
+
+            Auth::login($medico->usuario);
+            Log::info('Login realizado com sucesso após completar o perfil.');
 
             return response()->json([
                 'success' => true,
-                'redirect' => url('/medico/dashboard')
+                'message' => 'Cadastro finalizado com sucesso!',
             ]);
+
+        } catch (ValidationException $e) {
+            Log::error('Erro de validação ao completar perfil: ', $e->errors());
+            return response()->json(['success' => false, 'message' => 'Dados inválidos.', 'errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            Log::error('Erro geral ao completar perfil: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Ocorreu um erro no servidor.'], 500);
         }
-        
-        return response()->json(['success' => false, 'message' => 'Ocorreu um erro ao atualizar o perfil.'], 500);
     }
 }
+

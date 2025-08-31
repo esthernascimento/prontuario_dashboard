@@ -24,8 +24,8 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 // Rotas para o fluxo de login dinâmico do Médico
-Route::post('/medico/login/check', [LoginController::class, 'checkLogin']);
-Route::post('/medico/profile/complete', [LoginController::class, 'completeProfile']);
+Route::post('/medico/login/check', [LoginController::class, 'checkLogin'])->name('api.medico.login.check');
+Route::post('/medico/profile/complete', [LoginController::class, 'completeProfile'])->name('api.medico.profile.complete');
 
 
 // --- ROTAS PROTEGIDAS ---
@@ -36,8 +36,8 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
-    // Rota para o Admin pré-cadastrar um novo médico
-    Route::post('/admin/register/medico', [AuthController::class, 'registrarMedico']);
+    // Rota para o Admin pré-cadastrar um novo médico (ADICIONADA)
+    Route::post('/admin/register/medico', [AuthController::class, 'adminRegisterMedico'])->name('api.admin.register.medico');
 
     // Rota para fazer logout
     Route::post('/logout', [AuthController::class, 'logout']);
