@@ -10,6 +10,9 @@ use App\Http\Controllers\API\AuthController;
 |--------------------------------------------------------------------------
 | Rotas Web
 |--------------------------------------------------------------------------
+|
+| Aqui definimos as rotas que são acessadas diretamente pelo navegador.
+|
 */
 
 // --- ROTAS PÚBLICAS GERAIS ---
@@ -30,23 +33,20 @@ Route::get('/loginEnfermeiro', function () {
 
 // --- ROTAS PROTEGIDAS DO PAINEL ADMIN ---
 Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
-    Route::get('/pacientes', fn() => view('pacientes'))->name('pacientes');
-    Route::get('/ajuda', fn() => view('ajuda'))->name('ajuda');
-    Route::get('/seguranca', fn() => view('seguranca'))->name('seguranca');
+    Route::get('/dashboard', function () { return view('dashboard'); })->name('dashboard');
+    Route::get('/pacientes', function () { return view('pacientes'); })->name('pacientes');
+    Route::get('/ajuda', function () { return view('ajuda'); })->name('ajuda');
+    Route::get('/seguranca', function () { return view('seguranca'); })->name('seguranca');
     Route::post('/alterar-senha', [SegurancaController::class, 'alterarSenha'])->name('alterarSenha');
 
-    // --- ROTAS DE MÉDICOS ---
-    Route::get('/manutencaoMedicos', fn() => view('manutencaoMedicos'))->name('manutencaoMedicos');
-    Route::get('/cadastrarMedico', fn() => view('cadastrarMedico'))->name('cadastrarMedicos');
+    // Rotas para o admin gerenciar médicos
+    Route::get('/cadastroMedico', function () { return view('cadastroMedico'); })->name('medicos.create');
     Route::post('/medicos/register', [AuthController::class, 'adminRegisterMedico'])->name('medicos.register');
-    Route::get('/editarMedico', fn() => view('editarMedico'))->name('editarMedicos');
-    Route::get('/excluirMedico', fn() => view('excluirMedico'))->name('excluirMedicos');
-    Route::get('/editarMedico/{id}', fn($id) => view('editarMedico', ['id' => $id]))->name('editarMedico');
-
 });
 
+
 // --- ROTAS PROTEGIDAS DO PAINEL MÉDICO ---
+// Este grupo garante que apenas um usuário (médico) logado possa acessar estas páginas.
 Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () {
 
     Route::get('/dashboard', function () {
@@ -98,3 +98,4 @@ Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () 
 
     Route::get('/dashboard', fn() => view('medico.dashboard'))->name('dashboard');
 });
+
