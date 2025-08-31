@@ -12,9 +12,12 @@ class Medico extends Model
 
     protected $table = 'tbMedico';
     protected $primaryKey = 'idMedicoPK';
-    
-    // Desabilitado para evitar o erro de 'updated_at'
+
+    // Desabilita os timestamps padrão para usar colunas personalizadas.
     public $timestamps = false; 
+
+    // O SoftDeletes requer a coluna deleted_at, que deve ser tratada como data.
+    protected $dates = ['deleted_at'];
 
     protected $fillable = [
         'nomeMedico',
@@ -23,10 +26,8 @@ class Medico extends Model
         'id_usuarioFK',
     ];
 
-    // Relação com o Usuário (um Médico pertence a um Usuário)
     public function usuario()
     {
         return $this->belongsTo(Usuario::class, 'id_usuarioFK', 'idUsuarioPK');
     }
 }
-

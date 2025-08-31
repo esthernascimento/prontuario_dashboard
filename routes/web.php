@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\SegurancaController;
 use App\Http\Controllers\Medico\LoginController as MedicoLoginController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\Admin\MedicoController;
+use App\Http\Controllers\Admin\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,64 +40,22 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::get('/ajuda', function () { return view('ajuda'); })->name('ajuda');
     Route::get('/seguranca', function () { return view('seguranca'); })->name('seguranca');
     Route::post('/alterar-senha', [SegurancaController::class, 'alterarSenha'])->name('alterarSenha');
-
+    
     // Rotas para o admin gerenciar médicos
     Route::get('/cadastroMedico', function () { return view('cadastroMedico'); })->name('medicos.create');
     Route::post('/medicos/register', [AuthController::class, 'adminRegisterMedico'])->name('medicos.register');
+    Route::get('/manutencaoMedicos', [MedicoController::class, 'index'])->name('manutencaoMedicos');
+    
+    // Rota para exibir o formulário de confirmação de exclusão
+    Route::get('/medicos/{id}/excluir', [AdminController::class, 'confirmarExclusao'])->name('medicos.confirmarExclusao');
+    
+    // Adicione esta nova rota para aceitar a requisição DELETE
+    Route::delete('/medicos/{id}', [AdminController::class, 'excluir'])->name('medicos.excluir');
 });
-
 
 // --- ROTAS PROTEGIDAS DO PAINEL MÉDICO ---
-// Este grupo garante que apenas um usuário (médico) logado possa acessar estas páginas.
 Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () {
-
     Route::get('/dashboard', function () {
-
-        // Lembre-se de criar o arquivo: resources/views/medico/dashboard.blade.php
         return view('medico.dashboard');
     })->name('dashboard');
-  
-        return view('dashboard');
-    })->name('admin.dashboard');
-
-    Route::get('/pacientes', function () {
-        return view('pacientes');
-    })->name('admin.pacientes');
-
-    Route::get('/manutencaoMedicos', function () {
-        return view('manutencaoMedicos');
-    })->name('admin.manutencaoMedicos');
-
-    Route::get('/cadastrarMedico', function () {
-        return view('cadastrarMedico');
-    })->name('admin.cadastrarMedicos');
-
-    Route::get('/editarMedico', function () {
-        return view('editarMedico');
-    })->name('admin.editarMedicos');
-
-    Route::get('/desativarMedico', function () {
-        return view('desativarMedico');
-    })->name('admin.desativarMedico');
-
-    Route::get('/excluirMedico', function () {
-        return view('excluirMedico');
-    })->name('admin.excluirMedicos');
-
-    Route::get('/ajuda', function () {
-        return view('ajuda');
-    })->name('admin.ajuda');
-
-    Route::get('/seguranca', function () {
-        return view('seguranca');
-    })->name('admin.seguranca');
-
-    Route::post('/alterar-senha', [SegurancaController::class, 'alterarSenha'])
-    ->name('admin.alterarSenha');
-
-    // Adicione outras rotas do médico aqui no futuro
-;
-
-    Route::get('/dashboard', fn() => view('medico.dashboard'))->name('dashboard');
 });
-
