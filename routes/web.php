@@ -49,9 +49,32 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
 // Este grupo garante que apenas um usuário (médico) logado possa acessar estas páginas.
 Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () {
     Route::get('/dashboard', function () {
+
         // Lembre-se de criar o arquivo: resources/views/medico/dashboard.blade.php
         return view('medico.dashboard');
     })->name('dashboard');
+  
+        return view('dashboard');
+    })->name('admin.dashboard');
+
+    Route::get('/pacientes', function () {
+        return view('pacientes');
+    })->name('admin.pacientes');
+
+    Route::get('/manutencaoMedicos', function () {
+        return view('manutencaoMedicos');
+    })->name('admin.manutencaoMedicos');
+
+    Route::get('/ajuda', function () {
+        return view('ajuda');
+    })->name('admin.ajuda');
+
+    Route::get('/seguranca', function () {
+        return view('seguranca');
+    })->name('admin.seguranca');
+
+    Route::post('/alterar-senha', [SegurancaController::class, 'alterarSenha'])
+    ->name('admin.alterarSenha');
 
     // Adicione outras rotas do médico aqui no futuro
 });
