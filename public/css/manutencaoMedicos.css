@@ -143,9 +143,9 @@
      text-align: left;
  }
 
- thead th {
-     padding: 20px;
-     font-weight: bold;
+ thead tr th {
+    padding: 20px;
+    font-weight: bold;
  }
 
  tbody tr {
@@ -160,12 +160,12 @@
  }
 
 
- .actions {
-     display: flex;
-     gap: 12px;
-     justify-content: center;
-     align-items: center;
- }
+.actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
 
  .actions i {
      cursor: pointer;
@@ -181,3 +181,27 @@
      background-color: #6c7ae0;
      color: #fff;
  }
+
+ /* Define largura fixa proporcional para cada coluna */
+table th:nth-child(1),
+table td:nth-child(1) {
+    width: 30%; /* Nome Médico */
+}
+
+table th:nth-child(2),
+table td:nth-child(2) {
+    width: 40%; /* E-mail Médico */
+    word-break: break-word; /* Evita quebrar o layout em e-mails longos */
+}
+
+table th:nth-child(3),
+table td:nth-child(3) {
+    width: 15%; /* Senha */
+    text-align: center;
+}
+
+table th:nth-child(4),
+table td:nth-child(4) {
+    width: 140px; /* Ações */
+    text-align: center;
+}

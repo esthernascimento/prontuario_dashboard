@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Excluir Médico - Prontuário+</title>
+  <title>Desativar Médico - Prontuário+</title>
 
-  <link rel="stylesheet" href="{{ asset('css/excluirMedico.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/desativarMedico.css') }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
@@ -40,17 +40,17 @@
       <div class="cadastrar-header">
         
         <i class="bi bi-trash-fill"></i>
-        <h1>Excluir Médico</h1>
+        <h1>Desativar Médico</h1>
       </div>
 
-      <p>Tem certeza que deseja excluir o médico <b></b>?</p>
+      <p>Tem certeza que deseja desativar o médico<b></b>?</p>
 
       <form action="#" method="POST">
         @csrf
         @method('DELETE')
 
-        <button type="submit" class="btn-excluir">
-          Sim, excluir
+        <button type="submit" class="btn-desativar">
+        Sim, desativar
         </button>
       </form>
 
