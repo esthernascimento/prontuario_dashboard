@@ -77,5 +77,5 @@ Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () 
     ->name('admin.alterarSenha');
 
     // Adicione outras rotas do médico aqui no futuro
-});
+;
 
