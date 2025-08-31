@@ -38,13 +38,12 @@
       <div class="medico-header">
         <h1><i class="bi bi-person-vcard-fill"></i> Gerenciamento de Médicos</h1>
 
-        <button class="btn-add-medico" onclick='adicionar-medico.php'">
-       
-          <i class=" bi bi-plus-circle"></i> Cadastrar Médico
-        </button>
+ <button class="btn-add-medico" onclick="window.location.href='{{ route('admin.cadastrarMedicos') }}'">
+  <i class="bi bi-plus-circle"></i> Cadastrar Médico
+</button>
       </div>
 
-      <div class="box-table">
+            <div class="box-table">
         <table>
           <thead>
             <tr>
@@ -60,7 +59,7 @@
               <td>maria.souza@clinica.com</td>
               <td>123</td>
               <td class="actions">
-                <i class="bi bi-pencil"></i>
+                <a href="{{ route('admin.editarMedico', ['id' => 1]) }}"><i class="bi bi-pencil"></i></a>
                 <i class="bi bi-slash-circle"></i>
                 <i class="bi bi-trash"></i>
               </td>
@@ -97,8 +96,10 @@
             </tr>
           </tbody>
         </table>
-      </div>
+      </div> 
+    </div> 
   </main>
+
 
 </body>
 
