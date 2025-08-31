@@ -48,6 +48,7 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
 // --- ROTAS PROTEGIDAS DO PAINEL MÉDICO ---
 // Este grupo garante que apenas um usuário (médico) logado possa acessar estas páginas.
 Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () {
+
     Route::get('/dashboard', function () {
 
         // Lembre-se de criar o arquivo: resources/views/medico/dashboard.blade.php
@@ -73,6 +74,10 @@ Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () 
         return view('editarMedico');
     })->name('admin.editarMedicos');
 
+    Route::get('/desativarMedico', function () {
+        return view('desativarMedico');
+    })->name('admin.desativarMedico');
+
     Route::get('/excluirMedico', function () {
         return view('excluirMedico');
     })->name('admin.excluirMedicos');
@@ -90,4 +95,7 @@ Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () 
 
     // Adicione outras rotas do médico aqui no futuro
 ;
+
+    Route::get('/dashboard', fn() => view('medico.dashboard'))->name('dashboard');
+});
 
