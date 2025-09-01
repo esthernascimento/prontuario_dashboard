@@ -8,15 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-   
     public function showLoginForm()
     {
-      
-        return view('loginAdm'); 
+        // Corrigido o caminho da view
+        return view('admin.loginAdm'); 
     }
 
-    
-    
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -24,7 +21,10 @@ class LoginController extends Controller
             'senhaAdmin' => 'required',
         ]);
 
-        if (Auth::guard('admin')->attempt(['emailAdmin' => $credentials['emailAdmin'], 'password' => $credentials['senhaAdmin']])) {
+        if (Auth::guard('admin')->attempt([
+            'emailAdmin' => $credentials['emailAdmin'],
+            'password' => $credentials['senhaAdmin'],
+        ])) {
             $request->session()->regenerate();
             return redirect()->intended('/admin/dashboard');
         }
@@ -39,6 +39,7 @@ class LoginController extends Controller
         Auth::guard('admin')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        
         return redirect('/loginAdm'); 
     }
 }

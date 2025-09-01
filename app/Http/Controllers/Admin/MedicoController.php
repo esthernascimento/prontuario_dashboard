@@ -12,6 +12,6 @@ class MedicoController extends Controller
     {
         $medicos = Medico::all();
 
-        return view('manutencaoMedicos', compact('medicos'));
+        return view('admin.manutencaoMedicos', compact('medicos'));
     }
 }

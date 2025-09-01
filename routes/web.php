@@ -25,14 +25,14 @@ Route::get('/loginEnfermeiro', function () {
 
 // --- PAINEL ADMIN ---
 Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', function () { return view('dashboard'); })->name('dashboard');
-    Route::get('/pacientes', function () { return view('pacientes'); })->name('pacientes');
-    Route::get('/ajuda', function () { return view('ajuda'); })->name('ajuda');
-    Route::get('/seguranca', function () { return view('seguranca'); })->name('seguranca');
+    Route::get('/dashboard', function () { return view('admin.dashboard'); })->name('dashboard');
+    Route::get('/pacientes', function () { return view('geral.pacientes'); })->name('pacientes');
+    Route::get('/ajuda', function () { return view('geral.ajuda'); })->name('ajuda');
+    Route::get('/seguranca', function () { return view('admin.seguranca'); })->name('seguranca');
     Route::post('/alterar-senha', [SegurancaController::class, 'alterarSenha'])->name('alterarSenha');
 
     // Médicos
-    Route::get('/cadastroMedico', function () { return view('cadastroMedico'); })->name('medicos.create');
+    Route::get('/cadastroMedico', function () { return view('admin.cadastroMedico'); })->name('medicos.create');
     Route::post('/medicos/register', [AuthController::class, 'adminRegisterMedico'])->name('medicos.register');
     Route::get('/manutencaoMedicos', [MedicoController::class, 'index'])->name('manutencaoMedicos');
 

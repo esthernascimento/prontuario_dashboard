@@ -12,7 +12,7 @@ class AdminController extends Controller
     public function confirmarExclusao($id)
     {
         $medico = Medico::findOrFail($id);
-        return view('excluirMedico', compact('medico'));
+        return view('admin.excluirMedico', compact('medico'));
     }
 
     // Executa a exclusão do médico
@@ -28,7 +28,7 @@ class AdminController extends Controller
     public function editar($id)
     {
         $medico = Medico::findOrFail($id);
-        return view('editarMedico', compact('medico'));
+        return view('admin.editarMedico', compact('medico'));
     }
 
     // Atualiza os dados do médico
