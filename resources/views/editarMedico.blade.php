@@ -40,42 +40,35 @@
         <h1>Editar Médico</h1>
       </div>
 
-      <form action="#" method="POST" enctype="multipart/form-data" class="form-cadastrar">
-        @csrf
-        @method('PUT')
+    <form action="{{ route('admin.medicos.update', $medico->idMedicoPK) }}" method="POST" enctype="multipart/form-data">
+  @csrf
+  @method('PUT')
 
-        <!-- Upload de foto -->
-        <div class="foto-upload">
-  
-          <label for="foto">
-            <i class="bi bi-camera"></i>
-            <span>Alterar Foto</span>
-          </label>
-          <input type="file" id="foto" name="foto" accept="image/*" hidden>
-        </div>
+  <!-- Foto -->
+  <div class="foto-upload">
+    <label for="foto">
+      <i class="bi bi-camera"></i>
+      <span>Alterar Foto</span>
+    </label>
+    <input type="file" id="foto" name="foto" accept="image/*" hidden>
+    @if ($medico->usuario->foto ?? false)
+      <img src="{{ asset('storage/fotos/' . $medico->usuario->foto) }}" alt="Foto atual" style="width: 100px;">
+    @endif
+  </div>
 
-        <div class="form-group">
-          <label for="nome">Nome</label>
-          <input type="text" id="nome" name="nome" value="#" required>
-        </div>
+  <!-- Dados do Médico -->
+  <input type="text" name="nomeMedico" value="{{ $medico->nomeMedico }}" required>
+  <input type="text" name="crmMedico" value="{{ $medico->crmMedico }}" required>
+  <input type="text" name="especialidadeMedico" value="{{ $medico->especialidadeMedico }}">
 
-        <div class="form-group">
-          <label for="telefone">Telefone</label>
-          <input type="text" id="telefone" name="telefone" value="#" required>
-        </div>
+  <!-- Dados do Usuário -->
+  <input type="text" name="nomeUsuario" value="{{ $medico->usuario->nomeUsuario }}" required>
+  <input type="email" name="emailUsuario" value="{{ $medico->usuario->emailUsuario }}" required>
+  <input type="password" name="senhaUsuario" placeholder="Nova senha (opcional)">
 
-        <div class="form-group">
-          <label for="email">E-mail</label>
-          <input type="email" id="email" name="email" value="#" required>
-        </div>
+  <button type="submit">Salvar Alterações</button>
+</form>
 
-        <div class="form-group">
-          <label for="senha">Senha</label>
-          <input type="password" id="senha" name="senha" placeholder="Nova senha">
-        </div>
-
-        <button type="submit" class="btn-salvar">Salvar Alterações</button>
-      </form>
     </div>
   </main>
 

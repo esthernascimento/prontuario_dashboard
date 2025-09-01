@@ -23,6 +23,8 @@ class Usuario extends Authenticatable // MUDANÇA IMPORTANTE
         'emailUsuario',
         'senhaUsuario',
         'statusAtivoUsuario',
+        'foto',
+
     ];
 
     protected $hidden = [
