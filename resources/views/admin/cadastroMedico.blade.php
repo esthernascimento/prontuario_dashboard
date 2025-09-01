@@ -76,7 +76,7 @@
 
                     // Redireciona para a página de login do médico após 2 segundos
                     setTimeout(function() {
-                        window.location.href = "{{ route('medico.login') }}";
+                        window.location.href = "{{ route('admin.manutencaoMedicos') }}";
                     }, 2000);
 
                 } else {
