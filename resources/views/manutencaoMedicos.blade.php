@@ -38,10 +38,9 @@
       <div class="medico-header">
         <h1><i class="bi bi-person-vcard-fill"></i> Gerenciamento de Médicos</h1>
 
-        <button class="btn-add-medico" onclick='adicionar-medico.php'>
-       
-          <i class=" bi bi-plus-circle"></i> Cadastrar Médico
-        </button>
+        <a href="{{ route('admin.medicos.create') }}" class="btn-add-medico">
+          <i class="bi bi-plus-circle"></i> Cadastrar Médico
+        </a>
       </div>
 
       <div class="box-table">
@@ -49,52 +48,26 @@
           <thead>
             <tr>
               <th>Nome Médico</th>
-              <th>E-mail Médico</th>
+              <th>CRM Médico</th>
               <th>Senha</th>
               <th>Ações</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Dra. Maria Souza</td>
-              <td>maria.souza@clinica.com</td>
-              <td>123</td>
-              <td class="actions">
-                <i class="bi bi-pencil"></i>
-                <i class="bi bi-slash-circle"></i>
-                <i class="bi bi-trash"></i>
-              </td>
-            </tr>
-            <tr>
-              <td>Dra. Maria Souza</td>
-              <td>maria.souza@clinica.comm</td>
-              <td>123</td>
-              <td class="actions">
-                <i class="bi bi-pencil"></i>
-                <i class="bi bi-slash-circle"></i>
-                <i class="bi bi-trash"></i>
-              </td>
-            </tr>
-            <tr>
-              <td>Dra. Maria Souza</td>
-              <td>maria.souza@clinica.com</td>
-              <td>123</td>
-              <td class="actions">
-                <i class="bi bi-pencil"></i>
-                <i class="bi bi-slash-circle"></i>
-                <i class="bi bi-trash"></i>
-              </td>
-            </tr>
-            <tr>
-              <td>Dra. Maria Souza</td>
-              <td>maria.souza@clinica.com</td>
-              <td>123</td>
-              <td class="actions">
-                <i class="bi bi-pencil"></i>
-                <i class="bi bi-slash-circle"></i>
-                <i class="bi bi-trash"></i>
-              </td>
-            </tr>
+            @foreach ($medicos as $medico)
+              <tr>
+                <td>{{ $medico->nomeMedico }}</td>
+                <td>{{ $medico->crmMedico }}</td>
+                <td>{{ $medico->senha }}</td> {{-- CUIDADO: Exibir senhas é inseguro --}}
+                <td class="actions">
+                  <i class="bi bi-pencil"></i>
+                  <i class="bi bi-slash-circle"></i>
+                  <a href="{{ route('admin.medicos.confirmarExclusao', $medico->idMedicoPK) }}">
+                    <i class="bi bi-trash"></i>
+                  </a>
+                </td>
+              </tr>
+            @endforeach
           </tbody>
         </table>
       </div>
