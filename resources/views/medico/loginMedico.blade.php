@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Prontuário+ :: Login Médico</title>
 
-    <link rel="stylesheet" href="{{url('/css/loginMedico.css')}}">
+    <link rel="stylesheet" href="{{url('/css/medico/loginMedico.css')}}">
     <link rel="shortcut icon" href="{{url('img/logo-azul.png')}}" type="image/x-icon" />
 
     <style>

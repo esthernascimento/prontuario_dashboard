@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Prontuário+ | Admin Login</title>
 
-  <link rel="stylesheet" href="{{url('/css/loginAdm.css')}}">
+  <link rel="stylesheet" href="{{url('/css/admin/loginAdm.css')}}">
   <link rel="shortcut icon" href="{{url('img/logo-azul.png')}}" type="image/x-icon" />
 
 </head>

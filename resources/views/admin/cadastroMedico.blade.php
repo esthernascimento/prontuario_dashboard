@@ -7,7 +7,7 @@
     
     <title>Prontuário+ :: Cadastrar Médico</title>
     
-    <link rel="stylesheet" href="{{ asset('css/cadastroMedico.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/cadastroMedico.css') }}">
 </head>
 <body>
     <main class="main-container">

@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <title>Pacientes - Prontuário+</title>
 
-  <link rel="stylesheet" href="{{url('/css/dashboardAdm.css')}}">
-  <link rel="stylesheet" href="{{url('/css/pacientes.css')}}">
+  <link rel="stylesheet" href="{{url('/css/admin/dashboardAdm.css')}}">
+  <link rel="stylesheet" href="{{url('/css/geral/pacientes.css')}}">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
