@@ -8,6 +8,7 @@ use App\Http\Controllers\Medico\LoginController as MedicoLoginController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\Admin\MedicoController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\DashboardController;
 
 // --- ROTAS PÚBLICAS ---
 Route::get('/', function () {
@@ -26,18 +27,12 @@ Route::get('/loginEnfermeiro', function () {
 
 // --- PAINEL ADMIN ---
 Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
-    Route::get('/pacientes', function () {
-        return view('geral.pacientes');
-    })->name('pacientes');
-    Route::get('/ajuda', function () {
-        return view('geral.ajuda');
-    })->name('ajuda');
-    Route::get('/seguranca', function () {
-        return view('admin.seguranca');
-    })->name('seguranca');
+    
+    // Rota correta para o dashboard que chama o controlador
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/pacientes', function () {return view('geral.pacientes');})->name('pacientes');    
+    Route::get('/ajuda', function () {return view('geral.ajuda');})->name('ajuda');    
+    Route::get('/seguranca', function () {return view('admin.seguranca');})->name('seguranca');    
     Route::get('/configuracoes', [SegurancaController::class, 'configuracoes'])->name('configuracoes');
     Route::post('/alterar-senha', [SegurancaController::class, 'alterarSenha'])->name('alterarSenha');
 

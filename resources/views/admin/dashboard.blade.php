@@ -43,7 +43,11 @@
           </div>
 
           <div class="metrics">
-            <div class="metric-card">Médicos cadastrados<br><strong>{{ $adminsCount ?? 0 }}</strong></div>
+            <div class="metric-card">
+              Médicos cadastrados<br>
+              <strong>{{ $adminCount ?? 0 }}</strong>
+            </div>
+
             <div class="metric-card">Pacientes cadastrados<br><strong>{{ $patientsCount ?? 0 }}</strong></div>
             <div class="metric-card">Exames pendentes<br><strong>{{ $pendingExamsCount ?? 0 }}</strong></div>
           </div>
