@@ -18,7 +18,9 @@ Route::get('/', function () {
 // --- LOGIN ---
 Route::get('/loginAdm', [LoginController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/loginAdm', [LoginController::class, 'login']);
+// Logout admin
 Route::post('/logout', [LoginController::class, 'logout'])->name('admin.logout');
+
 
 Route::get('/loginMedico', [MedicoLoginController::class, 'showLoginForm'])->name('medico.login');
 Route::get('/loginEnfermeiro', function () {

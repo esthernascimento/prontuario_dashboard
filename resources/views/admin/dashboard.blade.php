@@ -20,7 +20,15 @@
       <a href="{{ route('admin.manutencaoMedicos') }}"><i class="bi bi-plus-circle-fill"></i></a>
       <a href="{{ route('admin.ajuda') }}"><i class="bi bi-question-circle-fill"></i></a>
       <a href="{{ route('admin.seguranca') }}"><i class="bi bi-shield-lock-fill"></i></a>
-      <a href="{{ route('admin.logout') }}"><i class="bi bi-power"></i></a>
+      <a href="{{ route('admin.logout') }}"
+        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <i class="bi bi-power"></i>
+      </a>
+
+      <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+        @csrf
+      </form>
+
 
     </nav>
   </div>
@@ -44,7 +52,7 @@
 
           <div class="metrics">
             <div class="metric-card">
-              Médicos cadastrados<br>
+              Médicos cadastrados<br> 
               <strong>{{ $adminCount ?? 0 }}</strong>
             </div>
 
