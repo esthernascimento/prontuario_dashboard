@@ -3,12 +3,19 @@
 
 body{
     background-color: rgb(6,24,185);
-    height: auto;
+    height: 100vh;
     width: 100%;
     font-family: 'Montserrat', sans-serif;
     justify-content: center;
     align-items: center;
     overflow-x: hidden;
+    display: flex;
+}
+
+.main-container{
+    align-items: center;
+    justify-content: center;
+    display: flex;
 }
 
 .box-content{
@@ -19,7 +26,6 @@ body{
     border-radius: 40px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 13%;
     display: flex;
     flex-direction: row;
 }
