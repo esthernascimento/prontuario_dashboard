@@ -50,6 +50,7 @@ class Admin extends Authenticatable
         'nomeAdmin',
         'emailAdmin',
         'senhaAdmin',
+        'foto',
     ];
 
     /**

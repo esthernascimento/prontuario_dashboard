@@ -11,9 +11,12 @@
 </head>
 
 <body>
+  @php $admin = auth()->guard('admin')->user(); @endphp
 
   <div class="sidebar">
-    <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo Prontuário+" class="logo">
+    <a href="{{ route('admin.perfil') }}">
+      <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo Prontuário+" class="logo">
+    </a>
     <nav>
       <a href="{{ route('admin.dashboard') }}"><i class="bi bi-house-door-fill"></i></a>
       <a href="{{ route('admin.pacientes') }}"><i class="bi bi-people-fill"></i></a>
@@ -24,71 +27,75 @@
         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
         <i class="bi bi-power"></i>
       </a>
-
       <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
         @csrf
       </form>
-
-
     </nav>
   </div>
 
-
-
   <div class="main-dashboard-wrapper">
     <header class="header">
-      <div class="user-info">
-        <img src="{{ asset('img/julia.png') }}" alt="Foto da Dra. Júlia">
-        <span>Dra. Júlia Marcelli</span>
-      </div>
+      <a href="{{ route('admin.perfil') }}" class="user-info" style="text-decoration: none; color: inherit;">
+        @if($admin && $admin->foto)
+        <img src="{{ asset('storage/fotos/' . $admin->foto) }}" alt="Foto do Admin">
+        @else
+        <img src="{{ asset('img/teste.png') }}" alt="Foto padrão">
+        @endif
+        <span>{{ $admin->nomeAdmin ?? 'Administrador' }}</span>
+      </a>
     </header>
 
     <main class="main-dashboard">
-      <main class="main-dashboard">
-        <div class="overview-container">
-          <div class="overview-header">
-            <h1><i class="bi bi-activity"></i> OVERVIEW</h1>
+      <div class="overview-container">
+        <div class="overview-header">
+          <h1><i class="bi bi-activity"></i> OVERVIEW</h1>
+        </div>
+
+        <div class="metrics">
+          <div class="metric-card">
+            Médicos cadastrados<br>
+            <strong>{{ $adminCount ?? 0 }}</strong>
+          </div>
+          <div class="metric-card">
+            Pacientes cadastrados<br>
+            <strong>{{ $patientsCount ?? 0 }}</strong>
+          </div>
+          <div class="metric-card">
+            Exames pendentes<br>
+            <strong>{{ $pendingExamsCount ?? 0 }}</strong>
+          </div>
+        </div>
+
+        <div class="content-wrapper">
+          <div id="bar-chart-container" class="chart-container">
+            <canvas id="graficoBarras"></canvas>
+          </div>
+          <div id="line-chart-container" class="chart-container">
+            <canvas id="graficoLinha"></canvas>
           </div>
 
-          <div class="metrics">
-            <div class="metric-card">
-              Médicos cadastrados<br> 
-              <strong>{{ $adminCount ?? 0 }}</strong>
+          <div class="info-cards-container">
+            <div class="info-card">
+              <h3>Índice de gênero</h3>
+              <div style="width: 120px; height: 120px;">
+                <canvas id="graficoDonutGenero"></canvas>
+              </div>
             </div>
-
-            <div class="metric-card">Pacientes cadastrados<br><strong>{{ $patientsCount ?? 0 }}</strong></div>
-            <div class="metric-card">Exames pendentes<br><strong>{{ $pendingExamsCount ?? 0 }}</strong></div>
-          </div>
-
-          <div class="content-wrapper">
-            <div id="bar-chart-container" class="chart-container">
-              <canvas id="graficoBarras"></canvas>
+            <div class="info-card">
+              <h3>75% IDOSOS</h3>
             </div>
-            <div id="line-chart-container" class="chart-container">
-              <canvas id="graficoLinha"></canvas>
+            <div class="info-card">
+              <h3>UBS cadastradas</h3>
+              <strong>{{ $ubsCount ?? 0 }}</strong>
             </div>
-
-            <div class="info-cards-container">
-              <div class="info-card">
-                <h3>Índice de gênero</h3>
-                <div style="width: 120px; height: 120px;">
-                  <canvas id="graficoDonutGenero"></canvas>
-                </div>
-              </div>
-              <div class="info-card">
-                <h3>75% IDOSOS</h3>
-              </div>
-              <div class="info-card">
-                <h3>UBS cadastradas</h3>
-                <strong>{{ $ubsCount ?? 0 }}</strong>
-              </div>
-              <div class="info-card">
-                <h3>A cada 10 usuários:</h3>
-                <p>7 são mulheres<br>3 são homens<br>8 são idosos</p>
-              </div>
+            <div class="info-card">
+              <h3>A cada 10 usuários:</h3>
+              <p>7 são mulheres<br>3 são homens<br>8 são idosos</p>
             </div>
           </div>
-      </main>
+        </div>
+      </div>
+    </main>
   </div>
 
 </body>
