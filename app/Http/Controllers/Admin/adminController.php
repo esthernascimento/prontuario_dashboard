@@ -36,12 +36,9 @@ class AdminController extends Controller
 {
     $request->validate([
         'nomeMedico' => 'required|string|max:255',
-        'crmMedico' => 'required|string|max:20',
-        'especialidadeMedico' => 'nullable|string|max:255',
         'nomeUsuario' => 'required|string|max:255',
         'emailUsuario' => 'required|email|max:255',
-        'senhaUsuario' => 'nullable|string|min:6',
-        'foto' => 'nullable|image|max:2048',
+        
     ]);
 
     $medico = Medico::with('usuario')->findOrFail($id);
@@ -49,8 +46,7 @@ class AdminController extends Controller
     // Atualiza dados do médico
     $medico->update([
         'nomeMedico' => $request->nomeMedico,
-        'crmMedico' => $request->crmMedico,
-        'especialidadeMedico' => $request->especialidadeMedico,
+        
     ]);
 
     // Atualiza dados do usuário vinculado

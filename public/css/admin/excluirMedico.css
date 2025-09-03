@@ -2,6 +2,7 @@ body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
     background-color: #f9f9f9;
+    height: 100vh;
   }
   
   .sidebar {
@@ -80,7 +81,8 @@ body {
     padding: 40px;
     border-radius: 20px;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 10%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .cadastrar-container p{

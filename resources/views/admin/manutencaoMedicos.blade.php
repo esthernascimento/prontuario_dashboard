@@ -66,6 +66,7 @@
             <tr>
               <th>Nome Médico</th>
               <th>CRM</th>
+              <th>email</th>
               <th>Ações</th>
             </tr>
           </thead>
@@ -74,6 +75,8 @@
             <tr>
               <td>{{ $medico->nomeMedico }}</td>
               <td>{{ $medico->crmMedico }}</td>
+              <td>{{ $medico->usuario->email ?? 'Sem email' }}</td>
+              
               <td class="actions">
                 <a href="{{ route('admin.medicos.editar', $medico->idMedicoPK) }}">
                   <i class="bi bi-pencil" title="Editar"></i>

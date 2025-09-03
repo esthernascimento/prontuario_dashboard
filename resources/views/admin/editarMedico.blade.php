@@ -54,28 +54,12 @@
         @csrf
         @method('PUT')
 
-        <!-- Foto -->
-        <div class="foto-upload">
-          <label for="foto">
-            <i class="bi bi-camera"></i>
-            <span>Alterar Foto</span>
-          </label>
-          <input type="file" id="foto" name="foto" accept="image/*" hidden onchange="previewFoto(event)">
-          @if ($medico->usuario->foto ?? false)
-          <img id="preview-img" src="{{ asset('storage/fotos/' . $medico->usuario->foto) }}" alt="Foto atual" style="width: 100px;">
-          @endif
-
-        </div>
-
         <!-- Dados do Médico -->
         <input type="text" name="nomeMedico" value="{{ $medico->nomeMedico }}" required>
-        <input type="text" name="crmMedico" value="{{ $medico->crmMedico }}" required>
-        <input type="text" name="especialidadeMedico" value="{{ $medico->especialidadeMedico }}">
 
         <!-- Dados do Usuário -->
         <input type="text" name="nomeUsuario" value="{{ $medico->usuario->nomeUsuario }}" required>
         <input type="email" name="emailUsuario" value="{{ $medico->usuario->emailUsuario }}" required>
-        <input type="password" name="senhaUsuario" placeholder="Nova senha (opcional)">
 
         <button type="submit">Salvar Alterações</button>
       </form>
@@ -83,20 +67,6 @@
     </div>
   </main>
 
-  <script>
-    function previewFoto(event) {
-      const input = event.target;
-      const preview = document.getElementById('preview-img');
-
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          preview.src = e.target.result;
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-  </script>
 </body>
 
 </html>

@@ -13,10 +13,8 @@ class Medico extends Model
     protected $table = 'tbMedico';
     protected $primaryKey = 'idMedicoPK';
 
-    // Desabilita os timestamps padrão para usar colunas personalizadas.
     public $timestamps = false; 
 
-    // O SoftDeletes requer a coluna deleted_at, que deve ser tratada como data.
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
