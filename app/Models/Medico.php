@@ -20,6 +20,7 @@ class Medico extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
+        'foto',
         'nomeMedico',
         'crmMedico',
         'especialidadeMedico',
