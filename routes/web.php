@@ -66,3 +66,6 @@ Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () 
     })->name('dashboard');
     
 });
+
+Route::post('/admin/medicos/{id}/toggle-status', [AdminController::class, 'toggleStatus'])->name('admin.medicos.toggleStatus');
+    
