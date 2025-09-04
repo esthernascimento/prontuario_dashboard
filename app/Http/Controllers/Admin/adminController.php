@@ -9,14 +9,12 @@ use App\Models\Usuario;
 
 class AdminController extends Controller
 {
-    // Exibe a tela de confirmação de exclusão
     public function confirmarExclusao($id)
     {
         $medico = Medico::findOrFail($id);
         return view('admin.excluirMedico', compact('medico'));
     }
 
-    // Executa a exclusão do médico
     public function excluir($id)
     {
         $medico = Medico::findOrFail($id);
@@ -25,14 +23,12 @@ class AdminController extends Controller
         return redirect()->route('admin.manutencaoMedicos')->with('success', 'Médico excluído com sucesso!');
     }
 
-    // Exibe o formulário de edição
     public function editar($id)
     {
         $medico = Medico::findOrFail($id);
         return view('admin.editarMedico', compact('medico'));
     }
 
-    // Atualiza os dados do médico
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -43,12 +39,10 @@ class AdminController extends Controller
 
         $medico = Medico::with('usuario')->findOrFail($id);
 
-        // Atualiza dados do médico
         $medico->update([
             'nomeMedico' => $request->nomeMedico,
         ]);
 
-        // Atualiza dados do usuário vinculado
         $usuario = $medico->usuario;
         $usuario->nomeUsuario = $request->nomeUsuario;
         $usuario->emailUsuario = $request->emailUsuario;
@@ -67,7 +61,6 @@ class AdminController extends Controller
         return redirect()->route('admin.manutencaoMedicos')->with('success', 'Dados atualizados com sucesso!');
     }
 
-    // ✅ Cadastra um novo médico
     public function store(Request $request)
     {
         $request->validate([
@@ -80,11 +73,11 @@ class AdminController extends Controller
             'senhaUsuario' => 'required|string|min:6',
         ]);
 
-        // Cria o usuário vinculado
         $usuario = new Usuario();
         $usuario->nomeUsuario = $request->nomeUsuario;
         $usuario->emailUsuario = $request->emailUsuario;
         $usuario->senhaUsuario = bcrypt($request->senhaUsuario);
+        $usuario->statusUsuario = 1;
 
         if ($request->hasFile('foto')) {
             $fotoPath = $request->file('foto')->store('public/fotos');
@@ -93,7 +86,6 @@ class AdminController extends Controller
 
         $usuario->save();
 
-        // Cria o médico vinculado ao usuário
         $medico = new Medico();
         $medico->id_usuarioFK = $usuario->idUsuarioPK;
         $medico->nomeMedico = $request->nomeMedico;
@@ -103,5 +95,20 @@ class AdminController extends Controller
         $medico->save();
 
         return redirect()->route('admin.manutencaoMedicos')->with('success', 'Médico cadastrado com sucesso!');
+    }
+
+    public function toggleStatus($id)
+    {
+        $medico = Medico::with('usuario')->findOrFail($id);
+
+        if (!$medico->usuario) {
+            return redirect()->route('admin.manutencaoMedicos')->with('error', 'Este médico não está vinculado a um usuário.');
+        }
+
+        $usuario = $medico->usuario;
+        $usuario->statusAtivoUsuario = $usuario->statusAtivoUsuario == 1 ? 0 : 1;
+        $usuario->save();
+
+        return redirect()->route('admin.manutencaoMedicos')->with('success', 'Status do médico atualizado com sucesso!');
     }
 }

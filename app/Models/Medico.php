@@ -22,8 +22,10 @@ class Medico extends Model
         'nomeMedico',
         'crmMedico',
         'especialidadeMedico',
+        'emailMedico',
         'id_usuarioFK',
     ];
+
 
     public function usuario()
     {
