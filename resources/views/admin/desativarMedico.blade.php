@@ -36,7 +36,7 @@
         @if($admin && $admin->foto)
           <img src="{{ asset('storage/fotos/' . $admin->foto) }}" alt="Foto do Admin">
         @else
-          <img src="{{ asset('img/teste.png') }}" alt="Foto padrão">
+          <img src="{{ asset('img/usuario-de-perfil.png') }}" alt="Foto padrão">
         @endif
         <span>{{ $admin->nomeAdmin ?? 'Administrador' }}</span>
       </a>
