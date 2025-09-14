@@ -89,14 +89,12 @@
         <!-- Dados -->
         <input type="text" name="nomeAdmin" value="{{ $admin->nomeAdmin }}" required>
         <input type="email" name="emailAdmin" value="{{ $admin->emailAdmin }}" required>
-        <input type="password" name="senhaAdmin" placeholder="Nova senha (opcional)">
 
         <button type="submit">Salvar Alterações</button>
       </form>
     </div>
   </main>
 
-  <!-- Preview da Foto -->
   <script>
     function previewFoto(event) {
       const input = event.target;

@@ -51,6 +51,20 @@
         </a>
       </div>
 
+      <div class="search-filters">
+        <div class="search-box">
+          <i class="bi bi-search"></i>
+          <input type="text" id="searchInput" placeholder="Pesquisar por nome, CRM ou email..." onkeyup="filterPatients()">
+        </div>
+        <div class="filters">
+          <select id="filterStatus" onchange="filterPatients()">
+            <option value="">Status</option>
+            <option value="ativo">Ativo</option>
+            <option value="inativo">Inativo</option>
+          </select>
+        </div>
+      </div>
+
       <div class="box-table">
         <table>
           <thead>
@@ -64,7 +78,7 @@
           </thead>
           <tbody>
             @foreach ($medicos as $medico)
-              <tr>
+              <tr data-status="{{ optional($medico->usuario)->statusAtivoUsuario == 1 ? 'ativo' : 'inativo' }}">
                 <td>{{ $medico->nomeMedico }}</td>
                 <td>{{ $medico->crmMedico }}</td>
                 <td>{{ $medico->usuario->emailUsuario ?? 'Sem email' }}</td>
@@ -104,5 +118,31 @@
       </div>
     </div>
   </main>
+
+  <script>
+    function filterPatients() {
+      const searchInput = document.getElementById('searchInput').value.toLowerCase();
+      const filterStatus = document.getElementById('filterStatus').value;
+
+      const rows = document.querySelectorAll('tbody tr');
+
+      rows.forEach(row => {
+        const name = row.children[0].textContent.toLowerCase();
+        const crm = row.children[1].textContent.toLowerCase();
+        const email = row.children[2].textContent.toLowerCase();
+        const status = row.dataset.status;
+
+        const matchesSearch = name.includes(searchInput) || crm.includes(searchInput) || email.includes(searchInput);
+        const matchesStatus = !filterStatus || status === filterStatus;
+
+        if (matchesSearch && matchesStatus) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+  </script>
+  
 </body>
 </html>
