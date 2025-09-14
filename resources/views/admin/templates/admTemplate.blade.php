@@ -1,4 +1,6 @@
 <link rel="stylesheet" href="{{ asset('css/admin/dashboardAdm.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/admin/template.css') }}">
+
 
 <!-- sidebar -->
 <div class="sidebar">
