@@ -6,8 +6,12 @@
     <title>@yield('title', 'Painel Administrativo')</title>
 
     {{-- CSS principal --}}
-    <link rel="stylesheet" href="{{ asset('css/medico/template.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/medico/dashboardMedico.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/geral/template.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/geral/ajuda.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/geral/pacientes.css') }}">
+
+
+  
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
