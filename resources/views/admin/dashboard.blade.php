@@ -1,76 +1,78 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+@extends('admin.templates.admTemplate')
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard - Prontuário+</title>
+@php 
+  $admin = auth()->guard('admin')->user();
 
-  <link rel="stylesheet" href="{{ asset('css/admin/dashboardAdm.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/admin/template.css') }}">
+  // Métricas principais
+  $metrics = [
+    ['title' => 'Médicos cadastrados', 'value' => $adminCount ?? 0],
+    ['title' => 'Pacientes cadastrados', 'value' => $patientsCount ?? 0],
+    ['title' => 'Exames pendentes', 'value' => $pendingExamsCount ?? 0],
+  ];
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-</head>
+  // Cards informativos
+  $infoCards = [
+    ['title' => '75% IDOSOS', 'content' => null],
+    ['title' => 'UBS cadastradas', 'content' => $ubsCount ?? 0],
+    ['title' => 'A cada 10 usuários:', 'content' => "7 são mulheres<br>3 são homens<br>8 são idosos"],
+  ];
+@endphp
 
-<body>
-  @php $admin = auth()->guard('admin')->user(); @endphp
+@section('title', 'Dashboard - Painel Administrativo')
 
- 
+@section('content')
+<div class="overview-container">
 
-
-    <main class="main-dashboard">
-      <div class="overview-container">
-        <div class="overview-header">
-          <h1><i class="bi bi-activity"></i> OVERVIEW</h1>
-        </div>
-
-        <div class="metrics">
-          <div class="metric-card">
-            Médicos cadastrados<br>
-            <strong>{{ $adminCount ?? 0 }}</strong>
-          </div>
-          <div class="metric-card">
-            Pacientes cadastrados<br>
-            <strong>{{ $patientsCount ?? 0 }}</strong>
-          </div>
-          <div class="metric-card">
-            Exames pendentes<br>
-            <strong>{{ $pendingExamsCount ?? 0 }}</strong>
-          </div>
-        </div>
-
-        <div class="content-wrapper">
-          <div id="bar-chart-container" class="chart-container">
-            <canvas id="graficoBarras"></canvas>
-          </div>
-          <div id="line-chart-container" class="chart-container">
-            <canvas id="graficoLinha"></canvas>
-          </div>
-
-          <div class="info-cards-container">
-            <div class="info-card">
-              <h3>Índice de gênero</h3>
-              <div style="width: 120px; height: 120px;">
-                <canvas id="graficoDonutGenero"></canvas>
-              </div>
-            </div>
-            <div class="info-card">
-              <h3>75% IDOSOS</h3>
-            </div>
-            <div class="info-card">
-              <h3>UBS cadastradas</h3>
-              <strong>{{ $ubsCount ?? 0 }}</strong>
-            </div>
-            <div class="info-card">
-              <h3>A cada 10 usuários:</h3>
-              <p>7 são mulheres<br>3 são homens<br>8 são idosos</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
+  {{-- Header --}}
+  <div class="overview-header">
+    <h1><i class="bi bi-activity"></i> OVERVIEW</h1>
   </div>
 
-</body>
+  {{-- Cards de métricas --}}
+  <div class="metrics">
+    @foreach($metrics as $metric)
+      <div class="metric-card">
+        <span>{{ $metric['title'] }}</span>
+        <strong>{{ $metric['value'] }}</strong>
+      </div>
+    @endforeach
+  </div>
 
-</html>
+  {{-- Conteúdo com gráficos e info cards --}}
+  <div class="content-wrapper">
+
+    {{-- Gráficos --}}
+    <div class="charts">
+      <div class="chart-container">
+        <canvas id="graficoBarras"></canvas>
+      </div>
+      <div class="chart-container">
+        <canvas id="graficoLinha"></canvas>
+      </div>
+    </div>
+
+    {{-- Info cards --}}
+    <div class="info-cards-container">
+      
+      {{-- Card com gráfico donut --}}
+      <div class="info-card">
+        <h3>Índice de gênero</h3>
+        <div class="donut-chart">
+          <canvas id="graficoDonutGenero"></canvas>
+        </div>
+      </div>
+
+      {{-- Outros cards --}}
+      @foreach($infoCards as $card)
+        <div class="info-card">
+          <h3>{{ $card['title'] }}</h3>
+          @if($card['content'])
+            <p>{!! $card['content'] !!}</p>
+          @endif
+        </div>
+      @endforeach
+
+    </div>
+  </div>
+</div>
+@endsection
