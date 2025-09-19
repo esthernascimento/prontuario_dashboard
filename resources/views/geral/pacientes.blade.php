@@ -1,20 +1,7 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+@extends('geral.templates.geralTemplate')
 
-<head>
-  <meta charset="UTF-8">
-  <title>Pacientes - Prontuário+</title>
+@section('content')
 
-  <link rel="stylesheet" href="{{ asset('css/admin/dashboardAdm.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/geral/template.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/geral/pacientes.css') }}">
-
-
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-</head>
-
-<body>
   @php $admin = auth()->guard('admin')->user(); @endphp
 
 
@@ -46,3 +33,4 @@
             </select>
           </div>
         </div>
+    @endsection
