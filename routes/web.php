@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Medico\LoginController as MedicoLoginController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\Enfermeiro\LoginController as EnfermeiroLoginController;
 
 // --- ROTAS PÚBLICAS ---
 Route::get('/', function () {
@@ -21,9 +22,21 @@ Route::post('/loginAdm', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('admin.logout');
 
 Route::get('/loginMedico', [MedicoLoginController::class, 'showLoginForm'])->name('medico.login');
-Route::get('/loginEnfermeiro', function () {
-    return view('loginEnfermeiro');
+
+
+
+// Rotas públicas do enfermeiro
+Route::get('/loginEnfermeiro', [EnfermeiroLoginController::class, 'showLoginForm'])->name('enfermeiro.login');
+Route::post('/loginEnfermeiro', [EnfermeiroLoginController::class, 'login'])->name('enfermeiro.login.post');
+Route::post('/logoutEnfermeiro', [EnfermeiroLoginController::class, 'logout'])->name('enfermeiro.logout');
+
+// Rotas protegidas do enfermeiro
+Route::middleware('auth:enfermeiro')->prefix('enfermeiro')->name('enfermeiro.')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('enfermeiro.dashboard');
+    })->name('dashboard');
 });
+
 
 // --- PAINEL ADMIN ---
 Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function () {

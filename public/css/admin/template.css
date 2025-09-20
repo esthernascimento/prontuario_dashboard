@@ -15,6 +15,7 @@ body {
     align-items: center;
     padding-top: 20px;
     z-index: 10;
+
   }
   
   .logo {
@@ -39,7 +40,12 @@ body {
     color: #98b5ff;
   }
   
- 
+  
+.main-dashboard {
+  padding: 40px;
+  margin-left: 80px;
+
+}
   .main-dashboard-wrapper {
     margin-left: 80px;
   }
@@ -52,4 +58,19 @@ body {
     justify-content: flex-end;
     background-color: #131D4F; 
     border-bottom: 1px solid #eee;
+  }
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .user-info span {
+      color: #fff; 
+  }
+
+  .user-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
   }

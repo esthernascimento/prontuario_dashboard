@@ -1,28 +1,18 @@
 /* dashboard.css ATUALIZADO */
 
-  .user-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-  }
-  
-  .user-info span {
-      color: #fff; 
-  }
-
-  .user-info img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
-
   .main-dashboard {
     padding: 20px 40px;
   }
 
   .medico-container {
     max-width: 1200px;
-    margin: 0 auto;
+    margin:   auto;
+
+  }
+  .overview-container{  
+    margin-left: 75px;
+    max-width: 1750px;
+
   }
   
   .overview-header {

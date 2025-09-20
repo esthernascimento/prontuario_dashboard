@@ -1,15 +1,7 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    
-    <title>Prontuário+ :: Cadastrar Médico</title>
-    
-    <link rel="stylesheet" href="{{ asset('css/admin/cadastroMedico.css') }}">
-</head>
-<body>
+@extends('admin.templates.admTemplate')
+
+@section('content')
+
     <main class="main-container">
         <div class="logo-area">
             <img src="{{ asset('img/medico-logo1.png') }}" alt="Logo Prontuário" />
@@ -102,6 +94,5 @@
             });
         });
     </script>
-</body>
-</html>
 
+@endsection

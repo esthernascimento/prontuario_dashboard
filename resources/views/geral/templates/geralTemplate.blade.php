@@ -52,7 +52,7 @@
         </a>
     </header>
 
-    <main class="content">
+    <main class="main-dashboard">
         @yield('content')
     </main>
 </body>

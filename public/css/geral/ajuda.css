@@ -1,14 +1,18 @@
 
 /* Estilos específicos para a página de ajuda */
 .help-container {
-    max-width: 900px;
-    margin: auto;
+  max-width: 800px;
+  margin: auto;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
   }
 
 
   .help-container h1{
       color: #131D4F;
       margin: 0;
+      margin-bottom: 10px;
   }
 
   .help-container h2 {
@@ -63,10 +67,21 @@
       border-radius: 8px;
       border: 1px solid #ccc;
       font-size: 1em;
+      cursor: pointer;
   }
   .contact-form button {
       background-color: #131D4F;
       color: white;
       font-weight: bold;
       cursor: pointer;
+      transition: background-color 0.3s;
   }
+
+  .contact-form button:hover {
+      background-color: #6c7ae0;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+  }
+
+  

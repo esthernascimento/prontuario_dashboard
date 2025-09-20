@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="{{ asset('css/admin/excluirMedico.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/editarMedico.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/desativarMedico.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/geral/ajuda.css') }}">
+
 
 
     {{-- Bootstrap Icons (caso não tenha no CSS principal) --}}

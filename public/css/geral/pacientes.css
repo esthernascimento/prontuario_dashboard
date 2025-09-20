@@ -1,9 +1,19 @@
 /* Estilos específicos para a página de pacientes */
-.patients-container {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
+.main-dashboard{
+  padding: 30px;
+  margin-left: 10px;
   
+}
+
+.patients-container {
+ 
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    align-self: center;
+  }
+
   .patients-header {
     display: flex;
     justify-content: space-between;
@@ -14,6 +24,7 @@
   .patients-header h1 {
     color: #131D4F;
     margin: 0;
+    
   }
   
   .patients-header h1 i {
