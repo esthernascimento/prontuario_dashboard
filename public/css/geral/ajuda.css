@@ -1,14 +1,18 @@
 
 /* Estilos específicos para a página de ajuda */
 .help-container {
-    max-width: 900px;
-    margin: auto;
+  max-width: 800px;
+  margin: auto;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
   }
 
 
   .help-container h1{
       color: #131D4F;
       margin: 0;
+      margin-bottom: 10px;
   }
 
   .help-container h2 {

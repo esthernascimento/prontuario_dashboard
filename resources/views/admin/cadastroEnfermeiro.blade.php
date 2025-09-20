@@ -1,15 +1,5 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prontuário+</title>
-  
-  <link rel="stylesheet" href="{{ asset('css/admin/cadastroEnfermeiro.css') }}">
-  
-</head>
+@extends('admin.templates.admTemplate')
 
-<body>
   <main class="main-container">
 
     <!-- Lado azul com a logo -->
@@ -43,5 +33,4 @@
     </div>
 
   </main>
-</body>
-</html>
+@endsection

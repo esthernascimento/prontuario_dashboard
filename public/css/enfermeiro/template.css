@@ -39,6 +39,10 @@ body {
     color: #98b5ff;
   }
   
+  .main-dashboard {
+    padding: 40px;
+    margin-left: 80px;
+  }
  
   .main-dashboard-wrapper {
     margin-left: 80px;

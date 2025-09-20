@@ -1,14 +1,15 @@
 @extends('geral.templates.geralTemplate')
 
+@section('content') 
   @php $admin = auth()->guard('admin')->user(); @endphp
 
   @section('title', 'Dashboard - Painel Administrativo')
 
-@section('content')
 
-    <main class="main-dashboard">
+
+    <main class="main-dashboardAjuda">
       <div class="help-container">
-        <h1>Central de Ajuda</h1>
+        <h1><i class="bi bi-person-heart"></i>Central de Ajuda</h1>
         <p>Olá, Dra. Júlia! Como podemos ajudar hoje?</p>
 
         <h2><i class="bi bi-question-circle-fill"></i> Perguntas Frequentes (FAQ)</h2>
@@ -42,5 +43,6 @@
 
       </div>
     </main>
+    
   
     @endsection
