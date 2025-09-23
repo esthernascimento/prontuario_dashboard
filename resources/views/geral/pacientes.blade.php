@@ -2,6 +2,8 @@
 
 @section('content')
 
+  <link rel="stylesheet" href="{{ asset('css/geral/pacientes.css') }}">
+
   @php $admin = auth()->guard('admin')->user(); @endphp
 
 

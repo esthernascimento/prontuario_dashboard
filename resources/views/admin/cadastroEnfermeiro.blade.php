@@ -1,4 +1,17 @@
-@extends('admin.templates.admTemplate')
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prontuário+ | Admin Login</title>
+
+  <link rel="stylesheet" href="{{ asset('css/admin/cadastroEnfermeiro.css') }}">
+  <link rel="shortcut icon" href="{{url('img/logo-azul.png')}}" type="image/x-icon" />
+
+</head>
+
+<body>
 
   <main class="main-container">
 
@@ -10,7 +23,7 @@
     <!-- Card de cadastro -->
     <div class="cads-area">
       <form class="cads-card" method="POST" action="/cadastro">
-    @csrf
+        @csrf
 
         <h2>Enfermeiro(a) Cadastro</h2>
 
@@ -33,4 +46,7 @@
     </div>
 
   </main>
-@endsection
+
+</body>
+
+</html>

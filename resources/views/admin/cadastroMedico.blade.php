@@ -1,6 +1,17 @@
-@extends('admin.templates.admTemplate')
+<!DOCTYPE html>
+<html lang="pt-BR">
 
-@section('content')
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prontuário+ | Admin Login</title>
+
+    <link rel="stylesheet" href="{{ asset('css/admin/cadastroMedico.css') }}">
+    <link rel="shortcut icon" href="{{url('img/logo-azul.png')}}" type="image/x-icon" />
+
+</head>
+
+<body>
 
     <main class="main-container">
         <div class="logo-area">
@@ -29,34 +40,38 @@
         </div>
     </main>
 
-    <script>
-        document.getElementById('cadastroMedicoForm').addEventListener('submit', function (event) {
-            event.preventDefault();
+</body>
 
-            const form = event.target;
-            const button = form.querySelector('button');
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-            const messagesDiv = document.getElementById('form-messages');
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+</html>
 
-            // Desabilita o botão para evitar cliques duplos
-            button.disabled = true;
-            button.textContent = 'Cadastrando...';
+<script>
+    document.getElementById('cadastroMedicoForm').addEventListener('submit', function (event) {
+        event.preventDefault();
 
-            messagesDiv.style.display = 'none';
-            messagesDiv.textContent = '';
-            messagesDiv.classList.remove('success', 'error');
-            
-            fetch("{{ route('admin.medicos.register') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                body: JSON.stringify(data)
-            })
+        const form = event.target;
+        const button = form.querySelector('button');
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        const messagesDiv = document.getElementById('form-messages');
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        // Desabilita o botão para evitar cliques duplos
+        button.disabled = true;
+        button.textContent = 'Cadastrando...';
+
+        messagesDiv.style.display = 'none';
+        messagesDiv.textContent = '';
+        messagesDiv.classList.remove('success', 'error');
+
+        fetch("{{ route('admin.medicos.register') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify(data)
+        })
             .then(response => response.json())
             .then(result => {
                 if (result.message === 'Médico pré-cadastrado com sucesso!') {
@@ -64,10 +79,10 @@
                     messagesDiv.textContent = result.message + " Redirecionando...";
                     messagesDiv.classList.add('success');
                     messagesDiv.style.display = 'block';
-                    form.reset(); 
+                    form.reset();
 
                     // Redireciona para a página de login do médico após 2 segundos
-                    setTimeout(function() {
+                    setTimeout(function () {
                         window.location.href = "{{ route('admin.manutencaoMedicos') }}";
                     }, 2000);
 
@@ -92,7 +107,5 @@
                 button.disabled = false;
                 button.textContent = 'CADASTRAR';
             });
-        });
-    </script>
-
-@endsection
+    });
+</script>

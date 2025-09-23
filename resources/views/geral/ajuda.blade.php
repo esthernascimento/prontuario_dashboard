@@ -5,7 +5,7 @@
 
   @section('title', 'Dashboard - Painel Administrativo')
 
-
+    <link rel="stylesheet" href="{{ asset('css/geral/ajuda.css') }}">
 
     <main class="main-dashboardAjuda">
       <div class="help-container">

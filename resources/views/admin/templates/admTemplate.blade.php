@@ -7,14 +7,14 @@
 
     {{-- CSS principal --}}
     <link rel="stylesheet" href="{{ asset('css/admin/template.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin/dashboardAdm.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin/seguranca.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin/perfilAdm.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin/manutencaoMedicos.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin/excluirMedico.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin/editarMedico.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin/desativarMedico.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/geral/ajuda.css') }}">
+    
+   
+    
+
+    
+   
+    
+   
 
 
 

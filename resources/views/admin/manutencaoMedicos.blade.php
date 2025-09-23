@@ -2,8 +2,9 @@
 
 @section('content')
 
-  @php $admin = auth()->guard('admin')->user(); @endphp
+  <link rel="stylesheet" href="{{ asset('css/admin/manutencaoMedicos.css') }}">
 
+  @php $admin = auth()->guard('admin')->user(); @endphp
 
   <main class="main-dashboard">
     <div class="medico-container">
