@@ -21,11 +21,15 @@
           <input type="text" id="searchInput" placeholder="Pesquisar por nome, CRM ou email..." onkeyup="filterPatients()">
         </div>
         <div class="filters">
-          <select id="filterStatus" onchange="filterPatients()">
-            <option value="">Status</option>
-            <option value="ativo">Ativo</option>
-            <option value="inativo">Inativo</option>
-          </select>
+          <div class="custom-select" id="customStatus">
+            <div class="selected">Status</div>
+            <div class="options">
+              <div data-value="">Status</div>
+              <div data-value="ativo">Ativo</div>
+              <div data-value="inativo">Inativo</div>
+            </div>
+          </div>
+          <input type="hidden" id="filterStatus" value="">
         </div>
       </div>
 
@@ -106,6 +110,36 @@
         }
       });
     }
+
+    const customSelect = document.getElementById("customStatus");
+    const selected = customSelect.querySelector(".selected");
+    const options = customSelect.querySelector(".options");
+    const hiddenInput = document.getElementById("filterStatus");
+
+    // abre/fecha dropdown
+    selected.addEventListener("click", () => {
+      options.style.display = options.style.display === "flex" ? "none" : "flex";
+    });
+
+    // ao selecionar opção
+    options.querySelectorAll("div").forEach(option => {
+      option.addEventListener("click", () => {
+        selected.textContent = option.textContent;
+        hiddenInput.value = option.dataset.value;
+        options.style.display = "none";
+        filterPatients(); // chama sua função existente
+      });
+    });
+
+    // fecha clicando fora
+    document.addEventListener("click", e => {
+      if (!customSelect.contains(e.target)) {
+        options.style.display = "none";
+      }
+    });
+
+
+
   </script>
 
 @endsection

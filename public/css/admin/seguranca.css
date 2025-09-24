@@ -64,6 +64,7 @@
     border-radius: 8px;
     font-size: 16px;
     transition: border-color 0.3s;
+    cursor: pointer;
   }
   
   .form-group input:focus {
@@ -93,7 +94,7 @@
   }
   
   .btn-primary:hover {
-    background-color: #02040c;
+    background-color: #6c7ae0;
   }
   
   .btn-secondary {
@@ -123,7 +124,7 @@
   }
   
   .btn-outline:hover {
-    background-color: #02061b;
+    background-color: #6c7ae0;
     color: white;
   }
 

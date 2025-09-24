@@ -40,10 +40,21 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
         'admin' => [
         'driver' => 'session',
         'provider' => 'admins',
-    ],
+        ],
+
+        'medico' => [
+            'driver' => 'session',
+            'provider' => 'medicos',
+        ],
+
+        'enfermeiro' => [
+            'driver' => 'session',
+            'provider' => 'enfermeiros',
+        ],
     ],
 
     /*
@@ -64,6 +75,7 @@ return [
     */
 
 'providers' => [
+
     'users' => [
         'driver' => 'eloquent',
         'model' => App\Models\Usuario::class, 
@@ -73,6 +85,16 @@ return [
         'driver' => 'eloquent',
         'model' => App\Models\Admin::class,
     ], 
+
+    'medicos' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Medico::class,
+    ],
+
+    'enfermeiros' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Enfermeiro::class,
+    ],
 
     // 'users' => [
     //     'driver' => 'database',
@@ -100,12 +122,14 @@ return [
     */
 
     'passwords' => [
+
         'users' => [
             'provider' => 'users',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,
         ],
+        
     ],
 
     /*
