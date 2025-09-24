@@ -2,9 +2,10 @@
 
 @section('content')
 
-  @php $admin = auth()->guard('admin')->user(); @endphp
+<link rel="stylesheet" href="{{ asset('css/admin/seguranca.css') }}">
 
- 
+
+  @php $admin = auth()->guard('admin')->user(); @endphp
 
     <main class="main-dashboard">
       <div class="security-container">

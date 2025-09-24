@@ -1,6 +1,8 @@
 @extends('admin.templates.admTemplate')
 
 @section('content')
+
+
   <script>
     window.onload = function() {
       @if(session('success'))
@@ -17,6 +19,9 @@
     };
   </script>
   @php $admin = auth()->guard('admin')->user(); @endphp
+
+  
+  <link rel="stylesheet" href="{{ asset('css/admin/perfilAdm.css') }}">
 
   
   <!-- Conteúdo Principal -->

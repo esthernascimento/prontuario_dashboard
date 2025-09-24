@@ -1,6 +1,6 @@
 @extends('geral.templates.geralTemplate') 
 
-@section('content') 
+@section('content')
 
 @php $admin = auth()->guard('admin')->user(); 
 

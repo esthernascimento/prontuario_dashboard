@@ -1,7 +1,15 @@
-@extends('admin.templates.admTemplate')
-
-@section('content')
-
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <title>Prontuário+ :: Cadastrar Médico</title>
+    
+    <link rel="stylesheet" href="{{ asset('css/admin/cadastroMedico.css') }}">
+</head>
+<body>
     <main class="main-container">
         <div class="logo-area">
             <img src="{{ asset('img/medico-logo1.png') }}" alt="Logo Prontuário" />
@@ -40,7 +48,7 @@
             const messagesDiv = document.getElementById('form-messages');
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-            // Desabilita o botão para evitar cliques duplos
+
             button.disabled = true;
             button.textContent = 'Cadastrando...';
 
@@ -60,13 +68,13 @@
             .then(response => response.json())
             .then(result => {
                 if (result.message === 'Médico pré-cadastrado com sucesso!') {
-                    // Exibe a mensagem de sucesso
+
                     messagesDiv.textContent = result.message + " Redirecionando...";
                     messagesDiv.classList.add('success');
                     messagesDiv.style.display = 'block';
                     form.reset(); 
 
-                    // Redireciona para a página de login do médico após 2 segundos
+
                     setTimeout(function() {
                         window.location.href = "{{ route('admin.manutencaoMedicos') }}";
                     }, 2000);
@@ -79,7 +87,7 @@
                     messagesDiv.textContent = errorText;
                     messagesDiv.classList.add('error');
                     messagesDiv.style.display = 'block';
-                    // Reabilita o botão em caso de erro
+
                     button.disabled = false;
                     button.textContent = 'CADASTRAR';
                 }
@@ -88,11 +96,12 @@
                 messagesDiv.textContent = 'Ocorreu um erro de comunicação. Tente novamente.';
                 messagesDiv.classList.add('error');
                 messagesDiv.style.display = 'block';
-                // Reabilita o botão em caso de erro
+
                 button.disabled = false;
                 button.textContent = 'CADASTRAR';
             });
         });
     </script>
+</body>
+</html>
 
-@endsection

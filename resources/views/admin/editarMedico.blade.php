@@ -1,5 +1,9 @@
 @extends('admin.templates.admTemplate')
 
+@section('content')
+
+    <link rel="stylesheet" href="{{ asset('css/admin/editarMedico.css') }}">
+
     @php $admin = auth()->guard('admin')->user(); @endphp
 
   

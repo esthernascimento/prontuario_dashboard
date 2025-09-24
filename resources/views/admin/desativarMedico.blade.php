@@ -1,5 +1,9 @@
 @extends('admin.templates.admTemplate')
 
+@section('content')
+
+  <link rel="stylesheet" href="{{ asset('css/admin/desativarMedico.css') }}">
+
   <!-- Conteúdo principal -->
   <main class="main-dashboard">
     <div class="cadastrar-container" style="text-align:center;">
