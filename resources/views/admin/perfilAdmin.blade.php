@@ -3,28 +3,11 @@
 @section('content')
 
 
-  <script>
-    window.onload = function() {
-      @if(session('success'))
-      setTimeout(function() {
-        window.location.href = "{{ route('admin.dashboard') }}";
-      }, 3000);
-      @endif
+  <link rel="stylesheet" href="{{ asset('css/admin/perfilAdmin.css') }}">
 
-      @if(session('error'))
-      setTimeout(function() {
-        window.location.href = "{{ route('admin.perfil') }}";
-      }, 3000);
-      @endif
-    };
-  </script>
   @php $admin = auth()->guard('admin')->user(); @endphp
 
-  
-  <link rel="stylesheet" href="{{ asset('css/admin/perfilAdm.css') }}">
 
-  
-  <!-- Conteúdo Principal -->
   <main class="main-dashboard">
     <div class="cadastrar-container">
       <div class="cadastrar-header">
@@ -35,16 +18,17 @@
       <form action="{{ route('admin.perfil.update') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
-        <!-- Foto -->
         <div class="foto-upload">
           <label for="foto">
             <i class="bi bi-camera"></i>
             <span>Alterar Foto</span>
           </label>
           <input type="file" id="foto" name="foto" accept="image/*" hidden onchange="previewFoto(event)">
-          
+
           <div class="box-foto">
-            <img id="preview-img" src="{{ $admin->foto ? asset('storage/fotos/' . $admin->foto) : asset('img/usuario-de-perfil.png') }}" alt="Foto atual" style="width: 134px; border-radius: 100px; margin-top: 10px;">
+            <img id="preview-img"
+              src="{{ $admin->foto ? asset('storage/fotos/' . $admin->foto) : asset('img/usuario-de-perfil.png') }}"
+              alt="Foto atual" style="width: 134px; border-radius: 100px; margin-top: 10px;">
           </div>
         </div>
 
@@ -64,11 +48,26 @@
 
       if (input.files && input.files[0]) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
           preview.src = e.target.result;
         };
         reader.readAsDataURL(input.files[0]);
       }
     }
+
+    window.onload = function () {
+      @if(session('success'))
+        setTimeout(function () {
+          window.location.href = "{{ route('admin.dashboard') }}";
+        }, 3000);
+      @endif
+
+      @if(session('error'))
+        setTimeout(function () {
+          window.location.href = "{{ route('admin.perfil') }}";
+        }, 3000);
+      @endif
+      };
+
   </script>
 @endsection
