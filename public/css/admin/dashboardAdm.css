@@ -11,12 +11,12 @@
   }
   .overview-container{ 
     max-width: 1750px;
-
   }
   
   .overview-header {
+    padding: 20px;
     display: flex;
-    justify-content: space-between;
+    justify-content: left;
     align-items: center;
     margin-bottom: 30px;
     margin-left: 40px;
@@ -36,6 +36,7 @@
 
   .metrics {
     display: flex;
+    justify-content: flex-end;
     flex-wrap: wrap;
     gap: 20px;
     margin: 20px 0;
@@ -47,9 +48,28 @@
     padding: 20px;
     border-radius: 15px;
     flex: 1;
-    min-width: 200px;
+    width: 300px;
     text-align: center;
     font-size: 1.1em;
+  }
+
+  .metric-card .container-img{
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .metric-card .container-img img{
+    height: 50px;
+    width: 50px;
+  }
+
+  .metric-card .container-img span{
+    font-size: 1.1em;
+    color: white; 
+    text-align: right;
   }
 
   .metric-card strong {
@@ -100,20 +120,24 @@
   }
 
   .info-card {
-    background-color: #fff; 
+    background-color: #E9ECFF; 
+    color: #0618b9;
     border-radius: 10px;
     padding: 15px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-
     flex: 1;
     min-width: 200px;
     min-height: 180px;
-    
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
+  }
+
+  .info-card h3{
+    color: #0618b9;
+    text-align: left;
   }
 
   .chart-container #top_x_div {
@@ -123,5 +147,24 @@
   }
 
   .chart-container {
-    height: 400px; 
+     background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    flex-grow: 1;
+    /* Remova a altura fixa ou aumente-a */
+    /* height: 320px; */ /* Pode remover esta linha */
+    height: 400px; /* Ou aumente para um valor que funcione */ 
+    zoom: 1;
+}
+
+.donut-chart {
+  width: 200px;
+  height: 200px;
+}
+
+.chart-container canvas {
+    max-height: 100%;
+    width: 100% !important;
+    height: 100% !important;
 }
