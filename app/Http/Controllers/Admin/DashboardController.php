@@ -49,8 +49,8 @@ class DashboardController extends Controller
         }
 
         // 📊 Distribuição de gênero (Homens, Mulheres, Idosos)
-        $homens = Paciente::where('sexoPaciente', 'Masculino')->count();
-        $mulheres = Paciente::where('sexoPaciente', 'Feminino')->count();
+        $homens = Paciente::where('genero', 'Masculino')->count();
+        $mulheres = Paciente::where('genero', 'Feminino')->count();
         $idosos = Paciente::whereRaw('TIMESTAMPDIFF(YEAR, dataNascPaciente, CURDATE()) >= 60')->count();
 
         $dadosGenero = [
