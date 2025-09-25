@@ -29,6 +29,5 @@
       
         <button class="button" type="submit">ENTRAR</button>
       
-        <a href="{{url('/cadastroEnfermeiro')}}">Não tem cadastro? <strong>Clique aqui</strong></a>
       </form>
     </div>      

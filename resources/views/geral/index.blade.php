@@ -24,7 +24,7 @@
             </div>
 
             <div class="img-content">
-                <img src="{{asset('img/medico-logo1.png')}}" class="logo">
+                <img src="{{asset('img/adm-logo1.png')}}" class="logo">
             </div>
 
         </div>

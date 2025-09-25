@@ -28,7 +28,7 @@ body {
 
 
 .medico-header h1 {
-    color: #131D4F;
+    color: #0618b9;
     margin: 0;
 
 }
@@ -39,7 +39,7 @@ body {
 }
 
 .btn-add-medico {
-    background-color: #131D4F;
+    background-color: #0618b9;
     color: white;
     padding: 12px 20px;
     border: none;
@@ -92,7 +92,7 @@ body {
 
 .search-box input:focus {
     outline: none;
-    border-color: #131D4F;
+    border-color: #0618b9;
     box-shadow: 0 0 0 2px rgba(0, 35, 160, 0.1);
 }
 
@@ -173,7 +173,7 @@ table {
 }
 
 thead {
-    background-color: #131D4F;
+    background-color: #0618b9;
     color: white;
     text-align: left;
 }

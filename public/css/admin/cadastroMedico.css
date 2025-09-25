@@ -10,7 +10,7 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #0618b9;
+  background-color: #8c1007;
 }
 
 .main-container {
@@ -38,11 +38,11 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #0618b9;
+  background-color: #8c1007;
 }
 
 .cads-card {
-  background-color: #dcdcf9;
+  background-color: #fceceb;
   padding: 40px;
   border-radius: 40px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -51,7 +51,7 @@ body {
 }
 
 .cads-card h2 {
-  color: #0618b9;
+  color: #8c1007;
   font-weight: 700;
   font-size: 25px;
   margin-bottom: 20px;
@@ -61,7 +61,7 @@ body {
 .cads-card label {
   display: flex;
   font-weight: 600;
-  color: #0618b9;
+  color: #8c1007;
   margin-top: 10px;
 }
 
@@ -81,7 +81,7 @@ body {
   margin: 20px auto 0;
   width: 55%;
   padding: 15px;
-  background-color: #0618b9;
+  background-color: #8c1007;
   color: white;
   border: none;
   border-radius: 23px;
@@ -92,7 +92,7 @@ body {
 }
 
 .cads-card button:hover {
-  background-color: #040e7f;
+  background-color: #f39791;
 }
 
 a {

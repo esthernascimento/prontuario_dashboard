@@ -18,7 +18,7 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #131D4F;
+  color: #0618b9;
   margin-bottom: 25px;
 }
 
@@ -28,7 +28,7 @@ body {
 }
 
 .foto-upload {
-  background-color: #131D4F;
+  background-color: #0618b9;
   color: white;
   border-radius: 16px;
   text-align: center;
@@ -64,7 +64,7 @@ form input {
   padding: 12px;
   border-radius: 20px;
   border: none;
-  background-color: #131D4F;
+  background-color: #0618b9
   color: white;
   font-size: 16px;
   margin-bottom: 20px;
@@ -77,7 +77,7 @@ form input::placeholder {
 /* Botão principal */
 form button {
   display: block;
-  background-color: #131D4F;
+  background-color: #0618b9;
   color: white;
   padding: 12px 25px;
   border: none;

@@ -39,7 +39,7 @@ body {
   }
   
   .foto-upload {
-    background-color: #131D4F;
+    background-color: #0618b9;
     color: white;
     border-radius: 16px;
     text-align: center;
@@ -62,7 +62,7 @@ body {
     display: flex;
     font-weight: 600;
     margin-bottom: 6px;
-    color: #131D4F;
+    color: #0618b9;
   }
   
   .form-group input {
@@ -72,7 +72,7 @@ body {
     padding: 12px;
     border-radius: 20px;
     border: none;
-    background-color: #131D4F;
+    background-color: #0618b9;
     color: white;
     font-size: 16px;
   }
@@ -83,7 +83,7 @@ body {
   
   .btn-salvar {
     display: block;
-    background-color: #131D4F;
+    background-color: #0618b9;
     color: white;
     padding: 12px 25px;
     border: none;
@@ -103,7 +103,7 @@ body {
   
   /* Botão cancelar e excluir */
   .btn-desativar:last-of-type {
-    background-color:#131D4F;
+    background-color:#0618b9;
     color: white;
     text-decoration: none;
     display: inline-block;
@@ -125,7 +125,7 @@ body {
   }
 
     .btn-cancelar:last-of-type {
-    background-color:#131D4F;
+    background-color:#0618b9;
     color: white;
     text-decoration: none;
     display: inline-block;

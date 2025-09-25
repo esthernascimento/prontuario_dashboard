@@ -12,7 +12,7 @@
   }
   
   .security-container h1 {
-    color: #131D4F;
+    color: #0618b9;
     margin-top: 0px;
     margin-bottom: 10px;
   }
@@ -32,7 +32,7 @@
   }
   
   .security-section h2 {
-    color: #131D4F;
+    color: #0618b9;
     margin-bottom: 20px;
     font-size: 1.3em;
   }
@@ -69,7 +69,7 @@
   
   .form-group input:focus {
     outline: none;
-    border-color: #131D4F;
+    border-color: #0618b9;
     box-shadow: 0 0 0 2px rgba(0, 35, 160, 0.1);
   }
   
@@ -82,7 +82,7 @@
   
   /* Botões */
   .btn-primary {
-    background-color: #131D4F;
+    background-color: #0618b9;
     color: white;
     padding: 12px 24px;
     border: none;
@@ -116,7 +116,7 @@
     background-color: transparent;
     color: #131D4F;
     padding: 10px 20px;
-    border: 2px solid #131D4F;
+    border: 2px solid #0618b9;
     border-radius: 8px;
     font-size: 14px;
     cursor: pointer;
