@@ -2,23 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Enfermeiro extends Authenticatable
+class Enfermeiro extends Model
 {
-    use Notifiable;
+    use HasFactory;
 
-    protected $table = 'enfermeiros'; // nome da tabela no banco
+    protected $table = 'tbEnfermeiro';
+    protected $primaryKey = 'idEnfermeiroPK';
+    public $timestamps = false;
 
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+   protected $fillable = [
+    'nomeEnfermeiro',
+    'emailEnfermeiro',
+    'corenEnfermeiro',
+    'especialidadeEnfermeiro',
+    'genero',
+    'id_usuario',
+];
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'id_usuario', 'idUsuarioPK');
+    }
 }
