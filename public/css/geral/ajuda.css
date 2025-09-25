@@ -1,5 +1,4 @@
 
-/* Estilos específicos para a página de ajuda */
 .help-container {
   max-width: 800px;
   margin: auto;
@@ -7,7 +6,6 @@
   display: flex;
   flex-direction: column;
   }
-
 
   .help-container h1{
       color: #131D4F;
@@ -20,6 +18,11 @@
     border-bottom: 2px solid #131D4F;
     padding-bottom: 10px;
     margin-top: 40px;
+  }
+
+  h1 i {
+    gap: 10px;
+    margin-right: 10px;
   }
   
   .search-bar {

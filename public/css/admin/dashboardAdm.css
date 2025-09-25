@@ -9,11 +9,7 @@
     margin:   auto;
 
   }
-  .overview-container{  
-<<<<<<< HEAD
-=======
-    margin-left: 75px;
->>>>>>> 3085df9b7a4eccbb0f9105d1c67bc357e0398db3
+  .overview-container{ 
     max-width: 1750px;
 
   }
@@ -119,3 +115,13 @@
     justify-content: center;
     text-align: center;
   }
+
+  .chart-container #top_x_div {
+    width: 100%;
+    margin-top: 0px;
+    height: 100%;
+  }
+
+  .chart-container {
+    height: 400px; 
+}

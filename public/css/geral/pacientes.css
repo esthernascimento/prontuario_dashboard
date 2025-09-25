@@ -84,3 +84,22 @@
     cursor: pointer;
   }
   
+
+.btn-add-paciente {
+  background-color: #131D4F;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-add-paciente:hover {
+  background-color: #6c7ae0;
+}

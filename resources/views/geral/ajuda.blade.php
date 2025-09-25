@@ -10,7 +10,7 @@
     <main class="main-dashboardAjuda">
       <div class="help-container">
         <h1><i class="bi bi-person-heart"></i>Central de Ajuda</h1>
-        <p>Olá, Dra. Júlia! Como podemos ajudar hoje?</p>
+        
 
         <h2><i class="bi bi-question-circle-fill"></i> Perguntas Frequentes (FAQ)</h2>
 
