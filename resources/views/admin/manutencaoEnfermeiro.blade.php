@@ -71,7 +71,7 @@
                         </a>
 
                         @if($enfermeiro->usuario)
-                            <form action="{{ route('admin.enfermeiros.toggleStatus', $enfermeiro->idEnfermeiroPK) }}" method="POST" style="display: inline;">
+                            <form action="{{ route('admin.enfermeiro.toggleStatus', $enfermeiro->idEnfermeiroPK) }}" method="POST" style="display: inline;">
                             @csrf
                             <button type="submit" style="background: none; border: none;">
                                 @if($enfermeiro->usuario->statusAtivoUsuario == 1)
