@@ -11,8 +11,9 @@
       <div class="medico-header">
         <h1><i class="bi bi-person-vcard-fill"></i> Gerenciamento de Médicos</h1>
         <a href="{{ route('admin.medicos.create') }}" class="btn-add-medico">
-          <i class="bi bi-plus-circle"></i> Cadastrar Médico
-        </a>
+    <i class="bi bi-plus-circle"></i> Cadastrar Médico
+</a>
+
       </div>
 
       <div class="search-filters">
