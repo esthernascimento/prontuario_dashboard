@@ -4,41 +4,45 @@ namespace App\Http\Controllers\Enfermeiro;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Enfermeiro;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
-    // Exibe o formulário de login
     public function showLoginForm()
     {
         return view('enfermeiro.login');
     }
 
-    // Processa o login
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
+            'corem' => 'required|string',
+            'senha' => 'required|string',
         ]);
 
-        $credentials = $request->only('email', 'password');
+        $enfermeiro = Enfermeiro::with('usuario')
+            ->where('corenEnfermeiro', $request->corem)
+            ->first();
 
-        if (Auth::guard('enfermeiro')->attempt($credentials, $request->filled('remember'))) {
-            $request->session()->regenerate();
-            return redirect()->intended(route('enfermeiro.dashboard'));
+        if ($enfermeiro && $enfermeiro->usuario && Hash::check($request->senha, $enfermeiro->usuario->senhaUsuario)) {
+            Auth::guard('enfermeiro')->login($enfermeiro->usuario);
+            session([
+                'enfermeiro_id' => $enfermeiro->id,
+                'enfermeiro_nome' => $enfermeiro->nomeEnfermeiro
+            ]);
+            return redirect()->route('enfermeiro.dashboard');
         }
 
         return back()->withErrors([
-            'email' => 'Credenciais inválidas.',
+            'corem' => 'COREM ou senha inválidos.'
         ])->withInput();
     }
 
-    // Logout do enfermeiro
     public function logout(Request $request)
     {
         Auth::guard('enfermeiro')->logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

@@ -53,7 +53,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($enfermeiro as $enfermeiro)
+                    @foreach ($enfermeiros as $enfermeiro)
                     <tr data-status="{{ optional($enfermeiro->usuario)->statusAtivoUsuario == 1 ? 'ativo' : 'inativo' }}">
                         <td>{{ $enfermeiro->nomeEnfermeiro }}</td>
                         <td>{{ $enfermeiro->corenEnfermeiro }}</td>
@@ -66,7 +66,7 @@
                         @endif
                         </td>
                         <td class="actions">
-                        <a href="{{ route('admin.enfermeiros.editar', $enfermeiro->idEnfermeiroPK) }}">
+                        <a href="{{ route('admin.enfermeiro.editar', $enfermeiro->idEnfermeiroPK) }}">
                             <i class="bi bi-pencil" title="Editar"></i>
                         </a>
 
@@ -83,7 +83,7 @@
                             </form>
                         @endif
 
-                        <a href="{{ route('admin.enfermeiros.confirmarExclusao', $enfermeiro->idEnfermeiroPK) }}">
+                        <a href="{{ route('admin.enfermeiro.confirmarExclusao', $enfermeiro->idEnfermeiroPK) }}">
                             <i class="bi bi-trash" title="Excluir"></i>
                         </a>
                         </td>

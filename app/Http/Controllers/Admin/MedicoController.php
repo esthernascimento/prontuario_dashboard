@@ -14,4 +14,6 @@ class MedicoController extends Controller
 
         return view('admin.manutencaoMedicos', compact('medicos'));
     }
+
+    
 }
