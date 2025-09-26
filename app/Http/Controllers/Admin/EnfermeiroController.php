@@ -22,12 +22,11 @@ class EnfermeiroController extends Controller
         return view('admin.cadastroEnfermeiro');
     }
 
-    // Salvar novo enfermeiro
     public function store(Request $request)
     {
         $request->validate([
             'nomeEnfermeiro' => 'required|string|max:255',
-            'emailEnfermeiro' => 'required|email|unique:tbenfermeiro,emailEnfermeiro', // ✅ Nome da tabela corrigido
+            'emailEnfermeiro' => 'required|email|unique:tbenfermeiro,emailEnfermeiro', 
             'corenEnfermeiro' => 'required|string|max:50',
             'especialidadeEnfermeiro' => 'nullable|string|max:100',
             'genero' => 'required|string|max:20',
@@ -36,7 +35,7 @@ class EnfermeiroController extends Controller
         $usuario = Usuario::create([
             'nomeUsuario' => $request->nomeEnfermeiro,
             'emailUsuario' => $request->emailEnfermeiro,
-            'senhaUsuario' => bcrypt('senhaPadrao123'),
+            'senhaUsuario' => bcrypt('12345678'),
             'statusAtivoUsuario' => true,
         ]);
 
@@ -46,7 +45,7 @@ class EnfermeiroController extends Controller
             'corenEnfermeiro' => $request->corenEnfermeiro,
             'especialidadeEnfermeiro' => $request->especialidadeEnfermeiro,
             'genero' => $request->genero,
-            'id_usuario' => $usuario->idUsuarioPK, // ✅ CORRIGIDO: era 'id_usuarioFK', agora é 'id_usuario'
+            'id_usuario' => $usuario->idUsuarioPK, 
         ]);
 
         return response()->json(['message' => 'Enfermeiro e usuário criados com sucesso.']);
