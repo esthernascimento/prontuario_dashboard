@@ -10,7 +10,7 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #024caa ;
+  background-color: #0a400c ;
 }
 
 .main-container {
@@ -38,11 +38,11 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #024caa;
+  background-color: ##0a400c;
 }
 
 .cads-card {
-  background-color: #dcdcf9;
+  background-color: #e2fee3;
   padding: 40px;
   border-radius: 40px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -51,7 +51,7 @@ body {
 }
 
 .cads-card h2 {
-  color: #024caa;
+  color: #0a400c;
   font-weight: 700;
   font-size: 25px;
   margin-bottom: 20px;
@@ -61,7 +61,7 @@ body {
 .cads-card label {
   display: flex;
   font-weight: 600;
-  color: #024caa;
+  color: #0a400c;
   margin-top: 10px;
 }
 
@@ -75,13 +75,34 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
+
+.cads-card select {
+  width: 100%;
+  padding: 13px;
+  margin-top: 5px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  background-color: #fff;
+  color: #0a400c;
+  cursor: pointer;
+  appearance: none; /* remove estilo padrão do navegador */
+}
+
+.cads-card select:focus {
+  box-shadow: 0 0 5px rgba(10, 64, 12, 0.5);
+  border: 1px solid #0a400c;
+}
+
 .cads-card button {
     font-size: 15px;
   display: block;
   margin: 20px auto 0;
   width: 55%;
   padding: 15px;
-  background-color: #024caa;
+  background-color: #0a400c;
   color: white;
   border: none;
   border-radius: 23px;
@@ -92,7 +113,7 @@ body {
 }   
 
 .cads-card button:hover {
-  background-color: #033270;
+  background-color: #021e03;
 }
 
 a {
@@ -100,7 +121,7 @@ a {
   text-align: center;
   margin-top: 15px;
   text-decoration: none;
-  color: #0618b9;
+  color: #0a400c;
   font-weight: 500;
 }
 
