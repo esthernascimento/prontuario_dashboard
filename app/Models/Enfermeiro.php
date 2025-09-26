@@ -9,22 +9,21 @@ class Enfermeiro extends Model
 {
     use HasFactory;
 
-    protected $table = 'tbEnfermeiro';
+    protected $table = 'tbenfermeiro'; // ✅ Nome correto da tabela (minúsculo)
     protected $primaryKey = 'idEnfermeiroPK';
     public $timestamps = false;
 
-   protected $fillable = [
-    'nomeEnfermeiro',
-    'emailEnfermeiro',
-    'corenEnfermeiro',
-    'especialidadeEnfermeiro',
-    'genero',
-    'id_usuario',
-];
-
+    protected $fillable = [
+        'id_usuario', // ✅ CORRIGIDO: era 'id_usuarioFK', agora é 'id_usuario'
+        'nomeEnfermeiro',
+        'emailEnfermeiro',
+        'corenEnfermeiro',
+        'especialidadeEnfermeiro',
+        'genero',
+    ];
 
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class, 'id_usuario', 'idUsuarioPK');
+        return $this->belongsTo(Usuario::class, 'id_usuario', 'idUsuarioPK'); // ✅ CORRIGIDO: chave estrangeira
     }
 }

@@ -37,7 +37,7 @@
       <input type="email" name="emailEnfermeiro" id="emailEnfermeiro" value="{{ $enfermeiro->emailEnfermeiro }}" required>
 
       <!-- Dados do Usuário vinculado -->
-      <label for="nomeUsuario">Nome do Usuário</label>
+   <label for="nomeUsuario">Nome do Usuário</label>
       <input type="text" name="nomeUsuario" id="nomeUsuario" value="{{ $enfermeiro->usuario->nomeUsuario }}" required>
 
       <label for="emailUsuario">Email do Usuário</label>

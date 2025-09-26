@@ -15,23 +15,29 @@
         <div class="box-content">
             <div class="content">
                 <h1>Seja Bem-Vindo ao Prontuário+</h1>
-                <a href="{{ url('/loginAdm') }}"><button  >SOU <p>ADMINISTRADOR</p></button></a>
 
-                <a href="{{ url('/loginEnfermeiro') }}"><button  >SOU <p>ENFERMEIRO</p></button></a>
+                <!-- Botão Admin -->
+                <a href="{{ url('/loginAdm') }}">
+                    <button>SOU <p>ADMINISTRADOR</p></button>
+                </a>
 
-                <a href="{{ url('/loginMedico') }}"><button  >SOU <p>MÉDICO</p></button></a>
+                <!-- Botão Enfermeiro -->
+                <a href="{{ url('/enfermeiro/login') }}">
+                    <button>SOU <p>ENFERMEIRO</p></button>
+                </a>
+
+                <!-- Botão Médico -->
+                <a href="{{ url('/loginMedico') }}">
+                    <button>SOU <p>MÉDICO</p></button>
+                </a>
 
             </div>
 
             <div class="img-content">
-                <img src="{{asset('img/adm-logo1.png')}}" class="logo">
+                <img src="{{ asset('img/adm-logo1.png') }}" class="logo">
             </div>
 
         </div>
-
-        
-
-       
 
     </main>
 </body>
