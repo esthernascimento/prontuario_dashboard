@@ -32,11 +32,7 @@
     @foreach($metrics as $metric)
       <div class="metric-card">
         <div class="container-img">
-          @if(isset($admin) && $admin->foto)
-            <img src="{{ asset('storage/fotos/' . $admin->foto) }}" alt="Foto do Admin">
-          @else
-            <img src="{{ asset('img/usuario-de-perfil.png') }}" alt="Foto padrão">
-          @endif
+            <img src="{{ asset('img/usuario-de-perfil.png') }}">
           <span>{{ $metric['title'] }}</span>
         </div>
         <strong>{{ $metric['value'] }}</strong>
@@ -67,7 +63,7 @@
         
       {{-- Card de Gênero (gráfico Donut) --}}
       <div class="info-card">
-        <h3>Índice de gênero</h3>
+        <h3>Índice de Gênero</h3>
         <div class="donut-chart">
           <canvas id="graficoDonutGenero"></canvas>
         </div>
@@ -75,21 +71,25 @@
 
       {{-- Card 75% IDOSOS --}}
       <div class="info-card">
-        <h3>75% IDOSOS</h3>
-        <p>Ajuste o conteúdo</p>
+          <div class="container-card-idosos">
+              <img class="img-pessoas" src="{{ asset('img/icon-pessoas.png') }}" alt="Ícone de idoso">
+              <h3 class="h3-pessoas">75% IDOSOS</h3>
+          </div>
+          <img class="img-logo-prontuario" src="{{ asset('img/adm-logo1.png') }}">
       </div>
 
       {{-- Card UBS cadastradas com mapa --}}
       <div class="info-card">
-        <h3>UBS cadastradas</h3>
+        <h3>UBS Cadastradas</h3>
         <div class="container-ubs">
-          <img src="{{ asset('img/mapa_brasil.png') }}" alt="Mapa do Brasil">
           <strong>10</strong>
+          <img class="mapa" src="{{ asset('img/icon-mapa.png') }}" alt="Mapa do Brasil">
         </div>
       </div>
       
-      <div class="info-card">
-        <h3>A cada 10 usuários:</h3>
+      <div class="info-card-user">
+         <img class="dez-pessoas" src="{{ asset('img/icon-dezpessoas.png') }}" alt="logo do SUS">
+        <h3>A Cada 10 Usuários do Aplicativo...</h3>
         <ul>
         @php
           // Divide o conteúdo em uma array de strings, usando a quebra de linha <br> como separador
@@ -99,6 +99,7 @@
           <li>{{ trim($line) }}</li>
         @endforeach
         </ul>
+        <img src="{{ asset('img/logo-sus.png') }}" alt="logo do SUS">
       </div>
 
     </div>
@@ -175,8 +176,8 @@ new Chart(ctxLinha, {
             {
                 label: 'Pacientes',
                 data: dadosLinha.pacientes,
-                borderColor: '#28a745',
-                backgroundColor: 'rgba(40,167,69,0.2)',
+                borderColor: '#0618b9',
+                backgroundColor: '#E9ECFF',
                 fill: true,
                 tension: 0.3
             }
