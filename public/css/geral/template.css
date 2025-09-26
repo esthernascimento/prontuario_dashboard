@@ -7,7 +7,7 @@ body {
   
   .sidebar {
     position: fixed;
-    width: 80px;
+    width: 120px;
     height: 100vh;
     background-color: #0618b9;
     display: flex;
@@ -15,12 +15,14 @@ body {
     align-items: center;
     padding-top: 20px;
     z-index: 10;
+
   }
   
   .logo {
-    width: 60px;
+    width: 100px;
     margin-bottom: 30px;
   }
+  
   
   .sidebar nav {
     display: flex;

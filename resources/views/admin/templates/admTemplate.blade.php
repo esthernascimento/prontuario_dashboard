@@ -7,15 +7,6 @@
 
     {{-- CSS principal --}}
     <link rel="stylesheet" href="{{ asset('css/admin/template.css') }}">
-    
-   
-    
-
-    
-   
-    
-   
-
 
 
     {{-- Bootstrap Icons (caso não tenha no CSS principal) --}}

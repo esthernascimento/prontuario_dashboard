@@ -32,13 +32,13 @@
         <label for="corem">COREM</label>
         <input type="text" id="corem" name="corenEnfermeiro" required />
 
+        <label for="genero">Gênero</label>
         <select name="genero" required>
           <option value="">Selecione</option>
           <option value="Masculino">Masculino</option>
           <option value="Feminino">Feminino</option>
           <option value="Outro">Outro</option>
         </select>
-
 
         <label for="email">E-mail</label>
         <input type="email" id="email" name="emailEnfermeiro" required />
