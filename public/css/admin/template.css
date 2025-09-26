@@ -7,7 +7,7 @@ body {
   
   .sidebar {
     position: fixed;
-    width: 80px;
+    width: 120px;
     height: 100vh;
     background-color: #0618b9;
     display: flex;
@@ -19,7 +19,7 @@ body {
   }
   
   .logo {
-    width: 60px;
+    width: 100px;
     margin-bottom: 30px;
   }
   
@@ -43,7 +43,7 @@ body {
   
 .main-dashboard {
   padding: 40px;
-  margin-left: 80px;
+  margin-left: 120px;
 
 }
   .main-dashboard-wrapper {

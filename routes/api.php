@@ -19,9 +19,9 @@ use App\Http\Controllers\Admin\EnfermeiroController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// Fluxo de login dinâmico Médico
-Route::post('/medico/login/check', [MedicoLoginController::class, 'checkLogin'])->name('api.medico.login.check');
-Route::post('/medico/profile/complete', [MedicoLoginController::class, 'completeProfile'])->name('api.medico.profile.complete');
+// // Fluxo de login dinâmico Médico
+// Route::post('/medico/login/check', [MedicoLoginController::class, 'checkLogin'])->name('api.medico.login.check');
+// Route::post('/medico/profile/complete', [MedicoLoginController::class, 'completeProfile'])->name('api.medico.profile.complete');
 
 // Fluxo de login dinâmico Enfermeiro
 Route::post('/enfermeiro/login/check', [EnfermeiroLoginController::class, 'checkLogin'])->name('api.enfermeiro.login.check');
