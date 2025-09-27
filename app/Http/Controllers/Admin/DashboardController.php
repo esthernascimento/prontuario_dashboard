@@ -70,5 +70,5 @@ class DashboardController extends Controller
             'dadosGenero'
         ));
     }
-}
+
 
