@@ -67,7 +67,6 @@
         messagesDiv.textContent = '';
         messagesDiv.classList.remove('success', 'error');
 
-        // ✅ Rota corrigida
         fetch("{{ route('admin.enfermeiro.register') }}", {
             method: 'POST',
             headers: {
@@ -81,7 +80,7 @@
             return response.json();
           })
           .then(result => {
-            messagesDiv.textContent = result.message || 'Cadastro realizado com sucesso.';
+            messagesDiv.textContent = result.message || 'Enfermeiro pré-cadastrado com sucesso!';
             messagesDiv.classList.add('success');
             messagesDiv.style.display = 'block';
             form.reset();
