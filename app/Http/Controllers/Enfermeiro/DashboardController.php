@@ -3,47 +3,33 @@
 namespace App\Http\Controllers\Enfermeiro;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Enfermeiro;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        Log::info('Tentativa de acesso ao dashboard', [
-            'session_data' => Session::all(),
-            'enfermeiro_id' => Session::get('enfermeiro_id')
-        ]);
-        
-        if (!Session::has('enfermeiro_id')) {
-            Log::warning('Acesso negado - sem sessão de enfermeiro');
-            return redirect()->route('enfermeiro.login')
-                ->with('error', 'Você precisa fazer login para acessar o dashboard.');
+        // Utiliza o guard para recuperar o usuário autenticado
+        $usuario = Auth::guard('enfermeiro')->user();
+
+        if (!$usuario) {
+            return redirect()->route('enfermeiro.login')->with('error', 'Faça login para acessar o dashboard.');
         }
 
-        $enfermeiroId = Session::get('enfermeiro_id');
-        $enfermeiroNome = Session::get('enfermeiro_nome');
-        
-        if (!$enfermeiroId || !$enfermeiroNome) {
-            Log::warning('Dados de sessão inválidos', [
-                'enfermeiro_id' => $enfermeiroId,
-                'enfermeiro_nome' => $enfermeiroNome
-            ]);
-            
-            Session::flush();
-            return redirect()->route('enfermeiro.login')
-                ->with('error', 'Sessão inválida. Faça login novamente.');
-        }
+        // Busca o enfermeiro relacionado ao usuário
+        $enfermeiro = Enfermeiro::where('id_usuario', $usuario->idUsuarioPK)->first();
 
-        Log::info('Acesso ao dashboard autorizado', ['enfermeiro_id' => $enfermeiroId]);
+        $nome = $enfermeiro->nomeEnfermeiro ?? $usuario->nomeUsuario;
+        $coren = $enfermeiro->corenEnfermeiro ?? null;
 
         return view('enfermeiro.dashboardEnfermeiro', [
-            'nome' => $enfermeiroNome,
-            'coren' => Session::get('enfermeiro_coren'),
-            'adminsCount' => 5,   // exemplo
+            'nome' => $nome,
+            'coren' => $coren,
+            'adminsCount' => 5,
             'patientsCount' => 20,
             'pendingExamsCount' => 3,
-            'ubsCount' => 2
+            'ubsCount' => 2,
         ]);
     }
 }
