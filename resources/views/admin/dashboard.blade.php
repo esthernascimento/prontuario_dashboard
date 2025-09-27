@@ -231,7 +231,9 @@ new Chart(ctxLinha, {
                   labels: {
                       usePointStyle: true, // Usa o estilo de ponto para a legenda
                   }
+                  
               }
+              
           }
       }
   });

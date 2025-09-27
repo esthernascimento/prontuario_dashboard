@@ -34,17 +34,17 @@ body {
   text-align: center;
   padding: 40px 20px;
   margin-bottom: 25px;
-  cursor: pointer;
 }
 
 .foto-upload i {
   font-size: 28px;
   display: block;
   margin-bottom: 8px;
+  cursor: pointer;
 }
 
 .foto-upload img {
- 
+  cursor: pointer;
   margin: 15px auto 0 auto;
   width: 150px;
   height: 120px;
@@ -64,10 +64,11 @@ form input {
   padding: 12px;
   border-radius: 20px;
   border: none;
-  background-color: #0618b9
-  color: white;
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
   font-size: 16px;
   margin-bottom: 20px;
+  cursor: pointer;
 }
 
 form input::placeholder {
