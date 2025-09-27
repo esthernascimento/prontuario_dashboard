@@ -56,9 +56,3 @@ class MedicoController extends Controller
 }
 
 }
-
-<<<<<<< HEAD
-?>
-=======
-
->>>>>>> bb924fd543f881c59e713e1a7d4e5463dabecb0b
