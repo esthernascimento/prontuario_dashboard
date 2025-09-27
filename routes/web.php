@@ -49,7 +49,7 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     // Páginas auxiliares
     Route::get('/pacientes', fn() => view('geral.pacientes'))->name('pacientes');
     Route::get('/ajuda', fn() => view('geral.ajuda'))->name('ajuda');
-    Route::get('/seguranca', [SegurancaController::class, 'index'])->name('seguranca');
+    Route::get('/seguranca', [SegurancaController::class, 'showAlterarSenhaForm'])->name('seguranca');
     Route::get('/configuracoes', [SegurancaController::class, 'configuracoes'])->name('configuracoes');
     Route::post('/alterar-senha', [SegurancaController::class, 'alterarSenha'])->name('alterarSenha');
     Route::get('/perfil', [ConfiguracaoController::class, 'perfil'])->name('perfil');

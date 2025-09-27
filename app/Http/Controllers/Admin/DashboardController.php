@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Medico;
 use App\Models\Paciente;
-use App\Models\Enfermeiro; // ✅ Certifique-se de que este model existe
+use App\Models\Enfermeiro;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -17,10 +17,10 @@ class DashboardController extends Controller
         // Contagens para os cards
         $adminCount = Medico::count();
         $patientsCount = Paciente::count();
-        $pendingExamsCount = 0; // Placeholder
-        $nursesCount = Enfermeiro::count(); // ✅ NOVO: Contagem de enfermeiros
+        $pendingExamsCount = 0; 
+        $nursesCount = Enfermeiro::count(); 
 
-        // Médicos por especialidade
+      
         $medicosPorEspecialidade = DB::table('tbMedico')
             ->select('especialidadeMedico', DB::raw('count(*) as total'))
             ->whereNotNull('especialidadeMedico')
@@ -37,7 +37,7 @@ class DashboardController extends Controller
 
         for ($i = 5; $i >= 0; $i--) {
             $mes = Carbon::now()->subMonths($i);
-            $dadosLinha['meses'][] = $mes->format('M Y'); // Ex: Jan 2024
+            $dadosLinha['meses'][] = $mes->format('M Y'); 
             
             $dadosLinha['admins'][] = Medico::whereYear('dataCadastroMedico', $mes->year)
                 ->whereMonth('dataCadastroMedico', $mes->month)
@@ -73,8 +73,5 @@ class DashboardController extends Controller
 
 }
 
-}
 
-
-}
 

@@ -51,14 +51,12 @@ class EnfermeiroController extends Controller
         return response()->json(['message' => 'Enfermeiro pré-cadastrado com sucesso!']);
     }
 
-    // Formulário de edição
     public function editar($id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
         return view('admin.editarEnfermeiro', compact('enfermeiro'));
     }
 
-    // Atualizar dados
     public function update(Request $request, $id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
@@ -73,7 +71,6 @@ class EnfermeiroController extends Controller
             'emailUsuario' => 'required|email|unique:tbusuario,emailUsuario,' . $enfermeiro->usuario->idUsuarioPK . ',idUsuarioPK', // ✅ Nome da tabela corrigido
         ]);
 
-        // Atualiza enfermeiro
         $enfermeiro->update([
             'nomeEnfermeiro' => $request->nomeEnfermeiro,
             'emailEnfermeiro' => $request->emailEnfermeiro,
@@ -82,7 +79,6 @@ class EnfermeiroController extends Controller
             'genero' => $request->genero,
         ]);
 
-        // Atualiza usuário vinculado
         $enfermeiro->usuario->update([
             'nomeUsuario' => $request->nomeUsuario,
             'emailUsuario' => $request->emailUsuario,
@@ -91,14 +87,12 @@ class EnfermeiroController extends Controller
         return redirect()->route('admin.manutencaoEnfermeiro')->with('success', 'Dados atualizados com sucesso.');
     }
 
-    // Visualizar enfermeiro
     public function show($id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
         return view('admin.visualizarEnfermeiro', compact('enfermeiro'));
     }
 
-    // Ativar/desativar status do usuário
     public function toggleStatus($id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
@@ -111,14 +105,12 @@ class EnfermeiroController extends Controller
         return back()->with('success', 'Status do enfermeiro atualizado.');
     }
 
-    // Confirmar exclusão
     public function confirmarExclusao($id)
     {
         $enfermeiro = Enfermeiro::findOrFail($id);
         return view('admin.desativarEnfermeiro', compact('enfermeiro'));
     }
 
-    // Excluir enfermeiro e usuário
     public function excluir($id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);

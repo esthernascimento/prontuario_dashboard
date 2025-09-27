@@ -10,7 +10,6 @@ class LoginController extends Controller
 {
     public function showLoginForm()
     {
-        // Corrigido o caminho da view
         return view('admin.loginAdm'); 
     }
 
@@ -40,6 +39,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         
-        return redirect('/loginAdm'); 
+        return redirect('/'); 
     }
-}
+} 

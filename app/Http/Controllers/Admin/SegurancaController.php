@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -6,8 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class SegurancaController extends Controller
+class SegurancaController extends Controller 
 {
+   
+    public function showAlterarSenhaForm()
+    {
+        return view('admin.seguranca');
+    }
+
     public function alterarSenha(Request $request)
     {
         $request->validate([
@@ -33,4 +40,4 @@ class SegurancaController extends Controller
         
         return back()->with('success', 'Senha alterada com sucesso!');
     }
-}
+} 

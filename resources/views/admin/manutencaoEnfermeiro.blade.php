@@ -6,7 +6,7 @@
 
 <link rel="stylesheet" href="{{ asset('css/admin/manutencaoEnfermeiros.css') }}">
 
-    @php $admin = auth()->guard('enfermeiro')->user(); @endphp
+@php $admin = auth()->guard('admin')->user(); @endphp
 
 
     @if(session('success'))
@@ -83,7 +83,8 @@
                             </form>
                         @endif
 
-                        <a href="{{ route('admin.enfermeiro.confirmarExclusao', $enfermeiro->idEnfermeiroPK) }}">
+                        {{-- NOVO: CHAMADA JS PARA ABRIR O MODAL --}}
+                        <a href="#" onclick="openDeleteEnfermeiroModal('{{ $enfermeiro->idEnfermeiroPK }}', '{{ $enfermeiro->nomeEnfermeiro }}')">
                             <i class="bi bi-trash" title="Excluir"></i>
                         </a>
                         </td>
@@ -95,7 +96,31 @@
         </div>
     </main>
 
+{{-- ESTRUTURA DO MODAL DE EXCLUSÃO DE ENFERMEIRO --}}
+<div id="deleteEnfermeiroModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <i class="bi bi-trash-fill"></i>
+            <h2>Excluir Enfermeiro(a)</h2>
+        </div>
+        
+        <p>Tem certeza que deseja excluir o(a) enfermeiro(a) <span id="enfermeiroNome"></span>?</p>
+
+        {{-- O action será preenchido pelo JavaScript --}}
+        <form id="deleteEnfermeiroForm" method="POST">
+            @csrf
+            @method('DELETE')
+
+            <div class="modal-buttons">
+                <button type="button" onclick="closeDeleteEnfermeiroModal()" class="btn-cancelar">Cancelar</button>
+                <button type="submit" class="btn-excluir">Sim, excluir</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
+
     function filterPatients() {
       const searchInput = document.getElementById('searchInput').value.toLowerCase();
       const filterStatus = document.getElementById('filterStatus').value;
@@ -124,28 +149,49 @@
     const options = customSelect.querySelector(".options");
     const hiddenInput = document.getElementById("filterStatus");
 
-    // abre/fecha dropdown
     selected.addEventListener("click", () => {
       options.style.display = options.style.display === "flex" ? "none" : "flex";
     });
 
-    // ao selecionar opção
     options.querySelectorAll("div").forEach(option => {
       option.addEventListener("click", () => {
         selected.textContent = option.textContent;
         hiddenInput.value = option.dataset.value;
         options.style.display = "none";
-        filterPatients(); // chama sua função existente
+        filterPatients();
       });
     });
 
-    // fecha clicando fora
     document.addEventListener("click", e => {
       if (!customSelect.contains(e.target)) {
         options.style.display = "none";
       }
     });
 
-  </script>
+
+    function openDeleteEnfermeiroModal(enfermeiroId, enfermeiroNome) {
+        const modal = document.getElementById('deleteEnfermeiroModal');
+        const nomeSpan = document.getElementById('enfermeiroNome');
+        const form = document.getElementById('deleteEnfermeiroForm');
+
+        nomeSpan.textContent = enfermeiroNome;
+
+        const deleteRoute = "{{ route('admin.enfermeiro.excluir', ['id' => 'PLACEHOLDER_ID']) }}";
+        form.action = deleteRoute.replace('PLACEHOLDER_ID', enfermeiroId);
+        
+        modal.style.display = 'flex';
+    }
+
+    function closeDeleteEnfermeiroModal() {
+        document.getElementById('deleteEnfermeiroModal').style.display = 'none';
+    }
+
+    document.getElementById('deleteEnfermeiroModal').addEventListener('click', function(event) {
+        if (event.target.id === 'deleteEnfermeiroModal') {
+            closeDeleteEnfermeiroModal();
+        }
+    });
+
+</script>
 
 @endsection
