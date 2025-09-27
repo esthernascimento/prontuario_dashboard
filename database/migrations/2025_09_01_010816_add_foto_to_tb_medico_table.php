@@ -8,8 +8,8 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('tbmedico', function (Blueprint $table) {
-            if (!Schema::hasColumn('tbmedico', 'foto')) {
+        Schema::table('tbMedico', function (Blueprint $table) {
+            if (!Schema::hasColumn('tbMedico', 'foto')) {
                 $table->string('foto')->nullable()->after('especialidadeMedico');
             }
         });
@@ -17,7 +17,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('tbmedico', function (Blueprint $table) {
+        Schema::table('tbMedico', function (Blueprint $table) {
             $table->dropColumn('foto');
         });
     }

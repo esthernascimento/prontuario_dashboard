@@ -11,14 +11,14 @@ return new class extends Migration
      */
   public function up(): void
 {
-    Schema::table('tbadmin', function (Blueprint $table) {
+    Schema::table('tbAdmin', function (Blueprint $table) {
         $table->string('foto')->nullable()->after('senhaAdmin');
     });
 }
 
 public function down(): void
 {
-    Schema::table('tbadmin', function (Blueprint $table) {
+    Schema::table('tbAdmin', function (Blueprint $table) {
         $table->dropColumn('foto');
     });
 }
