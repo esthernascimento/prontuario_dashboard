@@ -17,13 +17,13 @@
     {{-- Sidebar --}}
     <div class="sidebar">
         <a href="{{ route('admin.perfil') }}">
-            <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo Prontuário+" class="logo">
+            <img src="{{ asset('img/enfermeiro-logo2.png') }}" alt="Logo Prontuário+" class="logo">
         </a>
 
         <nav>
             <a href="{{ route('admin.dashboard') }}" title="Dashboard"><i class="bi bi-house-door-fill"></i></a>
             <a href="{{ route('admin.pacientes') }}" title="Pacientes"><i class="bi bi-people-fill"></i></a>
-            <a href="{{ route('admin.manutencaoMedicos') }}" title="Médicos"><i class="bi bi-plus-circle-fill"></i></a>
+            <a href="#" title="Prontuários"><i class="bi bi-file-medical-fill"></i></a>
             <a href="{{ route('admin.ajuda') }}" title="Ajuda"><i class="bi bi-question-circle-fill"></i></a>
             <a href="{{ route('admin.seguranca') }}" title="Segurança"><i class="bi bi-shield-lock-fill"></i></a>
             <a href="{{ route('admin.logout') }}" 

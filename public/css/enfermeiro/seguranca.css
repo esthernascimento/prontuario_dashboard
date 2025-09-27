@@ -1,0 +1,150 @@
+/* Estilos específicos para a página de segurança */
+
+.main-dashboard{
+  padding: 30px;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.security-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .security-container h1 {
+    color: #0a400c;
+    margin-top: 0px;
+    margin-bottom: 10px;
+  }
+  
+  .security-container > p {
+    color: #666;
+    margin-bottom: 30px;
+  }
+  
+  .security-section {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 25px;
+    margin-top: 0%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  
+  .security-section h2 {
+    color: #0a400c;
+    margin-bottom: 20px;
+    font-size: 1.3em;
+  }
+  
+  .security-section h2 i {
+    margin-right: 10px;
+  }
+  
+  /* Formulário de segurança */
+  .security-form {
+    max-width: 500px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+    cursor: pointer;
+  }
+  
+  .form-group input:focus {
+    outline: none;
+    border-color: #0a400c;
+    box-shadow: #011102;
+  }
+  
+  .form-hint {
+    color: #666;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+  }
+  
+  /* Botões */
+  .btn-primary {
+    background-color: #0a400c;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-primary:hover {
+    background-color: #599c5b;
+  }
+  
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #5a6268;
+  }
+
+  .btn-outline {
+    background-color: transparent;
+    color: #131D4F;
+    padding: 10px 20px;
+    border: 2px solid #0a400c;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .btn-outline:hover {
+    background-color: #b5feb7;
+    color: white;
+  }
+
+  
+  /* Responsividade */
+  @media (max-width: 768px) {
+    .session-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    
+    .setting-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    
+    .backup-section {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }

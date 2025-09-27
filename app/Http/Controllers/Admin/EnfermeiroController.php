@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Models\Enfermeiro;
 use App\Models\Usuario;
 
@@ -22,11 +23,16 @@ class EnfermeiroController extends Controller
         return view('admin.cadastroEnfermeiro');
     }
 
+    // Salvar cadastro
     public function store(Request $request)
     {
         $request->validate([
             'nomeEnfermeiro' => 'required|string|max:255',
-            'emailEnfermeiro' => 'required|email|unique:tbenfermeiro,emailEnfermeiro', 
+            'emailEnfermeiro' => [
+                'required',
+                'email',
+                Rule::unique((new Enfermeiro)->getTable(), 'emailEnfermeiro'),
+            ],
             'corenEnfermeiro' => 'required|string|max:50',
             'especialidadeEnfermeiro' => 'nullable|string|max:100',
             'genero' => 'required|string|max:20',
@@ -45,7 +51,7 @@ class EnfermeiroController extends Controller
             'corenEnfermeiro' => $request->corenEnfermeiro,
             'especialidadeEnfermeiro' => $request->especialidadeEnfermeiro,
             'genero' => $request->genero,
-            'id_usuario' => $usuario->idUsuarioPK, 
+            'id_usuario' => $usuario->idUsuarioPK,
         ]);
 
         return response()->json(['message' => 'Enfermeiro pré-cadastrado com sucesso!']);
@@ -65,12 +71,22 @@ class EnfermeiroController extends Controller
 
         $request->validate([
             'nomeEnfermeiro' => 'required|string|max:255',
-            'emailEnfermeiro' => 'required|email|unique:tbenfermeiro,emailEnfermeiro,' . $id . ',idEnfermeiroPK', // ✅ Nome da tabela corrigido
+            'emailEnfermeiro' => [
+                'required',
+                'email',
+                Rule::unique((new Enfermeiro)->getTable(), 'emailEnfermeiro')->ignore($id, 'idEnfermeiroPK'),
+            ],
             'corenEnfermeiro' => 'required|string|max:50',
             'especialidadeEnfermeiro' => 'nullable|string|max:100',
             'genero' => 'required|string|max:20',
+
             'nomeUsuario' => 'required|string|max:255',
-            'emailUsuario' => 'required|email|unique:tbusuario,emailUsuario,' . $enfermeiro->usuario->idUsuarioPK . ',idUsuarioPK', // ✅ Nome da tabela corrigido
+            'emailUsuario' => [
+                'required',
+                'email',
+                Rule::unique((new Usuario)->getTable(), 'emailUsuario')
+                    ->ignore($enfermeiro->usuario->idUsuarioPK, 'idUsuarioPK'),
+            ],
         ]);
 
         // Atualiza enfermeiro
