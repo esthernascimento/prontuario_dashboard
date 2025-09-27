@@ -43,9 +43,6 @@
         <label for="email">E-mail</label>
         <input type="email" id="email" name="emailEnfermeiro" required />
 
-        <label for="id_usuario">ID do Usuário</label>
-        <input type="number" id="id_usuario" name="id_usuario" required />
-
         <button class="button" type="submit">CADASTRAR</button>
         <div id="form-messages" style="display:none;"></div>
       </form>
@@ -70,6 +67,7 @@
         messagesDiv.textContent = '';
         messagesDiv.classList.remove('success', 'error');
 
+        // ✅ Rota corrigida
         fetch("{{ route('admin.enfermeiro.register') }}", {
             method: 'POST',
             headers: {

@@ -26,6 +26,7 @@ class DashboardController extends Controller
             ->get();
 
         // 📊 Crescimento de Admins e Pacientes por mês (Últimos 6 meses)
+        $meses = [];
         $dadosLinha = [
             'meses' => [],
             'admins' => [],
@@ -48,12 +49,16 @@ class DashboardController extends Controller
         }
 
         // 📊 Distribuição de gênero (Homens, Mulheres, Idosos)
+        $homens = Paciente::where('genero', 'Masculino')->count();
+        $mulheres = Paciente::where('genero', 'Feminino')->count();
+        $idosos = Paciente::whereRaw('TIMESTAMPDIFF(YEAR, dataNascPaciente, CURDATE()) >= 60')->count();
+
         $dadosGenero = [
-            'Mulheres' => Paciente::where('generoPaciente', 'Feminino')->count(),
-            'Homens' => Paciente::where('generoPaciente', 'Masculino')->count(),
-            'Idosos' => Paciente::where('dataNascPaciente', '<=', now()->subYears(60))->count()
+            'Homens'   => $homens,
+            'Mulheres' => $mulheres,
+            'Idosos'   => $idosos,
         ];
-        
+
         return view('admin.dashboard', compact(
             'adminCount',
             'patientsCount',
