@@ -48,7 +48,7 @@ class EnfermeiroController extends Controller
             'id_usuario' => $usuario->idUsuarioPK, 
         ]);
 
-        return response()->json(['message' => 'Enfermeiro e usuário criados com sucesso.']);
+        return response()->json(['message' => 'Enfermeiro pré-cadastrado com sucesso!']);
     }
 
     // Formulário de edição

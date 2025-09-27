@@ -8,13 +8,11 @@
 
 @php
     $admin = auth()->guard('admin')->user();
-    // Métricas principais
     $metrics = [
       ['title' => 'Médicos cadastrados', 'value' => $adminCount ?? 0],
       ['title' => 'Pacientes cadastrados', 'value' => $patientsCount ?? 0],
-      ['title' => 'Admins cadastrados', 'value' => $pendingExamsCount ?? 0],
+      ['title' => 'Enfermeiros cadastrados', 'value' => $nursesCount ?? 0], // ← NOVO CARD
     ];
-    // Cards informativos
     $infoCards = [
       ['title' => '75% IDOSOS', 'content' => null],
       ['title' => 'A cada 10 usuários:', 'content' => "7 são mulheres<br>3 são homens<br>8 são idosos"],
