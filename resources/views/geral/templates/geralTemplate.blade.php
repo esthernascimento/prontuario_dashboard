@@ -18,7 +18,7 @@
 <body>
     {{-- Sidebar --}}
     <div class="sidebar">
-        <a href="{{ route('admin.perfil') }}">
+        <a href="{{ route('admin.dashboard') }}">
             <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo Prontuário+" class="logo">
         </a>
 
@@ -28,7 +28,7 @@
             <a href="{{ route('admin.manutencaoMedicos') }}" title="Médicos"><i class="bi bi-plus-circle-fill"></i></a>
             <a href="{{ route('admin.manutencaoEnfermeiro') }}" title="Enfermeiro"><i class="bi bi-hospital-fill"></i></a>
             <a href="{{ route('admin.ajuda') }}" title="Ajuda"><i class="bi bi-question-circle-fill"></i></a>
-            <a href="{{ route('admin.seguranca') }}" title="Segurança"><i class="bi bi-shield-lock-fill"></i></a>
+            <a href="{{ route('admin.perfil') }}" title="perfil"><i class="bi bi-shield-lock-fill"></i></a>
             <a href="{{ route('admin.logout') }}" 
                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                title="Sair">
