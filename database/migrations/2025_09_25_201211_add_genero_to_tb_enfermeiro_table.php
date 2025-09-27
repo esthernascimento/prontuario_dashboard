@@ -14,6 +14,7 @@ return new class extends Migration
     Schema::table('tbEnfermeiro', function (Blueprint $table) {
         $table->string('genero', 20)->after('especialidadeEnfermeiro')->nullable();
     });
+    
 }
 
 public function down()

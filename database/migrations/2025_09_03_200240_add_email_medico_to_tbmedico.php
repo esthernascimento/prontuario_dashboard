@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('tbmedico', function (Blueprint $table) {
+        Schema::table('tbMedico', function (Blueprint $table) {
             $table->string('emailMedico')->unique(); 
         });
     }
@@ -22,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('tbmedico', function (Blueprint $table) {
+        Schema::table('tbMedico', function (Blueprint $table) {
             //
         });
     }
