@@ -12,10 +12,10 @@ use Carbon\Carbon;
 class DashboardController extends Controller
 {
     public function index()
-    {   
+
         $adminCount = Medico::count();
         $patientsCount = Paciente::count();
-        $pendingExamsCount = 0;
+        $pendingExamsCount = 0; // Placeholder
 
         // Médicos por especialidade
         $medicosPorEspecialidade = DB::table('tbMedico')
@@ -26,32 +26,33 @@ class DashboardController extends Controller
             ->get();
 
         // 📊 Crescimento de Admins e Pacientes por mês (Últimos 6 meses)
-        $meses = [];
         $dadosLinha = [
             'meses' => [],
             'admins' => [],
             'pacientes' => [],
         ];
 
-        // Cria um array com os últimos 6 meses
         for ($i = 5; $i >= 0; $i--) {
             $mes = Carbon::now()->subMonths($i);
             $dadosLinha['meses'][] = $mes->format('M Y'); // Ex: Jan 2024
             
-            // Busca dados de admins (médicos) e pacientes para cada mês
+            // Usando a coluna correta para a tabela de médicos
             $dadosLinha['admins'][] = Medico::whereYear('dataCadastroMedico', $mes->year)
                 ->whereMonth('dataCadastroMedico', $mes->month)
                 ->count();
             
-            $dadosLinha['pacientes'][] = Paciente::whereYear('dataCadastroPaciente', $mes->year)
-                ->whereMonth('dataCadastroPaciente', $mes->month)
+            // Usando 'created_at' para pacientes
+            $dadosLinha['pacientes'][] = Paciente::whereYear('created_at', $mes->year)
+                ->whereMonth('created_at', $mes->month)
                 ->count();
         }
 
         // 📊 Distribuição de gênero (Homens, Mulheres, Idosos)
         $homens = Paciente::where('genero', 'Masculino')->count();
         $mulheres = Paciente::where('genero', 'Feminino')->count();
-        $idosos = Paciente::whereRaw('TIMESTAMPDIFF(YEAR, dataNascPaciente, CURDATE()) >= 60')->count();
+        
+        // Usando a coluna 'data_nasc' para calcular a idade
+        $idosos = Paciente::where('data_nasc', '<=', Carbon::now()->subYears(60)->toDateString())->count();
 
         $dadosGenero = [
             'Homens'   => $homens,
@@ -59,6 +60,7 @@ class DashboardController extends Controller
             'Idosos'   => $idosos,
         ];
 
+        // CORREÇÃO FINAL AQUI: Apontando para a view correta 'admin.dashboard'
         return view('admin.dashboard', compact(
             'adminCount',
             'patientsCount',
@@ -69,3 +71,4 @@ class DashboardController extends Controller
         ));
     }
 }
+
