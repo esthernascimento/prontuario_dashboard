@@ -1,87 +1,121 @@
 /* Estilos específicos para a página de segurança */
 
-.main-dashboard{
-  padding: 30px;
-  margin-left: 10px;
-  margin-top: 10px;
+/* O main-dashboard vai receber padding e possivelmente margens do template pai.
+   Nosso foco é APENAS o conteúdo dentro dele. */
+.main-dashboard {
+    /* Não defino flex-grow, display, margin-left aqui para não interferir no template pai */
+    padding: 30px; /* Mantém o padding interno da área de conteúdo */
+    /* Removi margin-left, display flex e justify-content para não interferir no template */
+    /* Se precisar centralizar o 'security-container' dentro do 'main-dashboard',
+       o pai do 'main-dashboard' (o template) precisará ter 'display: flex; justify-content: center;'
+       ou o próprio 'main-dashboard' se ele for o container flex.*/
 }
 
+/* --- Container da Página de Segurança --- */
 .security-container {
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  .security-container h1 {
+    max-width: 800px; /* Largura máxima para a caixa de segurança */
+    width: 100%; /* Ocupa 100% da largura disponível até o max-width */
+    margin: 0 auto; /* Centraliza o container dentro do main-dashboard */
+    padding: 0 20px; /* Adiciona um padding nas laterais para telas menores */
+    box-sizing: border-box; /* Garante que padding não adicione largura extra */
+}
+
+/* --- Título Principal da Página --- */
+.security-container .main-title {
     color: #0618b9;
-    margin-top: 0px;
-    margin-bottom: 10px;
-  }
-  
-  .security-container > p {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centraliza o título */
+    gap: 10px;
+}
+
+.security-container .main-title i {
+    font-size: 30px;
+}
+
+/* --- Subtítulo / Descrição da Página --- */
+.security-container .main-subtitle {
     color: #666;
     margin-bottom: 30px;
-  }
-  
-  .security-section {
+    text-align: center; /* Centraliza a descrição */
+    font-size: 16px;
+}
+
+/* --- Seção de Alterar Senha --- */
+.security-section {
     background-color: #fff;
-    border-radius: 10px;
-    padding: 25px;
+    border-radius: 12px; /* Raio de borda um pouco maior para um visual mais suave */
+    padding: 30px;
     margin-bottom: 25px;
-    margin-top: 0%;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  }
-  
-  .security-section h2 {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1); /* Sombra mais pronunciada e suave */
+}
+
+.security-section h2 {
     color: #0618b9;
+    margin-bottom: 25px;
+    font-size: 1.4em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.security-section h2 i {
+    font-size: 20px;
+}
+
+/* --- Formulário de Alteração de Senha --- */
+.security-form {
+    max-width: 450px; /* Largura máxima para o formulário interno */
+    margin: 0 auto; /* Centraliza o formulário dentro da seção */
+}
+
+.form-group {
     margin-bottom: 20px;
-    font-size: 1.3em;
-  }
-  
-  .security-section h2 i {
-    margin-right: 10px;
-  }
-  
-  /* Formulário de segurança */
-  .security-form {
-    max-width: 500px;
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .form-group label {
+}
+
+.form-group label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     font-weight: 600;
     color: #333;
-  }
-  
-  .form-group input {
-    width: 100%;
+    font-size: 15px;
+}
+
+.form-group input {
+    width: calc(100% - 24px); /* Ajusta a largura total subtraindo padding */
     padding: 12px;
-    border: 1px solid #ddd;
+    border: 1px solid #e0e0e0; /* Borda mais suave */
     border-radius: 8px;
     font-size: 16px;
-    transition: border-color 0.3s;
-    cursor: pointer;
-  }
-  
-  .form-group input:focus {
+    background-color: #fdfdfd; /* Fundo levemente off-white */
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus {
     outline: none;
     border-color: #0618b9;
-    box-shadow: 0 0 0 2px rgba(0, 35, 160, 0.1);
-  }
-  
-  .form-hint {
-    color: #666;
+    box-shadow: 0 0 0 3px rgba(6, 24, 185, 0.15); /* Sombra azul suave ao focar */
+}
+
+.form-hint {
+    color: #888;
     font-size: 12px;
     margin-top: 5px;
     display: block;
-  }
-  
-  /* Botões */
-  .btn-primary {
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+    display: block;
+}
+
+/* --- Botão Primário (Alterar Senha) --- */
+.btn-primary {
     background-color: #0618b9;
     color: white;
     padding: 12px 24px;
@@ -90,79 +124,91 @@
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .btn-primary:hover {
-    background-color: #6c7ae0;
-  }
-  
-  .btn-secondary {
-    background-color: #6c757d;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .btn-secondary:hover {
-    background-color: #5a6268;
-  }
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 15px;
+    width: 100%; /* Ocupa 100% da largura do formulário */
+}
 
-  .btn-outline {
-    background-color: transparent;
-    color: #131D4F;
-    padding: 10px 20px;
-    border: 2px solid #0618b9;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  
-  .btn-outline:hover {
-    background-color: #6c7ae0;
-    color: white;
-  }
+.btn-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+}
 
-  /* Seção de backup */
-  .backup-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  .backup-info p {
-    margin: 0 0 10px 0;
-    color: #666;
-  }
-  
-  .backup-actions {
-    display: flex;
-    gap: 10px;
-  }
-  
-  /* Responsividade */
-  @media (max-width: 768px) {
-    .session-item {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
+/* --- Mensagens de Alerta (Sucesso/Erro) --- */
+.alert {
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.5;
+    animation: fadeIn 0.5s ease-out; /* Adiciona uma animação */
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-danger ul {
+    margin: 0;
+    padding-left: 20px;
+    list-style-type: disc;
+}
+
+/* Animação para alertas */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Responsividade (Ajustes para telas menores) --- */
+@media (max-width: 768px) {
+    .main-dashboard {
+        padding: 20px;
     }
-    
-    .setting-item {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
+
+    .security-container .main-title {
+        font-size: 24px;
     }
-    
-    .backup-section {
-      flex-direction: column;
-      align-items: flex-start;
+    .security-container .main-title i {
+        font-size: 26px;
     }
-  }
+    .security-section {
+        padding: 20px;
+    }
+    .security-section h2 {
+        font-size: 1.2em;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-dashboard {
+        padding: 15px;
+    }
+    .security-container .main-title {
+        font-size: 20px;
+        flex-direction: column; /* Ícone acima do texto em telas muito pequenas */
+    }
+    .security-container .main-title i {
+        font-size: 22px;
+    }
+    .security-container .main-subtitle {
+        font-size: 14px;
+    }
+    .security-section h2 {
+        font-size: 1.1em;
+        flex-direction: column;
+    }
+    .btn-primary {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+}

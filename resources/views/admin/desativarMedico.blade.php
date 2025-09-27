@@ -4,7 +4,6 @@
 
   <link rel="stylesheet" href="{{ asset('css/admin/desativarMedico.css') }}">
 
-  <!-- Conteúdo principal -->
   <main class="main-dashboard">
     <div class="cadastrar-container" style="text-align:center;">
       <div class="cadastrar-header">

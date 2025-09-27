@@ -12,21 +12,17 @@
 <body>
   <main class="main-container">
 
-    <!-- Lado azul com a logo -->
     <div class="logo-area">
       <img src="{{asset('img/adm-logo2.png')}}" class="logo">
     </div>
 
-    <!-- Card de login -->
     <div class="login-area">
-      <!-- O action agora aponta para a rota que criamos -->
       <form class="login-card" action="{{ route('admin.login') }}" method="POST">
-        <!-- @csrf é ESSENCIAL para segurança em formulários Laravel -->
+
         @csrf
 
         <h2>Administrador Login</h2>
 
-        <!-- Exibe erros de validação, se houver -->
         @if($errors->any())
             <div class="alert-error">
                 {{ $errors->first() }}
@@ -34,7 +30,6 @@
         @endif
 
         <label for="emailAdmin">E-mail</label>
-        <!-- O 'name' deve corresponder ao que o controller espera -->
         <input type="email" id="emailAdmin" name="emailAdmin" value="{{ old('emailAdmin') }}" required />
       
         <label for="senhaAdmin">Senha</label>
@@ -42,7 +37,6 @@
       
         <button class="button" type="submit">ENTRAR</button>
       
-        <!-- Removi o link de cadastro, já que será feito via tinker -->
       </form>
     </div>
   </main>

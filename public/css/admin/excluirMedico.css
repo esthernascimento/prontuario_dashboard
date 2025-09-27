@@ -3,148 +3,108 @@ body {
     font-family: 'Segoe UI', sans-serif;
     background-color: #f9f9f9;
     height: 100vh;
-  }
-  
-  
-  /* Container */
-  .cadastrar-container {
-    background-color: #eef1ff;
-    max-width: 600px;
-    height: 300px;
-    margin: 0 auto;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-    margin-left: auto;
-    margin-right: auto;
-  }
+}
 
-  .cadastrar-container p{
-    text-align: center;
-    color: #0618b9;
-    font-size: 20px;
-    margin-top: 60px;
-    font-weight: bold;
-  }
-  
-  .cadastrar-header {
+/* Container principal (fundo branco claro) */
+.cadastrar-container {
+    background-color: #ffffff; /* Fundo branco ou fafafa para leve contraste */
+    max-width: 400px; /* Mais estreito, como na imagem */
+    height: auto; /* Altura ajustável */
+    margin: 100px auto; /* Centraliza na tela */
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Centraliza o conteúdo (p, botões) */
+}
+
+/* Título e Ícone */
+.cadastrar-header {
     display: flex;
     align-items: center;
+    justify-content: center; /* Centraliza o cabeçalho */
     gap: 10px;
-    color: #131D4F;
+    color: #0618b9; /* Cor principal azul */
     margin-bottom: 25px;
-  }
-  
-  .cadastrar-header h1 {
-    font-size: 24px;
-    margin: 0;
-  }
-  
-  .foto-upload {
-    background-color: #0618b9;
-    color: white;
-    border-radius: 16px;
-    text-align: center;
-    padding: 40px 20px;
-    margin-bottom: 25px;
-    cursor: pointer;
-  }
-  
-  .foto-upload i {
-    font-size: 28px;
-    display: block;
-    margin-bottom: 8px;
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .form-group label {
-    display: flex;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: #0618b9;
-  }
-  
-  .form-group input {
-    width: 100%;
-    display: flex;
-    justify-self: center;
-    padding: 12px;
-    border-radius: 20px;
-    border: none;
-    background-color: #0618b9;
-    color: white;
-    font-size: 16px;
-  }
-  
-  .form-group input::placeholder {
-    color: #ddd;
-  }
-  
-  .btn-salvar {
-    display: block;
-    background-color: #0618b9;
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 25px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    width: 50%;
-    justify-self: center;
-    margin-top: 15px;
-    transition: background-color 0.3s;
-  }
-  
-  .btn-salvar:hover {
-    background-color: #6c7ae0;
-  }
-  
-/* Botão cancelar e excluir */
-  .btn-excluir:last-of-type {
-    background-color:#0618b9;
-    color: white;
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 25px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    width: 30%;
-    justify-self: center;
-    margin-top: 20px;
-    transition: background-color 0.3s;
-  }
-  
-  .btn-excluir:first-of-type:hover {
-    background-color: rgba(0, 20, 204, 0.555);
-  }
+}
 
-    .btn-cancelar:last-of-type {
-    background-color:#0618b9;
-    color: white;
-    text-decoration: none;
-    display: inline-block;
+.cadastrar-header h1 {
+    font-size: 20px;
+    margin: 0;
+    font-weight: 600;
+}
+
+/* Mensagem de confirmação */
+.cadastrar-container p {
     text-align: center;
+    color: #333; /* Cor mais escura para o texto */
+    font-size: 16px;
+    margin-top: 15px;
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+
+.cadastrar-container p b {
+    color: #0618b9; /* Nome do médico em azul */
+    font-weight: 700;
+}
+
+/* =================================== */
+/* Agrupamento e Estilo dos Botões */
+/* =================================== */
+
+.button-group {
+    display: flex;
+    flex-direction: column; /* Coloca os botões um abaixo do outro inicialmente */
+    align-items: center;
+    gap: 10px; /* Espaço entre os botões */
+    margin-top: 20px;
+}
+
+.btn-excluir, .btn-cancelar {
+    /* Estilos base para ambos os botões */
+    display: block;
+    width: 250px; 
     padding: 12px 25px;
     border: none;
     border-radius: 25px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    width: 22%;
-    justify-self: center;
-    margin-top: 20px;
-    transition: background-color 0.3s;
-  }
-  
-  .btn-cancelar:first-of-type:hover {
-    background-color: rgba(0, 20, 204, 0.555);
-  }
-  
+    text-decoration: none; /* Para o link Cancelar */
+    text-align: center;
+    transition: background-color 0.3s, opacity 0.3s;
+}
+
+/* Botão Sim, excluir (Primário) */
+.btn-excluir {
+    background-color: #0618b9; 
+    color: white;
+}
+
+.btn-excluir:hover {
+    background-color: #0056b3; 
+}
+
+/* Botão Cancelar (Secundário) */
+.btn-cancelar {
+    background-color: #0618b9; /* Azul principal */
+    color: white;
+    /* Se você quiser o botão de Cancelar mais suave, mude para: background-color: #f0f0f0; color: #333; */
+}
+
+.btn-cancelar:hover {
+    background-color: #0056b3; 
+}
+
+/* Media Query para telas maiores, colocando-os lado a lado */
+@media (min-width: 480px) {
+    .button-group {
+        flex-direction: row; /* Coloca os botões lado a lado */
+        justify-content: center;
+        gap: 20px;
+    }
+    
+    .btn-excluir, .btn-cancelar {
+        width: 150px; 
+    }
+}
