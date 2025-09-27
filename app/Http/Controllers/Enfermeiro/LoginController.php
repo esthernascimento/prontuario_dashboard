@@ -10,10 +10,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 
-class LoginController extends Controller    
+class LoginController extends Controller
 {
-
-    
     public function showLoginForm()
     {
         return view('enfermeiro.login');
@@ -21,90 +19,60 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        Log::info('Tentativa de login do enfermeiro', ['corem' => $request->corem]);
-        
+        // Validação básica
         $request->validate([
             'corem' => 'required|string',
             'senha' => 'required|string',
         ]);
 
+        $corem = $request->corem;
+
         try {
+            // Buscamos o enfermeiro pelo COREM
             $enfermeiro = Enfermeiro::with('usuario')
-                ->where('corenEnfermeiro', $request->corem)
+                ->where('corenEnfermeiro', $corem)
                 ->first();
 
-            Log::info('Enfermeiro encontrado', ['enfermeiro_id' => $enfermeiro ? $enfermeiro->id : null]);
-
             if (!$enfermeiro) {
-                Log::warning('Enfermeiro não encontrado', ['corem' => $request->corem]);
-                return back()->withErrors([
-                    'corem' => 'COREM não encontrado.'
-                ])->withInput();
+                return back()->withErrors(['corem' => 'COREM não encontrado.'])->withInput();
             }
 
             if (!$enfermeiro->usuario) {
-                Log::error('Usuário não vinculado ao enfermeiro', ['enfermeiro_id' => $enfermeiro->id]);
-                return back()->withErrors([
-                    'corem' => 'Usuário não encontrado para este enfermeiro.'
-                ])->withInput();
+                return back()->withErrors(['corem' => 'Usuário não vinculado ao enfermeiro.'])->withInput();
             }
 
-            if (!$enfermeiro->usuario->statusAtivoUsuario) {
-                Log::warning('Usuário inativo tentando fazer login', ['enfermeiro_id' => $enfermeiro->id]);
-                return back()->withErrors([
-                    'corem' => 'Usuário inativo. Entre em contato com o administrador.'
-                ])->withInput();
+            // Verifica se usuário está ativo
+            if (isset($enfermeiro->usuario->statusAtivoUsuario) && !$enfermeiro->usuario->statusAtivoUsuario) {
+                return back()->withErrors(['corem' => 'Usuário inativo. Contate o administrador.'])->withInput();
             }
 
-            if (Hash::check($request->senha, $enfermeiro->usuario->senhaUsuario)) {
-                Log::info('Senha correta, iniciando sessão', ['enfermeiro_id' => $enfermeiro->id]);
-                
-                Session::flush();
-                
-                Session::put([
-                    'enfermeiro_id' => $enfermeiro->id,
-                    'enfermeiro_nome' => $enfermeiro->nomeEnfermeiro,
-                    'enfermeiro_coren' => $enfermeiro->corenEnfermeiro,
-                    'usuario_id' => $enfermeiro->usuario->idUsuarioPK
-                ]);
-                
-                Auth::guard('enfermeiro')->login($enfermeiro->usuario);
-                
-                Session::save();
-                
-                Log::info('Sessão criada com sucesso', [
-                    'enfermeiro_id' => Session::get('enfermeiro_id'),
-                    'enfermeiro_nome' => Session::get('enfermeiro_nome')
-                ]);
-                
-                return redirect()->route('enfermeiro.dashboard')->with('success', 'Login realizado com sucesso!');
-            } else {
-                Log::warning('Senha incorreta', ['enfermeiro_id' => $enfermeiro->id]);
-                return back()->withErrors([
-                    'corem' => 'Senha inválida.'
-                ])->withInput();
+            // Verifica a senha
+            if (!Hash::check($request->senha, $enfermeiro->usuario->senhaUsuario)) {
+                return back()->withErrors(['corem' => 'Senha inválida.'])->withInput();
             }
-            
+
+            // Autentica usando o guard 'enfermeiro'
+            Auth::guard('enfermeiro')->login($enfermeiro->usuario);
+
+            // Grava alguns dados úteis na sessão
+            Session::put('enfermeiro_id', $enfermeiro->idEnfermeiroPK ?? $enfermeiro->id);
+            Session::put('enfermeiro_nome', $enfermeiro->nomeEnfermeiro);
+            Session::put('enfermeiro_coren', $enfermeiro->corenEnfermeiro);
+            Session::save();
+
+            return redirect()->route('enfermeiro.dashboard')->with('success', 'Login realizado com sucesso!');
         } catch (\Exception $e) {
-            Log::error('Erro durante o login', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            
-            return back()->withErrors([
-                'corem' => 'Erro interno. Tente novamente.'
-            ])->withInput();
+            Log::error('Erro no login enfermeiro: '.$e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            return back()->withErrors(['corem' => 'Erro interno. Tente novamente.'])->withInput();
         }
     }
 
     public function logout(Request $request)
     {
-        Log::info('Logout do enfermeiro', ['enfermeiro_id' => Session::get('enfermeiro_id')]);
-        
         Auth::guard('enfermeiro')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('enfermeiro.login')->with('success', 'Logout realizado com sucesso!');
+        return redirect()->route('enfermeiro.login')->with('success', 'Logout realizado com sucesso.');
     }
 }

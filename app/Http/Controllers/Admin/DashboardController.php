@@ -12,7 +12,8 @@ use Carbon\Carbon;
 class DashboardController extends Controller
 {
     public function index()
-
+    {
+        // Contagens para os cards
         $adminCount = Medico::count();
         $patientsCount = Paciente::count();
         $pendingExamsCount = 0; // Placeholder
@@ -70,5 +71,5 @@ class DashboardController extends Controller
             'dadosGenero'
         ));
     }
-
+}
 
