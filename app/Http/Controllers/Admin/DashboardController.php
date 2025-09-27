@@ -70,4 +70,12 @@ class DashboardController extends Controller
             'dadosGenero'
         ));
     }
+<<<<<<< HEAD
 }
+=======
+}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 994bc1bc5c0130793e5eeb04f4803ac8586ca5ed
+>>>>>>> b05724b54f50b674a5f40d03a034b569757c6cfc

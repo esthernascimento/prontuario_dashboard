@@ -35,8 +35,7 @@ class MedicoController extends Controller
                 'emailUsuario.required' => 'O e-mail é obrigatório.',
                 'emailUsuario.unique' => 'Este e-mail já está cadastrado.',
                 'senhaUsuario.required' => 'A senha é obrigatória.',
-            ]);
-
+            
             $usuario = new Usuario();
             $usuario->nomeUsuario = $request->nomeMedico;
             $usuario->emailUsuario = $request->emailUsuario;
@@ -135,3 +134,9 @@ public function confirmarExclusao($id)
     }
 
 }
+
+}
+
+
+?>
+
