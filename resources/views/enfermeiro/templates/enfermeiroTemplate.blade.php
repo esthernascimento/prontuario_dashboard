@@ -21,17 +21,17 @@
         </a>
 
         <nav>
-            <a href="{{ route('admin.dashboard') }}" title="Dashboard"><i class="bi bi-house-door-fill"></i></a>
-            <a href="{{ route('admin.pacientes') }}" title="Pacientes"><i class="bi bi-people-fill"></i></a>
-            <a href="#" title="Prontuários"><i class="bi bi-file-medical-fill"></i></a>
-            <a href="{{ route('admin.ajuda') }}" title="Ajuda"><i class="bi bi-question-circle-fill"></i></a>
-            <a href="{{ route('admin.seguranca') }}" title="Segurança"><i class="bi bi-shield-lock-fill"></i></a>
-            <a href="{{ route('admin.logout') }}" 
+            <a href="{{ route('enfermeiro.dashboard') }}" title="Dashboard"><i class="bi bi-house-door-fill"></i></a>
+            <a href="{{ route('enfermeiro.pacientes') }}" title="Pacientes"><i class="bi bi-people-fill"></i></a>
+            <a href="#" title="enfermeiro.prontuario"><i class="bi bi-file-medical-fill"></i></a>
+            <a href="{{ route('enfermeiro.ajuda') }}" title="Ajuda"><i class="bi bi-question-circle-fill"></i></a>
+            <a href="{{ route('enfermeiro.seguranca') }}" title="Segurança"><i class="bi bi-shield-lock-fill"></i></a>
+            <a href="{{ route('enfermeiro.logout') }}" 
                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                title="Sair">
                 <i class="bi bi-power"></i>
             </a>
-            <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+            <form id="logout-form" action="{{ route('enfermeiro.logout') }}" method="POST" style="display: none;">
                 @csrf
             </form>
         </nav>
@@ -40,13 +40,13 @@
 
     {{-- Header --}}
     <header class="header">
-        <a href="{{ route('admin.perfil') }}" class="user-info" style="text-decoration: none; color: inherit;">
-            @if(isset($admin) && $admin->foto)
-                <img src="{{ asset('storage/fotos/' . $admin->foto) }}" alt="Foto do Admin">
+        <a href="{{ route('enfermeiro.perfil') }}" class="user-info" style="text-decoration: none; color: inherit;">
+            @if(isset($enfermeiro) && $enfermeiro->foto)
+                <img src="{{ asset('storage/fotos/' . $enfermeiroo->foto) }}" alt="Foto do Enfermeiro">
             @else
                 <img src="{{ asset('img/usuario-de-perfil.png') }}" alt="Foto padrão">
             @endif
-            <span>{{ $admin->nomeAdmin ?? 'Administrador' }}</span>
+            <span>{{ $enfermeiro->nomeEnfermeiro ?? 'Enfermeiro' }}</span>
         </a>
     </header>
 

@@ -15,15 +15,14 @@
         <h2><i class="bi bi-question-circle-fill"></i> Perguntas Frequentes (FAQ)</h2>
 
         <details>
-          <summary>Como eu cadastro um novo paciente?</summary>
-          <p>Para cadastrar um novo paciente, vá para a seção "Pacientes" no menu lateral, clique no botão "+ Novo
-            Paciente", preencha as informações e clique em "Salvar".</p>
+          <summary>Como eu visualizo um prontuário?</summary>
+          <p>Para visualizar um prontuário, vá para a seção "Prontuário" e no paciente vc clica em visualizar
+            "Prontuário", preencha as informações e clique em "Salvar".</p>
         </details>
 
         <details>
-          <summary>O que significa o card "Exames Pendentes"?</summary>
-          <p>O card "Exames Pendentes" mostra a quantidade de resultados de exames que foram solicitados mas ainda não
-            foram anexados ao prontuário do paciente no sistema.</p>
+          <summary>O que significa o card "Pacientes no sistema"?</summary>
+          <p>O card "Pacientes no sistema" mostra a quantidade de resultados de pacientes que são cadastrados no Prontuário+</p>
         </details>
 
         <details>
