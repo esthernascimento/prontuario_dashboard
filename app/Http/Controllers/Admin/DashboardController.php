@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Medico;
 use App\Models\Paciente;
+use App\Models\Enfermeiro; // ✅ Certifique-se de que este model existe
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -17,6 +18,7 @@ class DashboardController extends Controller
         $adminCount = Medico::count();
         $patientsCount = Paciente::count();
         $pendingExamsCount = 0; // Placeholder
+        $nursesCount = Enfermeiro::count(); // ✅ NOVO: Contagem de enfermeiros
 
         // Médicos por especialidade
         $medicosPorEspecialidade = DB::table('tbMedico')
@@ -37,12 +39,10 @@ class DashboardController extends Controller
             $mes = Carbon::now()->subMonths($i);
             $dadosLinha['meses'][] = $mes->format('M Y'); // Ex: Jan 2024
             
-            // Usando a coluna correta para a tabela de médicos
             $dadosLinha['admins'][] = Medico::whereYear('dataCadastroMedico', $mes->year)
                 ->whereMonth('dataCadastroMedico', $mes->month)
                 ->count();
             
-            // Usando 'created_at' para pacientes
             $dadosLinha['pacientes'][] = Paciente::whereYear('created_at', $mes->year)
                 ->whereMonth('created_at', $mes->month)
                 ->count();
@@ -51,8 +51,6 @@ class DashboardController extends Controller
         // 📊 Distribuição de gênero (Homens, Mulheres, Idosos)
         $homens = Paciente::where('genero', 'Masculino')->count();
         $mulheres = Paciente::where('genero', 'Feminino')->count();
-        
-        // Usando a coluna 'data_nasc' para calcular a idade
         $idosos = Paciente::where('data_nasc', '<=', Carbon::now()->subYears(60)->toDateString())->count();
 
         $dadosGenero = [
@@ -61,14 +59,22 @@ class DashboardController extends Controller
             'Idosos'   => $idosos,
         ];
 
-        // CORREÇÃO FINAL AQUI: Apontando para a view correta 'admin.dashboard'
+        // ✅ Enviando também $nursesCount para a view
         return view('admin.dashboard', compact(
             'adminCount',
             'patientsCount',
             'pendingExamsCount',
+            'nursesCount',
             'medicosPorEspecialidade',
             'dadosLinha',
             'dadosGenero'
         ));
     }
+
 }
+
+}
+
+
+}
+
