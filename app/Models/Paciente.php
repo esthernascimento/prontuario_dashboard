@@ -3,37 +3,65 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes; // Importa o SoftDeletes
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Paciente extends Model
+class Paciente extends Authenticatable
 {
-    use HasFactory, SoftDeletes; // Usa o SoftDeletes
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
+    /**
+     * O nome da tabela associada ao modelo.
+     *
+     * @var string
+     */
     protected $table = 'tbPaciente';
-    protected $primaryKey = 'idPacientePK';
-    public $timestamps = true;
-    const CREATED_AT = 'dataCadastroPaciente';
-    const UPDATED_AT = 'dataAtualizacaoPaciente';
 
-    // Coluna para o SoftDeletes
-    const DELETED_AT = 'deleted_at';
-
+    /**
+     * Os atributos que podem ser preenchidos em massa.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
-        'nomePaciente',
-        'cpfPaciente',
-        'cartaoSusPaciente',
-        'dataNascPaciente',
-        'logradouroPaciente',
-        'cidadePaciente',
-        'ufPaciente',
-        'cepPaciente',
-        'alergiasPaciente',
-        'id_usuarioFK',
+        'nome',
+        'cpf',
+        'data_nasc',
+        'cartao_sus',
+        'nacionalidade',
+        'genero',
+        'caminho_foto',
+        'telefone', // Campo de telefone adicionado
+        'logradouro',
+        'numero',
+        'cep',
+        'bairro',
+        'cidade',
+        'uf',
+        'estado',
+        'pais',
+        'email',
+        'senha',
     ];
 
-    public function usuario()
+    /**
+     * Os atributos que devem ser ocultados para serialização.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'senha',
+    ];
+
+    /**
+     * Diz ao Laravel qual é a coluna da senha para autenticação.
+     *
+     * @return string
+     */
+    public function getAuthPassword()
     {
-        return $this->belongsTo(Usuario::class, 'id_usuarioFK', 'idUsuarioPK');
+        return $this->senha;
     }
 }
+
