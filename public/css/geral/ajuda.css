@@ -71,7 +71,14 @@
       border: 1px solid #ccc;
       font-size: 1em;
       cursor: pointer;
+      transition: border-color 0.3s;
   }
+
+  .contact-form input:focus, .contact-form textarea:focus {
+    border-color: #0618b9;
+    outline: none; /* This removes the default browser outline */
+  }
+
   .contact-form button {
       background-color: #0618b9;
       color: white;

@@ -69,21 +69,61 @@
     border-color: #0618b9;
     box-shadow: 0 0 0 2px rgba(0, 35, 160, 0.1);
   }
-  
-  .filters {
-    display: flex;
-    gap: 15px;
+
+  /* Estilos para o seletor personalizado */
+  .custom-select {
+      position: relative;
+      width: 140px;
+      font-size: 14px;
+      cursor: pointer;
   }
-  
-  .filters select {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 14px;
-    background-color: white;
-    cursor: pointer;
+
+  .custom-select .selected {
+    width: 140px;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: white;
+      user-select: none;
+      position: relative;
   }
-  
+
+  /* Seta no canto direito */
+  .custom-select .selected::after {
+      content: "▼";
+      font-size: 12px;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: #555;
+  }
+
+  .custom-select .options {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: white;
+      margin-top: 5px;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+  }
+
+  .custom-select .options div {
+      padding: 10px 15px;
+      cursor: pointer;
+  }
+
+  .custom-select .options div:hover {
+      background: #f0f0f0;
+  }
+    
 
 .btn-add-paciente {
   background-color: #0618b9;
