@@ -7,27 +7,27 @@ use App\Http\Controllers\Medico\LoginController as MedicoLoginController;
 use App\Http\Controllers\Enfermeiro\LoginController as EnfermeiroLoginController;
 use App\Http\Controllers\Admin\MedicoController;
 use App\Http\Controllers\Admin\EnfermeiroController;
+use App\Http\Controllers\Api\PacienteController;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| Rotas da API
 |--------------------------------------------------------------------------
-| Aqui registramos as rotas da API.
 */
 
-// --- ROTAS PÚBLICAS ---
-Route::post('/register', [AuthController::class, 'register']);
+// --- ROTAS PÚBLICAS (Acessíveis sem login) ---
+
+// Login de Admin/Médico/Enfermeiro
 Route::post('/login', [AuthController::class, 'login']);
 
-// // Fluxo de login dinâmico Médico
-// Route::post('/medico/login/check', [MedicoLoginController::class, 'checkLogin'])->name('api.medico.login.check');
-// Route::post('/medico/profile/complete', [MedicoLoginController::class, 'completeProfile'])->name('api.medico.profile.complete');
-
-// Fluxo de login dinâmico Enfermeiro
+// Rotas de login dinâmico
 Route::post('/enfermeiro/login/check', [EnfermeiroLoginController::class, 'checkLogin'])->name('api.enfermeiro.login.check');
 Route::post('/enfermeiro/profile/complete', [EnfermeiroLoginController::class, 'completeProfile'])->name('api.enfermeiro.profile.complete');
 
-// --- ROTAS PROTEGIDAS ---
+// ROTAS DO PACIENTE (AGORA PÚBLICAS)
+Route::post('/pacientes/login', [PacienteController::class, 'login']);
+Route::apiResource('pacientes', PacienteController::class);
+// --- ROTAS PROTEGIDAS (Exigem Autenticação) ---
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
@@ -37,14 +37,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/admin/register/medico', [AuthController::class, 'adminRegisterMedico'])->name('api.admin.register.medico');
     Route::post('/admin/register/enfermeiro', [AuthController::class, 'adminRegisterEnfermeiro'])->name('api.admin.register.enfermeiro');
 
-    // CRUD Médico
+    // CRUD Médico (Gerido pelo Admin)
     Route::get('/admin/medicos', [MedicoController::class, 'index']);
     Route::post('/admin/medicos', [MedicoController::class, 'store']);
     Route::put('/admin/medicos/{id}', [MedicoController::class, 'update']);
     Route::delete('/admin/medicos/{id}', [MedicoController::class, 'excluir']);
     Route::post('/admin/medicos/{id}/toggle-status', [MedicoController::class, 'toggleStatus']);
 
-    // CRUD Enfermeiro
+    // CRUD Enfermeiro (Gerido pelo Admin)
     Route::get('/admin/enfermeiro', [EnfermeiroController::class, 'index']);
     Route::post('/admin/enfermeiro', [EnfermeiroController::class, 'store']);
     Route::put('/admin/enfermeiro/{id}', [EnfermeiroController::class, 'update']);
@@ -54,3 +54,4 @@ Route::middleware('auth:sanctum')->group(function () {
     // Logout
     Route::post('/logout', [AuthController::class, 'logout']);
 });
+
