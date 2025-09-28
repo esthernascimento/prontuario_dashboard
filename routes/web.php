@@ -12,7 +12,7 @@ use App\Http\Controllers\Enfermeiro\LoginController as EnfermeiroLoginController
 use App\Http\Controllers\Enfermeiro\DashboardController as EnfermeiroDashboardController;
 use App\Http\Controllers\Enfermeiro\ConfiguracaoController as ConfiguracaoEnfermeiroController;
 use App\Http\Controllers\Enfermeiro\SegurancaController as SegurancaEnfermeiroController;
-use App\Http\Controllers\Enfermeiro\ProntuarioController; 
+use App\Http\Controllers\Enfermeiro\ProntuarioController;
 
 // ----------------------------------------------------------------------------------
 // --- 1. ROTAS GERAIS / PÚBLICAS ---
@@ -53,16 +53,17 @@ Route::prefix('enfermeiro')->name('enfermeiro.')->group(function () {
 });
 
 // ----------------------------------------------------------------------------------
-// --- 3. ROTAS DO MÉDICO (Comentadas conforme original) ---
+// --- 3. ROTAS DO MÉDICO  ---
 // ----------------------------------------------------------------------------------
 
-// Route::get('/loginMedico', [MedicoLoginController::class, 'showLoginForm'])->name('medico.login');
-// Route::post('/loginMedico', [MedicoLoginController::class, 'login'])->name('medico.login.submit');
-// Route::middleware('auth:medico')->prefix('medico')->name('medico.')->group(function () {
-//     Route::get('/dashboard', fn() => view('medico.dashboard'))->name('dashboard');
-//     Route::post('/logout', [MedicoLoginController::class, 'logout'])->name('logout');
-// });
-
+Route::get('/loginMedico', [MedicoLoginController::class, 'showLoginForm'])->name('medico.login');
+Route::post('/loginMedico', [MedicoLoginController::class, 'login'])->name('medico.login.submit');
+Route::post('/medico/profile/complete', [MedicoLoginController::class, 'completarPerfil'])->name('api.medico.profile.complete');
+Route::post('/medico/login/check', [MedicoLoginController::class, 'login'])->name('api.medico.login.check');
+Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () {
+    Route::get('/dashboard', fn() => view('medico.dashboardMedico'))->name('dashboard'); 
+    Route::post('/logout', [MedicoLoginController::class, 'logout'])->name('logout');
+});
 
 // ----------------------------------------------------------------------------------
 // --- 4. PAINEL ADMIN (PROTEGIDO) ---

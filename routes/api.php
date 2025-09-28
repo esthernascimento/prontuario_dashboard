@@ -17,6 +17,13 @@ use App\Http\Controllers\Api\PacienteController;
 
 // --- ROTAS PÚBLICAS (Acessíveis sem login) ---
 
+// Login do médico
+Route::post('/medico/login/check', [MedicoLoginController::class, 'login'])->name('api.medico.login.check');
+
+// Completar perfil do médico (especialidade)
+Route::post('/medico/profile/complete', [MedicoLoginController::class, 'completarPerfil'])->name('api.medico.profile.complete');
+
+
 // Login de Admin/Médico/Enfermeiro
 Route::post('/login', [AuthController::class, 'login']);
 
