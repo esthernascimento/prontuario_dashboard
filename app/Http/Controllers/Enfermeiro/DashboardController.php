@@ -22,6 +22,15 @@ class DashboardController extends Controller
 
         $nome = $enfermeiro->nomeEnfermeiro ?? $usuario->nomeUsuario;
         $coren = $enfermeiro->corenEnfermeiro ?? null;
+        
+        // 📊 Lógica para o gráfico de gênero dos enfermeiros
+        $homens = Enfermeiro::where('genero', 'Masculino')->count();
+        $mulheres = Enfermeiro::where('genero', 'Feminino')->count();
+
+        $dadosGeneroEnfermeiro = [
+            'Homens' => $homens,
+            'Mulheres' => $mulheres,
+        ];
 
         return view('enfermeiro.dashboardEnfermeiro', [
             'nome' => $nome,
@@ -30,6 +39,7 @@ class DashboardController extends Controller
             'patientsCount' => 20,
             'pendingExamsCount' => 3,
             'ubsCount' => 2,
+            'dadosGeneroEnfermeiro' => $dadosGeneroEnfermeiro, // Passa os dados de gênero para a view
         ]);
     }
 }

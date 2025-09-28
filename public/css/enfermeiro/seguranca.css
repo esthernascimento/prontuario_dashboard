@@ -85,12 +85,12 @@
   font-size: 16px;
   background-color: #fdfdfd; 
   transition: border-color 0.3s, box-shadow 0.3s;
+  cursor: pointer;
 }
 
 .form-group input:focus {
   outline: none;
   border-color: #0a400c;
-  box-shadow: 0 0 0 3px #032804; 
 }
 
 .form-hint {
@@ -123,7 +123,7 @@
 }
 
 .btn-primary:hover {
-  background-color: #022504;
+  background-color: #76d879;
   transform: translateY(-1px);
 }
 
