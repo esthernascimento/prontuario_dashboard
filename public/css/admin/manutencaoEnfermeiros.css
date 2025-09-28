@@ -2,6 +2,7 @@ body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
     background-color: #f9f9f9;
+    height: 100vh;
 }
 
 .main-dashboard {
@@ -318,26 +319,31 @@ table th:nth-child(5) {
     margin-top: 30px;
 }
 
-.btn-cancelar, .btn-excluir {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 20px;
+.btn-cancelar,
+.btn-excluir {
+    padding: 12px 25px;
+    border-radius: 25px;
     font-size: 16px;
     font-weight: 600;
+    border: none;
     cursor: pointer;
-    width: 140px;
-    transition: background-color 0.3s;
-    text-decoration: none;
-    text-align: center;
-    
-    background-color: #0618b9; 
+    width: 45%;
+}
+
+.btn-cancelar {
+    background-color: #ccc;
+    color: #333;
+}
+
+.btn-cancelar:hover {
+    background-color: #999;
+}
+
+.btn-excluir {
+    background-color: #0618b9;
     color: white;
 }
 
 .btn-excluir:hover {
-    background-color: #0056b3;
-}
-
-.btn-cancelar:hover {
     background-color: #0056b3;
 }
