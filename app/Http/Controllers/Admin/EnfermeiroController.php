@@ -63,6 +63,7 @@ class EnfermeiroController extends Controller
         return view('admin.editarEnfermeiro', compact('enfermeiro'));
     }
 
+    // MÉTODO UPDATE (EDITADO PARA MODAL DE SUCESSO)
     public function update(Request $request, $id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
@@ -100,7 +101,11 @@ class EnfermeiroController extends Controller
             'emailUsuario' => $request->emailUsuario,
         ]);
 
-        return redirect()->route('admin.manutencaoEnfermeiro')->with('success', 'Dados atualizados com sucesso.');
+        // ADICIONANDO A FLAG 'updated' PARA DISPARAR O MODAL DE SUCESSO NO BLADE
+        return redirect()->route('admin.manutencaoEnfermeiro')->with([
+            'success' => 'Dados atualizados com sucesso.',
+            'updated' => true // Flag para edição/atualização
+        ]);
     }
 
     public function show($id)
@@ -109,16 +114,28 @@ class EnfermeiroController extends Controller
         return view('admin.visualizarEnfermeiro', compact('enfermeiro'));
     }
 
+    // MÉTODO TOGGLESTATUS (EDITADO PARA MODAL DE SUCESSO)
     public function toggleStatus($id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
+        $mensagem = 'Status do enfermeiro atualizado.'; // Mensagem padrão
 
         if ($enfermeiro->usuario) {
-            $enfermeiro->usuario->statusAtivoUsuario = !$enfermeiro->usuario->statusAtivoUsuario;
+            // Inverte o status
+            $novoStatus = !$enfermeiro->usuario->statusAtivoUsuario;
+            $enfermeiro->usuario->statusAtivoUsuario = $novoStatus;
             $enfermeiro->usuario->save();
+
+            // Mensagem mais específica para o modal
+            $acao = $novoStatus ? 'ativado' : 'desativado';
+            $mensagem = "O enfermeiro(a) foi {$acao} com sucesso!";
         }
 
-        return back()->with('success', 'Status do enfermeiro atualizado.');
+        // ADICIONANDO A FLAG 'status_changed' PARA DISPARAR O MODAL DE SUCESSO NO BLADE
+        return redirect()->route('admin.manutencaoEnfermeiro')->with([
+            'success' => $mensagem,
+            'status_changed' => true // Flag para alteração de status
+        ]);
     }
 
     public function confirmarExclusao($id)
@@ -127,6 +144,7 @@ class EnfermeiroController extends Controller
         return view('admin.desativarEnfermeiro', compact('enfermeiro'));
     }
 
+    // MÉTODO EXCLUIR (EDITADO PARA MODAL DE SUCESSO)
     public function excluir($id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
@@ -137,6 +155,10 @@ class EnfermeiroController extends Controller
 
         $enfermeiro->delete();
 
-        return redirect()->route('admin.manutencaoEnfermeiro')->with('success', 'Enfermeiro e usuário excluídos com sucesso.');
+        // ADICIONANDO A FLAG 'deleted' PARA DISPARAR O MODAL DE SUCESSO NO BLADE
+        return redirect()->route('admin.manutencaoEnfermeiro')->with([
+            'success' => 'Enfermeiro e usuário excluídos com sucesso.',
+            'deleted' => true // NOVA FLAG para exclusão
+        ]);
     }
 }

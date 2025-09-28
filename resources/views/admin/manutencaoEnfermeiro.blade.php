@@ -9,7 +9,8 @@
 @php $admin = auth()->guard('admin')->user(); @endphp
 
 
-    @if(session('success'))
+    {{-- Esta barra de sucesso será exibida APENAS se não houver um modal configurado --}}
+    @if(session('success') && !session('status_changed') && !session('updated') && !session('deleted'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
@@ -71,19 +72,16 @@
                         </a>
 
                         @if($enfermeiro->usuario)
-                            <form action="{{ route('admin.enfermeiro.toggleStatus', $enfermeiro->idEnfermeiroPK) }}" method="POST" style="display: inline;">
-                            @csrf
-                            <button type="submit" style="background: none; border: none;">
+                            <a href="#" onclick="openStatusModal('{{ $enfermeiro->idEnfermeiroPK }}', '{{ $enfermeiro->nomeEnfermeiro }}', {{ $enfermeiro->usuario->statusAtivoUsuario }})">
                                 @if($enfermeiro->usuario->statusAtivoUsuario == 1)
                                 <i class="bi bi-slash-circle text-danger" title="Desativar"></i>
                                 @else
                                 <i class="bi bi-check-circle text-success" title="Ativar"></i>
                                 @endif
-                            </button>
-                            </form>
+                            </a>
                         @endif
 
-                        {{-- NOVO: CHAMADA JS PARA ABRIR O MODAL --}}
+                        {{-- CHAMADA JS PARA ABRIR O MODAL DE EXCLUSÃO --}}
                         <a href="#" onclick="openDeleteEnfermeiroModal('{{ $enfermeiro->idEnfermeiroPK }}', '{{ $enfermeiro->nomeEnfermeiro }}')">
                             <i class="bi bi-trash" title="Excluir"></i>
                         </a>
@@ -96,7 +94,7 @@
         </div>
     </main>
 
-{{-- ESTRUTURA DO MODAL DE EXCLUSÃO DE ENFERMEIRO --}}
+{{-- MODAL DE EXCLUSÃO --}}
 <div id="deleteEnfermeiroModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -106,7 +104,6 @@
         
         <p>Tem certeza que deseja excluir o(a) enfermeiro(a) <span id="enfermeiroNome"></span>?</p>
 
-        {{-- O action será preenchido pelo JavaScript --}}
         <form id="deleteEnfermeiroForm" method="POST">
             @csrf
             @method('DELETE')
@@ -119,56 +116,86 @@
     </div>
 </div>
 
+{{-- MODAL DE ALTERAÇÃO DE STATUS --}}
+<div id="statusEnfermeiroModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <i class="bi bi-toggle-on"></i>
+            <h2>Alterar Status</h2>
+        </div>
+        
+        <p>Tem certeza que deseja <span id="statusAction"></span> o(a) enfermeiro(a) <span id="statusEnfermeiroNome"></span>?</p>
+
+        <form id="statusEnfermeiroForm" method="POST">
+            @csrf
+            <div class="modal-buttons">
+                <button type="button" onclick="closeStatusModal()" class="btn-cancelar">Cancelar</button>
+                <button type="submit" class="btn-excluir">Sim, <span id="confirmStatusText"></span></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{-- MODAL DE SUCESSO UNIFICADO --}}
+<div id="statusSuccessModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header" style="color: #198754;"> {{-- Cor verde para sucesso --}}
+            <i class="bi bi-check-circle-fill"></i>
+            <h2>Sucesso!</h2>
+        </div>
+        
+        <p id="successMessage"></p>
+
+        <div class="modal-buttons">
+            {{-- Botão de fechar (Ok) com a cor verde de sucesso --}}
+            <button type="button" onclick="closeSuccessModal()" class="btn-excluir" style="background-color: #198754;">Fechar</button>
+        </div>
+    </div>
+</div>
+
+
 <script>
 
-    function filterPatients() {
-      const searchInput = document.getElementById('searchInput').value.toLowerCase();
-      const filterStatus = document.getElementById('filterStatus').value;
+    // ------------------------------------------
+    // LÓGICA DO MODAL DE SUCESSO UNIFICADO
+    // ------------------------------------------
 
-      const rows = document.querySelectorAll('tbody tr');
-
-      rows.forEach(row => {
-        const name = row.children[0].textContent.toLowerCase();
-        const crm = row.children[1].textContent.toLowerCase();
-        const email = row.children[2].textContent.toLowerCase();
-        const status = row.dataset.status;
-
-        const matchesSearch = name.includes(searchInput) || crm.includes(searchInput) || email.includes(searchInput);
-        const matchesStatus = !filterStatus || status === filterStatus;
-
-        if (matchesSearch && matchesStatus) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      });
+    function openSuccessModal(message) {
+        document.getElementById('successMessage').textContent = message;
+        document.getElementById('statusSuccessModal').style.display = 'flex';
     }
 
-    const customSelect = document.getElementById("customStatus");
-    const selected = customSelect.querySelector(".selected");
-    const options = customSelect.querySelector(".options");
-    const hiddenInput = document.getElementById("filterStatus");
+    function closeSuccessModal() {
+        document.getElementById('statusSuccessModal').style.display = 'none';
+    }
 
-    selected.addEventListener("click", () => {
-      options.style.display = options.style.display === "flex" ? "none" : "flex";
-    });
-
-    options.querySelectorAll("div").forEach(option => {
-      option.addEventListener("click", () => {
-        selected.textContent = option.textContent;
-        hiddenInput.value = option.dataset.value;
-        options.style.display = "none";
-        filterPatients();
-      });
-    });
-
-    document.addEventListener("click", e => {
-      if (!customSelect.contains(e.target)) {
-        options.style.display = "none";
-      }
+    // Fecha o modal de sucesso clicando fora
+    document.getElementById('statusSuccessModal').addEventListener('click', function(event) {
+        if (event.target.id === 'statusSuccessModal') {
+            closeSuccessModal();
+        }
     });
 
 
+    // ------------------------------------------
+    // Verificação de Sucesso ao Carregar a Página
+    // Agora verifica 'status_changed', 'updated' e 'deleted'
+    // ------------------------------------------
+
+    @if(session('status_changed') || session('updated') || session('deleted'))
+        document.addEventListener('DOMContentLoaded', () => {
+            // A mensagem de sucesso é a mesma para todas as ações
+            const message = "{{ session('success') }}"; 
+            openSuccessModal(message);
+        });
+    @endif
+
+
+    // ------------------------------------------
+    // LÓGICA DOS MODAIS EXISTENTES
+    // ------------------------------------------
+
+    // Funções do Modal de Exclusão
     function openDeleteEnfermeiroModal(enfermeiroId, enfermeiroNome) {
         const modal = document.getElementById('deleteEnfermeiroModal');
         const nomeSpan = document.getElementById('enfermeiroNome');
@@ -189,6 +216,89 @@
     document.getElementById('deleteEnfermeiroModal').addEventListener('click', function(event) {
         if (event.target.id === 'deleteEnfermeiroModal') {
             closeDeleteEnfermeiroModal();
+        }
+    });
+
+    // Funções do Modal de Status
+    function openStatusModal(enfermeiroId, enfermeiroNome, currentStatus) {
+        const modal = document.getElementById('statusEnfermeiroModal');
+        const nomeSpan = document.getElementById('statusEnfermeiroNome');
+        const actionSpan = document.getElementById('statusAction');
+        const confirmText = document.getElementById('confirmStatusText');
+        const form = document.getElementById('statusEnfermeiroForm');
+        
+        const action = currentStatus ? 'desativar' : 'ativar';
+        const confirmAction = currentStatus ? 'desativar' : 'ativar';
+
+        nomeSpan.textContent = enfermeiroNome;
+        actionSpan.textContent = action;
+        confirmText.textContent = confirmAction;
+
+        const statusRoute = "{{ route('admin.enfermeiro.toggleStatus', ['id' => 'PLACEHOLDER_ID']) }}";
+        form.action = statusRoute.replace('PLACEHOLDER_ID', enfermeiroId);
+        
+        modal.style.display = 'flex';
+    }
+
+    function closeStatusModal() {
+        document.getElementById('statusEnfermeiroModal').style.display = 'none';
+    }
+
+    document.getElementById('statusEnfermeiroModal').addEventListener('click', function(event) {
+        if (event.target.id === 'statusEnfermeiroModal') {
+            closeStatusModal();
+        }
+    });
+
+</script>
+
+
+<script>
+
+    function filterPatients() {
+        const searchInput = document.getElementById('searchInput').value.toLowerCase();
+        const filterStatus = document.getElementById('filterStatus').value;
+
+        const rows = document.querySelectorAll('tbody tr');
+
+        rows.forEach(row => {
+            const name = row.children[0].textContent.toLowerCase();
+            const crm = row.children[1].textContent.toLowerCase();
+            const email = row.children[2].textContent.toLowerCase();
+            const status = row.dataset.status;
+
+            const matchesSearch = name.includes(searchInput) || crm.includes(searchInput) || email.includes(searchInput);
+            const matchesStatus = !filterStatus || status === filterStatus;
+
+            if (matchesSearch && matchesStatus) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    const customSelect = document.getElementById("customStatus");
+    const selected = customSelect.querySelector(".selected");
+    const options = customSelect.querySelector(".options");
+    const hiddenInput = document.getElementById("filterStatus");
+
+    selected.addEventListener("click", () => {
+        options.style.display = options.style.display === "flex" ? "none" : "flex";
+    });
+
+    options.querySelectorAll("div").forEach(option => {
+        option.addEventListener("click", () => {
+            selected.textContent = option.textContent;
+            hiddenInput.value = option.dataset.value;
+            options.style.display = "none";
+            filterPatients();
+        });
+    });
+
+    document.addEventListener("click", e => {
+        if (!customSelect.contains(e.target)) {
+            options.style.display = "none";
         }
     });
 
