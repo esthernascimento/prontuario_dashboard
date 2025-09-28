@@ -22,7 +22,6 @@
 
         <nav>
             <a href="{{ route('enfermeiro.dashboard') }}" title="Dashboard"><i class="bi bi-house-door-fill"></i></a>
-            <a href="{{ route('enfermeiro.pacientes') }}" title="Pacientes"><i class="bi bi-people-fill"></i></a>
             <a href="{{ route('enfermeiro.prontuario') }}" title="Prontuário"><i class="bi bi-file-medical-fill"></i></a>
             <a href="{{ route('enfermeiro.ajuda') }}" title="Ajuda"><i class="bi bi-question-circle-fill"></i></a>
             <a href="{{ route('enfermeiro.perfil') }}" title="perfil"><i class="bi bi-shield-lock-fill"></i></a>

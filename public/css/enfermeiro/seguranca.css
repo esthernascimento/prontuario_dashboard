@@ -1,150 +1,207 @@
-/* Estilos específicos para a página de segurança */
+.main-dashboard {
 
-.main-dashboard{
-  padding: 30px;
-  margin-left: 10px;
-  margin-top: 10px;
+  padding: 30px; 
+
 }
 
+/* --- Container da Página de Segurança --- */
 .security-container {
-    max-width: 800px;
-    margin: 0 auto;
+  max-width: 800px; 
+  width: 100%; 
+  margin: 0 auto; 
+  padding: 0 20px; 
+  box-sizing: border-box; 
+}
+
+/* --- Título Principal da Página --- */
+.security-container .main-title {
+  color: #0a400c;
+  margin-top: 20px;
+  margin-bottom: 5px;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centraliza o título */
+  gap: 10px;
+}
+
+.security-container .main-title i {
+  font-size: 30px;
+}
+
+/* --- Subtítulo / Descrição da Página --- */
+.security-container .main-subtitle {
+  color: #666;
+  margin-bottom: 30px;
+  text-align: center; /* Centraliza a descrição */
+  font-size: 16px;
+}
+
+/* --- Seção de Alterar Senha --- */
+.security-section {
+  background-color: #fff;
+  border-radius: 12px; /* Raio de borda um pouco maior para um visual mais suave */
+  padding: 30px;
+  margin-bottom: 25px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1); /* Sombra mais pronunciada e suave */
+}
+
+.security-section h2 {
+  color: #0a400c;
+  margin-bottom: 25px;
+  font-size: 1.4em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.security-section h2 i {
+  font-size: 20px;
+}
+
+/* --- Formulário de Alteração de Senha --- */
+.security-form {
+  max-width: 450px; 
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+  font-size: 15px;
+}
+
+.form-group input {
+  width: calc(100% - 24px); 
+  padding: 12px;
+  border: 1px solid #e0e0e0; 
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: #fdfdfd; 
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #0a400c;
+  box-shadow: 0 0 0 3px #032804; 
+}
+
+.form-hint {
+  color: #888;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+
+/* --- Botão Primário (Alterar Senha) --- */
+.btn-primary {
+  background-color: #0a400c;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-top: 15px;
+  width: 100%; /* Ocupa 100% da largura do formulário */
+}
+
+.btn-primary:hover {
+  background-color: #022504;
+  transform: translateY(-1px);
+}
+
+/* --- Mensagens de Alerta (Sucesso/Erro) --- */
+.alert {
+  padding: 15px 20px;
+  margin-bottom: 25px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  animation: fadeIn 0.5s ease-out; /* Adiciona uma animação */
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.alert-danger ul {
+  margin: 0;
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+/* Animação para alertas */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Responsividade (Ajustes para telas menores) --- */
+@media (max-width: 768px) {
+  .main-dashboard {
+      padding: 20px;
   }
-  
-  .security-container h1 {
-    color: #0a400c;
-    margin-top: 0px;
-    margin-bottom: 10px;
+
+  .security-container .main-title {
+      font-size: 24px;
   }
-  
-  .security-container > p {
-    color: #666;
-    margin-bottom: 30px;
+  .security-container .main-title i {
+      font-size: 26px;
   }
-  
   .security-section {
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 25px;
-    margin-bottom: 25px;
-    margin-top: 0%;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 20px;
   }
-  
   .security-section h2 {
-    color: #0a400c;
-    margin-bottom: 20px;
-    font-size: 1.3em;
+      font-size: 1.2em;
   }
-  
-  .security-section h2 i {
-    margin-right: 10px;
+}
+
+@media (max-width: 480px) {
+  .main-dashboard {
+      padding: 15px;
   }
-  
-  /* Formulário de segurança */
-  .security-form {
-    max-width: 500px;
+  .security-container .main-title {
+      font-size: 20px;
+      flex-direction: column; /* Ícone acima do texto em telas muito pequenas */
   }
-  
-  .form-group {
-    margin-bottom: 20px;
+  .security-container .main-title i {
+      font-size: 22px;
   }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
-    color: #333;
+  .security-container .main-subtitle {
+      font-size: 14px;
   }
-  
-  .form-group input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: border-color 0.3s;
-    cursor: pointer;
+  .security-section h2 {
+      font-size: 1.1em;
+      flex-direction: column;
   }
-  
-  .form-group input:focus {
-    outline: none;
-    border-color: #0a400c;
-    box-shadow: #011102;
-  }
-  
-  .form-hint {
-    color: #666;
-    font-size: 12px;
-    margin-top: 5px;
-    display: block;
-  }
-  
-  /* Botões */
   .btn-primary {
-    background-color: #0a400c;
-    color: white;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s;
+      padding: 10px 20px;
+      font-size: 14px;
   }
-  
-  .btn-primary:hover {
-    background-color: #599c5b;
-  }
-  
-  .btn-secondary {
-    background-color: #6c757d;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .btn-secondary:hover {
-    background-color: #5a6268;
-  }
-
-  .btn-outline {
-    background-color: transparent;
-    color: #131D4F;
-    padding: 10px 20px;
-    border: 2px solid #0a400c;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  
-  .btn-outline:hover {
-    background-color: #b5feb7;
-    color: white;
-  }
-
-  
-  /* Responsividade */
-  @media (max-width: 768px) {
-    .session-item {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-    }
-    
-    .setting-item {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-    }
-    
-    .backup-section {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  }
+}
