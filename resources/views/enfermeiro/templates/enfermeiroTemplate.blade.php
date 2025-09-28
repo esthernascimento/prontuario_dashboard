@@ -16,7 +16,7 @@
     {{-- Sidebar --}}
     <div class="sidebar">
         {{-- CORRIGIDO: O link do logo deve ir para o perfil do enfermeiro, não do admin --}}
-        <a href="{{ route('enfermeiro.perfil') }}">
+        <a href="{{ route('enfermeiro.dashboard') }}">
             <img src="{{ asset('img/enfermeiro-logo2.png') }}" alt="Logo Prontuário+" class="logo">
         </a>
 
