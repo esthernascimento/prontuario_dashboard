@@ -1,55 +1,92 @@
+/* medico/template.css - FINALMENTE CORRIGIDO */
 
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
     background-color: #f9f9f9; 
-  }
-  
-  .sidebar {
+}
+ 
+/* SIDEBAR (BARRA LATERAL) */
+.sidebar {
     position: fixed;
-    width: 80px;
+    width: 120px; 
     height: 100vh;
-    background-color: #131D4F;
+    background-color: #8c1007; 
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 20px;
-    z-index: 10;
-  }
-  
-  .logo {
-    width: 60px;
+    /* MANTIDO: O padding empurra a logo e a navegação para baixo */
+    padding-top: 20px; 
+    /* Aumenta o Z-index para a sidebar sobrepor o conteúdo */
+    z-index: 11; 
+}
+ 
+.logo {
+    width: 100px;
     margin-bottom: 30px;
-  }
-  
-  .sidebar nav {
+}
+ 
+.sidebar nav {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 35px;
-  }
+}
 
-  .sidebar nav a i {
+.sidebar nav a i {
     font-size: 24px;
     color: white;
     transition: color 0.3s;
-  }
+}
 
-  .sidebar nav a:hover i {
-    color: #98b5ff;
-  }
-  
+.sidebar nav a:hover i {
+    color: #995c5cb9;
+}
  
-  .main-dashboard-wrapper {
-    margin-left: 80px;
-  }
-
-  .header {
+/* HEADER (CABECALHO) */
+.header {
     height: 60px;
     padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    background-color: #0023A0; 
+    background-color: #8c1007; 
     border-bottom: 1px solid #eee;
-  }
+
+    /* CORREÇÃO DE LAYOUT: Fixa o header e o alinha para preencher o topo */
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0; /* AJUSTADO: Começa em 0 para preencher 100% da largura superior */
+    
+    /* Aumenta o z-index para garantir que a cor vermelha cubra tudo */
+    z-index: 10; 
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    /* CORREÇÃO: Usa margin-left para afastar o texto do perfil da borda da sidebar */
+    margin-left: 120px; 
+}
+ 
+.user-info span {
+    color: #fff; 
+}
+
+.user-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+/* CONTEÚDO PRINCIPAL (usado para @yield('content')) */
+.content {
+    /* CORREÇÃO: Removemos a margem superior (pois o header fixo não exige), e usamos padding-top */
+    margin-left: 120px; /* Mantém o espaço da sidebar */
+    margin-top: 0; /* Remove a margem superior extra */
+    
+    /* Adiciona padding no topo para que o conteúdo não fique ESCONDIDO atrás do header fixo */
+    padding: 80px 40px 20px 40px; 
+}

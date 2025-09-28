@@ -1,0 +1,176 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+}
+
+/* Container Principal */
+.cadastrar-container {
+    background-color: white; 
+    max-width: 450px; /* Um pouco menor para ficar mais compacto */
+    margin: 50px auto;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center; 
+}
+
+/* Cabeçalho */
+.cadastrar-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #8c1007;
+    margin-bottom: 25px;
+    justify-content: center; 
+}
+
+.cadastrar-header h1 {
+    font-size: 22px;
+    margin: 0;
+    font-weight: 600;
+}
+
+/* =================================== */
+/* Estilo da Foto e Overlay (Bloco Azul) */
+/* =================================== */
+
+.foto-upload-container {
+    background-color: #8c1007; 
+    border-radius: 12px;
+    margin-bottom: 25px;
+    padding: 30px 20px;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    position: relative;
+    height: 180px; 
+}
+
+.foto-upload-label {
+    position: absolute;
+    cursor: pointer;
+    width: 100%; 
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box-foto img {
+    width: 130px; 
+    height: 130px;
+    object-fit: cover;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.overlay {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); 
+    z-index: 20;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.foto-upload-label:hover .overlay {
+    /* Torna o overlay visível ao passar o mouse */
+    opacity: 1; 
+}
+
+.overlay i {
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+/* =================================== */
+/* Inputs de Dados (Nome e Email) */
+/* =================================== */
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left; /* Garante que os inputs comecem da esquerda */
+}
+
+form input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: #ffffff; 
+    color: #333; 
+    font-size: 16px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+form input::placeholder {
+    color: #aaa;
+}
+
+form input:focus {
+    border-color: #8c1007; 
+    outline: none;
+}
+
+/* =================================== */
+/* Botões de Ação */
+/* =================================== */
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px; 
+    margin-top: 25px;
+}
+
+/* Botão Salvar (Principal) */
+.save-button {
+    /* Sobrescreve o estilo base do form button */
+    display: inline-block;
+    background-color: #8c1007;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    width: auto; 
+    flex-grow: 1;
+    margin: 0;
+    transition: background-color 0.3s;
+}
+
+.save-button:hover {
+    background-color: #4d1414;
+}
+
+.btn-trocar-senha {
+    display: inline-block;
+    background-color: #e0e0e0; 
+    color: #333;
+    text-decoration: none;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    width: auto; 
+    flex-grow: 1;
+    transition: background-color 0.3s;
+}
+
+.btn-trocar-senha:hover {
+    background-color: #ccc;
+}
