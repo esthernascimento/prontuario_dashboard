@@ -109,10 +109,17 @@ form input {
     color: #333; 
     font-size: 16px;
     box-sizing: border-box;
+    cursor: pointer;
+    transition: border-color 0.3s;
 }
 
 form input::placeholder {
     color: #aaa;
+}
+
+form input:focus {
+    border-color: #0a400c; 
+    outline: none;
 }
 
 /* =================================== */
@@ -145,7 +152,7 @@ form input::placeholder {
 }
 
 .save-button:hover {
-    background-color: #254a26;
+    background-color: #76d879;
 }
 
 .btn-trocar-senha {

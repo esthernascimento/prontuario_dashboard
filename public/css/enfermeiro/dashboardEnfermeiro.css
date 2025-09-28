@@ -150,3 +150,18 @@ h1 {
   text-align: right;
   line-height: 1.4;
 }
+
+.donut-card .text-info {
+    text-align: center; /* Centraliza o texto */
+    margin-bottom: 15px; /* Adiciona uma margem abaixo do texto para separar do gráfico */
+    color: #fff; /* Se o fundo for escuro, o texto precisa ser claro */
+    font-size: 1.1em;
+}
+
+#graficoDonutEnfermeiro {
+    max-width: 200px; /* Define a largura máxima do seu gráfico */
+    max-height: 200px; /* Define a altura máxima do seu gráfico */
+    margin-top: 10px; /* Adicione um pouco de margem acima do gráfico, se necessário */
+    width: 100% !important; /* Garante que ele respeite o max-width */
+    height: 100% !important; /* Garante que ele respeite o max-height */
+}
