@@ -20,14 +20,27 @@ class DashboardController extends Controller
         $pendingExamsCount = 0; 
         $nursesCount = Enfermeiro::count(); 
 
-      
+        
+        // 📊 Gráfico de Profissionais por Área
+        
+        // 1. Desativa temporariamente o modo estrito do MySQL para evitar erro 1055
+        DB::statement("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
+
+        // 2. CORREÇÃO: Remove a lógica de 'Não Especificada' e filtra
+        // agora apenas especialidades preenchidas (não NULL e não string vazia)
         $medicosPorEspecialidade = DB::table('tbMedico')
-            ->select('especialidadeMedico', DB::raw('count(*) as total'))
+            ->select(
+                'especialidadeMedico',
+                DB::raw('count(*) as total')
+            )
+            // Filtra registros que tenham a especialidade definida (não nula)
             ->whereNotNull('especialidadeMedico')
-            ->groupBy('especialidadeMedico')
+            // E também filtra registros onde a especialidade não é uma string vazia após remover espaços
+            ->where(DB::raw("TRIM(especialidadeMedico)"), '!=', '')
+            ->groupBy('especialidadeMedico') 
             ->orderBy('total', 'desc')
             ->get();
-
+        
         // 📊 Crescimento de Admins e Pacientes por mês (Últimos 6 meses)
         $dadosLinha = [
             'meses' => [],
@@ -54,22 +67,21 @@ class DashboardController extends Controller
         $idosos = Paciente::where('data_nasc', '<=', Carbon::now()->subYears(60)->toDateString())->count();
 
         $dadosGenero = [
-            'Homens'   => $homens,
+            'Homens'  => $homens,
             'Mulheres' => $mulheres,
-            'Idosos'   => $idosos,
+            'Idosos'  => $idosos,
         ];
 
-        // ✅ Enviando também $nursesCount para a view
+        // Variável 'medicosPorEspecialidade' já está formatada corretamente
         return view('admin.dashboard', compact(
             'adminCount',
             'patientsCount',
             'pendingExamsCount',
             'nursesCount',
-            'medicosPorEspecialidade',
+            'medicosPorEspecialidade', // Variável crucial para o gráfico de barras
             'dadosLinha',
             'dadosGenero'
         ));
     }
 
 }
-
