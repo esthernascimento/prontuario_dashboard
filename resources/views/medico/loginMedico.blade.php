@@ -9,30 +9,6 @@
     <link rel="stylesheet" href="{{ url('/css/medico/loginMedico.css') }}">
     <link rel="shortcut icon" href="{{ url('img/logo-azul.png') }}" type="image/x-icon" />
 
-    <style>
-        .notification {
-            text-align: center;
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            display: none;
-        }
-        .notification.success {
-            color: #155724;
-            background-color: #d4edda;
-            border: 1px solid #c3e6cb;
-        }
-        .notification.error {
-            color: #721c24;
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-        }
-        .notification.info {
-            color: #0c5460;
-            background-color: #d1ecf1;
-            border-color: #bee5eb;
-        }
-    </style>
 </head>
 <body>
     <main class="main-container">
@@ -61,7 +37,7 @@
 
                 <button class="button" type="submit" id="submit-button">ENTRAR</button>
 
-                <a href="#">Não tem cadastro? <strong>Fale com o Administrador</strong></a>
+ 
             </form>
         </div>
     </main>

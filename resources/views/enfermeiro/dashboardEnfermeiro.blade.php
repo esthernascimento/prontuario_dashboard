@@ -3,7 +3,24 @@
 @section('content')
 <main class="content">
     <div class="page-container">
-        <h1>Bem-vindo {{ $nome }}!</h1>
+
+        <div class="welcome-banner">
+        <div class="banner-left">
+            {{-- Logo Prontuário+ --}}
+            <div class="banner-logo-container">
+                {{-- Usando o logo2.png do template (ou ajuste o caminho conforme o logo real) --}}
+                <img src="{{ asset('img/enfermeiro-logo2.png') }}" alt="Logo Prontuário+" class="banner-logo">
+            </div>
+        </div>
+        <div class="banner-center">
+            <h2>Bem-vindo(a) <span class="name">Enfermeiro(a). {{ $nome ?? 'Esther' }}</span></h2>
+            <p>O Prontuário+ fica feliz com a sua presença e dedicação à saúde.</p>
+        </div>
+        <div class="banner-right">
+            {{-- Ilustração de médicos --}}
+            <img src="{{ asset('img/enfermeiros.png') }}" alt="Ilustração de Médicos" class="enfermeiros-image">
+        </div>
+    </div>
 
         <div class="metrics">
             <div class="metric-card">

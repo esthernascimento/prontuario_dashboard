@@ -3,45 +3,76 @@
 @section('title', 'Dashboard - Prontuário+')
 
 @section('content')
+
 <link rel="stylesheet" href="{{ asset('css/medico/dashboardMedico.css') }}">
 
-<div class="main-dashboard"> 
-    {{-- A tag <main> já está no template, mudamos para <div> --}}
-    <h1>OVERVIEW</h1>
+<div class="main-dashboard">
+    {{-- Título principal --}}
+    <h1 class="dashboard-title">Dashboard Médico</h1>
 
-    <div class="metrics">
-        <div class="metric-card">Médicos cadastrados<br><strong>{{ $adminsCount ?? 0 }}</strong></div>
-        <div class="metric-card">Pacientes cadastrados<br><strong>{{ $patientsCount ?? 0 }}</strong></div>
-        <div class="metric-card">Exames pendentes<br><strong>{{ $pendingExamsCount ?? 0 }}</strong></div>
-    </div>
-
-    <div class="content-wrapper">
-        <div id="bar-chart-container" class="chart-container">
-            <canvas id="graficoBarras"></canvas>
+    {{-- 1. Banner de Boas-vindas (Full Width) --}}
+    <div class="welcome-banner">
+        <div class="banner-left">
+            {{-- Logo Prontuário+ --}}
+            <div class="banner-logo-container">
+                {{-- Usando o logo2.png do template (ou ajuste o caminho conforme o logo real) --}}
+                <img src="{{ asset('img/medico-logo2.png') }}" alt="Logo Prontuário+" class="banner-logo">
+            </div>
         </div>
-        <div id="line-chart-container" class="chart-container">
-            <canvas id="graficoLinha"></canvas>
+        <div class="banner-center">
+            <h2>Bem-vindo(a) <span class="doctor-name">Dr(a). {{ $nome ?? 'Esther' }}</span></h2>
+            <p>O Prontuário+ fica feliz com a sua presença e dedicação à saúde.</p>
         </div>
-
-        <div class="info-cards-container">
-            <div class="info-card">
-                <h3>Índice de gênero</h3>
-                <div style="width: 120px; height: 120px;">
-                    <canvas id="graficoDonutGenero"></canvas>
-                </div>
-            </div>
-            <div class="info-card">
-                <h3>75% IDOSOS</h3>
-            </div>
-            <div class="info-card">
-                <h3>UBS cadastradas</h3>
-                <strong>{{ $ubsCount ?? 0 }}</strong>
-            </div>
-            <div class="info-card">
-                <h3>A cada 10 usuários:</h3>
-                <p>7 são mulheres<br>3 são homens<br>8 são idosos</p>
-            </div>
+        <div class="banner-right">
+            {{-- Ilustração de médicos --}}
+            <img src="{{ asset('img/funcionarios.png') }}" alt="Ilustração de Médicos" class="funcionarios-image">
         </div>
     </div>
+
+    {{-- 2. Cards de Métricas Quadrados e Logo SUS --}}
+    <div class="main-metrics-wrapper">
+        <div class="metric-square-container">
+            <div class="metric-square">
+                <img src="{{ asset('img/icon-pessoa.png') }}" alt="Ícone Pacientes" class="icon-metric">
+                <strong>{{ $patientsCount ?? '1.006' }}</strong>
+                <span>Pacientes ativos</span>
+            </div>
+            <div class="metric-square">
+                <img src="{{ asset('img/icon-prontuario.png') }}" alt="Ícone Prontuários" class="icon-metric">
+                <strong>{{ $adminsCount ?? '1.006' }}</strong>
+                <span>Prontuários registrados</span>
+            </div>
+        </div>
+
+        {{-- Logo SUS (Separado, ao lado dos cards) --}}
+        <div class="sus-logo-container">
+            <i class="bi bi-hospital sus-icon"></i>
+            <span class="sus-text">SUS</span>
+            <p>Sistema Único de Saúde</p>
+        </div>
+    </div>
+
+
+    {{-- 3. Área de Gráficos --}}
+    <div class="chart-and-logo-wrapper">
+
+        {{-- Coluna Esquerda: Gráfico de Barras (Menor) --}}
+        <div class="chart-column-left">
+            <div id="bar-chart-container" class="chart-container">
+                <h3 class="chart-title">Atendimentos por Mês</h3>
+                <canvas id="graficoBarras"></canvas>
+            </div>
+        </div>
+
+        {{-- Coluna Direita: Gráfico de Linha (Maior) --}}
+        <div class="chart-column-right">
+            <div id="line-chart-container" class="chart-container">
+                <h3 class="chart-title">Evolução de Atendimentos</h3>
+                <canvas id="graficoLinha"></canvas>
+            </div>
+        </div>
+    </div>
+
 </div>
+
 @endsection

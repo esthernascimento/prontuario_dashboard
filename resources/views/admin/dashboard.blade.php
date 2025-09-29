@@ -21,9 +21,26 @@
 
 <div class="overview-container">
   {{-- Header --}}
-  <div class="overview-header">
-    <h1><i class="bi bi-activity"></i>OVERVIEW</h1>
-  </div>
+  <h1 class="dashboard-title">Dashboard Médico</h1>
+
+{{-- 1. Banner de Boas-vindas (Full Width) --}}
+<div class="welcome-banner">
+    <div class="banner-left">
+        {{-- Logo Prontuário+ --}}
+        <div class="banner-logo-container">
+            {{-- Usando o logo2.png do template (ou ajuste o caminho conforme o logo real) --}}
+            <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo Prontuário+" class="banner-logo">
+        </div>
+    </div>
+    <div class="banner-center">
+        <h2>Bem-vindo(a) <span class="name"> {{ $nome ?? 'Esther' }}</span></h2>
+        <p>O Prontuário+ fica feliz com a sua presença e dedicação à saúde.</p>
+    </div>
+    <div class="banner-right">
+        {{-- Ilustração de médicos --}}
+        <img src="{{ asset('img/ministerio.png') }}" alt="Ilustração de Médicos" class="funcionarios-image">
+    </div>
+</div>
 
   {{-- Métricas --}}
   <div class="metrics">
