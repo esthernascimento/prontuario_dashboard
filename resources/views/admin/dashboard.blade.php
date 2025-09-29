@@ -144,9 +144,9 @@
             scales: {
                 y: {
                     beginAtZero: true,
-                    max: 1000,
+                    max: 100,
                     ticks: {
-                        stepSize: 100
+                        stepSize: 10
                     },
                     grid: {
                         color: '#f0f0f0'
