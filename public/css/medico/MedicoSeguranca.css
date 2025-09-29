@@ -1,0 +1,213 @@
+.main-dashboard {
+
+  padding: 30px; 
+
+}
+
+h1{
+    color: #8c1007;
+    margin-bottom: 20px;
+    font-size: 32px;
+    text-align: center;       
+}
+/* --- Container da Página de Segurança --- */
+.security-container {
+  max-width: 800px; 
+  width: 100%; 
+  margin: 0 auto; 
+  padding: 0 20px; 
+  box-sizing: border-box; 
+}
+
+/* --- Título Principal da Página --- */
+.security-container .main-title {
+  color: #8c1007;
+  margin-top: 20px;
+  margin-bottom: 5px;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centraliza o título */
+  gap: 10px;
+}
+
+.security-container .main-title i {
+  font-size: 30px;
+}
+
+/* --- Subtítulo / Descrição da Página --- */
+.security-container .main-subtitle {
+  color: #666;
+  margin-bottom: 30px;
+  text-align: center; /* Centraliza a descrição */
+  font-size: 16px;
+}
+
+/* --- Seção de Alterar Senha --- */
+.security-section {
+  background-color: #fff;
+  border-radius: 12px; /* Raio de borda um pouco maior para um visual mais suave */
+  padding: 30px;
+  margin-bottom: 25px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1); /* Sombra mais pronunciada e suave */
+}
+
+.security-section h2 {
+  color: #8c1007;
+  margin-bottom: 25px;
+  font-size: 1.4em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.security-section h2 i {
+  font-size: 20px;
+}
+
+/* --- Formulário de Alteração de Senha --- */
+.security-form {
+  max-width: 450px; 
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+  font-size: 15px;
+}
+
+.form-group input {
+  width: calc(100% - 24px); 
+  padding: 12px;
+  border: 1px solid #e0e0e0; 
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: #fdfdfd; 
+  transition: border-color 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #8c1007;
+}
+
+.form-hint {
+  color: #888;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+
+/* --- Botão Primário (Alterar Senha) --- */
+.btn-primary {
+  background-color: #8c1007;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-top: 15px;
+  width: 100%; /* Ocupa 100% da largura do formulário */
+}
+
+.btn-primary:hover {
+  background-color: #551010;
+  transform: translateY(-1px);
+}
+
+/* --- Mensagens de Alerta (Sucesso/Erro) --- */
+.alert {
+  padding: 15px 20px;
+  margin-bottom: 25px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  animation: fadeIn 0.5s ease-out; /* Adiciona uma animação */
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #551010;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.alert-danger ul {
+  margin: 0;
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+/* Animação para alertas */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Responsividade (Ajustes para telas menores) --- */
+@media (max-width: 768px) {
+  .main-dashboard {
+      padding: 20px;
+  }
+
+  .security-container .main-title {
+      font-size: 24px;
+  }
+  .security-container .main-title i {
+      font-size: 26px;
+  }
+  .security-section {
+      padding: 20px;
+  }
+  .security-section h2 {
+      font-size: 1.2em;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-dashboard {
+      padding: 15px;
+  }
+  .security-container .main-title {
+      font-size: 20px;
+      flex-direction: column; /* Ícone acima do texto em telas muito pequenas */
+  }
+  .security-container .main-title i {
+      font-size: 22px;
+  }
+  .security-container .main-subtitle {
+      font-size: 14px;
+  }
+  .security-section h2 {
+      font-size: 1.1em;
+      flex-direction: column;
+  }
+  .btn-primary {
+      padding: 10px 20px;
+      font-size: 14px;
+  }
+}

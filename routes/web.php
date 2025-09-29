@@ -5,6 +5,11 @@ use App\Http\Controllers\Admin\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\SegurancaController;
 use App\Http\Controllers\Admin\ConfiguracaoController;
 use App\Http\Controllers\Admin\MedicoController;
+use App\Http\Controllers\Medico\MedicoDashboardController;
+use App\Http\Controllers\Medico\MedicoConfiguracaoController;
+use App\Http\Controllers\Medico\MedicoSegurancaController;
+use App\Http\Controllers\Medico\MedicoProntuarioController;
+
 use App\Http\Controllers\Admin\EnfermeiroController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Medico\LoginController as MedicoLoginController;
@@ -56,13 +61,27 @@ Route::prefix('enfermeiro')->name('enfermeiro.')->group(function () {
 // --- 3. ROTAS DO MÉDICO  ---
 // ----------------------------------------------------------------------------------
 
+// Login Médico
 Route::get('/loginMedico', [MedicoLoginController::class, 'showLoginForm'])->name('medico.login');
 Route::post('/loginMedico', [MedicoLoginController::class, 'login'])->name('medico.login.submit');
 Route::post('/medico/profile/complete', [MedicoLoginController::class, 'completarPerfil'])->name('api.medico.profile.complete');
 Route::post('/medico/login/check', [MedicoLoginController::class, 'login'])->name('api.medico.login.check');
+
 Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () {
-    Route::get('/dashboard', fn() => view('medico.dashboardMedico'))->name('dashboard'); 
+
+    Route::get('/dashboard', [MedicoDashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [MedicoLoginController::class, 'logout'])->name('logout');
+
+    Route::get('/perfil', [MedicoConfiguracaoController::class, 'perfil'])->name('perfil');
+    Route::post('/perfil/update', [MedicoConfiguracaoController::class, 'atualizarPerfil'])->name('perfil.update');
+
+    Route::get('/seguranca', [MedicoSegurancaController::class, 'showAlterarSenhaForm'])->name('seguranca');
+    Route::post('/alterar-senha', [MedicoSegurancaController::class, 'alterarSenha'])->name('alterarSenha');
+
+    Route::get('/prontuario', [MedicoProntuarioController::class, 'index'])->name('prontuario');
+    Route::get('/prontuario/{id}', [MedicoProntuarioController::class, 'show'])->name('paciente.prontuario');
+
+    Route::get('/ajuda', fn() => view('medico.ajudaMedico'))->name('ajuda');
 });
 
 // ----------------------------------------------------------------------------------

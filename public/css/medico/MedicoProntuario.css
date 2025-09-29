@@ -1,0 +1,237 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+}
+
+.main-dashboard {
+    padding: 30px;
+    margin-left: 10px;
+}
+
+.enfermeiro-container {
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    align-self: center;
+}
+
+.enfermeiro-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    margin-left: 5px;
+    flex-direction: row;
+}
+
+.enfermeiro-header h1 {
+    color: #8c1007;
+    margin: 0;
+}
+
+.enfermeiro-header h1 i {
+    margin-right: 10px;
+}
+
+.search-filters {
+    display: flex;
+    flex-direction: row;
+    width: 450px;
+    gap: 80px;
+    margin-bottom: 30px;
+}
+
+.search-box {
+    position: relative;
+    flex: 1;
+    min-width: 300px;
+}
+
+.search-box i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+.search-box input {
+    cursor: pointer;
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #8c1007;
+    box-shadow: 0 0 0 2px rgba(10, 64, 12, 0.1);
+}
+
+.filters {
+    display: flex;
+    gap: 15px;
+}
+
+.custom-select {
+    position: relative;
+    width: 140px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.custom-select .selected {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: white;
+    user-select: none;
+    position: relative;
+}
+
+.custom-select .selected::after {
+    content: "▼";
+    font-size: 12px;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #555;
+}
+
+.custom-select .options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: white;
+    margin-top: 5px;
+    display: none;
+    flex-direction: column;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.custom-select .options div {
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.custom-select .options div:hover {
+    background: #f0f0f0;
+}
+
+/* Tabela */
+
+.box-table {
+    background-color: #eef4ef;
+    width: 90%;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #8c1007;
+    color: white;
+    text-align: left;
+}
+
+thead tr th {
+    padding: 20px;
+    font-weight: bold;
+}
+
+tbody tr {
+    background-color: #eef4ef;
+    color: #8c1007;
+}
+
+tbody td {
+    padding: 12px 14px;
+    vertical-align: middle;
+    font-weight: bold;
+}
+
+tbody tr:hover {
+    background-color: #c7e3c8;
+    color: #8c1007;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.actions i {
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.3s;
+    color: #8c1007;
+}
+
+.actions i:hover {
+    color: #e06c7f;
+}
+
+/* Largura das colunas */
+
+table th:nth-child(1),
+table td:nth-child(1) {
+    width: 28%;
+}
+
+table th:nth-child(2),
+table td:nth-child(2) {
+    width: 20%;
+}
+
+table th:nth-child(3),
+table td:nth-child(3) {
+    width: 20%;
+}
+
+table th:nth-child(4),
+table td:nth-child(4) {
+    width: 15%;
+    text-align: center;
+}
+
+table th:nth-child(5),
+table td:nth-child(5) {
+    width: 17%;
+    text-align: center;
+}
+
+/* Cores de status */
+
+td span {
+    font-weight: bold;
+}
+
+td span[style*="green"],
+td span[style*="#0a400c"] {
+    color: #551010;
+}
+
+td span[style*="red"] {
+    color: red;
+}
