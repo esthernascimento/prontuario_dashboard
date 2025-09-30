@@ -9,6 +9,125 @@
   }
 
   .main-dashboard {
+    padding: 0;
+    /* O padding já é definido no .content do template.css */
+}
+
+
+
+.main-dashboard h1 {
+    color: #0618b9;
+    font-size: 30px;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+
+.banner-logo {
+    width: 150px;
+}
+
+
+
+.funcionarios-image {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+
+
+.icon-prontuario {
+    width: 150px;
+}
+
+/* --- 1. Título Geral --- */
+
+.dashboard-title {
+    color: #333;
+    font-size: 1.8em;
+    margin-bottom: 30px;
+    padding: 0 0 10px 0;
+    /* Espaçamento interno */
+}
+
+
+
+/* --- 2. Banner de Boas-vindas --- */
+
+.welcome-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #4554db;
+    /* Vermelho Principal */
+    color: white;
+    padding: 25px 40px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    height: 150px;
+    /* Altura fixa para ser proeminente */
+}
+
+.banner-left {
+    flex-basis: 15%;
+}
+
+.banner-center {
+    flex-basis: 50%;
+}
+
+.banner-right {
+    flex-basis: 35%;
+    display: flex;
+    
+}
+
+
+.banner-logo-placeholder {
+    font-size: 1.2em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 1px;
+}
+
+.banner-logo-placeholder i {
+    font-size: 2em;
+    transform: rotate(45deg);
+    /* Para simular o visual do logo */
+}
+
+.welcome-banner h2 {
+    font-size: 2.2em;
+    margin: 0;
+    font-weight: 300;
+}
+
+.name {
+    font-weight: 600;
+    /* Destaque em negrito como na imagem */
+}
+
+.welcome-banner p {
+    margin-top: 5px;
+    font-size: 1em;
+    opacity: 0.9;
+}
+
+
+.banner-illustration-icon {
+    font-size: 7em;
+    color: rgba(255, 255, 255, 0.4);
+    /* Ícone esmaecido para simular a ilustração */
+}
+
+
+  .main-dashboard {
     padding: 20px 40px;
   }
 
@@ -32,15 +151,6 @@
   }
   
 
-  .overview-header h1 {
-    color: #0618b9;
-    margin: 0;
-    margin-top: 0px;
-  }
-  
-  .overview-header h1 i {
-    margin-right: 10px;
-  }
 
   .metrics {
     display: flex;

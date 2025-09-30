@@ -15,7 +15,7 @@
   {{-- Sidebar --}}
   <div class="sidebar">
     <a href="{{ route('medico.dashboard') }}">
-      <img src="{{ asset('img/medico-logo.png') }}" alt="Logo Prontuário+" class="logo"> </a>
+      <img src="{{ asset('img/medico-logo2.png') }}" alt="Logo Prontuário+" class="logo"> </a>
 
     <nav>
       <a href="{{ route('medico.dashboard') }}" title="Dashboard"><i class="bi bi-house-door-fill"></i></a>
