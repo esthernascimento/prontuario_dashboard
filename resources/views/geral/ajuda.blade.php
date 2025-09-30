@@ -1,48 +1,89 @@
 @extends('geral.templates.geralTemplate')
 
 @section('content') 
-  @php $admin = auth()->guard('admin')->user(); @endphp
+  @php $admin = auth()->guard('admin')->user(); @endphp
 
-  @section('title', 'Dashboard - Painel Administrativo')
+  @section('title', 'Dashboard - Painel Administrativo')
 
-    <link rel="stylesheet" href="{{ asset('css/geral/ajuda.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/geral/ajuda.css') }}">
 
-    <main class="main-dashboardAjuda">
-      <div class="help-container">
-        <h1><i class="bi bi-person-heart"></i>Central de Ajuda</h1>
-        
+    <main class="main-dashboardAjuda">
+      <div class="help-container">
+        
+        <div class="title-bar">
+          <h1><i class="bi bi-person-heart"></i>Central de Ajuda</h1>
+          
+          <div class="search-box">
+            <i class="bi bi-search"></i>
+            <input type="text" id="faq-search" onkeyup="filterFAQ()" placeholder="Pesquisar nas Perguntas Frequentes...">
+          </div>
+        </div>
+        
 
-        <h2><i class="bi bi-question-circle-fill"></i> Perguntas Frequentes (FAQ)</h2>
+        <h2><i class="bi bi-question-circle-fill"></i> Perguntas Frequentes (FAQ)</h2>
 
-        <details>
-          <summary>Como eu cadastro um novo paciente?</summary>
-          <p>Para cadastrar um novo paciente, vá para a seção "Pacientes" no menu lateral, clique no botão "+ Novo
-            Paciente", preencha as informações e clique em "Salvar".</p>
-        </details>
+        <p id="no-results-message" style="display: none; color: #a00; font-weight: bold; margin-top: 15px;">
+            Nenhuma pergunta encontrada. Por favor, digite sua dúvida no formulário abaixo.
+        </p>
 
-        <details>
-          <summary>O que significa o card "Exames Pendentes"?</summary>
-          <p>O card "Exames Pendentes" mostra a quantidade de resultados de exames que foram solicitados mas ainda não
-            foram anexados ao prontuário do paciente no sistema.</p>
-        </details>
+        <div id="faq-list">
+          <details>
+            <summary>Como eu cadastro um novo paciente?</summary>
+            <p>Para cadastrar um novo paciente, vá para a seção "Pacientes" no menu lateral, clique no botão "+ Novo
+              Paciente", preencha as informações e clique em "Salvar".</p>
+          </details>
 
-        <details>
-          <summary>Como eu altero minha senha?</summary>
-          <p>No menu lateral, clique no ícone de cadeado (<i class="bi bi-shield-lock-fill"></i>). Na página de
-            segurança, você encontrará a opção para definir uma nova senha.</p>
-        </details>
+          <details>
+            <summary>O que significa o card "Exames Pendentes"?</summary>
+            <p>O card "Exames Pendentes" mostra a quantidade de resultados de exames que foram solicitados mas ainda não
+              foram anexados ao prontuário do paciente no sistema.</p>
+          </details>
 
-        <h2><i class="bi bi-headset"></i> Não encontrou o que procurava?</h2>
-        <p>Envie sua dúvida diretamente para nossa equipe de suporte através do formulário abaixo.</p>
+          <details>
+            <summary>Como eu altero minha senha?</summary>
+            <p>No menu lateral, clique no ícone de cadeado (<i class="bi bi-shield-lock-fill"></i>). Na página de
+              segurança, você encontrará a opção para definir uma nova senha.</p>
+          </details>
+        </div>
 
-        <form action="enviar_ajuda.php" method="POST" class="contact-form">
-          <input type="text" name="assunto" placeholder="Assunto" required>
-          <textarea name="mensagem" rows="6" placeholder="Digite sua mensagem aqui..." required></textarea>
-          <button type="submit">Enviar Mensagem</button>
-        </form>
+        <h2><i class="bi bi-headset"></i> Não encontrou o que procurava?</h2>
+        <p>Envie sua dúvida diretamente para nossa equipe de suporte através do formulário abaixo.</p>
 
-      </div>
-    </main>
-    
-  
-    @endsection
+        <form action="enviar_ajuda.php" method="POST" class="contact-form">
+          <input type="text" name="assunto" placeholder="Assunto" required>
+          <textarea name="mensagem" rows="6" placeholder="Digite sua mensagem aqui..." required></textarea>
+          <button type="submit">Enviar Mensagem</button>
+        </form>
+
+      </div>
+    </main>
+    
+    <script>
+    function filterFAQ() {
+        let input, filter, faqList, detailsElements, summaryText, i, matchCount = 0;
+        input = document.getElementById('faq-search');
+        filter = input.value.toUpperCase();
+        faqList = document.getElementById('faq-list');
+        detailsElements = faqList.getElementsByTagName('details');
+        const noResultsMessage = document.getElementById('no-results-message');
+
+        for (i = 0; i < detailsElements.length; i++) {
+            summaryText = detailsElements[i].querySelector('summary').textContent;
+            
+            if (summaryText.toUpperCase().indexOf(filter) > -1) {
+                detailsElements[i].style.display = "";
+                matchCount++;
+            } else {
+                detailsElements[i].style.display = "none";
+            }
+        }
+
+        if (matchCount === 0 && filter.length > 0) {
+            noResultsMessage.style.display = "block";
+        } else {
+            noResultsMessage.style.display = "none";
+        }
+    }
+    </script>
+  
+    @endsection
