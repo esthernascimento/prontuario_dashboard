@@ -13,7 +13,7 @@ class PacienteController extends Controller
 {
     public function index()
     {
-        return Paciente::orderBy('nome')->paginate(20);
+        return Paciente::orderBy('nomePaciente')->paginate(20);
     }
 
     public function store(Request $request)
