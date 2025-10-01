@@ -11,36 +11,34 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Alterado de 'pacientes' para 'tbPaciente' para consistência
-        Schema::create('tbPaciente', function (Blueprint $t) {
-            $t->id();
+        Schema::create('tbPaciente', function (Blueprint $table) {
+            $table->id('idPacientePK');
 
-            // Dados básicos
-            $t->string('nome');
-            $t->string('cpf', 14)->unique();
-            $t->date('data_nasc')->nullable();
-            $t->string('cartao_sus', 20)->nullable()->unique();
-            $t->string('nacionalidade')->nullable();
-            $t->string('genero')->nullable();
-            $t->string('caminho_foto')->nullable();
-            $t->string('telefone', 20)->nullable();
+            // Dados do Paciente
+            $table->string('nomePaciente');
+            $table->string('cpfPaciente', 14)->unique()->nullable();
+            $table->date('dataNascPaciente')->nullable();
+            $table->string('cartaoSusPaciente', 20)->nullable()->unique();
+            $table->string('generoPaciente')->nullable();
+            $table->string('fotoPaciente')->nullable();
+            $table->string('telefonePaciente', 20)->nullable();
 
             // Endereço
-            $t->string('logradouro')->nullable();
-            $t->string('numero')->nullable();
-            $t->string('cep', 9)->nullable();
-            $t->string('bairro')->nullable();
-            $t->string('cidade')->nullable();
-            $t->string('uf', 2)->nullable();
-            $t->string('estado')->nullable();
-            $t->string('pais')->nullable();
-
-            // Autenticação
-            $t->string('email')->unique();
-            $t->string('senha');
-
-            $t->softDeletes();
-            $t->timestamps();
+            $table->string('logradouroPaciente')->nullable();
+            $table->string('numLogradouroPaciente')->nullable();
+            $table->string('cepPaciente', 9)->nullable();
+            $table->string('bairroPaciente')->nullable();
+            $table->string('cidadePaciente')->nullable();
+            $table->string('ufPaciente', 2)->nullable();
+            
+            // AUTENTICAÇÃO (AGORA DENTRO DESTA TABELA)
+            $table->string('emailPaciente')->unique();
+            $table->string('senhaPaciente');
+            
+            // Controlo
+            $table->boolean('statusPaciente')->default(true);
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
