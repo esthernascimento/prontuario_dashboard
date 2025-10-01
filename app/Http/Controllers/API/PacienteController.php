@@ -11,36 +11,22 @@ use Illuminate\Support\Facades\Storage;
 
 class PacienteController extends Controller
 {
-    /**
-     * Lista todos os pacientes.
-     */
     public function index()
     {
         return Paciente::orderBy('nome')->paginate(20);
     }
 
-    /**
-     * Cria um novo paciente.
-     */
     public function store(Request $request)
     {
-        // VALIDAÇÃO CORRIGIDA E COMPLETA
         $validator = Validator::make($request->all(), [
-            // Dados Básicos (obrigatórios)
             'nome' => 'required|string|min:2',
-            'cpf' => ['required', 'string', 'size:11', 'unique:tbPaciente,cpf'],
-            'cartao_sus' => ['required', 'string', 'max:20', 'unique:tbPaciente,cartao_sus'],
-            'email' => ['required', 'email', 'unique:tbPaciente,email'],
-            'senha' => 'required|string|min:6',
-            
-            // Dados Demográficos (opcionais)
+            'cpf' => ['required', 'string', 'size:11', 'unique:pacientes,cpf'],
             'data_nasc' => 'nullable|date',
+            'cartao_sus' => ['required', 'string', 'max:20', 'unique:pacientes,cartao_sus'],
             'nacionalidade' => 'nullable|string',
             'genero' => 'nullable|string',
-            'telefone' => 'nullable|string|max:20',
             'caminho_foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-
-            // Endereço (opcionais)
+            'telefone' => 'nullable|string|max:20',
             'logradouro' => 'nullable|string',
             'numero' => 'nullable|string',
             'cep' => 'nullable|string|max:9',
@@ -49,6 +35,8 @@ class PacienteController extends Controller
             'uf' => 'nullable|string|size:2',
             'estado' => 'nullable|string',
             'pais' => 'nullable|string',
+            'email' => ['required', 'email', 'unique:pacientes,email'],
+            'senha' => 'required|string|min:6',
         ]);
 
         if ($validator->fails()) {
@@ -68,9 +56,6 @@ class PacienteController extends Controller
         return response()->json($paciente, 201);
     }
 
-    /**
-     * Exibe um paciente específico.
-     */
     public function show($id)
     {
         $paciente = Paciente::find($id);
@@ -80,9 +65,6 @@ class PacienteController extends Controller
         return $paciente;
     }
 
-    /**
-     * Atualiza um paciente.
-     */
     public function update(Request $request, $id)
     {
         $paciente = Paciente::find($id);
@@ -90,12 +72,19 @@ class PacienteController extends Controller
             return response()->json(['message' => 'Paciente não encontrado.'], 404);
         }
 
-        // Adicione aqui as regras de validação para o update também
         $data = $request->validate([
             'nome' => 'sometimes|string|min:2',
-            'email' => "sometimes|email|unique:tbPaciente,email,{$id}",
+            'email' => "sometimes|email|unique:pacientes,email,{$id}",
             'telefone' => 'sometimes|nullable|string|max:20',
-            // ... etc
+            'logradouro' => 'sometimes|nullable|string',
+            'numero' => 'sometimes|nullable|string',
+            'cep' => 'sometimes|nullable|string|max:9',
+            'bairro' => 'sometimes|nullable|string',
+            'cidade' => 'sometimes|nullable|string',
+            'uf' => 'sometimes|nullable|string|size:2',
+            'estado' => 'sometimes|nullable|string',
+            'pais' => 'sometimes|nullable|string',
+            'caminho_foto' => 'sometimes|nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         if ($request->hasFile('caminho_foto')) {
@@ -111,9 +100,6 @@ class PacienteController extends Controller
         return response()->json($paciente->fresh());
     }
 
-    /**
-     * Apaga um paciente (Soft Delete).
-     */
     public function destroy($id)
     {
         $paciente = Paciente::find($id);
@@ -124,9 +110,6 @@ class PacienteController extends Controller
         return response()->noContent();
     }
 
-    /**
-     * Lógica de Login para o Paciente.
-     */
     public function login(Request $request)
     {
         $data = $request->validate([
