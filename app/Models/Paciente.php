@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable; // Importante: mudou para Authenticatable
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,8 +13,9 @@ class Paciente extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
     
     protected $table = 'tbPaciente';
-    protected $primaryKey = 'idPacientePK';
-    
+    protected $primaryKey = 'idPaciente';
+    public $incrementing = true;
+    protected $keyType = 'int';
     public $timestamps = true;
 
     protected $fillable = [
@@ -31,40 +32,41 @@ class Paciente extends Authenticatable
         'bairroPaciente',
         'cidadePaciente',
         'ufPaciente',
-        'emailPaciente',    
-        'senhaPaciente',    
+        'estadoPaciente',
+        'paisPaciente',
+        'emailPaciente',
+        'senhaPaciente',
         'statusPaciente',
     ];
 
-    /**
-     * Atributos que devem ser ocultados.
-     */
     protected $hidden = [
         'senhaPaciente',
     ];
 
-    /**
-     * Diz ao Laravel qual é a coluna da senha.
-     */
+    protected $casts = [
+        'statusPaciente'   => 'boolean',
+        'dataNascPaciente' => 'date',
+    ];
+
+    // Usado pelo Guard/Auth para saber qual coluna é a senha
     public function getAuthPassword()
     {
         return $this->senhaPaciente;
     }
 
     /**
-     * Define a relação: Um Paciente tem um Prontuário.
+     * Relações (exemplos — ajuste os nomes das FKs conforme suas migrations)
      */
     public function prontuario()
     {
-        return $this->hasOne(Prontuario::class, 'idPacienteFK', 'idPacientePK');
+        // supondo que prontuarios.idPacienteFK -> tbPaciente.idPaciente
+        return $this->hasOne(Prontuario::class, 'idPacienteFK', 'idPaciente');
     }
 
-    /**
-     * Define a relação: Um Paciente pode ter muitas Alergias.
-     */
     public function alergias()
     {
-        return $this->hasMany(Alergia::class, 'idPacienteFK', 'idPacientePK');
+        // supondo que alergias.idPacienteFK -> tbPaciente.idPaciente
+        return $this->hasMany(Alergia::class, 'idPacienteFK', 'idPaciente');
     }
-}
 
+}

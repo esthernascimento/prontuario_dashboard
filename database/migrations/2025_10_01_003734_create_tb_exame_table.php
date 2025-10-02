@@ -6,28 +6,40 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('tbExame', function (Blueprint $table) {
             $table->id('idExamePK');
-            $table->foreignId('idConsultaFK')->constrained('tbConsulta', 'idConsultaPK');
-            $table->foreignId('idPacienteFK')->unique()->constrained('tbPaciente', 'idPacientePK');
+
+            // Muitos exames por consulta
+            $table->foreignId('idConsultaFK')
+                  ->constrained('tbConsulta', 'idConsultaPK')
+                  ->cascadeOnUpdate()
+                  ->cascadeOnDelete();
+
+            // Muitos exames por paciente
+            $table->foreignId('idPacienteFK')
+                  ->constrained('tbPaciente', 'idPaciente')
+                  ->cascadeOnUpdate()
+                  ->cascadeOnDelete();
+
             $table->string('descExame');
             $table->text('resultadoExame')->nullable();
+
+            // NOVO: data do exame
+            $table->date('dataExame');
+            $table->index('dataExame');
+
             $table->timestamps();
             $table->softDeletes();
+
+            // (Opcional) evitar duplicar MESMO exame na MESMA consulta:
+             $table->unique(['idConsultaFK', 'descExame', 'dataExame']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('tbExame');
     }
 };
-
