@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\SegurancaController;
 use App\Http\Controllers\Admin\ConfiguracaoController;
 use App\Http\Controllers\Admin\MedicoController;
+use App\Http\Controllers\API\PacienteController;
+
 use App\Http\Controllers\Medico\MedicoDashboardController;
 use App\Http\Controllers\Medico\MedicoConfiguracaoController;
 use App\Http\Controllers\Medico\MedicoSegurancaController;
@@ -93,6 +95,7 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/pacientes', fn() => view('geral.pacientes'))->name('pacientes');
+    
     Route::get('/ajuda', fn() => view('geral.ajuda'))->name('ajuda');
 
     Route::get('/seguranca', [SegurancaController::class, 'showAlterarSenhaForm'])->name('seguranca');
@@ -100,6 +103,11 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::get('/configuracoes', [SegurancaController::class, 'configuracoes'])->name('configuracoes');
     Route::get('/perfil', [ConfiguracaoController::class, 'perfil'])->name('perfil');
     Route::post('/perfil/update', [ConfiguracaoController::class, 'atualizarPerfil'])->name('perfil.update');
+
+    // Painel Admin - Cadastro de Paciente
+    Route::get('/cadastroPaciente', [PacienteController::class, 'create'])->name('admin.cadastroPaciente');
+    Route::post('/paciente/store', [PacienteController::class, 'store'])->name('admin.paciente.store');
+
 
     // CRUD MÉDICOS
     Route::get('/manutencaoMedicos', [MedicoController::class, 'index'])->name('manutencaoMedicos');

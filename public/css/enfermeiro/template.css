@@ -54,6 +54,10 @@ body {
   justify-content: flex-end;
   background-color: #0a400c;
   border-bottom: 1px solid #eee;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0; 
 }
 
 .user-info {

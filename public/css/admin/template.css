@@ -58,6 +58,10 @@ body {
     justify-content: flex-end;
     background-color: #0618b9; 
     border-bottom: 1px solid #eee;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0; /* AJUSTADO: Começa em 0 para preencher 100% da largura superior */
   }
   .user-info {
     display: flex;
