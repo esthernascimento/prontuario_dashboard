@@ -11,7 +11,7 @@ class Enfermeiro extends Model
 
     protected $table = 'tbEnfermeiro'; 
     protected $primaryKey = 'idEnfermeiroPK';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'id_usuario', 
@@ -19,11 +19,15 @@ class Enfermeiro extends Model
         'emailEnfermeiro',
         'corenEnfermeiro',
         'especialidadeEnfermeiro',
-        'genero',
+        'genero',   
     ];
 
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class, 'id_usuario', 'idUsuarioPK'); // ✅ CORRIGIDO: chave estrangeira
+        return $this->belongsTo(Usuario::class, 'id_usuario', 'idUsuarioPK'); 
     }
-}
+    public function unidades()
+    {
+        return $this->belongsToMany(Unidade::class, 'tbEnfermeiroUnidade', 'idEnfermeiroFK', 'idUnidadeFK');
+    }
+}   

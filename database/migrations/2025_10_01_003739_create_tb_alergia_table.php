@@ -11,21 +11,20 @@ return new class extends Migration
         Schema::create('tbAlergia', function (Blueprint $table) {
             $table->id('idAlergiaPK');
 
-            // FK -> tbPaciente.idPaciente (sem unique para permitir N alergias por paciente)
+         
             $table->foreignId('idPacienteFK')
                   ->constrained('tbPaciente', 'idPaciente')
                   ->cascadeOnUpdate()
                   ->cascadeOnDelete();
 
-            $table->string('descAlergia'); // ex.: "Dipirona", "Amendoim" etc.
-            // (Opcional) niveis adicionais:
-             $table->string('gravidade')->nullable();  // leve | moderada | severa
-             $table->string('reacao')->nullable();     // ex.: urticária, anafilaxia, etc.
+            $table->string('descAlergia'); 
+      
+             $table->string('gravidade')->nullable();  
+             $table->string('reacao')->nullable();     
 
             $table->timestamps();
             $table->softDeletes();
 
-            // (Opcional) Evitar duplicar a MESMA alergia para o MESMO paciente:
              $table->unique(['idPacienteFK', 'descAlergia']);
         });
     }

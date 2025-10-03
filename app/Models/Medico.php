@@ -13,7 +13,7 @@ class Medico extends Model
     protected $table = 'tbMedico';
     protected $primaryKey = 'idMedicoPK';
 
-    public $timestamps = false; 
+    public $timestamps = true; 
 
     protected $dates = ['deleted_at'];
 
@@ -30,4 +30,9 @@ class Medico extends Model
     {
         return $this->belongsTo(Usuario::class, 'id_usuarioFK', 'idUsuarioPK');
     }
-}
+    public function unidades()
+    {
+      
+        return $this->belongsToMany(Unidade::class, 'tbMedicoUnidade', 'idMedicoFK', 'idUnidadeFK');
+    }
+}   

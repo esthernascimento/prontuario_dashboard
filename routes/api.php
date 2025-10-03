@@ -17,8 +17,10 @@ use App\Http\Controllers\Api\ConsultaController;
 use App\Http\Controllers\Api\MedicamentoController;
 use App\Http\Controllers\Api\ExameController;
 use App\Http\Controllers\Api\AlergiaController;
-use App\Http\Controllers\Api\UnidadeController;
 use App\Http\Controllers\Api\ProntuarioController;
+
+// Importação do controller de Unidades para o Admin
+use App\Http\Controllers\Admin\UnidadeController;
 
 
 
@@ -65,10 +67,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('medicamentos', MedicamentoController::class);
     Route::apiResource('exames', ExameController::class);
     Route::apiResource('alergias', AlergiaController::class);
-    Route::apiResource('unidades', UnidadeController::class);
-
-    // CRUD para Pacientes (GET, UPDATE, DELETE - só acessível logado)
-    Route::apiResource('pacientes', PacienteController::class)->except(['store']);
 
 
     // --- ROTAS DE ADMINISTRAÇÃO ---
@@ -83,6 +81,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/admin/medicos/{id}', [MedicoController::class, 'update']);
     Route::delete('/admin/medicos/{id}', [MedicoController::class, 'excluir']);
     Route::post('/admin/medicos/{id}/toggle-status', [MedicoController::class, 'toggleStatus']);
+    // ADICIONADO: Rota para associar unidades a um médico
+    Route::post('/admin/medicos/{medico}/unidades', [MedicoController::class, 'syncUnidades']);
 
     // CRUD Enfermeiro (Gerido pelo Admin)
     Route::get('/admin/enfermeiro', [EnfermeiroController::class, 'index']);
@@ -90,5 +90,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/admin/enfermeiro/{id}', [EnfermeiroController::class, 'update']);
     Route::delete('/admin/enfermeiro/{id}', [EnfermeiroController::class, 'excluir']);
     Route::post('/admin/enfermeiro/{id}/toggle-status', [EnfermeiroController::class, 'toggleStatus']);
+    // ADICIONADO: Rota para associar unidades a um enfermeiro
+    Route::post('/admin/enfermeiro/{enfermeiro}/unidades', [EnfermeiroController::class, 'syncUnidades']);
+    
+    // CRUD Unidade (Gerido pelo Admin)
+    Route::get('/admin/unidades', [UnidadeController::class, 'index']);
+    Route::post('/admin/unidades', [UnidadeController::class, 'store']);
+    Route::get('/admin/unidades/{unidade}', [UnidadeController::class, 'show']);
+    Route::put('/admin/unidades/{unidade}', [UnidadeController::class, 'update']);
+    Route::delete('/admin/unidades/{unidade}', [UnidadeController::class, 'destroy']);
 });
 

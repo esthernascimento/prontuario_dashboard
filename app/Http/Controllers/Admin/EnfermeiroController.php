@@ -7,23 +7,23 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\Enfermeiro;
 use App\Models\Usuario;
+use App\Models\Unidade; 
 
 class EnfermeiroController extends Controller
 {
-    // Listagem de enfermeiros
+ 
     public function index()
     {
         $enfermeiros = Enfermeiro::with('usuario')->get();
         return view('admin.manutencaoEnfermeiro', compact('enfermeiros'));
     }
 
-    // Formulário de cadastro
     public function create()
     {
         return view('admin.cadastroEnfermeiro');
     }
 
-    // Salvar cadastro
+
     public function store(Request $request)
     {
         $request->validate([
@@ -63,7 +63,6 @@ class EnfermeiroController extends Controller
         return view('admin.editarEnfermeiro', compact('enfermeiro'));
     }
 
-    // MÉTODO UPDATE (EDITADO PARA MODAL DE SUCESSO)
     public function update(Request $request, $id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
@@ -101,10 +100,9 @@ class EnfermeiroController extends Controller
             'emailUsuario' => $request->emailUsuario,
         ]);
 
-        // ADICIONANDO A FLAG 'updated' PARA DISPARAR O MODAL DE SUCESSO NO BLADE
         return redirect()->route('admin.manutencaoEnfermeiro')->with([
             'success' => 'Dados atualizados com sucesso.',
-            'updated' => true // Flag para edição/atualização
+            'updated' => true 
         ]);
     }
 
@@ -114,27 +112,25 @@ class EnfermeiroController extends Controller
         return view('admin.visualizarEnfermeiro', compact('enfermeiro'));
     }
 
-    // MÉTODO TOGGLESTATUS (EDITADO PARA MODAL DE SUCESSO)
     public function toggleStatus($id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
-        $mensagem = 'Status do enfermeiro atualizado.'; // Mensagem padrão
-
+        $mensagem = 'Status do enfermeiro atualizado.'; 
         if ($enfermeiro->usuario) {
-            // Inverte o status
+     
             $novoStatus = !$enfermeiro->usuario->statusAtivoUsuario;
             $enfermeiro->usuario->statusAtivoUsuario = $novoStatus;
             $enfermeiro->usuario->save();
 
-            // Mensagem mais específica para o modal
+          
             $acao = $novoStatus ? 'ativado' : 'desativado';
             $mensagem = "O enfermeiro(a) foi {$acao} com sucesso!";
         }
 
-        // ADICIONANDO A FLAG 'status_changed' PARA DISPARAR O MODAL DE SUCESSO NO BLADE
+       
         return redirect()->route('admin.manutencaoEnfermeiro')->with([
             'success' => $mensagem,
-            'status_changed' => true // Flag para alteração de status
+            'status_changed' => true
         ]);
     }
 
@@ -144,7 +140,6 @@ class EnfermeiroController extends Controller
         return view('admin.desativarEnfermeiro', compact('enfermeiro'));
     }
 
-    // MÉTODO EXCLUIR (EDITADO PARA MODAL DE SUCESSO)
     public function excluir($id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
@@ -155,10 +150,28 @@ class EnfermeiroController extends Controller
 
         $enfermeiro->delete();
 
-        // ADICIONANDO A FLAG 'deleted' PARA DISPARAR O MODAL DE SUCESSO NO BLADE
+      
         return redirect()->route('admin.manutencaoEnfermeiro')->with([
             'success' => 'Enfermeiro e usuário excluídos com sucesso.',
-            'deleted' => true // NOVA FLAG para exclusão
+            'deleted' => true 
+        ]);
+    }
+
+   
+    public function syncUnidades(Request $request, Enfermeiro $enfermeiro)
+    {
+        
+        $request->validate([
+            'unidades' => 'required|array',
+            'unidades.*' => 'exists:tbUnidade,idUnidadePK', 
+        ]);
+
+       
+        $enfermeiro->unidades()->sync($request->unidades);
+
+        return response()->json([
+            'message' => 'Unidades do enfermeiro atualizadas com sucesso!',
+            'enfermeiro' => $enfermeiro->load('unidades') 
         ]);
     }
 }

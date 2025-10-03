@@ -35,7 +35,7 @@ class MedicoController extends Controller
                 'emailUsuario.required' => 'O e-mail é obrigatório.',
                 'emailUsuario.unique' => 'Este e-mail já está cadastrado.',
                 'senhaUsuario.required' => 'A senha é obrigatória.',
-           
+            
             ]);
 
             $usuario = new Usuario();
@@ -68,7 +68,7 @@ class MedicoController extends Controller
             ], 500);
         }
     }
-public function confirmarExclusao($id)
+    public function confirmarExclusao($id)
     {
         $medico = Medico::findOrFail($id);
         return view('admin.excluirMedico', compact('medico'));
@@ -135,7 +135,22 @@ public function confirmarExclusao($id)
         return redirect()->route('admin.manutencaoMedicos')->with('success', 'Status do médico atualizado com sucesso!');
     }
 
-}
+   
+    public function syncUnidades(Request $request, Medico $medico)
+    {
+     
+        $request->validate([
+            'unidades' => 'required|array',
+            'unidades.*' => 'exists:tbUnidade,idUnidadePK', 
+        ]);
 
-?>
+      
+        $medico->unidades()->sync($request->unidades);
+
+        return response()->json([
+            'message' => 'Unidades do médico atualizadas com sucesso!',
+            'medico' => $medico->load('unidades') 
+        ]);
+    }
+}
 
