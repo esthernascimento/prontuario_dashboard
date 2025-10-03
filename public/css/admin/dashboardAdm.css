@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
+
 /* dashboard.css ATUALIZADO */
 
   body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Montserrat', sans-serif;
     background-color: #f4f6f8;
     margin: 0;
     padding: 0;
@@ -10,20 +12,14 @@
 
   .main-dashboard {
     padding: 0;
-    /* O padding já é definido no .content do template.css */
 }
-
-
 
 .main-dashboard h1 {
     color: #0618b9;
     margin-top: 80px;
     font-size: 30px;
     font-weight: 600;
-    font-family: 'Montserrat', sans-serif;
 }
-
-
 
 .banner-logo {
     width: 150px;
@@ -108,6 +104,8 @@
     margin: 0;
     font-weight: 300;
 }
+
+
 
 .name {
     font-weight: 600;

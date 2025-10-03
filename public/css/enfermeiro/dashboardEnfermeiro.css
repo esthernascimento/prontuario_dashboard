@@ -1,8 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 /* ========== 1. CONTAINER GERAL ========== */
+
+body{
+  font-family: 'Montserrat', sans-serif;
+}
+
 .page-container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 30px 40px;
+  margin-top: 20px;
 }
 
 main {
@@ -26,7 +33,6 @@ h1 {
 
 
 .main-dashboard h1 {
-  color: #0618b9;
   font-size: 30px;
   font-weight: 600;
   font-family: 'Montserrat', sans-serif;
@@ -54,7 +60,7 @@ h1 {
 /* --- 1. Título Geral --- */
 
 .dashboard-title {
-  color: #333;
+  color: #2e7d32;
   font-size: 1.8em;
   margin-bottom: 30px;
   padding: 0 0 10px 0;

@@ -4,7 +4,10 @@
 <main class="content">
     <div class="page-container">
 
+    <h1 class="dashboard-title">Dashboard Enfermeiro</h1>
+    
         <div class="welcome-banner">
+            
         <div class="banner-left">
             {{-- Logo Prontuário+ --}}
             <div class="banner-logo-container">

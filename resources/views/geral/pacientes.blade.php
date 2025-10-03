@@ -3,6 +3,10 @@
 @section('content')
   @php
     $admin = auth()->guard('admin')->user();
+
+    use App\Models\Paciente;
+    // Se o controller não passar $pacientes, pega todos do Model
+    $pacientes = $pacientes ?? Paciente::paginate(10);
   @endphp
 
   <main class="main-dashboard">
@@ -10,7 +14,6 @@
       <div class="patients-header">
         <h1><i class="bi bi-people-fill"></i> Gerenciamento de Pacientes</h1>
         <a href="{{ route('admin.cadastroPaciente') }}" class="btn-add-paciente">
-          
           <i class="bi bi-plus-circle"></i> Cadastrar Paciente
         </a>
       </div>
@@ -57,30 +60,38 @@
           </tr>
         </thead>
         <tbody>
-          @foreach($pacientes as $paciente)
-            <tr data-age-group="{{ $paciente->faixa_etaria }}" data-gender="{{ $paciente->genero }}">
-              <td>{{ $paciente->nome }}</td>
-              <td>{{ $paciente->cpf }}</td>
-              <td>{{ $paciente->telefone }}</td>
-              <td>{{ $paciente->idade }}</td>
-              <td>{{ $paciente->genero }}</td>
-              <td>
-                <a href="{{ route('admin.paciente.show', $paciente->id) }}" class="btn-view">Ver</a>
-                <a href="{{ route('admin.paciente.edit', $paciente->id) }}" class="btn-edit">Editar</a>
-                <form action="{{ route('admin.paciente.destroy', $paciente->id) }}" method="POST" style="display:inline;">
-                  @csrf
-                  @method('DELETE')
-                  <button type="submit" class="btn-delete">Excluir</button>
-                </form>
-              </td>
+          @if(isset($pacientes) && count($pacientes) > 0)
+            @foreach($pacientes as $paciente)
+              <tr data-age-group="{{ $paciente->faixa_etaria }}" data-gender="{{ $paciente->genero }}">
+                <td>{{ $paciente->nome }}</td>
+                <td>{{ $paciente->cpf }}</td>
+                <td>{{ $paciente->telefone }}</td>
+                <td>{{ $paciente->idade }}</td>
+                <td>{{ $paciente->genero }}</td>
+                <td>
+                  <a href="{{ route('admin.paciente.show', $paciente->id) }}" class="btn-view">Ver</a>
+                  <a href="{{ route('admin.paciente.edit', $paciente->id) }}" class="btn-edit">Editar</a>
+                  <form action="{{ route('admin.paciente.destroy', $paciente->id) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn-delete">Excluir</button>
+                  </form>
+                </td>
+              </tr>
+            @endforeach
+          @else
+            <tr>
+              <td colspan="6">Nenhum paciente encontrado.</td>
             </tr>
-          @endforeach
+          @endif
         </tbody>
       </table>
 
       <!-- Paginação -->
       <div class="pagination-container">
-        {{ $pacientes->links() }}
+        @if(method_exists($pacientes, 'links'))
+          {{ $pacientes->links() }}
+        @endif
       </div>
     </div>
   </main>
@@ -150,5 +161,4 @@
       initializeCustomSelect("customGender");
     });
   </script>
-
 @endsection

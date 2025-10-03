@@ -95,7 +95,7 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/pacientes', fn() => view('geral.pacientes'))->name('pacientes');
-    
+
     Route::get('/ajuda', fn() => view('geral.ajuda'))->name('ajuda');
 
     Route::get('/seguranca', [SegurancaController::class, 'showAlterarSenhaForm'])->name('seguranca');
@@ -105,8 +105,13 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::post('/perfil/update', [ConfiguracaoController::class, 'atualizarPerfil'])->name('perfil.update');
 
     // Painel Admin - Cadastro de Paciente
-    Route::get('/cadastroPaciente', [PacienteController::class, 'create'])->name('admin.cadastroPaciente');
-    Route::post('/paciente/store', [PacienteController::class, 'store'])->name('admin.paciente.store');
+    // Painel Admin - Cadastro de Paciente
+    Route::get('/cadastroPaciente', function () {
+        return view('admin.cadastroPaciente');
+    })->name('cadastroPaciente');
+
+    Route::post('/paciente/store', [PacienteController::class, 'store'])->name('paciente.store');
+
 
 
     // CRUD MÉDICOS
