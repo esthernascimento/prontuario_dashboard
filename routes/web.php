@@ -94,7 +94,6 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     // Dashboard
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/pacientes', fn() => view('geral.pacientes'))->name('pacientes');
 
     Route::get('/ajuda', fn() => view('geral.ajuda'))->name('ajuda');
 
@@ -104,8 +103,11 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::get('/perfil', [ConfiguracaoController::class, 'perfil'])->name('perfil');
     Route::post('/perfil/update', [ConfiguracaoController::class, 'atualizarPerfil'])->name('perfil.update');
 
-    // Painel Admin - Cadastro de Paciente
-    // Painel Admin - Cadastro de Paciente
+    Route::get('/pacientes', function () {
+        $pacientes = \App\Models\Paciente::orderBy('nomePaciente')->paginate(10);
+        return view('geral.pacientes', compact('pacientes'));
+    })->name('pacientes.index');
+
     Route::get('/cadastroPaciente', function () {
         return view('admin.cadastroPaciente');
     })->name('cadastroPaciente');

@@ -9,8 +9,7 @@ body {
   font-family: 'Montserrat', sans-serif;
   height: 100vh;
   display: flex;
-  flex-direction: column;
-  background-color: #131D4F;
+  background-color: #0618b9;
 }
 
 .main-container {
@@ -30,7 +29,6 @@ body {
 .logo-area img {
   width: 350px;
   height: auto;
-  background-color: #fff;
 }
 
 .cads-area {
@@ -38,20 +36,20 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #131D4F;
+  background-color: #0618b9;
 }
 
 .cads-card {
   background-color: #dcdcf9;
   padding: 40px;
   border-radius: 40px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
   width: 100%;
   max-width: 350px;
 }
 
 .cads-card h2 {
-  color: #131D4F;
+  color: #0618b9;
   font-weight: 700;
   font-size: 25px;
   margin-bottom: 20px;
@@ -59,9 +57,9 @@ body {
 }
 
 .cads-card label {
-  display: flex;
+  display: block;
   font-weight: 600;
-  color: #131D4F;
+  color: #0618b9;
   margin-top: 10px;
 }
 
@@ -76,12 +74,12 @@ body {
 }
 
 .cads-card button {
-    font-size: 15px;
+  font-size: 15px;
   display: block;
   margin: 20px auto 0;
   width: 55%;
   padding: 15px;
-  background-color: #131D4F;
+  background-color: #0618b9;
   color: white;
   border: none;
   border-radius: 23px;
@@ -92,16 +90,5 @@ body {
 }
 
 .cads-card button:hover {
-  background-color: #0a0f29;
+  background-color: #0618b9f5;
 }
-
-a {
-  display: block;
-  text-align: center;
-  margin-top: 15px;
-  text-decoration: none;
-  color: #131D4F;
-  font-weight: 500;
-}
-
-
