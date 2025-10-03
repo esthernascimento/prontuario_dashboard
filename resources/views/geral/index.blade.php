@@ -1,45 +1,37 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prontuário+</title>
-  
-  <link rel="stylesheet" href="{{ asset('css/geral/index.css') }}">
-  
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prontuário+</title>
+    <link rel="stylesheet" href="{{ asset('css/geral/index.css') }}">
 </head>
 
 <body>
     <main class="main-container">
-
+        <!-- Conteúdo do lado esquerdo -->
         <div class="box-content">
-            <div class="content">
-                <h1>Seja Bem-Vindo ao Prontuário+</h1>
+            <h1>Seja bem-vindo<br>ao Prontuário+</h1>
+            
+            <div class="subtitle">SELECIONE A SUA ÁREA DE ATUAÇÃO</div>
 
-                <!-- Botão Admin -->
-                <a href="{{ url('/loginAdm') }}">
-                    <button>SOU <p>ADMINISTRADOR</p></button>
+            <div class="area-selection">
+                <a href="{{ url('/loginAdm') }}" class="area-button administrador">
+                    Administrador
                 </a>
-
-                <!-- Botão Enfermeiro -->
-                <a href="{{ url('/enfermeiro/login') }}">
-                    <button>SOU <p>ENFERMEIRO</p></button>
+                <a href="{{ url('/loginMedico') }}" class="area-button medico">
+                    Médico
                 </a>
-
-                <!-- Botão Médico -->
-                <a href="{{ url('/loginMedico') }}">
-                    <button>SOU <p>MÉDICO</p></button>
+                <a href="{{ url('/enfermeiro/login') }}" class="area-button enfermeiro">
+                    Enfermeiro
                 </a>
-
             </div>
-
-            <div class="img-content">
-                <img src="{{ asset('img/adm-logo1.png') }}" class="logo">
-            </div>
-
         </div>
 
+        <!-- Logo do lado direito -->
+        <div class="logo-container">
+            <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo Prontuário+" class="logo">
+        </div>
     </main>
 </body>
-
 </html>
