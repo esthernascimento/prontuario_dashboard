@@ -17,13 +17,13 @@ class ProntuarioController extends Controller
         // 1. Busca todos os pacientes ordenados pelo nome
         // Você pode ajustar a query (where, paginate) conforme o volume de dados.
         // Se usar paginate(), lembre-se de usar $pacientes->links() na view.
-        $pacientes = Paciente::orderBy('nome')->get();
+        $pacientes = Paciente::orderBy('nomePaciente')->get();
         
         // Se a sua coluna de data de nascimento se chama 'data_nasc' e não 'data_nascimento', 
         // certifique-se de que a query e a view estejam consistentes.
         
         // 2. Passa a lista de pacientes para a view
-        return view('enfermeiro.prontuario', compact('pacientes'));
+        return view('enfermeiro.prontuarioEnfermeiro', compact('pacientes'));
     }
 
     /**

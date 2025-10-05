@@ -19,7 +19,7 @@ body {
 .cadastrar-header {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 13px;
     color: #0618b9;
     margin-bottom: 25px;
     justify-content: center; 

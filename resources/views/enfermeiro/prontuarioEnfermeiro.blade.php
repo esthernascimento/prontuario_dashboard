@@ -50,13 +50,13 @@
                         <td>{{ \Carbon\Carbon::parse($paciente->data_nascimento)->format('d/m/Y') }}</td>
                         <td>
                             @if($paciente->status === 'internado')
-                                <span style="color: #0a400c;">Internado</span>
+                            <span style="color: #0a400c;">Internado</span>
                             @else
-                                <span style="color: red;">Alta</span>
+                            <span style="color: red;">Alta</span>
                             @endif
                         </td>
                         <td class="actions">
-                            <a href="{{ route('enfermeiro.paciente.prontuario', $paciente->id) }}" title="Visualizar Prontuário">
+                            <a href="{{ route('enfermeiro.paciente.prontuario', ['id' => $paciente->id]) }}" title="Visualizar Prontuário">
                                 <i class="bi bi-eye-fill"></i>
                             </a>
                         </td>

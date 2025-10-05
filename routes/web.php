@@ -55,7 +55,10 @@ Route::prefix('enfermeiro')->name('enfermeiro.')->group(function () {
 
         Route::get('/paciente', fn() => view('enfermeiro.pacientes'))->name('pacientes');
         Route::get('/ajuda', fn() => view('enfermeiro.ajuda'))->name('ajuda');
-        Route::get('/prontuario', [ProntuarioController::class, 'index'])->name('prontuario');
+        Route::get('/prontuarioEnfermeiro', [ProntuarioController::class, 'index'])->name('prontuario');
+        Route::get('/prontuario/{id}', [ProntuarioController::class, 'show'])->name('paciente.prontuario'); 
+
+
     });
 });
 
