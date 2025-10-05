@@ -1,59 +1,93 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>@yield('title', 'Painel Médico')</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title', 'Painel Médico')</title>
 
-  <link rel="stylesheet" href="{{ asset('css/medico/template.css') }}">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    {{-- CSS do Template --}}
+    <link rel="stylesheet" href="{{ asset('css/medico/template.css') }}">
+
+    {{-- CSS específico de cada página --}}
+    @stack('styles')
+
+    {{-- Bootstrap Icons --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
-
 <body>
+    {{-- Sidebar --}}
+    <div class="sidebar-medico">
+        <a href="{{ route('medico.dashboard') }}" class="logo-link-medico">
+            <img src="{{ asset('img/medico-logo2.png') }}" alt="Logo Prontuário+" class="logo-medico">
+        </a>
 
-  {{-- Sidebar --}}
-  <div class="sidebar">
-    <a href="{{ route('medico.dashboard') }}">
-      <img src="{{ asset('img/medico-logo2.png') }}" alt="Logo Prontuário+" class="logo"> </a>
+        <nav class="nav-medico">
+            <a href="{{ route('medico.dashboard') }}" class="nav-item-medico">
+                <i class="bi bi-house-door-fill"></i>
+                <span class="nav-text-medico">Dashboard</span>
+            </a>
+            <a href="{{ route('medico.prontuario') }}" class="nav-item-medico">
+                <i class="bi bi-journal-medical"></i>
+                <span class="nav-text-medico">Prontuário</span>
+            </a>
+            <a href="{{ route('medico.ajuda') }}" class="nav-item-medico">
+                <i class="bi bi-question-circle-fill"></i>
+                <span class="nav-text-medico">Ajuda</span>
+            </a>
+            <a href="{{ route('medico.perfil') }}" class="nav-item-medico">
+                <i class="bi bi-shield-lock-fill"></i>
+                <span class="nav-text-medico">Perfil</span>
+            </a>
 
-    <nav>
-      <a href="{{ route('medico.dashboard') }}" title="Dashboard"><i class="bi bi-house-door-fill"></i></a>
-      <a href="{{ route('medico.prontuario') }}" title="Prontuário"><i class="bi bi-journal-medical"></i></a>
+            {{-- Logout --}}
+            <a href="{{ route('medico.logout') }}" 
+               onclick="event.preventDefault(); document.getElementById('logout-form-medico').submit();"
+               class="nav-item-medico">
+                <i class="bi bi-power"></i>
+                <span class="nav-text-medico">Sair</span>
+            </a>
+            <form id="logout-form-medico" action="{{ route('medico.logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+        </nav>
+    </div>
 
-      <a href="{{ route('medico.ajuda') }}" title="Ajuda"><i class="bi bi-question-circle-fill"></i></a>
+    {{-- Header --}}
+    <header class="header-medico">
+        <a href="{{ route('medico.perfil') }}" class="user-info-medico" style="text-decoration: none; color: inherit;">
+            @php $medico = auth()->user(); @endphp
+            @if($medico && $medico->foto)
+                <img src="{{ asset('storage/fotos/' . $medico->foto) }}" alt="Foto do Médico">
+            @else
+                <img src="{{ asset('img/usuario-de-perfil.png') }}" alt="Foto padrão">
+            @endif
+            <span>{{ $medico->nomeMedico ?? 'Médico' }}</span>
+        </a>
+    </header>
 
-      <a href="{{ route('medico.perfil') }}" title="perfil"><i class="bi bi-shield-lock-fill"></i></a>
+    {{-- Conteúdo Dinâmico --}}
+    <main class="main-content-medico">
+        @yield('content')
+    </main>
 
-      <a href="{{ route('medico.logout') }}"
-        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-        title="Sair">
-        <i class="bi bi-power"></i>
-      </a>
-      <form id="logout-form" action="{{ route('medico.logout') }}" method="POST" style="display: none;">
-        @csrf
-      </form>
-    </nav>
-  </div>
+    {{-- Scripts específicos de cada página --}}
+    @stack('scripts')
 
-  {{-- Header --}}
-  <header class="header">
-    <a href="{{ route('medico.perfil') }}" class="user-info" style="text-decoration: none; color: inherit;">
-      @php $medico = auth()->user(); @endphp
-      @if($medico && $medico->foto)
-      <img src="{{ asset('storage/fotos/' . $medico->foto) }}" alt="Foto do Médico">
-      @else
-      <img src="{{ asset('img/usuario-de-perfil.png') }}" alt="Foto padrão">
-      @endif
-      <span>{{ $medico->nomeMedico ?? 'Médico' }}</span>
-    </a>
-  </header>
+    {{-- Script para sincronizar header e conteúdo com sidebar --}}
+    <script>
+        const sidebar = document.querySelector('.sidebar-medico');
+        const header = document.querySelector('.header-medico');
+        const mainContent = document.querySelector('.main-content-medico');
 
-  {{-- Conteúdo --}}
-  <main class="content">
-    @yield('content')
-  </main>
+        sidebar.addEventListener('mouseenter', () => {
+            header.style.left = '250px';
+            mainContent.style.marginLeft = '250px';
+        });
 
+        sidebar.addEventListener('mouseleave', () => {
+            header.style.left = '100px';
+            mainContent.style.marginLeft = '100px';
+        });
+    </script>
 </body>
-
 </html>

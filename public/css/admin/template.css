@@ -113,7 +113,7 @@ body {
   position: fixed;
   top: 0;
   right: 0;
-  left: 80px;
+  left: 100px;
   z-index: 999;
   transition: left 0.3s ease;
 }
@@ -146,10 +146,11 @@ body {
 
 /* Conteúdo principal com margem para a sidebar */
 .main-dashboard {
-  padding: 40px;
-  margin-left: 80px;
+  margin-left: 100px;
   margin-top: 60px;
   min-height: calc(100vh - 60px);
+  transition: margin-left 0.3s ease;
+  /* REMOVIDO padding fixo - cada página controla seu próprio padding */
 }
 
 /* Responsividade */
@@ -169,6 +170,5 @@ body {
 
   .main-dashboard {
     margin-left: 70px;
-    padding: 20px;
   }
 }

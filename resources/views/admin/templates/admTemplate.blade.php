@@ -8,8 +8,6 @@
     {{-- CSS principal --}}
     <link rel="stylesheet" href="{{ asset('css/admin/template.css') }}">
 
-
-
     {{-- Bootstrap Icons --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
@@ -75,5 +73,22 @@
     <main class="main-dashboard">
         @yield('content')
     </main>
+
+    {{-- Script para sincronizar header e conteúdo com sidebar --}}
+    <script>
+        const sidebar = document.querySelector('.sidebar');
+        const header = document.querySelector('.header');
+        const mainDashboard = document.querySelector('.main-dashboard');
+
+        sidebar.addEventListener('mouseenter', () => {
+            header.style.left = '250px';
+            mainDashboard.style.marginLeft = '250px';
+        });
+
+        sidebar.addEventListener('mouseleave', () => {
+            header.style.left = '100px';
+            mainDashboard.style.marginLeft = '100px';
+        });
+    </script>
 </body>
 </html>
