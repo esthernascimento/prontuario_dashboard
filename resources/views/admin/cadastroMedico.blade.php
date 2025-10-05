@@ -55,7 +55,13 @@
             </div>
           </div>
 
-
+          <div class="input-group">
+            <label for="senhaUsuario">Senha</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock icon-left"></i>
+              <input type="password" id="senhaUsuario" name="senhaUsuario" required />
+            </div>
+          </div>
 
           <button class="btn-login" type="submit">CADASTRAR</button>
         </form>

@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('emailUsuario')->unique();
             $table->string('senhaUsuario');
             $table->boolean('statusAtivoUsuario')->default(true);
-            $table->boolean('statusSenhaUsuario')->default(true);
             $table->timestamp('dataCadastroUsuario')->nullable();
             $table->timestamp('dataAtualizacaoUsuario')->nullable();
         });
