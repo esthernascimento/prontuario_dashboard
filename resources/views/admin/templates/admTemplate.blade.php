@@ -35,6 +35,10 @@
                 <i class="bi bi-hospital-fill"></i>
                 <span class="nav-text">Enfermeiros</span>
             </a>
+           <a href="{{ route('admin.unidades.index') }}" class="nav-item">
+                <i class="bi bi-hospital-fill"></i>
+                <span class="nav-text">Unidade</span>
+            </a>
             <a href="{{ route('admin.ajuda') }}" class="nav-item">
                 <i class="bi bi-question-circle-fill"></i>
                 <span class="nav-text">Ajuda</span>

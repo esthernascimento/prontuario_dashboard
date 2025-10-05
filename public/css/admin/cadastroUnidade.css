@@ -1,0 +1,114 @@
+/* Estilos gerais */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+}
+
+/* Container Principal do Formulário */
+.cadastrar-container {
+    background-color: white;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Cabeçalho do formulário */
+.cadastrar-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #0d6efd; /* Azul principal */
+    margin-bottom: 25px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+
+.cadastrar-header h1 {
+    font-size: 22px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.cadastrar-header .icon {
+    font-size: 28px;
+}
+
+/* Títulos de secção */
+.form-section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* Grupos de Input (Label + Campo) */
+.input-group {
+    margin-bottom: 20px;
+}
+
+form label {
+    display: block;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+form input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: #f5f5f5;
+    color: #333;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+form input:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2);
+}
+
+form input::placeholder {
+    color: #999;
+}
+
+/* Botão "Cadastrar Unidade" */
+.save-button {
+    display: block;
+    background-color: #0d6efd;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+.save-button:hover {
+    background-color: #0b5ed7;
+}
+
+/* Mensagens de Erro */
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.alert-danger ul {
+    margin: 0;
+    padding-left: 20px;
+}
