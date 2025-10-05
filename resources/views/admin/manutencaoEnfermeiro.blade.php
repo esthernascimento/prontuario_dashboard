@@ -3,54 +3,45 @@
 @section('title', 'Manutenção de Enfermeiros')
 
 @section('content')
-
 <link rel="stylesheet" href="{{ asset('css/admin/manutencaoEnfermeiros.css') }}">
 
 @php $admin = auth()->guard('admin')->user(); @endphp
 
-
-    {{-- Esta barra de sucesso será exibida APENAS se não houver um modal configurado --}}
-    @if(session('success') && !session('status_changed') && !session('updated') && !session('deleted'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
-    <main class="main-dashboard">
-        <div class="enfermeiro-container">
-            <div class="enfermeiro-header">
-                <h1><i class="bi bi-person-vcard-fill"></i> Gerenciamento de Enfermeiro</h1>
-                <a href="{{ route('admin.enfermeiro.create') }}" class="btn-add-enfermeiro">
+<main class="main-dashboard">
+    <div class="enfermeiro-container">
+        <div class="enfermeiro-header">
+            <h1><i class="bi bi-person-vcard"></i> Gerenciamento de Enfermeiros</h1>
+            <a href="{{ route('admin.enfermeiro.create') }}" class="btn-add-enfermeiro">
                 <i class="bi bi-plus-circle"></i> Cadastrar Enfermeiro
-                </a>
-            </div>
+            </a>
+        </div>
 
-
-            <div class="search-filters">
-                <div class="search-box">
+        <div class="search-filters">
+            <div class="search-box">
                 <i class="bi bi-search"></i>
-                <input type="text" id="searchInput" placeholder="Pesquisar por nome, COREN ou email..." onkeyup="filterPatients()">
-                </div>
-                <div class="filters">
-                <div class="custom-select" id="customStatus">
-                    <div class="selected">Status</div>
-                    <div class="options">
-                    <div data-value="">Status</div>
+                <input type="text" id="searchInput" placeholder="Pesquisar por nome, COREN ou email..." onkeyup="filterEnfermeiros()">
+            </div>
+            
+            <div class="custom-select" id="customStatus">
+                <div class="selected">Status</div>
+                <div class="options">
+                    <div data-value="">Todos</div>
                     <div data-value="ativo">Ativo</div>
                     <div data-value="inativo">Inativo</div>
-                    </div>
-                </div>
-                <input type="hidden" id="filterStatus" value="">
                 </div>
             </div>
+            <input type="hidden" id="filterStatus" value="">
+        </div>
 
-            <div class="box-table">
-                <table>
+        <div class="box-table">
+            <table>
                 <thead>
                     <tr>
-                    <th>Nome Enfermeiro</th>
-                    <th>COREN</th>
-                    <th>Email</th>
-                    <th>Status</th>
-                    <th>Ações</th>
+                        <th>Nome Enfermeiro</th>
+                        <th>COREN</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -58,41 +49,52 @@
                     <tr data-status="{{ optional($enfermeiro->usuario)->statusAtivoUsuario == 1 ? 'ativo' : 'inativo' }}">
                         <td>{{ $enfermeiro->nomeEnfermeiro }}</td>
                         <td>{{ $enfermeiro->corenEnfermeiro }}</td>
-                        <td>{{ $enfermeiro->usuario->emailUsuario ?? 'Sem email' }}</td>
+                        <td>{{ optional($enfermeiro->usuario)->emailUsuario ?? 'Sem email' }}</td>
                         <td>
-                        @if(optional($enfermeiro->usuario)->statusAtivoUsuario == 1)
-                            <span style="color: green;">Ativo</span>
-                        @else
-                            <span style="color: red;">Inativo</span>
-                        @endif
+                            @if(optional($enfermeiro->usuario)->statusAtivoUsuario == 1)
+                                <span class="status-badge status-ativo">Ativo</span>
+                            @else
+                                <span class="status-badge status-inativo">Inativo</span>
+                            @endif
                         </td>
                         <td class="actions">
-                        <a href="{{ route('admin.enfermeiro.editar', $enfermeiro->idEnfermeiroPK) }}">
-                            <i class="bi bi-pencil" title="Editar"></i>
-                        </a>
-
-                        @if($enfermeiro->usuario)
-                            <a href="#" onclick="openStatusModal('{{ $enfermeiro->idEnfermeiroPK }}', '{{ $enfermeiro->nomeEnfermeiro }}', {{ $enfermeiro->usuario->statusAtivoUsuario }})">
-                                @if($enfermeiro->usuario->statusAtivoUsuario == 1)
-                                <i class="bi bi-slash-circle text-danger" title="Desativar"></i>
-                                @else
-                                <i class="bi bi-check-circle text-success" title="Ativar"></i>
-                                @endif
+                            <a href="{{ route('admin.enfermeiro.editar', $enfermeiro->idEnfermeiroPK) }}" class="btn-action btn-edit" title="Editar">
+                                <i class="bi bi-pencil"></i>
                             </a>
-                        @endif
 
-                        {{-- CHAMADA JS PARA ABRIR O MODAL DE EXCLUSÃO --}}
-                        <a href="#" onclick="openDeleteEnfermeiroModal('{{ $enfermeiro->idEnfermeiroPK }}', '{{ $enfermeiro->nomeEnfermeiro }}')">
-                            <i class="bi bi-trash" title="Excluir"></i>
-                        </a>
+                            @if($enfermeiro->usuario)
+                                <a href="#" onclick="openStatusModal('{{ $enfermeiro->idEnfermeiroPK }}', '{{ $enfermeiro->nomeEnfermeiro }}', {{ $enfermeiro->usuario->statusAtivoUsuario }})" class="btn-action" title="{{ $enfermeiro->usuario->statusAtivoUsuario == 1 ? 'Desativar' : 'Ativar' }}">
+                                    @if($enfermeiro->usuario->statusAtivoUsuario == 1)
+                                        <i class="bi bi-slash-circle text-danger"></i>
+                                    @else
+                                        <i class="bi bi-check-circle text-success"></i>
+                                    @endif
+                                </a>
+                            @endif
+
+                            <a href="#" onclick="openDeleteEnfermeiroModal('{{ $enfermeiro->idEnfermeiroPK }}', '{{ $enfermeiro->nomeEnfermeiro }}')" class="btn-action btn-delete" title="Excluir">
+                                <i class="bi bi-trash"></i>
+                            </a>
                         </td>
                     </tr>
                     @endforeach
+                    
+                    @if($enfermeiros->isEmpty())
+                        <tr data-status="empty-list">
+                            <td colspan="5" class="no-enfermeiros">Nenhum enfermeiro cadastrado.</td>
+                        </tr>
+                    @endif
                 </tbody>
-                </table>
-            </div>
+            </table>
         </div>
-    </main>
+
+        <div class="pagination-container">
+            @if(method_exists($enfermeiros, 'links'))
+                {{ $enfermeiros->links() }}
+            @endif
+        </div>
+    </div>
+</main>
 
 {{-- MODAL DE EXCLUSÃO --}}
 <div id="deleteEnfermeiroModal" class="modal-overlay">
@@ -139,7 +141,7 @@
 {{-- MODAL DE SUCESSO UNIFICADO --}}
 <div id="statusSuccessModal" class="modal-overlay">
     <div class="modal-content">
-        <div class="modal-header" style="color: #198754;"> {{-- Cor verde para sucesso --}}
+        <div class="modal-header">
             <i class="bi bi-check-circle-fill"></i>
             <h2>Sucesso!</h2>
         </div>
@@ -147,15 +149,12 @@
         <p id="successMessage"></p>
 
         <div class="modal-buttons">
-            {{-- Botão de fechar (Ok) com a cor verde de sucesso --}}
-            <button type="button" onclick="closeSuccessModal()" class="btn-excluir" style="background-color: #198754;">Fechar</button>
+            <button type="button" onclick="closeSuccessModal()" class="btn-excluir">Fechar</button>
         </div>
     </div>
 </div>
 
-
 <script>
-
     // ------------------------------------------
     // LÓGICA DO MODAL DE SUCESSO UNIFICADO
     // ------------------------------------------
@@ -167,42 +166,32 @@
 
     function closeSuccessModal() {
         document.getElementById('statusSuccessModal').style.display = 'none';
+        window.location.reload(); 
     }
 
-    // Fecha o modal de sucesso clicando fora
     document.getElementById('statusSuccessModal').addEventListener('click', function(event) {
         if (event.target.id === 'statusSuccessModal') {
             closeSuccessModal();
         }
     });
 
-
-    // ------------------------------------------
-    // Verificação de Sucesso ao Carregar a Página
-    // Agora verifica 'status_changed', 'updated' e 'deleted'
-    // ------------------------------------------
-
-    @if(session('status_changed') || session('updated') || session('deleted'))
+    @if(session('status_changed') || session('updated') || session('deleted') || session('success'))
         document.addEventListener('DOMContentLoaded', () => {
-            // A mensagem de sucesso é a mesma para todas as ações
             const message = "{{ session('success') }}"; 
             openSuccessModal(message);
         });
     @endif
 
-
     // ------------------------------------------
-    // LÓGICA DOS MODAIS EXISTENTES
+    // LÓGICA DOS MODAIS DE ENFERMEIRO
     // ------------------------------------------
 
-    // Funções do Modal de Exclusão
     function openDeleteEnfermeiroModal(enfermeiroId, enfermeiroNome) {
         const modal = document.getElementById('deleteEnfermeiroModal');
         const nomeSpan = document.getElementById('enfermeiroNome');
         const form = document.getElementById('deleteEnfermeiroForm');
 
         nomeSpan.textContent = enfermeiroNome;
-
         const deleteRoute = "{{ route('admin.enfermeiro.excluir', ['id' => 'PLACEHOLDER_ID']) }}";
         form.action = deleteRoute.replace('PLACEHOLDER_ID', enfermeiroId);
         
@@ -219,7 +208,6 @@
         }
     });
 
-    // Funções do Modal de Status
     function openStatusModal(enfermeiroId, enfermeiroNome, currentStatus) {
         const modal = document.getElementById('statusEnfermeiroModal');
         const nomeSpan = document.getElementById('statusEnfermeiroNome');
@@ -227,8 +215,8 @@
         const confirmText = document.getElementById('confirmStatusText');
         const form = document.getElementById('statusEnfermeiroForm');
         
-        const action = currentStatus ? 'desativar' : 'ativar';
-        const confirmAction = currentStatus ? 'desativar' : 'ativar';
+        const action = currentStatus == 1 ? 'desativar' : 'ativar';
+        const confirmAction = currentStatus == 1 ? 'desativar' : 'ativar';
 
         nomeSpan.textContent = enfermeiroNome;
         actionSpan.textContent = action;
@@ -250,58 +238,81 @@
         }
     });
 
-</script>
+    // ------------------------------------------
+    // LÓGICA DE FILTRAGEM
+    // ------------------------------------------
 
-
-<script>
-
-    function filterPatients() {
+    function filterEnfermeiros() {
         const searchInput = document.getElementById('searchInput').value.toLowerCase();
         const filterStatus = document.getElementById('filterStatus').value;
 
         const rows = document.querySelectorAll('tbody tr');
+        let visibleRowsCount = 0;
+        let emptyRow = null;
 
         rows.forEach(row => {
+            if (row.dataset.status === 'empty-list') {
+                emptyRow = row;
+                row.style.display = 'none';
+                return;
+            }
+
             const name = row.children[0].textContent.toLowerCase();
-            const crm = row.children[1].textContent.toLowerCase();
+            const coren = row.children[1].textContent.toLowerCase();
             const email = row.children[2].textContent.toLowerCase();
             const status = row.dataset.status;
 
-            const matchesSearch = name.includes(searchInput) || crm.includes(searchInput) || email.includes(searchInput);
+            const matchesSearch = name.includes(searchInput) || coren.includes(searchInput) || email.includes(searchInput);
             const matchesStatus = !filterStatus || status === filterStatus;
 
             if (matchesSearch && matchesStatus) {
                 row.style.display = '';
+                visibleRowsCount++;
             } else {
                 row.style.display = 'none';
             }
         });
+        
+        if (emptyRow) {
+            if (visibleRowsCount === 0) {
+                emptyRow.style.display = ''; 
+            } else {
+                emptyRow.style.display = 'none';
+            }
+        }
     }
 
-    const customSelect = document.getElementById("customStatus");
-    const selected = customSelect.querySelector(".selected");
-    const options = customSelect.querySelector(".options");
-    const hiddenInput = document.getElementById("filterStatus");
+    function initializeCustomSelect(containerId) {
+        const customSelect = document.getElementById(containerId);
+        const selected = customSelect.querySelector(".selected");
+        const options = customSelect.querySelector(".options");
+        const hiddenInput = document.getElementById(containerId.replace('custom', 'filter'));
 
-    selected.addEventListener("click", () => {
-        options.style.display = options.style.display === "flex" ? "none" : "flex";
-    });
-
-    options.querySelectorAll("div").forEach(option => {
-        option.addEventListener("click", () => {
-            selected.textContent = option.textContent;
-            hiddenInput.value = option.dataset.value;
-            options.style.display = "none";
-            filterPatients();
+        selected.addEventListener("click", (e) => {
+            e.stopPropagation();
+            document.querySelectorAll(".custom-select .options").forEach(opt => {
+                if (opt !== options) opt.parentElement.classList.remove('active');
+            });
+            customSelect.classList.toggle('active');
         });
-    });
 
-    document.addEventListener("click", e => {
-        if (!customSelect.contains(e.target)) {
-            options.style.display = "none";
-        }
-    });
+        options.querySelectorAll("div").forEach(option => {
+            option.addEventListener("click", () => {
+                selected.textContent = option.textContent;
+                hiddenInput.value = option.dataset.value;
+                customSelect.classList.remove('active');
+                filterEnfermeiros();
+            });
+        });
 
+        document.addEventListener("click", () => {
+            customSelect.classList.remove('active');
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        initializeCustomSelect("customStatus");
+        document.getElementById('searchInput').addEventListener('input', filterEnfermeiros);
+    });
 </script>
-
 @endsection

@@ -30,7 +30,7 @@
 
         <!-- Logo do lado direito -->
         <div class="logo-container">
-            <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo Prontuário+" class="logo">
+       
         </div>
     </main>
 </body>

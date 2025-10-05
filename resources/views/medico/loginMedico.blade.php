@@ -24,7 +24,7 @@
         <div class="right-side">
             <div class="login-content">
                 <div class="logo">
-                    <img src="{{ asset('img/icon-loginMedico.png') }}" alt="Logo Prontuário+">
+                    <img src="{{ asset('img/icon-loginMédico.png') }}" alt="Logo Prontuário+">
                 </div>
 
                 <h2>Login Médico</h2>
