@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +11,6 @@
     {{-- Bootstrap Icons --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
-
 <body>
     {{-- Sidebar --}}
     <div class="sidebar">
@@ -34,12 +32,8 @@
                 <span class="nav-text">Médicos</span>
             </a>
             <a href="{{ route('admin.manutencaoEnfermeiro') }}" class="nav-item">
-                <i class="bi bi-person-fill-add"></i>
-                <span class="nav-text">Enfermeiros</span>
-            </a>
-            <a href="{{ route('admin.unidades.index') }}" class="nav-item">
                 <i class="bi bi-hospital-fill"></i>
-                <span class="nav-text">Unidade</span>
+                <span class="nav-text">Enfermeiros</span>
             </a>
             <a href="{{ route('admin.ajuda') }}" class="nav-item">
                 <i class="bi bi-question-circle-fill"></i>
@@ -51,8 +45,9 @@
             </a>
 
             {{-- Logout --}}
-            <a href="{{ route('admin.logout') }}"
-                onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="nav-item">
+            <a href="{{ route('admin.logout') }}" 
+               onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+               class="nav-item">
                 <i class="bi bi-power"></i>
                 <span class="nav-text">Sair</span>
             </a>
@@ -96,5 +91,4 @@
         });
     </script>
 </body>
-
 </html>

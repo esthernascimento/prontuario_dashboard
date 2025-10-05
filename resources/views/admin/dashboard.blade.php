@@ -21,7 +21,7 @@
 
 <div class="overview-container">
   {{-- Header --}}
-  <h1 class="dashboard-title">Dashboard Administrador</h1>
+  <h1 class="dashboard-title">Dashboard Médico</h1>
 
 {{-- 1. Banner de Boas-vindas (Full Width) --}}
 <div class="welcome-banner">

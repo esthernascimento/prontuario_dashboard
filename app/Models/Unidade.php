@@ -13,35 +13,19 @@ class Unidade extends Model
     protected $table = 'tbUnidade';
     protected $primaryKey = 'idUnidadePK';
 
-    /**
-     * Os atributos que podem ser preenchidos em massa,
-     * agora incluindo todos os novos campos de endereço e telefone.
-     */
     protected $fillable = [
         'nomeUnidade',
         'tipoUnidade',
-        'telefoneUnidade',
-        'logradouroUnidade',
-        'numLogradouroUnidade',
-        'bairroUnidade',
-        'cepUnidade',
-        'cidadeUnidade',
-        'ufUnidade',
-        'estadoUnidade',
-        'paisUnidade',
+        'enderecoUnidade',
     ];
 
-    /**
-     * Define a relação Muitos-para-Muitos com Médicos.
-     */
+   
     public function medicos()
     {
         return $this->belongsToMany(Medico::class, 'tbMedicoUnidade', 'idUnidadeFK', 'idMedicoFK');
     }
 
-    /**
-     * Define a relação Muitos-para-Muitos com Enfermeiros.
-     */
+   
     public function enfermeiros()
     {
         return $this->belongsToMany(Enfermeiro::class, 'tbEnfermeiroUnidade', 'idUnidadeFK', 'idEnfermeiroFK');

@@ -126,6 +126,7 @@ h2 {
   font-size: 15px;
   color: #333;
   background: transparent;
+  cursor: pointer;
 }
 
 .icon-left {
