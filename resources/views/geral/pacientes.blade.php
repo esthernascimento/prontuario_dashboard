@@ -1,4 +1,4 @@
-@extends('geral.templates.geralTemplate')
+@extends('admin.templates.admTemplate')
 
 @section('content')
 @php
@@ -6,6 +6,8 @@
     use App\Models\Paciente;
     $pacientes = $pacientes ?? Paciente::orderBy('nomePaciente')->paginate(10);
 @endphp
+
+<link rel="stylesheet" href="{{ asset('css/admin/pacientes.css') }}">
 
 <main class="main-dashboard">
     <div class="patients-container">

@@ -1,104 +1,147 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>Prontuário+ | Cadastro Médico</title>
 
-    <title>Prontuário+ : Cadastrar Médico</title>
-
-    <link rel="stylesheet" href="{{ asset('css/admin/cadastroMedico.css') }}">
+  <!-- Estilo base herdado do login -->
+  <link rel="stylesheet" href="{{ url('/css/admin/cadastroMedico.css') }}">
+  <link rel="shortcut icon" href="{{url('img/logo-azul.png')}}" type="image/x-icon" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
 <body>
-    <main class="main-container">
-        <div class="logo-area">
-            <img src="{{ asset('img/medico-logo1.png') }}" alt="Logo Prontuário" />
-        </div>
-        <div class="cads-area">
-            <form class="cads-card" id="cadastroMedicoForm">
-    <h2>Médico(a) Cadastro</h2>
+  <main class="main-container">
 
-    <div id="form-messages" class="form-messages" style="display: none;"></div>
 
-    <label for="nomeMedico">Nome completo</label>
-    <input type="text" id="nomeMedico" name="nomeMedico" required />
+    <div class="left-side">
+      <img src="{{ asset('img/medico-logo2.png') }}" alt="Logo Médico" />
+    </div>
 
-    <label for="crmMedico">CRM</label>
-    <input type="text" id="crmMedico" name="crmMedico" required />
+    <div class="right-side">
+      <div class="login-content fade-in">
+      
 
-    <label for="emailUsuario">E-mail</label>
-    <input type="email" id="emailUsuario" name="emailUsuario" required />
+        <h2>Cadastro de Médico</h2>
 
-    <label for="senhaUsuario">Senha</label>
-    <input type="password" id="senhaUsuario" name="senhaUsuario" required />
+        <div id="form-messages" class="alert-error" style="display: none;"></div>
 
-    <button class="button" type="submit">CADASTRAR</button>
-</form>
+        <form id="cadastroMedicoForm">
+          @csrf
 
-<script>
-document.getElementById('cadastroMedicoForm').addEventListener('submit', function (event) {
-    event.preventDefault();
+          <div class="input-group">
+            <label for="nomeMedico">Nome completo</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-user-doctor icon-left"></i>
+              <input type="text" id="nomeMedico" name="nomeMedico" required />
+            </div>
+          </div>
 
-    const form = event.target;
-    const button = form.querySelector('button');
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-    const messagesDiv = document.getElementById('form-messages');
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+          <div class="input-group">
+            <label for="crmMedico">CRM</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-id-card icon-left"></i>
+              <input type="text" id="crmMedico" name="crmMedico" required />
+            </div>
+          </div>
 
-    button.disabled = true;
-    button.textContent = 'Cadastrando...';
+          <div class="input-group">
+            <label for="emailUsuario">E-mail</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-envelope icon-left"></i>
+              <input type="email" id="emailUsuario" name="emailUsuario" required />
+            </div>
+          </div>
 
-    messagesDiv.style.display = 'none';
-    messagesDiv.textContent = '';
-    messagesDiv.classList.remove('success', 'error');
+          <div class="input-group">
+            <label for="senhaUsuario">Senha</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock icon-left"></i>
+              <input type="password" id="senhaUsuario" name="senhaUsuario" required />
+            </div>
+          </div>
 
-    fetch("{{ route('admin.medicos.register') }}", {
+          <button class="btn-login" type="submit">CADASTRAR</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('cadastroMedicoForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const form = event.target;
+      const button = form.querySelector('button');
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      const messagesDiv = document.getElementById('form-messages');
+      const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+      button.disabled = true;
+      button.textContent = 'Cadastrando...';
+
+      messagesDiv.style.display = 'none';
+      messagesDiv.textContent = '';
+      messagesDiv.classList.remove('success', 'error');
+
+      fetch("{{ route('admin.medicos.register') }}", {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': csrfToken
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-TOKEN': csrfToken
         },
         body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(result => {
+      })
+      .then(response => response.json())
+      .then(result => {
         if (result.success) {
-            messagesDiv.textContent = result.message + " Redirecionando...";
-            messagesDiv.classList.add('success');
-            messagesDiv.style.display = 'block';
-            form.reset();
+          messagesDiv.textContent = result.message + " Redirecionando...";
+          messagesDiv.classList.add('success');
+          messagesDiv.style.display = 'block';
+          form.reset();
 
-            setTimeout(function() {
-                window.location.href = "{{ route('admin.manutencaoMedicos') }}";
-            }, 2000);
+          setTimeout(function () {
+            window.location.href = "{{ route('admin.manutencaoMedicos') }}";
+          }, 2000);
         } else {
-            let errorText = result.message || 'Ocorreu um erro.';
-            if (result.errors) {
-                errorText = Object.values(result.errors).flat().join(' ');
-            }
-            messagesDiv.textContent = errorText;
-            messagesDiv.classList.add('error');
-            messagesDiv.style.display = 'block';
+          let errorText = result.message || 'Ocorreu um erro.';
+          if (result.errors) {
+            errorText = Object.values(result.errors).flat().join(' ');
+          }
+          messagesDiv.textContent = errorText;
+          messagesDiv.classList.add('error');
+          messagesDiv.style.display = 'block';
         }
 
         button.disabled = false;
         button.textContent = 'CADASTRAR';
-    })
-    .catch(error => {
+      })
+      .catch(error => {
         messagesDiv.textContent = 'Ocorreu um erro de comunicação. Tente novamente.';
         messagesDiv.classList.add('error');
         messagesDiv.style.display = 'block';
 
         button.disabled = false;
         button.textContent = 'CADASTRAR';
+      });
     });
-});
-</script>
 
+    const inputs = document.querySelectorAll(".input-wrapper input");
+
+    inputs.forEach(input => {
+      input.addEventListener("focus", () => {
+        input.parentElement.classList.add("focused");
+      });
+      input.addEventListener("blur", () => {
+        if (input.value === "") {
+          input.parentElement.classList.remove("focused");
+        }
+      });
+    });
+  </script>
 </body>
-
 </html>
