@@ -4,6 +4,9 @@
 
 @section('content')
 
+
+@php $admin = auth()->guard('admin')->user(); @endphp
+
 <link rel="stylesheet" href="{{ asset('css/admin/cadastroUnidade.css') }}">
 
 <main class="main-dashboard">
