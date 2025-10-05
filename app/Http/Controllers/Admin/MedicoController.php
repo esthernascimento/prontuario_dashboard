@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\Medico;
 use App\Models\Usuario;
 use Illuminate\Validation\ValidationException;
+use App\Mail\emailMedico;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class MedicoController extends Controller
 {
@@ -28,21 +32,22 @@ class MedicoController extends Controller
                 'nomeMedico'      => 'required|string|max:255',
                 'crmMedico'       => 'required|string|max:20',
                 'emailUsuario'    => 'required|email|max:255|unique:tbUsuario,emailUsuario',
-                'senhaUsuario'    => 'required|string|min:6',
+
             ], [
                 'nomeMedico.required' => 'O nome do médico é obrigatório.',
                 'crmMedico.required' => 'O CRM é obrigatório.',
                 'emailUsuario.required' => 'O e-mail é obrigatório.',
-                'emailUsuario.unique' => 'Este e-mail já está cadastrado.',
-                'senhaUsuario.required' => 'A senha é obrigatória.',
-           
+                'emailUsuario.unique' => 'Este e-mail já está cadastrado.',           
             ]);
+
+            $senhaTemporaria = Str::random(10);
 
             $usuario = new Usuario();
             $usuario->nomeUsuario = $request->nomeMedico;
             $usuario->emailUsuario = $request->emailUsuario;
-            $usuario->senhaUsuario = bcrypt($request->senhaUsuario);
+            $usuario->senhaUsuario = Hash::make($senhaTemporaria);
             $usuario->statusAtivoUsuario = 1;
+            $usuario->statusSenhaUsuario = true; 
             $usuario->save();
 
             $medico = new Medico();
@@ -51,6 +56,9 @@ class MedicoController extends Controller
             $medico->crmMedico = $request->crmMedico;
             $medico->especialidadeMedico = $request->especialidadeMedico;
             $medico->save();
+
+            Mail::to($usuario->emailUsuario)->send(new emailMedico($usuario, $senhaTemporaria));
+
 
             return response()->json([
                 'success' => true,
