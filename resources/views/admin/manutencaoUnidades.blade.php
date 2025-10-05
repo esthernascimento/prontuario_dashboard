@@ -4,7 +4,9 @@
 
 @section('content')
 {{-- Reutilizando o mesmo CSS para manter a consistência visual --}}
-<link rel="stylesheet" href="{{ asset('css/admin/manutencaoMedicos.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin/manutencaoUnidade.css') }}">
+
+@php $admin = auth()->guard('admin')->user(); @endphp
 
 <main class="main-dashboard">
     <div class="medico-container"> {{-- Reutilizando a classe de layout --}}

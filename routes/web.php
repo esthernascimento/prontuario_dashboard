@@ -60,7 +60,7 @@ Route::prefix('enfermeiro')->name('enfermeiro.')->group(function () {
         Route::get('/paciente', fn() => view('enfermeiro.pacientes'))->name('pacientes');
         Route::get('/ajuda', fn() => view('enfermeiro.ajuda'))->name('ajuda');
         Route::get('/prontuarioEnfermeiro', [ProntuarioController::class, 'index'])->name('prontuario');
-        Route::get('/prontuario/{id}', [ProntuarioController::class, 'show'])->name('paciente.prontuario'); 
+        Route::get('/prontuario/{id}', [ProntuarioController::class, 'show'])->name('paciente.prontuario');
     });
 });
 
@@ -108,6 +108,15 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
         return view('admin.cadastroPaciente');
     })->name('cadastroPaciente');
     Route::post('/paciente/store', [PacienteController::class, 'store'])->name('paciente.store');
+
+
+    // ...
+    Route::get('/paciente/{id}/editar', [PacienteController::class, 'edit'])->name('paciente.edit');
+    Route::put('/paciente/{id}', [PacienteController::class, 'update'])->name('paciente.update');
+    // ...
+    Route::get('/paciente/{id}/excluir', [PacienteController::class, 'confirmarExclusao'])->name('pacientes.confirmarExclusao');
+    Route::delete('/paciente/{id}', [PacienteController::class, 'destroy'])->name('pacientes.excluir');
+    Route::post('/paciente/{id}/toggle-status', [PacienteController::class, 'toggleStatus'])->name('pacientes.toggleStatus');
 
     // CRUD MÉDICOS
     Route::get('/manutencaoMedicos', [MedicoController::class, 'index'])->name('manutencaoMedicos');

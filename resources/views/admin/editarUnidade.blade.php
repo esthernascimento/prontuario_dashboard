@@ -5,7 +5,7 @@
 @section('content')
 
 {{-- Reutilizando o mesmo CSS para manter a consistência --}}
-<link rel="stylesheet" href="{{ asset('css/admin/editarEnfermeiro.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin/editarUnidade.css') }}">
 
 <main class="main-dashboard">
     <div class="cadastrar-container">

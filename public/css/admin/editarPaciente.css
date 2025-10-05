@@ -1,12 +1,11 @@
 /* ============================================
-   CADASTRO DE UNIDADE - CSS PROFISSIONAL
+   EDITAR PACIENTE - CSS PROFISSIONAL
    ============================================ */
 
    :root {
-    --primary-blue: #2563EB;
-    --primary-blue-dark: #1E40AF;
-    --primary-blue-light: #3B82F6;
-    --accent-cyan: #06B6D4;
+    --primary-blue: #0618b9;
+    --primary-blue-dark: #04108a;
+    --primary-blue-light: #0820e0;
     --bg-white: #FFFFFF;
     --bg-gray-50: #F9FAFB;
     --bg-gray-100: #F3F4F6;
@@ -14,7 +13,7 @@
     --text-secondary: #6B7280;
     --text-muted: #9CA3AF;
     --border-color: #E5E7EB;
-    --border-focus: #3B82F6;
+    --border-focus: #0618b9;
     --success-green: #10B981;
     --error-red: #EF4444;
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -74,7 +73,7 @@
     right: -10%;
     width: 300px;
     height: 300px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
     border-radius: 50%;
     animation: pulse 4s ease-in-out infinite;
 }
@@ -88,12 +87,13 @@
     font-size: 2.5rem;
     color: white;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-    animation: iconBounce 2s ease-in-out infinite;
+    animation: iconRotate 3s ease-in-out infinite;
 }
 
-@keyframes iconBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+@keyframes iconRotate {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
 }
 
 .cadastrar-header h1 {
@@ -110,8 +110,8 @@
    ============================================ */
 
 .alert-danger {
-    margin: 30px 40px;
-    padding: 20px;
+    margin: 24px 36px;
+    padding: 16px 20px;
     background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
     border-left: 4px solid var(--error-red);
     border-radius: var(--radius-md);
@@ -137,6 +137,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    font-size: 0.9rem;
 }
 
 .alert-danger li::before {
@@ -169,7 +170,7 @@ form {
     content: '';
     width: 6px;
     height: 24px;
-    background: linear-gradient(180deg, var(--primary-blue) 0%, var(--accent-cyan) 100%);
+    background: linear-gradient(180deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
     border-radius: 3px;
 }
 
@@ -177,7 +178,7 @@ form {
     border: none;
     height: 2px;
     background: linear-gradient(90deg, transparent 0%, var(--border-color) 50%, transparent 100%);
-    margin: 40px 0;
+    margin: 32px 0;
 }
 
 /* ============================================
@@ -212,21 +213,14 @@ form {
     font-size: 0.9rem;
     color: var(--text-primary);
     margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
     transition: color 0.3s ease;
 }
 
-.input-group label::after {
-    content: '*';
-    color: var(--error-red);
-    font-size: 1.1rem;
-}
-
 .input-group input[type="text"],
-.input-group input[type="tel"] {
-    width: 90%;
+.input-group input[type="date"],
+.input-group input[type="tel"],
+.input-group select {
+    width: 100%;
     padding: 11px 16px;
     font-size: 0.95rem;
     color: var(--text-primary);
@@ -243,30 +237,23 @@ form {
     font-weight: 400;
 }
 
-.input-group input:hover {
+.input-group input:hover,
+.input-group select:hover {
     border-color: var(--primary-blue-light);
     background: white;
 }
 
-.input-group input:focus {
+.input-group input:focus,
+.input-group select:focus {
     border-color: var(--border-focus);
     background: white;
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 0 0 4px rgba(6, 24, 185, 0.15);
     transform: translateY(-2px);
 }
 
-.input-group input:focus + label {
-    color: var(--primary-blue);
-}
-
-/* Efeito de preenchimento */
 .input-group input:not(:placeholder-shown) {
     background: white;
     border-color: var(--success-green);
-}
-
-.input-group input:not(:placeholder-shown):invalid {
-    border-color: var(--error-red);
 }
 
 /* ============================================
@@ -285,23 +272,7 @@ form {
 }
 
 /* ============================================
-   CAMPO CEP ESPECIAL
-   ============================================ */
-
-#cepUnidade {
-    background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
-    border: 2px solid var(--accent-cyan);
-    font-weight: 600;
-    position: relative;
-}
-
-#cepUnidade:focus {
-    border-color: var(--accent-cyan);
-    box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.15);
-}
-
-/* ============================================
-   BOTÃO DE ENVIO
+   BOTÃO DE SALVAR
    ============================================ */
 
 .save-button {
@@ -338,7 +309,7 @@ form {
 
 .save-button:hover {
     transform: translateY(-3px);
-    box-shadow: 0 20px 35px -5px rgba(37, 99, 235, 0.4);
+    box-shadow: 0 20px 35px -5px rgba(6, 24, 185, 0.4);
 }
 
 .save-button:active {
@@ -347,31 +318,168 @@ form {
 }
 
 .save-button::after {
-    content: '→';
-    margin-left: 10px;
+    content: '✓';
+    margin-left: 8px;
     display: inline-block;
     transition: transform 0.3s ease;
+    font-size: 1.2rem;
 }
 
 .save-button:hover::after {
-    transform: translateX(5px);
+    transform: scale(1.2);
 }
 
 /* ============================================
-   ESTADOS DE LOADING (para a busca do CEP)
+   MODAL DE CONFIRMAÇÃO
    ============================================ */
 
-input[value="Buscando..."] {
-    background: linear-gradient(90deg, #F3F4F6 0%, #E5E7EB 50%, #F3F4F6 100%);
-    background-size: 200% 100%;
-    animation: loadingShimmer 1.5s infinite;
-    color: var(--text-muted);
-    pointer-events: none;
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    animation: fadeInModal 0.3s ease-out;
 }
 
-@keyframes loadingShimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+@keyframes fadeInModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    max-width: 480px;
+    width: 90%;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+}
+
+.modal-content i {
+    font-size: 4rem;
+    color: var(--primary-blue);
+    margin-bottom: 20px;
+    display: inline-block;
+    animation: iconPulse 2s ease-in-out infinite;
+    filter: drop-shadow(0 4px 12px rgba(6, 24, 185, 0.3));
+}
+
+@keyframes iconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.modal-content h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+}
+
+.modal-content p {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+    line-height: 1.6;
+}
+
+/* ============================================
+   BOTÕES DO MODAL
+   ============================================ */
+
+.modal-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.modal-buttons button {
+    padding: 12px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-cancelar {
+    background: var(--bg-gray-100);
+    color: var(--text-secondary);
+    border: 2px solid var(--border-color);
+}
+
+.btn-cancelar:hover {
+    background: var(--bg-gray-50);
+    border-color: var(--text-secondary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-excluir {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+.btn-excluir::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.btn-excluir:hover::before {
+    left: 100%;
+}
+
+.btn-excluir:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -6px rgba(6, 24, 185, 0.5);
+}
+
+.btn-excluir:active,
+.btn-cancelar:active {
+    transform: translateY(0);
 }
 
 /* ============================================
@@ -388,25 +496,25 @@ input[value="Buscando..."] {
     }
 
     .cadastrar-header {
-        padding: 30px 20px;
+        padding: 24px 20px;
         flex-direction: column;
         text-align: center;
     }
 
     .cadastrar-header h1 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
 
     .cadastrar-header .icon {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
     }
 
     form {
-        padding: 30px 20px;
+        padding: 24px 20px;
     }
 
     .form-section-title {
-        font-size: 1.1rem;
+        font-size: 1.05rem;
     }
 
     .split-group {
@@ -415,32 +523,59 @@ input[value="Buscando..."] {
     }
 
     .split-group .input-group {
-        margin-bottom: 24px;
+        margin-bottom: 18px;
     }
 
-    .save-button {
-        padding: 16px 24px;
+    .modal-content {
+        padding: 32px 24px;
+        max-width: 90%;
+    }
+
+    .modal-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .modal-content p {
         font-size: 1rem;
+    }
+
+    .modal-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-buttons button {
+        width: 100%;
     }
 }
 
 @media (max-width: 480px) {
     .cadastrar-header h1 {
-        font-size: 1.3rem;
+        font-size: 1.25rem;
     }
 
-    .input-group input {
-        padding: 12px 16px;
-        font-size: 0.95rem;
+    .input-group input,
+    .input-group select {
+        padding: 10px 14px;
+        font-size: 0.9rem;
+    }
+
+    .save-button {
+        font-size: 1rem;
+        padding: 12px 24px;
+    }
+
+    .modal-content i {
+        font-size: 3.5rem;
     }
 }
 
 /* ============================================
-   MICRO INTERAÇÕES E POLIMENTO
+   MICRO INTERAÇÕES
    ============================================ */
 
-/* Efeito de foco suave em todos os inputs */
-input:focus {
+input:focus,
+select:focus {
     animation: focusPulse 0.3s ease-out;
 }
 
@@ -448,20 +583,4 @@ input:focus {
     0% { transform: scale(1); }
     50% { transform: scale(1.01); }
     100% { transform: scale(1); }
-}
-
-/* Transição suave ao carregar a página */
-form > * {
-    animation: fadeInSequence 0.6s ease-out backwards;
-}
-
-@keyframes fadeInSequence {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
