@@ -1,60 +1,48 @@
+
 @extends('admin.templates.admTemplate')
 
 @section('title', 'Gerenciamento de Médicos')
 
 @section('content')
-
-{{-- 
-    IMPORTANTE: Assuma-se que você tenha um arquivo CSS dedicado para 
-    manutenção de médicos ou que você usará o mesmo arquivo de enfermeiros
-    caso os estilos sejam idênticos.
---}}
 <link rel="stylesheet" href="{{ asset('css/admin/manutencaoMedicos.css') }}">
 
 @php $admin = auth()->guard('admin')->user(); @endphp
 
-{{-- 
-    O bloco de alerta antigo foi removido para que o MODAL DE SUCESSO UNIFICADO 
-    abaixo possa gerenciar todas as mensagens de sucesso.
---}}
-
-    <main class="main-dashboard">
-        <div class="medico-container">
-            <div class="medico-header">
-                <h1><i class="bi bi-person-badge-fill"></i> Gerenciamento de Médico</h1>
-                <a href="{{ route('admin.medicos.create') }}" class="btn-add-medico">
+<main class="main-dashboard">
+    <div class="medico-container">
+        <div class="medico-header">
+            <h1><i class="bi bi-person-badge"></i> Gerenciamento de Médicos</h1>
+            <a href="{{ route('admin.medicos.create') }}" class="btn-add-medico">
                 <i class="bi bi-plus-circle"></i> Cadastrar Médico
-                </a>
-            </div>
+            </a>
+        </div>
 
-
-            <div class="search-filters">
-                <div class="search-box">
+        <div class="search-filters">
+            <div class="search-box">
                 <i class="bi bi-search"></i>
                 <input type="text" id="searchInput" placeholder="Pesquisar por nome, CRM ou email..." onkeyup="filterMedicos()">
-                </div>
-                <div class="filters">
-                <div class="custom-select" id="customStatus">
-                    <div class="selected">Status</div>
-                    <div class="options">
-                    <div data-value="">Status</div>
+            </div>
+            
+            <div class="custom-select" id="customStatus">
+                <div class="selected">Status</div>
+                <div class="options">
+                    <div data-value="">Todos</div>
                     <div data-value="ativo">Ativo</div>
                     <div data-value="inativo">Inativo</div>
-                    </div>
-                </div>
-                <input type="hidden" id="filterStatus" value="">
                 </div>
             </div>
+            <input type="hidden" id="filterStatus" value="">
+        </div>
 
-            <div class="box-table">
-                <table>
+        <div class="box-table">
+            <table>
                 <thead>
                     <tr>
-                    <th>Nome Médico</th>
-                    <th>CRM</th>
-                    <th>Email</th>
-                    <th>Status</th>
-                    <th>Ações</th>
+                        <th>Nome Médico</th>
+                        <th>CRM</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,45 +52,50 @@
                         <td>{{ $medico->crmMedico }}</td>
                         <td>{{ optional($medico->usuario)->emailUsuario ?? 'Sem email' }}</td>
                         <td>
-                        @if(optional($medico->usuario)->statusAtivoUsuario == 1)
-                            <span style="color: green;">Ativo</span>
-                        @else
-                            <span style="color: red;">Inativo</span>
-                        @endif
+                            @if(optional($medico->usuario)->statusAtivoUsuario == 1)
+                                <span class="status-badge status-ativo">Ativo</span>
+                            @else
+                                <span class="status-badge status-inativo">Inativo</span>
+                            @endif
                         </td>
                         <td class="actions">
-                        <a href="{{ route('admin.medicos.editar', $medico->idMedicoPK) }}">
-                            <i class="bi bi-pencil" title="Editar"></i>
-                        </a>
-
-                        @if($medico->usuario)
-                            {{-- Chamada do modal de status --}}
-                            <a href="#" onclick="openStatusModal('{{ $medico->idMedicoPK }}', '{{ $medico->nomeMedico }}', {{ optional($medico->usuario)->statusAtivoUsuario }})">
-                                @if(optional($medico->usuario)->statusAtivoUsuario == 1)
-                                <i class="bi bi-slash-circle text-danger" title="Desativar"></i>
-                                @else
-                                <i class="bi bi-check-circle text-success" title="Ativar"></i>
-                                @endif
+                            <a href="{{ route('admin.medicos.editar', $medico->idMedicoPK) }}" class="btn-action btn-edit" title="Editar">
+                                <i class="bi bi-pencil"></i>
                             </a>
-                        @endif
 
-                        {{-- CHAMADA JS PARA ABRIR O MODAL DE EXCLUSÃO --}}
-                        <a href="#" onclick="openDeleteMedicoModal('{{ $medico->idMedicoPK }}', '{{ $medico->nomeMedico }}')">
-                            <i class="bi bi-trash" title="Excluir"></i>
-                        </a>
+                            @if($medico->usuario)
+                                <a href="#" onclick="openStatusModal('{{ $medico->idMedicoPK }}', '{{ $medico->nomeMedico }}', {{ optional($medico->usuario)->statusAtivoUsuario }})" class="btn-action" title="{{ optional($medico->usuario)->statusAtivoUsuario == 1 ? 'Desativar' : 'Ativar' }}">
+                                    @if(optional($medico->usuario)->statusAtivoUsuario == 1)
+                                        <i class="bi bi-slash-circle text-danger"></i>
+                                    @else
+                                        <i class="bi bi-check-circle text-success"></i>
+                                    @endif
+                                </a>
+                            @endif
+
+                            <a href="#" onclick="openDeleteMedicoModal('{{ $medico->idMedicoPK }}', '{{ $medico->nomeMedico }}')" class="btn-action btn-delete" title="Excluir">
+                                <i class="bi bi-trash"></i>
+                            </a>
                         </td>
                     </tr>
                     @endforeach
-                    @if (empty($medicos))
+                    
+                    @if($medicos->isEmpty())
                         <tr data-status="empty-list">
-                            <td colspan="5" style="text-align: center; padding: 20px;">Nenhum médico cadastrado.</td>
+                            <td colspan="5" class="no-doctors">Nenhum médico cadastrado.</td>
                         </tr>
                     @endif
                 </tbody>
-                </table>
-            </div>
+            </table>
         </div>
-    </main>
+
+        <div class="pagination-container">
+            @if(method_exists($medicos, 'links'))
+                {{ $medicos->links() }}
+            @endif
+        </div>
+    </div>
+</main>
 
 {{-- MODAL DE EXCLUSÃO --}}
 <div id="deleteMedicoModal" class="modal-overlay">
@@ -149,7 +142,7 @@
 {{-- MODAL DE SUCESSO UNIFICADO --}}
 <div id="statusSuccessModal" class="modal-overlay">
     <div class="modal-content">
-        <div class="modal-header" style="color: #198754;"> {{-- Cor verde para sucesso --}}
+        <div class="modal-header">
             <i class="bi bi-check-circle-fill"></i>
             <h2>Sucesso!</h2>
         </div>
@@ -157,15 +150,12 @@
         <p id="successMessage"></p>
 
         <div class="modal-buttons">
-            {{-- Botão de fechar (Ok) com a cor verde de sucesso --}}
-            <button type="button" onclick="closeSuccessModal()" class="btn-excluir" style="background-color: #198754;">Fechar</button>
+            <button type="button" onclick="closeSuccessModal()" class="btn-excluir">Fechar</button>
         </div>
     </div>
 </div>
 
-
 <script>
-
     // ------------------------------------------
     // LÓGICA DO MODAL DE SUCESSO UNIFICADO
     // ------------------------------------------
@@ -177,44 +167,32 @@
 
     function closeSuccessModal() {
         document.getElementById('statusSuccessModal').style.display = 'none';
-        // Recarrega a página ou faz uma chamada AJAX para atualizar a lista se necessário
         window.location.reload(); 
     }
 
-    // Fecha o modal de sucesso clicando fora
     document.getElementById('statusSuccessModal').addEventListener('click', function(event) {
         if (event.target.id === 'statusSuccessModal') {
             closeSuccessModal();
         }
     });
 
-
-    // ------------------------------------------
-    // Verificação de Sucesso ao Carregar a Página (AGORA UNIVERSAL PARA session('success'))
-    // ------------------------------------------
-
     @if(session('success'))
         document.addEventListener('DOMContentLoaded', () => {
-            // A mensagem de sucesso é a mesma para todas as ações (sucesso, status, updated, deleted)
             const message = "{{ session('success') }}"; 
             openSuccessModal(message);
         });
     @endif
 
-
     // ------------------------------------------
     // LÓGICA DOS MODAIS DE MÉDICO
     // ------------------------------------------
 
-    // Funções do Modal de Exclusão
     function openDeleteMedicoModal(medicoId, medicoNome) {
         const modal = document.getElementById('deleteMedicoModal');
         const nomeSpan = document.getElementById('medicoNome');
         const form = document.getElementById('deleteMedicoForm');
 
         nomeSpan.textContent = medicoNome;
-
-        // Rota de exclusão para médicos
         const deleteRoute = "{{ route('admin.medicos.excluir', ['id' => 'PLACEHOLDER_ID']) }}";
         form.action = deleteRoute.replace('PLACEHOLDER_ID', medicoId);
         
@@ -231,7 +209,6 @@
         }
     });
 
-    // Funções do Modal de Status
     function openStatusModal(medicoId, medicoNome, currentStatus) {
         const modal = document.getElementById('statusMedicoModal');
         const nomeSpan = document.getElementById('statusMedicoNome');
@@ -239,7 +216,6 @@
         const confirmText = document.getElementById('confirmStatusText');
         const form = document.getElementById('statusMedicoForm');
         
-        // Se o status for 1 (ativo), a ação será desativar. Se for 0 (inativo), a ação será ativar.
         const action = currentStatus == 1 ? 'desativar' : 'ativar';
         const confirmAction = currentStatus == 1 ? 'desativar' : 'ativar';
 
@@ -247,7 +223,6 @@
         actionSpan.textContent = action;
         confirmText.textContent = confirmAction;
 
-        // Rota de toggleStatus para médicos
         const statusRoute = "{{ route('admin.medicos.toggleStatus', ['id' => 'PLACEHOLDER_ID']) }}";
         form.action = statusRoute.replace('PLACEHOLDER_ID', medicoId);
         
@@ -264,7 +239,6 @@
         }
     });
 
-
     // ------------------------------------------
     // LÓGICA DE FILTRAGEM
     // ------------------------------------------
@@ -278,10 +252,9 @@
         let emptyRow = null;
 
         rows.forEach(row => {
-            // Verifica se a linha é a linha de "Nenhum médico cadastrado"
             if (row.dataset.status === 'empty-list') {
                 emptyRow = row;
-                row.style.display = 'none'; // Esconde por padrão para o cálculo
+                row.style.display = 'none';
                 return;
             }
 
@@ -301,10 +274,8 @@
             }
         });
         
-        // Lógica para mostrar a linha "Nenhum médico cadastrado" se não houver resultados.
         if (emptyRow) {
             if (visibleRowsCount === 0) {
-                 // Verifica se o resultado do filtro e pesquisa é zero, e mostra a linha vazia
                 emptyRow.style.display = ''; 
             } else {
                 emptyRow.style.display = 'none';
@@ -312,31 +283,37 @@
         }
     }
 
-    // Lógica para o Select Personalizado de Status
-    const customSelect = document.getElementById("customStatus");
-    const selected = customSelect.querySelector(".selected");
-    const options = customSelect.querySelector(".options");
-    const hiddenInput = document.getElementById("filterStatus");
+    function initializeCustomSelect(containerId) {
+        const customSelect = document.getElementById(containerId);
+        const selected = customSelect.querySelector(".selected");
+        const options = customSelect.querySelector(".options");
+        const hiddenInput = document.getElementById(containerId.replace('custom', 'filter'));
 
-    selected.addEventListener("click", () => {
-        options.style.display = options.style.display === "flex" ? "none" : "flex";
-    });
-
-    options.querySelectorAll("div").forEach(option => {
-        option.addEventListener("click", () => {
-            selected.textContent = option.textContent;
-            hiddenInput.value = option.dataset.value;
-            options.style.display = "none";
-            filterMedicos(); // Chama a função de filtro após a seleção
+        selected.addEventListener("click", (e) => {
+            e.stopPropagation();
+            document.querySelectorAll(".custom-select .options").forEach(opt => {
+                if (opt !== options) opt.parentElement.classList.remove('active');
+            });
+            customSelect.classList.toggle('active');
         });
-    });
 
-    document.addEventListener("click", e => {
-        if (!customSelect.contains(e.target)) {
-            options.style.display = "none";
-        }
-    });
+        options.querySelectorAll("div").forEach(option => {
+            option.addEventListener("click", () => {
+                selected.textContent = option.textContent;
+                hiddenInput.value = option.dataset.value;
+                customSelect.classList.remove('active');
+                filterMedicos();
+            });
+        });
 
+        document.addEventListener("click", () => {
+            customSelect.classList.remove('active');
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        initializeCustomSelect("customStatus");
+        document.getElementById('searchInput').addEventListener('input', filterMedicos);
+    });
 </script>
-
 @endsection

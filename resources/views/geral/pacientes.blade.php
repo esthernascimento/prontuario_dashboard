@@ -22,7 +22,7 @@
         <div class="search-filters">
             <div class="search-box">
                 <i class="bi bi-search"></i>
-                <input type="text" id="searchInput" placeholder="Pesquisar por nome, CPF ou telefone..." onkeyup="filterPatients()">
+                <input type="text" id="searchInput" placeholder="Pesquisar por nome, CPF ou cartão SUS..." onkeyup="filterPatients()">
             </div>
             
             <div class="custom-select" id="customAge">
@@ -46,61 +46,89 @@
                 </div>
             </div>
             <input type="hidden" id="filterGender" value="">
+
+            <div class="custom-select" id="customStatus">
+                <div class="selected">Todos os Status</div>
+                <div class="options">
+                    <div data-value="">Todos os Status</div>
+                    <div data-value="ativo">Ativo</div>
+                    <div data-value="inativo">Inativo</div>
+                </div>
+            </div>
+            <input type="hidden" id="filterStatus" value="">
         </div>
 
-<!-- Tabela de Pacientes -->
-<div class="table-wrapper">
-    <table class="patients-table">
-        <thead>
-            <tr>
-                <th>NOME</th>
-                <th>CPF</th>
-                <th>IDADE</th>
-                <th>CARTÃO SUS</th>
-                <th>STATUS</th>
-                <th>AÇÕES</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if(isset($pacientes) && count($pacientes) > 0)
-                @foreach($pacientes as $paciente)
-                    @php
-                        $idade = \Carbon\Carbon::parse($paciente->dataNascPaciente)->age;
-                    @endphp
+        <!-- Tabela de Pacientes -->
+        <div class="table-wrapper">
+            <table class="patients-table">
+                <thead>
                     <tr>
-                        <td>{{ $paciente->nomePaciente }}</td>
-                        <td>{{ $paciente->cpfPaciente }}</td>
-                        <td>{{ $idade }} anos</td>
-                        <td>{{ $paciente->cartaoSusPaciente ?? 'N/A' }}</td>
-                        <td>{{ ucfirst($paciente->statusPaciente) }}</td>
-                        <td>
-                            <div class="action-buttons">
-                                <a href="#" class="btn-view" title="Ver detalhes">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <a href="#" class="btn-edit" title="Editar">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <form action="#" method="POST" class="delete-form">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn-delete" title="Excluir" onclick="return confirm('Tem certeza?')">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
+                        <th>NOME</th>
+                        <th>CPF</th>
+                        <th>IDADE</th>
+                        <th>CARTÃO SUS</th>
+                        <th>STATUS</th>
+                        <th>AÇÕES</th>
                     </tr>
-                @endforeach
-            @else
-                <tr>
-                    <td colspan="6" class="no-patients">Nenhum paciente encontrado.</td>
-                </tr>
-            @endif
-        </tbody>
-    </table>
-</div>
+                </thead>
+                <tbody>
+                    @if(isset($pacientes) && count($pacientes) > 0)
+                        @foreach($pacientes as $paciente)
+                            @php
+                                $idade = \Carbon\Carbon::parse($paciente->dataNascPaciente)->age;
+                                $statusDisplay = ucfirst($paciente->statusPaciente);
 
+                                // Lógica para o grupo de idade
+                                if ($idade <= 12) {
+                                    $ageGroup = 'crianca';
+                                } elseif ($idade >= 13 && $idade <= 17) {
+                                    $ageGroup = 'adolescente';
+                                } elseif ($idade >= 18 && $idade <= 59) {
+                                    $ageGroup = 'adulto';
+                                } else {
+                                    $ageGroup = 'idoso';
+                                }
+
+                                // Para o filtro de gênero
+                                $genderCode = strtoupper(substr($paciente->generoPaciente ?? '', 0, 1));
+                            @endphp
+                            <tr 
+                                data-age-group="{{ $ageGroup }}" 
+                                data-gender="{{ $genderCode }}"
+                                data-status="{{ strtolower($paciente->statusPaciente) }}"
+                            >
+                                <td>{{ $paciente->nomePaciente }}</td>
+                                <td>{{ $paciente->cpfPaciente }}</td>
+                                <td>{{ $idade }} anos</td>
+                                <td>{{ $paciente->cartaoSusPaciente ?? 'N/A' }}</td>
+                                <td>
+                                    <span class="status-badge status-{{ strtolower($paciente->statusPaciente) }}">
+                                        {{ $statusDisplay }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a href="#" class="btn-action btn-view" title="Ver detalhes">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a href="#" class="btn-action btn-edit" title="Editar">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a href="#" class="btn-action btn-delete" title="Excluir">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="6" class="no-patients">Nenhum paciente encontrado.</td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+        </div>
 
         <!-- Paginação -->
         <div class="pagination-container">
@@ -110,65 +138,118 @@
         </div>
     </div>
 </main>
+
+{{-- MODAL DE SUCESSO UNIFICADO --}}
+<div id="statusSuccessModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <i class="bi bi-check-circle-fill"></i>
+            <h2>Sucesso!</h2>
+        </div>
+        
+        <p id="successMessage"></p>
+
+        <div class="modal-buttons">
+            <button type="button" onclick="closeSuccessModal()" class="btn-excluir">Fechar</button>
+        </div>
+    </div>
+</div>
+
 <script>
-function filterPatients() {
-    const searchInput = document.getElementById('searchInput').value.toLowerCase();
-    const filterAge = document.getElementById('filterAge').value;
-    const filterGender = document.getElementById('filterGender').value;
-    const rows = document.querySelectorAll('tbody tr');
-    let visibleCount = 0;
+    // ------------------------------------------
+    // LÓGICA DO MODAL DE SUCESSO UNIFICADO
+    // ------------------------------------------
 
-    rows.forEach(row => {
-        const name = row.children[0].textContent.toLowerCase();
-        const cpf = row.children[1].textContent.toLowerCase();
-        const phone = row.children[2].textContent.toLowerCase();
-        const ageGroup = row.dataset.ageGroup; 
-        const gender = row.dataset.gender;
+    function openSuccessModal(message) {
+        document.getElementById('successMessage').textContent = message;
+        document.getElementById('statusSuccessModal').style.display = 'flex';
+    }
 
-        const matchesSearch = name.includes(searchInput) || cpf.includes(searchInput) || phone.includes(searchInput);
-        const matchesAge = !filterAge || ageGroup === filterAge;
-        const matchesGender = !filterGender || gender === filterGender;
+    function closeSuccessModal() {
+        document.getElementById('statusSuccessModal').style.display = 'none';
+        window.location.reload(); 
+    }
 
-        if (matchesSearch && matchesAge && matchesGender) {
-            row.style.display = '';
-            visibleCount++;
-        } else {
-            row.style.display = 'none';
+    document.getElementById('statusSuccessModal').addEventListener('click', function(event) {
+        if (event.target.id === 'statusSuccessModal') {
+            closeSuccessModal();
         }
     });
-}
 
-function initializeCustomSelect(containerId) {
-    const customSelect = document.getElementById(containerId);
-    const selected = customSelect.querySelector(".selected");
-    const options = customSelect.querySelector(".options");
-    const hiddenInput = document.getElementById(containerId.replace('custom', 'filter'));
-
-    selected.addEventListener("click", (e) => {
-        e.stopPropagation();
-        document.querySelectorAll(".custom-select .options").forEach(opt => {
-            if (opt !== options) opt.style.display = "none";
+    @if(session('success'))
+        document.addEventListener('DOMContentLoaded', () => {
+            const message = "{{ session('success') }}"; 
+            openSuccessModal(message);
         });
-        customSelect.classList.toggle('active');
-    });
+    @endif
 
-    options.querySelectorAll("div").forEach(option => {
-        option.addEventListener("click", () => {
-            selected.textContent = option.textContent;
-            hiddenInput.value = option.dataset.value;
+    // ------------------------------------------
+    // LÓGICA DE FILTRAGEM
+    // ------------------------------------------
+
+    function filterPatients() {
+        const searchInput = document.getElementById('searchInput').value.toLowerCase();
+        const filterAge = document.getElementById('filterAge').value;
+        const filterGender = document.getElementById('filterGender').value;
+        const filterStatus = document.getElementById('filterStatus').value;
+        const rows = document.querySelectorAll('tbody tr');
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            const name = row.children[0].textContent.toLowerCase();
+            const cpf = row.children[1].textContent.toLowerCase();
+            const cartaoSus = row.children[3].textContent.toLowerCase();
+            const ageGroup = row.dataset.ageGroup; 
+            const gender = row.dataset.gender;
+            const status = row.dataset.status;
+
+            const matchesSearch = name.includes(searchInput) || cpf.includes(searchInput) || cartaoSus.includes(searchInput);
+            const matchesAge = !filterAge || ageGroup === filterAge;
+            const matchesGender = !filterGender || gender === filterGender;
+            const matchesStatus = !filterStatus || status === filterStatus;
+
+            if (matchesSearch && matchesAge && matchesGender && matchesStatus) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    function initializeCustomSelect(containerId) {
+        const customSelect = document.getElementById(containerId);
+        const selected = customSelect.querySelector(".selected");
+        const options = customSelect.querySelector(".options");
+        const hiddenInput = document.getElementById(containerId.replace('custom', 'filter'));
+
+        selected.addEventListener("click", (e) => {
+            e.stopPropagation();
+            document.querySelectorAll(".custom-select .options").forEach(opt => {
+                if (opt !== options) opt.parentElement.classList.remove('active');
+            });
+            customSelect.classList.toggle('active');
+        });
+
+        options.querySelectorAll("div").forEach(option => {
+            option.addEventListener("click", () => {
+                selected.textContent = option.textContent;
+                hiddenInput.value = option.dataset.value;
+                customSelect.classList.remove('active');
+                filterPatients();
+            });
+        });
+
+        document.addEventListener("click", () => {
             customSelect.classList.remove('active');
-            filterPatients();
         });
-    });
+    }
 
-    document.addEventListener("click", () => {
-        customSelect.classList.remove('active');
+    document.addEventListener("DOMContentLoaded", () => {
+        initializeCustomSelect("customAge");
+        initializeCustomSelect("customGender");
+        initializeCustomSelect("customStatus");
+        document.getElementById('searchInput').addEventListener('input', filterPatients);
     });
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    initializeCustomSelect("customAge");
-    initializeCustomSelect("customGender");
-});
 </script>
 @endsection
