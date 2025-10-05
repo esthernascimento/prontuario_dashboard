@@ -11,12 +11,13 @@
 body {
     font-family: 'Montserrat', sans-serif;
     margin-top: 30px;
-    padding: 20px;
+    padding: 30px;
+    overflow-x: hidden;
     /* Aplica a fonte globalmente */
 }
 
 .main-dashboard {
-    /* O padding já é definido no .content do template.css */
+    padding: 0;
 }
 
 

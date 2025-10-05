@@ -11,12 +11,20 @@
 body {
     font-family: 'Montserrat', sans-serif;
     /* Aplica a fonte globalmente */
+    overflow-x: hidden;
+    height: 100vh;
 }
+
+ .main-dashboardAjuda{
+    padding: 20px;
+    min-height: 100vh;
+  }
+
 
 .help-container {
   max-width: 800px;
   margin: auto;
-  margin-top: 50px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
 }

@@ -2,12 +2,13 @@
 /* ========== 1. CONTAINER GERAL ========== */
 body{
   font-family: 'Montserrat', sans-serif;
+  overflow-x: hidden;
 }
 /* CONTAINER PRINCIPAL */
 .help-container {
     max-width: 800px;
     margin: auto;
-    margin-top: 50px;
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
 }

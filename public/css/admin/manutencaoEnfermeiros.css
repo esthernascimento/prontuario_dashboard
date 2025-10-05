@@ -13,10 +13,16 @@ body {
     color: #333;
 }
 
+
+  .main-dashboard {
+    padding: 20px;
+    min-height: 100vh;
+  }
+
 .main-dashboard {
     padding: 20px;
     min-height: 100vh;
-}
+
 
 .enfermeiro-container {
     max-width: 1200px;
