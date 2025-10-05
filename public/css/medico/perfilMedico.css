@@ -9,9 +9,18 @@
 */
 
 body {
+    margin: 0;
     font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+    overflow-y: hidden;
     /* Aplica a fonte globalmente */
+    height: 100vh;
 }
+
+  .main-dashboard {
+    padding: 20px;
+    min-height: 100vh;
+  }
 
 /* Container Principal */
 .cadastrar-container {

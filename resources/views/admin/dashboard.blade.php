@@ -203,9 +203,9 @@ new Chart(ctxLinha, {
         scales: { // Adiciona a configuração de escala aqui
             y: {
                 beginAtZero: true,
-                max: 1000, // Eixo Y vai até 1000
+                max: 100, // Eixo Y vai até 1000
                 ticks: {
-                    stepSize: 100 // Intervalos de 100
+                    stepSize: 10 // Intervalos de 100
                 }
             }
         },

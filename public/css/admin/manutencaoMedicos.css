@@ -1,15 +1,21 @@
-body {
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
     background-color: #f9f9f9;
     height: 100vh;
 }
 
-.main-dashboard {
-    padding: 30px;
-    margin-top: 20px;
-    margin-left: 10px;
-}
+  .main-dashboard {
+    padding: 20px;
+    min-height: 100vh;
+  }
 
 .medico-container {
     max-width: 1200px;

@@ -7,9 +7,11 @@
   }
   
   body {
-    background: #f5f7fb;
-    color: #333;
-  }
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+    height: 100vh;
+}
   
   .main-dashboard {
     padding: 20px;
@@ -29,7 +31,6 @@
     margin-bottom: 25px;
     padding: 0 10px;
     /* Reduzido margin-top de 120px para 20px para elementos ficarem mais próximos do topo */
-    margin-top: 20px;
   }
   
   .patients-header h1 {
@@ -67,11 +68,10 @@
     display: flex;
     align-items: center;
     gap: 15px;
+    border: none;
     margin-bottom: 25px;
-    padding: 20px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    
     flex-wrap: wrap;
   }
   
