@@ -13,7 +13,7 @@
             <h1>Editar Paciente</h1>
         </div>
 
-        <form action="{{ route('admin.pacientes.update', $paciente->idPacientePK) }}" method="POST" id="editPacienteForm">
+        <form action="{{ route('admin.pacientes.update', $paciente) }}" method="POST" id="editPacienteForm">
             @csrf
             @method('PUT')
 
@@ -31,7 +31,7 @@
 
             <div class="input-group">
                 <label for="dataNascPaciente">Data de Nascimento</label>
-                <input type="date" id="dataNascPaciente" name="dataNascPaciente" value="{{ $paciente->dataNascPaciente }}" required>
+                <input type="date" id="dataNascPaciente" name="dataNascPaciente" value="{{ $paciente->dataNascPaciente->format('Y-m-d') }}" required>
             </div>
 
             <div class="split-group">

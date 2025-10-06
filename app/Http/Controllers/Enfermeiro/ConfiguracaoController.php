@@ -58,7 +58,7 @@ class ConfiguracaoController extends Controller
                 'required',
                 'email',
                 'max:255',
-                // A regra de 'unique' ignora o próprio registro do enfermeiro na verificação
+               
                 Rule::unique('tbEnfermeiro', 'emailEnfermeiro')->ignore($enfermeiro->idEnfermeiroPK, 'idEnfermeiroPK'),
             ],
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
