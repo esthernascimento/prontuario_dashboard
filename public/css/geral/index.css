@@ -1,83 +1,334 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
+:root {
+    --primary-blue: #0039A6;
+    --light-blue: #4A90E2;
+    --admin-blue: #2563EB;
+    --medico-red: #DC2626;
+    --enfermeiro-green: #059669;
+    --bg-gradient-start: #0A1929;
+    --bg-gradient-end: #1E3A5F;
+    --text-white: #FFFFFF;
+    --text-gray: #E5E7EB;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
 
-body{
-    background-color: rgb(6,24,185);
-    height: 100vh;
-    width: 100%;
-    font-family: 'Montserrat', sans-serif;
-    justify-content: center;
-    align-items: center;
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /*background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);*/
+    background-image: url(/img/background-index.png);
+    background-size: cover;
+    min-height: 100vh;
     overflow-x: hidden;
-    display: flex;
+    position: relative;
 }
 
-.main-container{
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(74, 144, 226, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(37, 99, 235, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+    animation: backgroundPulse 15s ease-in-out infinite;
+}
+
+@keyframes backgroundPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.main-container {
+    min-height: 100vh;
+    display: flex;
     align-items: center;
-    justify-content: center;
-    display: flex;
+    justify-content: space-between;
+    padding: 60px 80px;
+    gap: 80px;
+    position: relative;
+    z-index: 1;
 }
 
-.box-content{
-    background-color:rgb(231,232,248);
-    height: 450px;
-    width: 850px;
-    padding: 5px 25px;
-    border-radius: 40px;
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    flex-direction: row;
+.box-content {
+    flex: 1;
+    max-width: 600px;
+    animation: slideInLeft 0.8s ease-out;
 }
 
-.content{
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.box-content h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--text-white);
+    line-height: 1.2;
+    margin-bottom: 40px;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-gray);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 3px solid rgba(74, 144, 226, 0.3);
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.area-selection {
     display: flex;
     flex-direction: column;
+    gap: 20px;
+    animation: fadeInUp 0.8s ease-out 0.6s both;
 }
 
-.box-content h1{
-    color: rgb(6,24,185);
-    font-size: 40px;
-    width: 400px;
-    font-weight: bold;
-    text-align: left;
-}
-
-.box-content button{
-    background-color: rgb(255,255,255);
-    width: 300px;
-    height: 60px;
-    padding: 10px 20px;
-    margin-right: auto;
-    margin-top: 20px;
-    text-align: left;
-    color: rgb(6,24,185);
-    border-radius: 50px;
-    border-color:  rgb(255,255,255);
-    box-shadow: 0px 0px 10px rgb(196, 195, 255);
-    border-width: 1px;
-    font-size: 12px;
+.area-button {
     display: flex;
-    flex-direction: row;
-}
-
-.box-content button p{
-    color: rgb(6,24,185);
-    font-weight: bold;
-    font-size: 18px;
-    position: absolute;
-}
-
-.content a{
+    align-items: center;
+    justify-content: flex-start;
+    padding: 24px 32px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-white);
     text-decoration: none;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
 }
 
-.img-content img{
+.area-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.6s;
+}
+
+.area-button:hover::before {
+    left: 100%;
+}
+
+.area-button::after {
+    content: '→';
+    position: absolute;
+    right: 32px;
+    font-size: 1.5rem;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+}
+
+.area-button:hover::after {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.area-button:hover {
+    transform: translateX(8px) scale(1.02);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.area-button:active {
+    transform: translateX(4px) scale(0.98);
+}
+
+.administrador {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(37, 99, 235, 0.05) 100%);
+    border-color: rgba(37, 99, 235, 0.3);
+}
+
+.administrador:hover {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.35) 0%, rgba(37, 99, 235, 0.15) 100%);
+    border-color: var(--admin-blue);
+    box-shadow: 0 8px 32px rgba(37, 99, 235, 0.4);
+}
+
+.medico {
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(220, 38, 38, 0.05) 100%);
+    border-color: rgba(220, 38, 38, 0.3);
+}
+
+.medico:hover {
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.35) 0%, rgba(220, 38, 38, 0.15) 100%);
+    border-color: var(--medico-red);
+    box-shadow: 0 8px 32px rgba(220, 38, 38, 0.4);
+}
+
+.enfermeiro {
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.2) 0%, rgba(5, 150, 105, 0.05) 100%);
+    border-color: rgba(5, 150, 105, 0.3);
+}
+
+.enfermeiro:hover {
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.35) 0%, rgba(5, 150, 105, 0.15) 100%);
+    border-color: var(--enfermeiro-green);
+    box-shadow: 0 8px 32px rgba(5, 150, 105, 0.4);
+}
+
+.logo-container {
+    flex: 1;
     display: flex;
-    justify-content: flex-end;
-    width: 300px;
-    height: 300px;
-    margin-left: 30%;
-    margin-top: 40%;
+    align-items: center;
+    justify-content: center;
+    animation: fadeInScale 1s ease-out 0.4s both;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.logo {
+    max-width: 500px;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.3));
+    animation: floatAnimation 6s ease-in-out infinite;
+}
+
+@keyframes floatAnimation {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+    .main-container {
+        padding: 40px 60px;
+        gap: 60px;
+    }
     
+    .box-content h1 {
+        font-size: 3rem;
+    }
+    
+    .logo {
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 968px) {
+    .main-container {
+        flex-direction: column;
+        padding: 40px 30px;
+        gap: 50px;
+    }
+    
+    .box-content {
+        max-width: 100%;
+        text-align: center;
+    }
+    
+    .box-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+    }
+    
+    .area-button {
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+    
+    .logo {
+        max-width: 350px;
+    }
+}
+
+@media (max-width: 576px) {
+    .main-container {
+        padding: 30px 20px;
+    }
+    
+    .box-content h1 {
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
+    
+    .subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 24px;
+    }
+    
+    .area-button {
+        padding: 20px 24px;
+        font-size: 1.1rem;
+        border-radius: 12px;
+    }
+    
+    .area-button::after {
+        right: 24px;
+    }
+    
+    .logo {
+        max-width: 280px;
+    }
+}
+
+/* Animação de entrada para os botões (staggered) */
+.area-button:nth-child(1) {
+    animation: fadeInUp 0.8s ease-out 0.7s both;
+}
+
+.area-button:nth-child(2) {
+    animation: fadeInUp 0.8s ease-out 0.85s both;
+}
+
+.area-button:nth-child(3) {
+    animation: fadeInUp 0.8s ease-out 1s both;
 }

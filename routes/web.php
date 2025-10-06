@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\SegurancaController;
 use App\Http\Controllers\Admin\ConfiguracaoController;
 use App\Http\Controllers\Admin\MedicoController;
+use App\Http\Controllers\API\PacienteController;
+
 use App\Http\Controllers\Medico\MedicoDashboardController;
 use App\Http\Controllers\Medico\MedicoConfiguracaoController;
 use App\Http\Controllers\Medico\MedicoSegurancaController;
@@ -53,7 +55,10 @@ Route::prefix('enfermeiro')->name('enfermeiro.')->group(function () {
 
         Route::get('/paciente', fn() => view('enfermeiro.pacientes'))->name('pacientes');
         Route::get('/ajuda', fn() => view('enfermeiro.ajuda'))->name('ajuda');
-        Route::get('/prontuario', [ProntuarioController::class, 'index'])->name('prontuario');
+        Route::get('/prontuarioEnfermeiro', [ProntuarioController::class, 'index'])->name('prontuario');
+        Route::get('/prontuario/{id}', [ProntuarioController::class, 'show'])->name('paciente.prontuario'); 
+
+
     });
 });
 
@@ -92,7 +97,7 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     // Dashboard
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/pacientes', fn() => view('geral.pacientes'))->name('pacientes');
+
     Route::get('/ajuda', fn() => view('geral.ajuda'))->name('ajuda');
 
     Route::get('/seguranca', [SegurancaController::class, 'showAlterarSenhaForm'])->name('seguranca');
@@ -100,6 +105,19 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::get('/configuracoes', [SegurancaController::class, 'configuracoes'])->name('configuracoes');
     Route::get('/perfil', [ConfiguracaoController::class, 'perfil'])->name('perfil');
     Route::post('/perfil/update', [ConfiguracaoController::class, 'atualizarPerfil'])->name('perfil.update');
+
+    Route::get('/pacientes', function () {
+        $pacientes = \App\Models\Paciente::orderBy('nomePaciente')->paginate(10);
+        return view('geral.pacientes', compact('pacientes'));
+    })->name('pacientes.index');
+
+    Route::get('/cadastroPaciente', function () {
+        return view('admin.cadastroPaciente');
+    })->name('cadastroPaciente');
+
+    Route::post('/paciente/store', [PacienteController::class, 'store'])->name('paciente.store');
+
+
 
     // CRUD MÉDICOS
     Route::get('/manutencaoMedicos', [MedicoController::class, 'index'])->name('manutencaoMedicos');

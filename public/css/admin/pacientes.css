@@ -1,15 +1,16 @@
-
-
 /* ESTILOS GERAIS */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-body {
-    background: #f5f7fb;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+    height: 100vh;
     color: #333;
 }
 
@@ -18,23 +19,27 @@ body {
     min-height: 100vh;
 }
 
-
-.enfermeiro-container {
+.patients-container {
     max-width: 1200px;
     margin: 0 auto;
 }
 
 /* HEADER */
-.enfermeiro-header {
+.patients-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
     padding: 0 10px;
+    /* Reduzido margin-top de 120px para 20px para elementos ficarem mais próximos do topo */
+  }
+  
+  .patients-header h1 {
+    color: #1a3bb9;
     margin-top: 20px;
 }
 
-.enfermeiro-header h1 {
+.patients-header h1 {
     color: #0618b9;
     font-size: 28px;
     font-weight: 700;
@@ -43,7 +48,7 @@ body {
     gap: 10px;
 }
 
-.btn-add-enfermeiro {
+.btn-add-paciente {
     background: #0618b9;
     color: white;
     padding: 12px 24px;
@@ -58,10 +63,10 @@ body {
     cursor: pointer;
 }
 
-.btn-add-enfermeiro:hover {
-    background: #0618b9;
+.btn-add-paciente:hover {
+    background: #0056b3;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(6, 18, 121, 0.548);
+    box-shadow: 0 4px 12px rgba(26, 59, 185, 0.3);
 }
 
 /* BARRA DE PESQUISA E FILTROS */
@@ -69,6 +74,7 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
+    border: none;
     margin-bottom: 25px;
     padding: 20px;
     border-radius: 12px;
@@ -78,7 +84,7 @@ body {
 .search-box {
     position: relative;
     flex: 1;
-    min-width: 250px;
+    min-width: 300px;
 }
 
 .search-box i {
@@ -105,17 +111,22 @@ body {
     outline: none;
     border-color: #0618b9;
     background: white;
-    box-shadow: 0 0 0 3px rgba(0,0,0,0,1);
+    box-shadow: 0 0 0 3px rgba(26, 59, 185, 0.1);
 }
 
 .search-box input::placeholder {
     color: #999;
 }
 
-/* ESTILO DOS FILTROS */
+/* FILTROS */
+.filter-group {
+    display: flex;
+    gap: 12px;
+}
+
 .custom-select {
     position: relative;
-    width: 150px;
+    width: 170px;
     cursor: pointer;
 }
 
@@ -151,10 +162,10 @@ body {
     left: 0;
     right: 0;
     background: white;
-    border: 1px solid #e1e5ee;
+    border: 2px solid #e1e5ee;
     border-radius: 8px;
     margin-top: 5px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     display: none;
     z-index: 1000;
     max-height: 200px;
@@ -180,26 +191,26 @@ body {
     border-bottom: none;
 }
 
-/* TABELA - PADRÃO DA IMAGEM */
-.box-table {
+/* TABELA */
+.table-wrapper {
     background: white;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     margin-bottom: 20px;
     border: 1px solid #e1e5ee;
 }
 
-table {
+.patients-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-thead {
+.patients-table thead {
     background: #0618b9;
 }
 
-th {
+.patients-table th {
     background: transparent;
     color: white;
     padding: 18px 20px;
@@ -211,20 +222,20 @@ th {
     border-bottom: none;
 }
 
-/* Cor das Linhas da Tabela (Claro com Fundo Verde) */
-tbody tr {
+/* Cor das Linhas da Tabela */
+.patients-table tbody tr {
     background-color: #f7f7ff;
 }
 
-tbody tr:nth-child(even) {
+.patients-table tbody tr:nth-child(even) {
     background-color: #f0f0f5;
 }
 
-tbody tr:hover {
+.patients-table tbody tr:hover {
     background-color: #e6e6f2;
 }
 
-td {
+.patients-table td {
     padding: 16px 20px;
     border-bottom: none;
     color: #333;
@@ -257,8 +268,8 @@ td {
     border: 1px solid #ffcdd2;
 }
 
-/* AÇÕES - Ajuste de Estilo dos Ícones */
-.actions {
+/* AÇÕES - Estilo dos Ícones */
+.action-buttons {
     display: flex;
     gap: 8px;
     align-items: center;
@@ -306,7 +317,7 @@ td {
 }
 
 /* MENSAGEM VAZIA */
-.no-enfermeiros {
+.no-patients {
     text-align: center;
     padding: 60px 20px;
     color: #666;
@@ -397,12 +408,12 @@ td {
 }
 
 .btn-excluir {
-    background-color: #8c1007;
+    background-color: #0618b9;
     color: white;
 }
 
 .btn-excluir:hover {
-    background-color: #8c1007b0;
+    background-color: #0056b3;
 }
 
 /* MODAL DE SUCESSO */
@@ -432,44 +443,49 @@ td {
 
 /* RESPONSIVIDADE */
 @media (max-width: 768px) {
-    .enfermeiro-header {
+    .patients-header {
         flex-direction: column;
         gap: 15px;
         align-items: flex-start;
     }
-    
+
     .search-filters {
         flex-direction: column;
         gap: 15px;
     }
-    
+
     .search-box {
         min-width: 100%;
     }
-    
+
+    .filter-group {
+        width: 100%;
+        flex-direction: column;
+    }
+
     .custom-select {
         width: 100%;
     }
-    
-    table {
+
+    .patients-table {
         display: block;
         overflow-x: auto;
     }
-    
-    .actions {
+
+    .action-buttons {
         gap: 5px;
     }
-    
+
     .modal-content {
         width: 90%;
         margin: 20px;
     }
-    
+
     .modal-buttons {
         flex-direction: column;
         gap: 10px;
     }
-    
+
     .btn-cancelar,
     .btn-excluir {
         width: 100%;

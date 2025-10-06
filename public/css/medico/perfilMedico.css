@@ -1,8 +1,28 @@
+/* Importação da fonte Montserrat */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
+
+/* Cores principais: 
+   - #8c1007 (Vermelho Principal - Forte, usado no template)
+   - #a33e38 (Vermelho Mais Claro/Rose para Cards de Background)
+   - #7b0e06 (Vermelho Escuro para Destaque)
+   - #004d99 (Azul SUS Profissional)
+*/
+
 body {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f9f9f9;
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    /* Aplica a fonte globalmente */
+    height: 100vh;
+    padding: 40px;
+
 }
+
+  .main-dashboard {
+    padding: 20px;
+    min-height: 100vh;
+  }
 
 /* Container Principal */
 .cadastrar-container {

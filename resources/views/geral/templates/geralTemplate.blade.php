@@ -7,8 +7,8 @@
 
     {{-- CSS principal --}}
     <link rel="stylesheet" href="{{ asset('css/geral/template.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/geral/ajuda.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/geral/pacientes.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/ajuda.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/pacientes.css') }}">
 
 
   
@@ -24,7 +24,7 @@
 
         <nav>
             <a href="{{ route('admin.dashboard') }}" title="Dashboard"><i class="bi bi-house-door-fill"></i></a>
-            <a href="{{ route('admin.pacientes') }}" title="Pacientes"><i class="bi bi-people-fill"></i></a>
+            <a href="{{ route('admin.pacientes.index') }}" title="Pacientes"><i class="bi bi-people-fill"></i></a>
             <a href="{{ route('admin.manutencaoMedicos') }}" title="Médicos"><i class="bi bi-plus-circle-fill"></i></a>
             <a href="{{ route('admin.manutencaoEnfermeiro') }}" title="Enfermeiro"><i class="bi bi-hospital-fill"></i></a>
             <a href="{{ route('admin.ajuda') }}" title="Ajuda"><i class="bi bi-question-circle-fill"></i></a>

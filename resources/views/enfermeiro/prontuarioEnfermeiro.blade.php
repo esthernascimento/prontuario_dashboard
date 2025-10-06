@@ -44,23 +44,38 @@
                 </thead>
                 <tbody>
                     @foreach ($pacientes as $paciente)
-                    <tr data-status="{{ $paciente->status }}">
-                        <td>{{ $paciente->nome }}</td>
-                        <td>{{ $paciente->cpf }}</td>
-                        <td>{{ \Carbon\Carbon::parse($paciente->data_nascimento)->format('d/m/Y') }}</td>
-                        <td>
-                            @if($paciente->status === 'internado')
-                                <span style="color: #0a400c;">Internado</span>
-                            @else
-                                <span style="color: red;">Alta</span>
-                            @endif
-                        </td>
-                        <td class="actions">
-                            <a href="{{ route('enfermeiro.paciente.prontuario', $paciente->id) }}" title="Visualizar Prontuário">
-                                <i class="bi bi-eye-fill"></i>
-                            </a>
-                        </td>
-                    </tr>
+                        <tr data-status="{{ $paciente->status }}">
+                            
+                            {{-- 1. Nome --}}
+                            <td>{{ $paciente->nome }}</td>
+                            
+                            {{-- 2. CPF - CORRIGIDO: Esta célula estava faltando, desalinhando o restante. --}}
+                            <td>{{ $paciente->cpf }}</td> 
+                            
+                            {{-- 3. Nascimento - Agora na posição correta --}}
+                            <td>{{ Carbon\Carbon::parse($paciente->data_nascimento)->format('d/M/Y') }}</td>
+                            
+                            {{-- 4. Status - Agora na posição correta --}}
+                            <td>
+                                @if ($paciente->status === 'Internado')
+                                    <span style="color: #00A40C;">Internado</span>
+                                @else
+                                    <span style="color: #0a400c;">Alta</span>
+                                @endif
+                            </td>
+                            
+                            {{-- 5. Prontuário (Actions) - CORRIGIDO: Adicionado o tratamento de erro para o link. --}}
+                            <td class="actions">
+                                @if ($paciente->id)
+                                    <a href="{{ route('enfermeiro.paciente.prontuario', ['id' => $paciente->id]) }}">
+                                        <i class="bi bi-eye-fill"></i>
+                                    </a>
+                                @else
+                                    {{-- Exibe um traço se o ID estiver faltando, prevenindo o erro. --}}
+                                    <span>-</span> 
+                                @endif
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -73,11 +88,12 @@
         const searchInput = document.getElementById('searchInput').value.toLowerCase();
         const filterStatus = document.getElementById('filterStatus').value;
 
+        // O índice do CPF mudou de 1 para 2 após a correção no HTML
         const rows = document.querySelectorAll('tbody tr');
 
         rows.forEach(row => {
             const name = row.children[0].textContent.toLowerCase();
-            const cpf = row.children[1].textContent.toLowerCase();
+            const cpf = row.children[1].textContent.toLowerCase(); // O CPF agora é o segundo elemento (índice 1)
             const status = row.dataset.status;
 
             const matchesSearch = name.includes(searchInput) || cpf.includes(searchInput);

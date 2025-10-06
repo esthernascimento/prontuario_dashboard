@@ -1,10 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
-/* ========== 1. CONTAINER GERAL ========== */
-body{
-  font-family: 'Montserrat', sans-serif;
-  overflow-x: hidden;
-}
 /* CONTAINER PRINCIPAL */
+
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+    height: 100vh;
+}
+  
+  .main-dashboard{
+    padding: 20px;
+    min-height: 100vh;
+  }
+
 .help-container {
     max-width: 800px;
     margin: auto;
@@ -23,7 +30,7 @@ body{
 
 /* TÍTULO H1 */
 .help-container h1 {
-    color: #0a400c;
+    color: #1a3bb9;
     margin: 0; 
     font-size: 2em; 
     flex-shrink: 0; 
@@ -34,8 +41,8 @@ h1 i {
 }
 
 .help-container h2 {
-    color: #0a400c;
-    border-bottom: 2px solid #0a400c;
+    color: #1a3bb9;
+    border-bottom: 2px solid #1a3bb9;
     padding-bottom: 10px;
     margin-top: 40px;
 }
@@ -57,7 +64,7 @@ summary {
 }
 
 details[open] {
-  border-color: #0a400c;
+  border-color: #1a3bb9;
 }
 
 details p {
@@ -85,12 +92,12 @@ details p {
 
 .contact-form input:focus,
 .contact-form textarea:focus {
-  border-color: #0a400c;
+  border-color: #1a3bb9;
   outline: none;
 }
 
 .contact-form button {
-  background-color: #0a400c;
+  background-color: #1a3bb9;
   color: white;
   font-weight: bold;
   cursor: pointer;
@@ -98,7 +105,7 @@ details p {
 }
 
 .contact-form button:hover {
-  background-color: #76d879;
+  background-color: #9bafff;
   color: white;
   font-weight: bold;
   cursor: pointer;
@@ -125,7 +132,7 @@ details p {
     left: 15px;
     top: 50%;
     transform: translateY(-50%);
-    color: #0a400c;
+    color: #1a3bb9;
 }
 
 .search-box input {
@@ -140,6 +147,6 @@ details p {
 
 .search-box input:focus {
     outline: none;
-    border-color: #0a400c;
+    border-color: #1a3bb9;
     box-shadow: 0 0 0 2px rgba(0, 35, 160, 0.1);
 }

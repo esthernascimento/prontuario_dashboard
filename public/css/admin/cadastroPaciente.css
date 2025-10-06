@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
 :root {
-  --vermelho: #8c1007;
-  --vermelho-claro: #d63c2e;
+  --azul: #0618b9;
+  --azul-claro: #304bff;
   --cinza: #dcdcdc;
   --branco: #fff;
-  --sombra: 0 8px 20px rgba(140, 16, 7, 0.15);
+  --sombra: 0 8px 20px rgba(6, 24, 185, 0.15);
 }
 
 * {
@@ -33,18 +33,18 @@ body {
 /* --- Lado Esquerdo --- */
 .left-side {
   width: 50%;
-  background: linear-gradient(135deg, var(--vermelho) 0%, var(--vermelho-claro) 100%);
+  background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%);
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 0 100px 100px 0;
-  box-shadow: inset 0 0 50px rgba(255,255,255,0.1);
+  box-shadow: inset 0 0 50px rgba(255, 255, 255, 0.1);
   animation: slide-in-left 0.8s ease forwards;
 }
 
 .left-side img {
   width: 80%;
-  max-width: 520px;
+  max-width: 550px;
   opacity: 0;
   animation: fade-in 1.5s ease 0.5s forwards;
 }
@@ -59,13 +59,14 @@ body {
   animation: slide-in-right 0.8s ease forwards;
 }
 
+/* --- Conteúdo do Formulário --- */
 .login-content {
   width: 100%;
-  max-width: 360px;
-  text-align: center;
-  background-color: #fff;
+  max-width: 400px;
+  background-color: var(--branco);
   border-radius: 20px;
   padding: 40px;
+  text-align: center;
   box-shadow: var(--sombra);
   transition: transform 0.3s ease;
 }
@@ -76,19 +77,19 @@ body {
 
 /* --- Logo --- */
 .logo img {
-  width: 180px;
+  width: 160px;
   margin-bottom: 20px;
   animation: fade-in 1.2s ease;
 }
 
 h2 {
-  color: var(--vermelho);
+  color: var(--azul);
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 25px;
 }
 
-/* --- Inputs --- */
+/* --- Grupos de Inputs --- */
 .input-group {
   text-align: left;
   margin-bottom: 22px;
@@ -96,7 +97,7 @@ h2 {
 
 .input-group label {
   font-weight: 600;
-  color: var(--vermelho);
+  color: var(--azul);
   display: block;
   margin-bottom: 8px;
   font-size: 14px;
@@ -110,12 +111,12 @@ h2 {
   border-radius: 8px;
   padding: 10px 12px;
   transition: all 0.3s ease;
-  background-color: #fff4f4;
+  background-color: #f0f4ff;
 }
 
 .input-wrapper.focused {
-  border-color: var(--vermelho);
-  box-shadow: 0 0 0 3px rgba(140, 16, 7, 0.15);
+  border-color: var(--azul);
+  box-shadow: 0 0 0 3px rgba(6, 24, 185, 0.15);
   background-color: #fff;
 }
 
@@ -126,30 +127,19 @@ h2 {
   font-size: 15px;
   color: #333;
   background: transparent;
-  cursor: pointer;
 }
 
+/* --- Ícones --- */
 .icon-left {
-  color: var(--vermelho);
+  color: var(--azul);
   margin-right: 10px;
   font-size: 16px;
-}
-
-.icon-right {
-  color: var(--vermelho);
-  margin-left: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.icon-right:hover {
-  color: var(--vermelho-claro);
 }
 
 /* --- Botão --- */
 .btn-login {
   width: 100%;
-  background: linear-gradient(135deg, var(--vermelho) 0%, var(--vermelho-claro) 100%);
+  background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%);
   color: var(--branco);
   border: none;
   border-radius: 50px;
@@ -162,33 +152,27 @@ h2 {
 }
 
 .btn-login:hover {
-  background: linear-gradient(135deg, var(--vermelho-claro) 0%, var(--vermelho) 100%);
+  background: linear-gradient(135deg, var(--azul-claro) 0%, var(--azul) 100%);
   transform: translateY(-2px);
 }
 
-/* --- Notificações --- */
-.notification {
+/* --- Alerta de Erro --- */
+.alert-error {
+  background-color: #ffd6d6;
+  color: #b30000;
   padding: 10px;
-  margin-bottom: 15px;
   border-radius: 8px;
   font-size: 13px;
   font-weight: 600;
-  display: none;
+  margin-bottom: 15px;
+  animation: shake 0.4s;
 }
 
-.notification.success {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.notification.error {
-  background-color: #f8d7da;
-  color: #721c24;
-}
-
-.notification.info {
-  background-color: #fff3cd;
-  color: #856404;
+/* --- Checkbox Ativo --- */
+.input-group input[type="checkbox"] {
+  transform: scale(1.2);
+  accent-color: var(--azul);
+  cursor: pointer;
 }
 
 /* --- Animações --- */
@@ -207,7 +191,13 @@ h2 {
   to { transform: translateX(0); opacity: 1; }
 }
 
-/* --- Responsivo --- */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* --- Responsividade --- */
 @media (max-width: 950px) {
   .main-container {
     flex-direction: column;
@@ -215,8 +205,8 @@ h2 {
 
   .left-side {
     width: 100%;
-    border-radius: 0;
     height: 250px;
+    border-radius: 0;
   }
 
   .right-side {

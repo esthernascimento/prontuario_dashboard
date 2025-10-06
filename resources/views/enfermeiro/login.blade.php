@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Prontuário+ - Login Enfermeiro</title>
+
+  <!-- Ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- CSS -->
   <link rel="stylesheet" href="{{ url('/css/enfermeiro/loginEnfermeiro.css') }}">
   <link rel="shortcut icon" href="{{ url('img/logo-azul.png') }}" type="image/x-icon" />
 </head>
@@ -12,39 +16,76 @@
 <body>
   <main class="main-container">
 
-    <!-- Lado azul com a logo -->
-    <div class="logo-area">
-      <img src="{{ asset('img/enfermeiro-logo2.png') }}" class="logo">
+    <!-- Lado esquerdo -->
+    <div class="left-side">
+      <img src="{{ asset('img/enfermeiro-logo2.png') }}" alt="Logo Enfermeiro(a)">
     </div>
 
-    <!-- Card de login -->
-    <div class="login-area">
-      <div class="login-card">
+    <!-- Lado direito -->
+    <div class="right-side">
+      <div class="login-content">
+        <div class="logo">
+          <img src="{{ asset('img/icon-loginEnfermeiro.png') }}" alt="Logo Prontuário+">
+        </div>
+
+        <h2>Login Enfermeiro(a)</h2>
+
+        @if ($errors->any())
+          <div class="notification error">
+            {{ $errors->first() }}
+          </div>
+        @endif
+
         <form action="{{ route('enfermeiro.login.submit') }}" method="POST">
           @csrf
-          <h2>Enfermeiro(a) Login</h2>
 
-          <!-- Mensagens de erro -->
-          @if ($errors->any())
-            <div class="error-messages">
-              @foreach ($errors->all() as $error)
-                <p style="color:red">{{ $error }}</p>
-              @endforeach
+          <div class="input-group">
+            <label for="corem">COREM</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-user icon-left"></i>
+              <input type="text" id="corem" name="corem" value="{{ old('corem') }}" required />
             </div>
-          @endif
+          </div>
 
-          <label for="corem">COREM</label>
-          <input type="text" id="corem" name="corem" value="{{ old('corem') }}" required />
+          <div class="input-group">
+            <label for="senha">Senha</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock icon-left"></i>
+              <input type="password" id="senha" name="senha" required />
+              <i id="togglePassword" class="fa-solid fa-eye-slash icon-right"></i>
+            </div>
+          </div>
 
-          <label for="senha">Senha</label>
-          <input type="password" id="senha" name="senha" required />
-
-          <button class="button" type="submit">ENTRAR</button>
+          <button class="btn-login" type="submit">ENTRAR</button>
         </form>
       </div>
     </div>
-
   </main>
-</body>
 
+  <script>
+    // Alternar visibilidade da senha
+    const togglePassword = document.getElementById("togglePassword");
+    const passwordInput = document.getElementById("senha");
+
+    togglePassword.addEventListener("click", () => {
+      const isPassword = passwordInput.type === "password";
+      passwordInput.type = isPassword ? "text" : "password";
+      togglePassword.classList.toggle("fa-eye");
+      togglePassword.classList.toggle("fa-eye-slash");
+    });
+
+    // Estilizar foco nos inputs
+    const inputs = document.querySelectorAll(".input-wrapper input");
+    inputs.forEach(input => {
+      input.addEventListener("focus", () => {
+        input.parentElement.classList.add("focused");
+      });
+      input.addEventListener("blur", () => {
+        if (input.value === "") {
+          input.parentElement.classList.remove("focused");
+        }
+      });
+    });
+  </script>
+</body>
 </html>

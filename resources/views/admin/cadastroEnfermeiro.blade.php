@@ -1,51 +1,76 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prontuário+ | Admin Cadastro</title>
+  <title>Prontuário+ | Cadastro de Enfermeiro(a)</title>
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <script>
-    const redirectUrl = "{{ route('admin.manutencaoEnfermeiro') }}";
-  </script>
   <link rel="stylesheet" href="{{ asset('css/admin/cadastroEnfermeiro.css') }}">
-  <link rel="shortcut icon" href="{{ url('img/logo-azul.png') }}" type="image/x-icon" />
+  <link rel="shortcut icon" href="{{ asset('img/logo-azul.png') }}" type="image/x-icon" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 </head>
 
 <body>
   <main class="main-container">
-    <div class="logo-area">
-      <img src="{{ asset('img/enfermeiro-logo1.png') }}" alt="Logo Prontuário" />
+    
+    <!-- Lado Esquerdo com imagem -->
+    <div class="left-side">
+      <img src="{{ asset('img/enfermeiro-logo2.png') }}" alt="Imagem enfermeiro(a)">
     </div>
 
-    <div class="cads-area">
-      <form id="cadastroEnfermeiroForm" class="cads-card" method="POST">
-        @csrf
+    <!-- Lado Direito com o formulário -->
+    <div class="right-side">
+      <div class="login-content">
 
-        <h2>Enfermeiro(a) Cadastro</h2>
+        <h2>Cadastro de Enfermeiro(a)</h2>
 
-        <label for="name">Nome completo</label>
-        <input type="text" id="name" name="nomeEnfermeiro" required />
+        <form id="cadastroEnfermeiroForm">
+  @csrf
 
-        <label for="corem">COREM</label>
-        <input type="text" id="corem" name="corenEnfermeiro" required />
+  <div class="input-group">
+    <label for="name">Nome completo</label>
+    <div class="input-wrapper">
+      <i class="fa-solid fa-user icon-left"></i>
+      <input type="text" id="name" name="nomeEnfermeiro" required />
+    </div>
+  </div>
 
-        <label for="genero">Gênero</label>
-        <select name="genero" required>
-          <option value="">Selecione</option>
-          <option value="Masculino">Masculino</option>
-          <option value="Feminino">Feminino</option>
-          <option value="Outro">Outro</option>
-        </select>
+  <div class="input-group">
+    <label for="corem">COREN</label>
+    <div class="input-wrapper">
+      <i class="fa-solid fa-id-card icon-left"></i>
+      <input type="text" id="corem" name="corenEnfermeiro" required />
+    </div>
+  </div>
 
-        <label for="email">E-mail</label>
-        <input type="email" id="email" name="emailEnfermeiro" required />
+  <div class="input-group">
+    <label for="genero">Gênero</label>
+    <div class="input-wrapper">
+      <i class="fa-solid fa-venus-mars icon-left"></i>
+      <select name="genero" required>
+        <option value="">Selecione</option>
+        <option value="Masculino">Masculino</option>
+        <option value="Feminino">Feminino</option>
+        <option value="Outro">Outro</option>
+      </select>
+    </div>
+  </div>
 
-        <button class="button" type="submit">CADASTRAR</button>
-        <div id="form-messages" style="display:none;"></div>
-      </form>
+  <div class="input-group">
+    <label for="email">E-mail</label>
+    <div class="input-wrapper">
+      <i class="fa-solid fa-envelope icon-left"></i>
+      <input type="email" id="email" name="emailEnfermeiro" required />
+    </div>
+  </div>
+
+  <button type="submit">CADASTRAR</button>
+  <div id="form-messages" style="display:none;"></div>
+</form>
+
+      </div>
     </div>
   </main>
 
@@ -80,13 +105,13 @@
             return response.json();
           })
           .then(result => {
-            messagesDiv.textContent = result.message || 'Enfermeiro pré-cadastrado com sucesso!';
+            messagesDiv.textContent = result.message || 'Enfermeiro(a) cadastrado com sucesso!';
             messagesDiv.classList.add('success');
             messagesDiv.style.display = 'block';
             form.reset();
 
             setTimeout(() => {
-              window.location.href = redirectUrl;
+              window.location.href = "{{ route('admin.manutencaoEnfermeiro') }}";
             }, 2000);
           })
           .catch(async error => {
@@ -112,5 +137,4 @@
     });
   </script>
 </body>
-
 </html>
