@@ -2,6 +2,7 @@
 
 /* ESTILOS GERAIS */
 * {
+
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -13,24 +14,18 @@ body {
     color: #333;
 }
 
-
   .main-dashboard {
     padding: 20px;
     min-height: 100vh;
   }
 
-.main-dashboard {
-    padding: 20px;
-    min-height: 100vh;
-
-
-.enfermeiro-container {
+.medico-container {
     max-width: 1200px;
     margin: 0 auto;
 }
 
 /* HEADER */
-.enfermeiro-header {
+.medico-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -39,7 +34,7 @@ body {
     margin-top: 20px;
 }
 
-.enfermeiro-header h1 {
+.medico-header h1 {
     color: #0618b9;
     font-size: 28px;
     font-weight: 700;
@@ -48,7 +43,7 @@ body {
     gap: 10px;
 }
 
-.btn-add-enfermeiro {
+.btn-add-medico {
     background: #0618b9;
     color: white;
     padding: 12px 24px;
@@ -63,10 +58,10 @@ body {
     cursor: pointer;
 }
 
-.btn-add-enfermeiro:hover {
+.btn-add-medico:hover {
     background: #0618b9;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(6, 18, 121, 0.548);
+    box-shadow: 0 4px 12px rgba(140, 16, 7, 0.3);
 }
 
 /* BARRA DE PESQUISA E FILTROS */
@@ -110,7 +105,7 @@ body {
     outline: none;
     border-color: #0618b9;
     background: white;
-    box-shadow: 0 0 0 3px rgba(0,0,0,0,1);
+    box-shadow: 0 0 0 3px rgba(140, 16, 7, 0.1);
 }
 
 .search-box input::placeholder {
@@ -216,7 +211,7 @@ th {
     border-bottom: none;
 }
 
-/* Cor das Linhas da Tabela (Claro com Fundo Verde) */
+/* Cor das Linhas da Tabela (Claro com Fundo Vermelho) */
 tbody tr {
     background-color: #f7f7ff;
 }
@@ -228,6 +223,9 @@ tbody tr:nth-child(even) {
 tbody tr:hover {
     background-color: #e6e6f2;
 }
+
+
+
 
 td {
     padding: 16px 20px;
@@ -310,7 +308,7 @@ td {
 }
 
 /* MENSAGEM VAZIA */
-.no-enfermeiros {
+.no-doctors {
     text-align: center;
     padding: 60px 20px;
     color: #666;
@@ -324,6 +322,9 @@ td {
     justify-content: center;
     margin-top: 20px;
 }
+/* ============================================
+   MODAIS PROFISSIONAIS - CSS ATUALIZADO
+   ============================================ */
 
 /* MODAL GERAL */
 .modal-overlay {
@@ -680,5 +681,4 @@ td {
         opacity: 1;
         transform: scale(1) translateY(0);
     }
-}
 }
