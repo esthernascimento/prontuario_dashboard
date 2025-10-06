@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class PacienteController extends Controller
 {
@@ -19,24 +20,24 @@ class PacienteController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nome' => 'required|string|min:2',
-            'cpf' => ['required', 'string', 'size:11', 'unique:pacientes,cpf'],
-            'data_nasc' => 'nullable|date',
-            'cartao_sus' => ['required', 'string', 'max:20', 'unique:pacientes,cartao_sus'],
-            'nacionalidade' => 'nullable|string',
-            'genero' => 'nullable|string',
-            'caminho_foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'telefone' => 'nullable|string|max:20',
-            'logradouro' => 'nullable|string',
-            'numero' => 'nullable|string',
-            'cep' => 'nullable|string|max:9',
-            'bairro' => 'nullable|string',
-            'cidade' => 'nullable|string',
-            'uf' => 'nullable|string|size:2',
-            'estado' => 'nullable|string',
-            'pais' => 'nullable|string',
-            'email' => ['required', 'email', 'unique:pacientes,email'],
-            'senha' => 'required|string|min:6',
+            'nomePaciente'        => 'required|string|min:2',
+            'cpfPaciente'         => ['required', 'string', 'size:11', Rule::unique('tbPaciente', 'cpfPaciente')],
+            'dataNascPaciente'    => 'required|date',
+            'cartaoSusPaciente'   => ['required', 'string', 'max:20', Rule::unique('tbPaciente', 'cartaoSusPaciente')],
+            'generoPaciente'      => 'nullable|string',
+            'fotoPaciente'        => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+            'telefonePaciente'    => 'nullable|string|max:20',
+            'logradouroPaciente'  => 'nullable|string',
+            'numLogradouroPaciente' => 'nullable|string',
+            'cepPaciente'         => 'nullable|string|max:9',
+            'bairroPaciente'      => 'nullable|string',
+            'cidadePaciente'      => 'nullable|string',
+            'ufPaciente'          => 'nullable|string|size:2',
+            'estadoPaciente'      => 'nullable|string',
+            'paisPaciente'        => 'nullable|string',
+            'statusPaciente'      => 'sometimes|boolean',
+            'emailPaciente'       => ['nullable', 'email', Rule::unique('tbPaciente', 'emailPaciente')],
+            'senhaPaciente'       => 'nullable|string|min:6',
         ]);
 
         if ($validator->fails()) {
@@ -44,15 +45,19 @@ class PacienteController extends Controller
         }
 
         $data = $validator->validated();
-        $data['senha'] = bcrypt($data['senha']);
 
-        if ($request->hasFile('caminho_foto')) {
-            $path = $request->file('caminho_foto')->store('fotos_pacientes', 'public');
-            $data['caminho_foto'] = $path;
+        if (!empty($data['senhaPaciente'])) {
+            $data['senhaPaciente'] = bcrypt($data['senhaPaciente']);
         }
 
-        $paciente = Paciente::create($data);
+        $path = '';
+        if ($request->hasFile('fotoPaciente')) {
 
+            $path = $request->file('fotoPaciente')->store('images', 'public');
+        }
+        $data['fotoPaciente'] = $path;
+
+        $paciente = Paciente::create($data);
         return response()->json($paciente, 201);
     }
 
@@ -73,30 +78,35 @@ class PacienteController extends Controller
         }
 
         $data = $request->validate([
-            'nome' => 'sometimes|string|min:2',
-            'email' => "sometimes|email|unique:pacientes,email,{$id}",
-            'telefone' => 'sometimes|nullable|string|max:20',
-            'logradouro' => 'sometimes|nullable|string',
-            'numero' => 'sometimes|nullable|string',
-            'cep' => 'sometimes|nullable|string|max:9',
-            'bairro' => 'sometimes|nullable|string',
-            'cidade' => 'sometimes|nullable|string',
-            'uf' => 'sometimes|nullable|string|size:2',
-            'estado' => 'sometimes|nullable|string',
-            'pais' => 'sometimes|nullable|string',
-            'caminho_foto' => 'sometimes|nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'nomePaciente'        => 'sometimes|string|min:2',
+            'emailPaciente'       => ['sometimes', 'nullable', 'email', Rule::unique('tbPaciente', 'emailPaciente')->ignore($paciente->getKey(), $paciente->getKeyName())],
+            'generoPaciente'      => 'sometimes|nullable|string',
+            'telefonePaciente'    => 'sometimes|nullable|string|max:20',
+            'logradouroPaciente'  => 'sometimes|nullable|string',
+            'numLogradouroPaciente' => 'sometimes|nullable|string',
+            'cepPaciente'         => 'sometimes|nullable|string|max:9',
+            'bairroPaciente'      => 'sometimes|nullable|string',
+            'cidadePaciente'      => 'sometimes|nullable|string',
+            'ufPaciente'          => 'sometimes|nullable|string|size:2',
+            'estadoPaciente'      => 'sometimes|nullable|string',
+            'paisPaciente'        => 'sometimes|nullable|string',
+            'fotoPaciente'        => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+            'statusPaciente'      => 'sometimes|boolean',
+            'senhaPaciente'       => 'sometimes|nullable|string|min:6',
         ]);
 
-        if ($request->hasFile('caminho_foto')) {
-            if ($paciente->caminho_foto) {
-                Storage::disk('public')->delete($paciente->caminho_foto);
-            }
-            $path = $request->file('caminho_foto')->store('fotos_pacientes', 'public');
-            $data['caminho_foto'] = $path;
+
+        if ($request->hasFile('fotoPaciente')) {
+            $path = $request->file('fotoPaciente')->store('images', 'public');
+            $data['fotoPaciente'] = $path;
+        }
+
+
+        if (!empty($data['senhaPaciente'])) {
+            $data['senhaPaciente'] = bcrypt($data['senhaPaciente']);
         }
 
         $paciente->update($data);
-
         return response()->json($paciente->fresh());
     }
 
@@ -113,22 +123,22 @@ class PacienteController extends Controller
     public function login(Request $request)
     {
         $data = $request->validate([
-            'cartao_sus' => 'required|string',
-            'senha' => 'required|string',
+            'cpfPaciente' => 'required|string',
+            'senhaPaciente'     => 'required|string',
         ]);
 
-        $paciente = Paciente::where('cartao_sus', $data['cartao_sus'])->first();
-        if (!$paciente || !Hash::check($data['senha'], $paciente->senha)) {
+        $paciente = Paciente::where('cpfPaciente', $data['cpfPaciente'])->first();
+
+        if (!$paciente || !Hash::check($data['senhaPaciente'], $paciente->senhaPaciente)) {
             return response()->json(['message' => 'Credenciais inválidas.'], 401);
         }
 
         $token = $paciente->createToken('auth-token-paciente')->plainTextToken;
 
         return response()->json([
-            'message' => 'Login bem-sucedido!',
+            'message'  => 'Login bem-sucedido!',
             'paciente' => $paciente,
-            'token' => $token
+            'token'    => $token
         ]);
     }
 }
-

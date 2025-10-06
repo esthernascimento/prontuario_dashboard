@@ -33,7 +33,13 @@ Route::post('/enfermeiro/profile/complete', [EnfermeiroLoginController::class, '
 
 // Rotas de login e registo de Pacientes (via tbPaciente, para a app mobile)
 Route::post('/pacientes/login', [PacienteController::class, 'login']);
-Route::apiResource('pacientes', PacienteController::class)->only(['store']); // Apenas a rota de registo (POST) é pública
+Route::post('/pacientes', [PacienteController::class, 'store']);
+Route::get('/pacientes', [PacienteController::class, 'index']);
+Route::get('/pacientes/{id}', [PacienteController::class, 'show']);
+Route::put('/pacientes/{id}', [PacienteController::class, 'update']);
+Route::delete('/pacientes/{id}', [PacienteController::class, 'destroy']);
+
+
 
 
 // --- ROTAS PROTEGIDAS (Exigem autenticação com token) ---
@@ -61,8 +67,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('alergias', AlergiaController::class);
     Route::apiResource('unidades', UnidadeController::class);
 
-    // CRUD para Pacientes (GET, UPDATE, DELETE - só acessível logado)
-    Route::apiResource('pacientes', PacienteController::class)->except(['store']);
+
 
 
     // --- ROTAS DE ADMINISTRAÇÃO ---
