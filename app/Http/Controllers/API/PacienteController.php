@@ -25,7 +25,7 @@ class PacienteController extends Controller
             'dataNascPaciente'    => 'required|date',
             'cartaoSusPaciente'   => ['required', 'string', 'max:20', Rule::unique('tbPaciente', 'cartaoSusPaciente')],
             'generoPaciente'      => 'nullable|string',
-            'fotoPaciente'        => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'fotoPaciente'        => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
             'telefonePaciente'    => 'nullable|string|max:20',
             'logradouroPaciente'  => 'nullable|string',
             'numLogradouroPaciente' => 'nullable|string',
@@ -35,7 +35,7 @@ class PacienteController extends Controller
             'ufPaciente'          => 'nullable|string|size:2',
             'estadoPaciente'      => 'nullable|string',
             'paisPaciente'        => 'nullable|string',
-            'statusPaciente'      => 'sometimes|boolean', // recomendado p/ bater com boolean na migration
+            'statusPaciente'      => 'sometimes|boolean',
             'emailPaciente'       => ['nullable', 'email', Rule::unique('tbPaciente', 'emailPaciente')],
             'senhaPaciente'       => 'nullable|string|min:6',
         ]);
@@ -50,10 +50,12 @@ class PacienteController extends Controller
             $data['senhaPaciente'] = bcrypt($data['senhaPaciente']);
         }
 
+        $path = '';
         if ($request->hasFile('fotoPaciente')) {
-            $path = $request->file('fotoPaciente')->store('fotos_pacientes', 'public');
-            $data['fotoPaciente'] = $path;
+
+            $path = $request->file('fotoPaciente')->store('images', 'public');
         }
+        $data['fotoPaciente'] = $path;
 
         $paciente = Paciente::create($data);
         return response()->json($paciente, 201);
@@ -61,7 +63,7 @@ class PacienteController extends Controller
 
     public function show($id)
     {
-        $paciente = Paciente::find($id); // funciona pois o Model já sabe que a PK é idPacientePK
+        $paciente = Paciente::find($id);
         if (!$paciente) {
             return response()->json(['message' => 'Paciente não encontrado.'], 404);
         }
@@ -77,7 +79,7 @@ class PacienteController extends Controller
 
         $data = $request->validate([
             'nomePaciente'        => 'sometimes|string|min:2',
-            'emailPaciente'       => ['sometimes','nullable','email', Rule::unique('tbPaciente', 'emailPaciente')->ignore($paciente->getKey(), $paciente->getKeyName())],
+            'emailPaciente'       => ['sometimes', 'nullable', 'email', Rule::unique('tbPaciente', 'emailPaciente')->ignore($paciente->getKey(), $paciente->getKeyName())],
             'generoPaciente'      => 'sometimes|nullable|string',
             'telefonePaciente'    => 'sometimes|nullable|string|max:20',
             'logradouroPaciente'  => 'sometimes|nullable|string',
@@ -88,17 +90,17 @@ class PacienteController extends Controller
             'ufPaciente'          => 'sometimes|nullable|string|size:2',
             'estadoPaciente'      => 'sometimes|nullable|string',
             'paisPaciente'        => 'sometimes|nullable|string',
-            'fotoPaciente'        => 'sometimes|nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'fotoPaciente'        => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
             'statusPaciente'      => 'sometimes|boolean',
             'senhaPaciente'       => 'sometimes|nullable|string|min:6',
         ]);
 
+
         if ($request->hasFile('fotoPaciente')) {
-            if ($paciente->fotoPaciente) {
-                Storage::disk('public')->delete($paciente->fotoPaciente);
-            }
-            $data['fotoPaciente'] = $request->file('fotoPaciente')->store('fotos_pacientes', 'public');
+            $path = $request->file('fotoPaciente')->store('images', 'public');
+            $data['fotoPaciente'] = $path;
         }
+
 
         if (!empty($data['senhaPaciente'])) {
             $data['senhaPaciente'] = bcrypt($data['senhaPaciente']);

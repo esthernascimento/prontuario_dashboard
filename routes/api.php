@@ -67,8 +67,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('alergias', AlergiaController::class);
     Route::apiResource('unidades', UnidadeController::class);
 
-    // CRUD para Pacientes (GET, UPDATE, DELETE - só acessível logado)
-    Route::apiResource('pacientes', PacienteController::class)->except(['store']);
+
 
 
     // --- ROTAS DE ADMINISTRAÇÃO ---
