@@ -10,7 +10,7 @@ class MedicoProntuarioController extends Controller
 {
     public function index()
     {
-        $pacientes = Paciente::orderBy('nome')->get();
+        $pacientes = Paciente::orderBy('nomePaciente')->get();
         return view('medico.prontuarioMedico', compact('pacientes'));
     }
 
