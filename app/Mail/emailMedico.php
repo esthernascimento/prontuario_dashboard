@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Usuario;
 
-class emailMedico extends Mailable
+class EmailMedico extends Mailable
 {
     use Queueable, SerializesModels;
 

@@ -56,7 +56,8 @@
                             @endif
                         </td>
                         <td class="actions">
-                            <a href="{{ route('enfermeiro.paciente.prontuario', ['id' => $paciente->id]) }}" title="Visualizar Prontuário">
+                        <a href="{{ route('enfermeiro.prontuario.show', $paciente->id) }}" title="Visualizar Prontuário">
+
                                 <i class="bi bi-eye-fill"></i>
                             </a>
                         </td>
