@@ -50,20 +50,38 @@ Route::post('/medico/profile/complete', [MedicoLoginController::class, 'completa
 Route::post('/medico/login/check', [MedicoLoginController::class, 'login'])->name('api.medico.login.check');
 
 Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () {
+    // Dashboard e configurações
     Route::get('/dashboard', [MedicoDashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [MedicoLoginController::class, 'logout'])->name('logout');
     Route::get('/perfil', [MedicoConfiguracaoController::class, 'perfil'])->name('perfil');
     Route::post('/perfil/update', [MedicoConfiguracaoController::class, 'atualizarPerfil'])->name('perfil.update');
     Route::get('/seguranca', [MedicoSegurancaController::class, 'showAlterarSenhaForm'])->name('seguranca');
     Route::post('/alterar-senha', [MedicoSegurancaController::class, 'alterarSenha'])->name('alterarSenha');
-    
-    // Prontuário
-    Route::get('/prontuario', [MedicoProntuarioController::class, 'index'])->name('prontuario');
-    Route::get('/prontuario/{id}', [MedicoProntuarioController::class, 'show'])->name('paciente.prontuario');
-    Route::get('/prontuario/{id}/cadastrar', [MedicoProntuarioController::class, 'create'])->name('cadastrarProntuario');
-    Route::post('/prontuario/{id}/cadastrar', [MedicoProntuarioController::class, 'store'])->name('prontuario.store');
-    
     Route::get('/ajuda', fn() => view('medico.ajudaMedico'))->name('ajuda');
+    
+    // =======================================================================
+    // --- ROTAS DE PRONTUÁRIO ---
+    // IMPORTANTE: Rotas específicas devem vir ANTES das rotas com parâmetros genéricos
+    // =======================================================================
+    
+    // Lista todos os pacientes com prontuários (tela principal)
+    Route::get('/prontuario', [MedicoProntuarioController::class, 'index'])->name('prontuario');
+    
+    // Formulário para criar nova consulta (cadastrarProntuario.blade.php)
+    Route::get('/cadastrar-prontuario/{id}', [MedicoProntuarioController::class, 'create'])->name('cadastrarProntuario');
+    
+    // Salva nova consulta
+    Route::post('/cadastrar-prontuario/{id}', [MedicoProntuarioController::class, 'store'])->name('prontuario.store');
+    
+    // Visualiza prontuário completo do paciente (histórico de consultas)
+    Route::get('/prontuario/{id}', [MedicoProntuarioController::class, 'show'])->name('paciente.prontuario');
+    
+    // Edita uma consulta específica
+    Route::get('/prontuario/editar/{id}', [MedicoProntuarioController::class, 'edit'])->name('prontuario.edit');
+    
+    // Atualiza uma consulta
+    Route::put('/prontuario/atualizar/{id}', [MedicoProntuarioController::class, 'update'])->name('prontuario.update');
+    // =======================================================================
 });
 
 // ----------------------------------------------------------------------------------

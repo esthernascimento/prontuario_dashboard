@@ -38,7 +38,7 @@
             <th>CPF</th>
             <th>Nascimento</th>
             <th>Status</th>
-            <th>Prontuário</th>
+            <th>Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -51,20 +51,27 @@
             <td>{{ $paciente->dataNascPaciente ? \Carbon\Carbon::parse($paciente->dataNascPaciente)->format('d/m/Y') : 'N/A' }}</td>
             <td>
               @if($paciente->statusPaciente)
-                <span style="color: #0a400c;">Ativo</span>
+                <span class="status-badge status-ativo">Ativo</span>
               @else
-                <span style="color: red;">Inativo</span>
+                <span class="status-badge status-inativo">Inativo</span>
               @endif
             </td>
             <td class="actions">
-              <a href="{{ route('medico.paciente.prontuario', $paciente->idPaciente) }}" title="Visualizar Prontuário">
+              <a href="{{ route('medico.paciente.prontuario', $paciente->idPaciente) }}" 
+                 class="btn-action btn-view" 
+                 title="Visualizar Prontuário">
                 <i class="bi bi-eye-fill"></i>
+              </a>
+              <a href="{{ route('medico.cadastrarProntuario', $paciente->idPaciente) }}" 
+                 class="btn-action btn-add-consulta" 
+                 title="Criar Consulta">
+                <i class="bi bi-plus-circle-fill"></i>
               </a>
             </td>
           </tr>
           @empty
           <tr>
-            <td colspan="5" style="text-align: center;">Nenhum paciente encontrado.</td>
+            <td colspan="5" class="no-enfermeiros">Nenhum paciente encontrado.</td>
           </tr>
           @endforelse
         </tbody>
