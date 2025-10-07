@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class Enfermeiro extends Model
 {
     use HasFactory;
@@ -24,6 +24,11 @@ class Enfermeiro extends Model
 
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class, 'id_usuario', 'idUsuarioPK'); // ✅ CORRIGIDO: chave estrangeira
+        return $this->belongsTo(Usuario::class, 'id_usuario', 'idUsuarioPK');
+    }
+
+     public function unidades()
+    {
+        return $this->belongsToMany(Unidade::class, 'tbEnfermeiroUnidade', 'idEnfermeiroFK', 'idUnidadeFK');
     }
 }
