@@ -1,684 +1,463 @@
-
-
-/* ESTILOS GERAIS */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-body {
-    background: #f5f7fb;
-    color: #333;
-}
-
-
-  .main-dashboard {
-    padding: 20px;
-    min-height: 100vh;
-  }
-
-.main-dashboard {
-    padding: 20px;
-    min-height: 100vh;
-
-
-.enfermeiro-container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-/* HEADER */
-.enfermeiro-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-    padding: 0 10px;
-    margin-top: 20px;
-}
-
-.enfermeiro-header h1 {
-    color: #0618b9;
-    font-size: 28px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.btn-add-enfermeiro {
-    background: #0618b9;
-    color: white;
-    padding: 12px 24px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
-}
-
-.btn-add-enfermeiro:hover {
-    background: #0618b9;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(6, 18, 121, 0.548);
-}
-
-/* BARRA DE PESQUISA E FILTROS */
-.search-filters {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 25px;
-    padding: 20px;
-    border-radius: 12px;
-    flex-wrap: wrap;
-}
-
-.search-box {
-    position: relative;
-    flex: 1;
-    min-width: 250px;
-}
-
-.search-box i {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #666;
-    z-index: 2;
-}
-
-.search-box input {
-    width: 100%;
-    padding: 14px 15px 14px 45px;
-    border: 2px solid #e1e5ee;
-    border-radius: 8px;
-    font-size: 14px;
-    background: #fafbfc;
-    height: 48px;
-    transition: all 0.3s ease;
-}
-
-.search-box input:focus {
-    outline: none;
-    border-color: #0618b9;
-    background: white;
-    box-shadow: 0 0 0 3px rgba(0,0,0,0,1);
-}
-
-.search-box input::placeholder {
-    color: #999;
-}
-
-/* ESTILO DOS FILTROS */
-.custom-select {
-    position: relative;
-    width: 150px;
-    cursor: pointer;
-}
-
-.custom-select .selected {
-    padding: 14px 40px 14px 15px;
-    border: 2px solid #e1e5ee;
-    border-radius: 8px;
-    background: #fafbfc;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.custom-select .selected:hover {
-    border-color: #0618b9;
-}
-
-.custom-select .selected::after {
-    content: "▼";
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 12px;
-    color: #666;
-}
-
-.custom-select .options {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #e1e5ee;
-    border-radius: 8px;
-    margin-top: 5px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    display: none;
-    z-index: 1000;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.custom-select.active .options {
-    display: block;
-}
-
-.custom-select .options div {
-    padding: 12px 15px;
-    border-bottom: 1px solid #f0f0f0;
-    transition: background 0.2s ease;
-}
-
-.custom-select .options div:hover {
-    background: #f8f9fa;
-    color: #0618b9;
-}
-
-.custom-select .options div:last-child {
-    border-bottom: none;
-}
-
-/* TABELA - PADRÃO DA IMAGEM */
-.box-table {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    overflow: hidden;
-    margin-bottom: 20px;
-    border: 1px solid #e1e5ee;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-thead {
-    background: #0618b9;
-}
-
-th {
-    background: transparent;
-    color: white;
-    padding: 18px 20px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: none;
-}
-
-/* Cor das Linhas da Tabela (Claro com Fundo Verde) */
-tbody tr {
-    background-color: #f7f7ff;
-}
-
-tbody tr:nth-child(even) {
-    background-color: #f0f0f5;
-}
-
-tbody tr:hover {
-    background-color: #e6e6f2;
-}
-
-td {
-    padding: 16px 20px;
-    border-bottom: none;
-    color: #333;
-    font-size: 14px;
-}
-
-/* STATUS BADGE */
-.status-badge {
-    display: inline-block;
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-weight: 600;
-    font-size: 12px;
-    text-transform: capitalize;
-    letter-spacing: 0.3px;
-    text-align: center;
-    min-width: 60px;
-}
-
-.status-ativo {
-    background: #e6ffed;
-    color: #008744;
-    border: 1px solid #c8e6c9;
-}
-
-.status-inativo {
-    background: #fbe6e6;
-    color: #d32f2f;
-    border: 1px solid #ffcdd2;
-}
-
-/* AÇÕES - Ajuste de Estilo dos Ícones */
-.actions {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-action {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px; 
-    height: 34px;
-    border-radius: 50%;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
-    font-size: 16px;
-    background: transparent;
-}
-
-.delete-form {
-    display: inline;
-}
-
-/* Cores dos Ícones de Ação */
-.btn-view {
-    color: #6c757d;
-}
-.btn-edit {
-    color: #0d6efd;
-}
-.btn-delete {
-    color: #dc3545;
-}
-
-/* Efeito Hover Sutil */
-.btn-view:hover, .btn-edit:hover, .btn-delete:hover {
-    background: #f0f0f0;
-    transform: scale(1.05);
-}
-
-.delete-form button.btn-action {
-    padding: 0;
-}
-
-/* MENSAGEM VAZIA */
-.no-enfermeiros {
-    text-align: center;
-    padding: 60px 20px;
-    color: #666;
-    font-style: italic;
-    background: #fafbfc;
-}
-
-/* PAGINAÇÃO */
-.pagination-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-/* MODAL GERAL */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    animation: fadeInModal 0.3s ease-out;
-}
-
-@keyframes fadeInModal {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-.modal-content {
-    background: white;
-    border-radius: 16px;
-    padding: 40px;
-    max-width: 480px;
-    width: 90%;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    text-align: center;
-    animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-@keyframes scaleIn {
-    from {
-        opacity: 0;
-        transform: scale(0.8) translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
-}
-
-.modal-content::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 6px;
-    background: linear-gradient(90deg, #0618b9 0%, #04108a 100%);
-}
-
-.modal-content .modal-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-content i {
-    font-size: 4rem;
-    color: #0618b9;
-    margin-bottom: 20px;
-    display: inline-block;
-    animation: iconPulse 2s ease-in-out infinite;
-    filter: drop-shadow(0 4px 12px rgba(6, 24, 185, 0.3));
-}
-
-@keyframes iconPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-}
-
-.modal-content h2 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: #111827;
-    margin-bottom: 12px;
-    letter-spacing: -0.5px;
-}
-
-.modal-content p {
-    font-size: 1.05rem;
-    color: #6B7280;
-    margin-bottom: 32px;
-    line-height: 1.6;
-}
-
 /* ============================================
-   BOTÕES DO MODAL
-   ============================================ */
+    GERENCIAMENTO DE ENFERMEIROS - CSS PROFISSIONAL
+    ============================================ */
 
-.modal-buttons {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-}
-
-.btn-cancelar,
-.btn-excluir {
-    padding: 12px 28px;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-    flex: 1;
-}
-
-.btn-cancelar {
-    background: #F3F4F6;
-    color: #6B7280;
-    border: 2px solid #E5E7EB;
-}
-
-.btn-cancelar:hover {
-    background: #F9FAFB;
-    border-color: #6B7280;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-.btn-excluir {
-    background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
-    color: white;
-    box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.2);
-}
-
-.btn-excluir::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.5s;
-}
-
-.btn-excluir:hover::before {
-    left: 100%;
-}
-
-.btn-excluir:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 24px -6px rgba(220, 38, 38, 0.5);
-}
-
-.btn-excluir:active,
-.btn-cancelar:active {
-    transform: translateY(0);
-}
-
-/* ============================================
-   MODAL DE SUCESSO
-   ============================================ */
-
-#statusSuccessModal .modal-content::before {
-    background: linear-gradient(90deg, #10B981 0%, #059669 100%);
-}
-
-#statusSuccessModal .modal-content i {
-    color: #10B981;
-    font-size: 4.5rem;
-    animation: successPulse 2s ease-in-out infinite;
-    filter: drop-shadow(0 4px 16px rgba(16, 185, 129, 0.4));
-}
-
-@keyframes successPulse {
-    0%, 100% { 
-        transform: scale(1);
-        filter: drop-shadow(0 4px 16px rgba(16, 185, 129, 0.4));
-    }
-    50% { 
-        transform: scale(1.15);
-        filter: drop-shadow(0 6px 20px rgba(16, 185, 129, 0.6));
-    }
-}
-
-#statusSuccessModal .modal-content h2 {
-    color: #10B981;
-    font-weight: 700;
-    font-size: 1.85rem;
-    margin-top: 8px;
-}
-
-#statusSuccessModal .modal-content p {
-    margin-top: 16px;
-    color: #6B7280;
-}
-
-#statusSuccessModal .btn-excluir {
-    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-    box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
-}
-
-#statusSuccessModal .btn-excluir:hover {
-    box-shadow: 0 12px 24px -6px rgba(16, 185, 129, 0.5);
-}
-
-/* ============================================
-   MODAL DE CONFIRMAÇÃO AZUL (para edição)
-   ============================================ */
-
-.modal-confirm-edit .modal-content::before {
-    background: linear-gradient(90deg, #0618b9 0%, #04108a 100%);
-}
-
-.modal-confirm-edit .modal-content i {
-    color: #0618b9;
-    filter: drop-shadow(0 4px 12px rgba(6, 24, 185, 0.3));
-}
-
-.modal-confirm-edit .btn-excluir {
-    background: linear-gradient(135deg, #0618b9 0%, #04108a 100%);
-    box-shadow: 0 4px 6px -1px rgba(6, 24, 185, 0.2);
-}
-
-.modal-confirm-edit .btn-excluir:hover {
-    box-shadow: 0 12px 24px -6px rgba(6, 24, 185, 0.5);
-}
-
-/* ============================================
-   RESPONSIVIDADE
-   ============================================ */
-
-@media (max-width: 768px) {
-    .medico-header {
-        flex-direction: column;
-        gap: 15px;
-        align-items: flex-start;
+    :root {
+        /* Cores */
+        --primary-blue: #0618b9;
+        --primary-blue-dark: #04108a;
+        --primary-blue-light: #0820e0;
+        --bg-white: #FFFFFF;
+        --bg-gray-50: #F9FAFB;
+        --bg-gray-100: #F3F4F6;
+        --bg-table-even: #F7F7FF; /* Fundo mais claro para linhas pares */
+        --bg-table-odd: #F0F0F5;  /* Fundo sutil para linhas ímpares */
+        --text-primary: #111827;
+        --text-secondary: #6B7280;
+        --text-muted: #9CA3AF;
+        --border-color: #E5E7EB;
+        --success-green: #10B981;
+        --error-red: #DC2626;
+    
+        /* Sombras e Bordas */
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
     }
     
+    /* Base e Layout */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+        background: linear-gradient(135deg, #F0F9FF 0%, var(--bg-gray-50) 100%);
+        min-height: 100vh;
+        color: var(--text-primary);
+    }
+    
+    .main-dashboard {
+        padding: 40px;
+        min-height: 100vh;
+    }
+    
+    .enfermeiro-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        animation: fadeIn 0.6s ease-out;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* --------------------------------------------
+        HEADER
+        -------------------------------------------- */
+    
+    .enfermeiro-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+        padding: 0 10px;
+        animation: slideDown 0.6s ease-out;
+    }
+    
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .enfermeiro-header h1 {
+        color: var(--primary-blue);
+        font-size: 2rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        letter-spacing: -0.5px;
+    }
+    
+    .enfermeiro-header h1 i {
+        font-size: 2.2rem;
+        filter: drop-shadow(0 2px 4px rgba(6, 24, 185, 0.2));
+    }
+    
+    .btn-add-enfermeiro {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+        color: white;
+        padding: 12px 24px;
+        border-radius: var(--radius-md);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 10px -2px rgba(6, 24, 185, 0.3);
+    }
+    
+    .btn-add-enfermeiro:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px -4px rgba(6, 24, 185, 0.5);
+    }
+    
+    /* --------------------------------------------
+        BARRA DE PESQUISA E FILTROS
+        -------------------------------------------- */
+    
     .search-filters {
-        flex-direction: column;
-        gap: 15px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 28px;
+        padding: 24px;
+        flex-wrap: wrap;
+        animation: slideUp 0.6s ease-out 0.2s backwards;
+      
+    }
+    
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
     
     .search-box {
-        min-width: 100%;
+        position: relative;
+        flex: 1;
+        min-width: 300px;
     }
     
-    .custom-select {
+    .search-box i {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        z-index: 2;
+    }
+    
+    .search-box input {
         width: 100%;
+        padding: 12px 16px 12px 48px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        font-size: 0.95rem;
+        background: var(--bg-gray-50);
+        height: 48px;
+        transition: all 0.3s ease;
+        outline: none;
+        box-shadow: var(--shadow-sm);
     }
     
-    table {
+    .search-box input:focus {
+        border-color: var(--primary-blue);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(6, 24, 185, 0.1);
+    }
+    
+    /* Custom Select (Filtro) */
+    .custom-select {
+        position: relative;
+        width: 180px;
+        cursor: pointer;
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .custom-select .selected {
+        padding: 12px 40px 12px 16px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        background: var(--bg-gray-50);
+        height: 48px;
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+        font-size: 0.95rem;
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+        user-select: none;
+    }
+    
+    .custom-select.active .selected {
+        border-color: var(--primary-blue);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(6, 24, 185, 0.1);
+    }
+    
+    .custom-select .options {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        display: none;
+        z-index: 1000;
+        animation: dropDown 0.3s ease-out;
+    }
+    
+    @keyframes dropDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .custom-select.active .options {
         display: block;
+    }
+    
+    .custom-select .options div {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--bg-gray-100);
+        transition: all 0.2s ease;
+        cursor: pointer;
+        font-size: 0.95rem;
+    }
+    
+    .custom-select .options div:hover {
+        background: var(--bg-gray-50);
+        color: var(--primary-blue);
+    }
+    
+    /* --------------------------------------------
+        TABELA
+        -------------------------------------------- */
+    
+    .box-table {
+        background: white;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
+        margin-bottom: 24px;
+        border: 1px solid var(--border-color);
+        animation: slideUp 0.6s ease-out 0.4s backwards;
         overflow-x: auto;
     }
     
-    .actions {
-        gap: 5px;
-    }
-    
-    .modal-content {
-        padding: 32px 24px;
-        max-width: 90%;
-        margin: 20px;
-    }
-
-    .modal-content i {
-        font-size: 3.5rem;
-    }
-
-    #statusSuccessModal .modal-content i {
-        font-size: 4rem;
-    }
-
-    .modal-content h2 {
-        font-size: 1.5rem;
-    }
-
-    .modal-content p {
-        font-size: 1rem;
-    }
-    
-    .modal-buttons {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .btn-cancelar,
-    .btn-excluir {
+    .box-table table {
         width: 100%;
-        flex: none;
+        border-collapse: collapse;
+        min-width: 900px; /* Garante que a tabela não quebre em telas menores */
     }
-}
-
-@media (max-width: 480px) {
-    .modal-content {
-        padding: 28px 20px;
+    
+    .box-table thead {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+        color: white;
     }
-
-    .modal-content i {
-        font-size: 3rem;
+    
+    .box-table th {
+        padding: 14px 20px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        border-bottom: 2px solid var(--primary-blue-dark);
+        white-space: nowrap;
     }
-
-    #statusSuccessModal .modal-content i {
-        font-size: 3.5rem;
+    
+    .box-table tbody tr {
+        background-color: var(--bg-table-even);
+        transition: all 0.3s ease;
     }
-
-    .modal-content h2 {
-        font-size: 1.35rem;
+    
+    .box-table tbody tr:nth-child(even) {
+        background-color: var(--bg-table-odd);
     }
-
-    .btn-cancelar,
-    .btn-excluir {
-        padding: 11px 24px;
+    
+    .box-table tbody tr:hover {
+        background-color: #E6E6F2;
+        box-shadow: inset 3px 0 0 0 var(--primary-blue);
+    }
+    
+    .box-table td {
+        padding: 12px 20px;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-primary);
         font-size: 0.95rem;
     }
-}
-
-/* ============================================
-   MICRO INTERAÇÕES
-   ============================================ */
-
-/* Efeito de shake no modal de erro */
-.modal-overlay.shake .modal-content {
-    animation: modalShake 0.5s ease-out;
-}
-
-@keyframes modalShake {
-    0%, 100% { transform: translateX(0) scale(1); }
-    25% { transform: translateX(-10px) scale(1.01); }
-    75% { transform: translateX(10px) scale(1.01); }
-}
-
-/* Efeito de bounce no modal de sucesso */
-#statusSuccessModal.show .modal-content {
-    animation: successBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes successBounce {
-    0% {
-        opacity: 0;
-        transform: scale(0.3) translateY(-30px);
+    
+    .box-table tbody tr:last-child td {
+        border-bottom: none;
     }
-    50% {
-        transform: scale(1.05) translateY(0);
+    
+    .no-enfermeiros {
+        text-align: center;
+        padding: 40px 20px !important;
+        color: var(--text-muted) !important;
+        font-style: italic;
+        background: var(--bg-gray-50) !important;
     }
-    100% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
+    
+    /* Status Badge */
+    .status-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 9999px; 
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: capitalize;
+        min-width: 70px;
+        text-align: center;
     }
-}
-}
+    
+    .status-ativo {
+        background: #D1FAE5;
+        color: #059669;
+    }
+    
+    .status-inativo {
+        background: #FEE2E2;
+        color: var(--error-red);
+    }
+    
+    /* Ações (Action Buttons) */
+    .actions {
+        width: 120px;
+        text-align: right;
+        display: flex; /* Garante que os botões fiquem em linha */
+        gap: 8px; 
+        align-items: center;
+        justify-content: flex-end; /* Alinha os botões na direita */
+    }
+    
+    .btn-action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: var(--radius-sm);
+        text-decoration: none;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+    }
+    
+    .btn-action:hover {
+        transform: none;
+        box-shadow: none;
+        background: var(--bg-gray-100);
+    }
+    
+    .btn-edit { color: #2563EB; } 
+    .btn-delete { color: var(--error-red); }
+    
+    .text-danger { color: var(--error-red) !important; }
+    .text-success { color: var(--success-green) !important; }
+    
+    /* --------------------------------------------
+        PAGINAÇÃO
+        -------------------------------------------- */
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 32px;
+    }
+    
+    
+    /* --------------------------------------------
+        MODAIS
+        -------------------------------------------- */
+    
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        backdrop-filter: blur(4px);
+    }
+    
+    .modal-content {
+        background-color: var(--bg-white);
+        padding: 30px 40px;
+        border-radius: var(--radius-lg);
+        width: 90%;
+        max-width: 450px;
+        box-shadow: var(--shadow-xl);
+        text-align: center;
+        animation: modalPopIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    
+    @keyframes modalPopIn {
+        from { opacity: 0; transform: scale(0.9); }
+        to { opacity: 1; transform: scale(1); }
+    }
+    
+    .modal-header { margin-bottom: 20px; }
+    .modal-header h2 { font-size: 1.5rem; color: var(--text-primary); font-weight: 700; margin-top: 10px; }
+    
+    /* Estilo dos Ícones nos Modais */
+    #deleteEnfermeiroModal .modal-header i { font-size: 3rem; color: var(--error-red); }
+    #statusEnfermeiroModal .modal-header i { font-size: 3rem; color: var(--primary-blue); }
+    #statusSuccessModal .modal-header i { font-size: 3rem; color: var(--success-green); }
+    
+    .modal-content p { color: var(--text-secondary); font-size: 1rem; line-height: 1.6; margin-bottom: 30px; }
+    .modal-content p span { font-weight: 600; color: var(--text-primary); }
+    
+    .modal-buttons { display: flex; justify-content: center; gap: 15px; }
+    
+    .btn-cancelar, .btn-excluir {
+        padding: 12px 24px; 
+        border-radius: var(--radius-sm); 
+        font-weight: 600; 
+        cursor: pointer; 
+        border: none; 
+        transition: all 0.3s ease; 
+        font-size: 0.95rem; 
+        flex: 1;
+    }
+    
+    .btn-cancelar { background: var(--bg-gray-100); color: var(--text-secondary); }
+    .btn-cancelar:hover { background: #EBEBEB; }
+    
+    /* Botão de Excluir */
+    .btn-excluir { background: var(--error-red); color: var(--bg-white); }
+    .btn-excluir:hover { background: #C22020; transform: translateY(-1px); }
+    
+    /* Botão de Confirmação para Status/Sucesso (Azul Primário) */
+    #statusEnfermeiroModal .btn-excluir,
+    #statusSuccessModal .btn-excluir { background: var(--primary-blue); }
+    
+    #statusEnfermeiroModal .btn-excluir:hover,
+    #statusSuccessModal .btn-excluir:hover { background: var(--primary-blue-dark); }
+    
+    
+    /* --------------------------------------------
+        MEDIA QUERIES (Responsividade)
+        -------------------------------------------- */
+    @media (max-width: 768px) {
+        .main-dashboard { padding: 20px; }
+        .enfermeiro-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+        .enfermeiro-header h1 { font-size: 1.75rem; }
+        .btn-add-enfermeiro { width: 100%; justify-content: center; }
+        .search-filters { flex-direction: column; align-items: stretch; padding: 15px; }
+        .search-box, .custom-select { min-width: 100%; width: 100%; }
+        .box-table { overflow-x: auto; }
+        .modal-buttons { flex-direction: column; gap: 10px; }
+        .btn-cancelar, .btn-excluir { flex: none; width: 100%; }
+    }

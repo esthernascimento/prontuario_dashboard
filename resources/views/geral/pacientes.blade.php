@@ -283,7 +283,20 @@ use Carbon\Carbon;
     }
     
     // Modal de Exclusão (Soft Delete)
-  z
+    function openDeletePacienteModal(pacienteId, pacienteNome) {
+        const modal = document.getElementById('deletePacienteModal');
+        const nomeSpan = document.getElementById('pacienteNome');
+        const form = document.getElementById('deletePacienteForm');
+
+        nomeSpan.textContent = pacienteNome;
+
+        // Monta a URL para o formulário de exclusão
+        // Assumindo que a rota de exclusão usa o ID do paciente: admin.pacientes.destroy/{paciente}
+        const deleteRoute = "{{ route('admin.pacientes.destroy', ['paciente' => 'PLACEHOLDER_ID']) }}";
+        form.action = deleteRoute.replace('PLACEHOLDER_ID', pacienteId);
+
+        modal.style.display = 'flex';
+    }
 
     function closeDeletePacienteModal() {
         document.getElementById('deletePacienteModal').style.display = 'none';

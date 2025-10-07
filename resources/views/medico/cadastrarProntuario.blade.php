@@ -9,7 +9,7 @@
     <div class="cadastrar-container">
         <div class="cadastrar-header">
             <i class="bi bi-journal-medical icon"></i>
-            <h1>Cadastrar Prontuário</h1>
+            <h1>Cadastrar Consulta ao Prontuário+</h1>
         </div>
 
         <div class="paciente-info">
@@ -21,7 +21,7 @@
         <form action="{{ route('medico.prontuario.store', $paciente->idPaciente) }}" method="POST" id="prontuarioForm">
             @csrf
 
-            <div class="form-section-title">Dados do Prontuário</div>
+            <div class="form-section-title">Dados da Consulta</div>
 
             <div class="input-group">
                 <label for="queixaPrincipal">Queixa Principal *</label>

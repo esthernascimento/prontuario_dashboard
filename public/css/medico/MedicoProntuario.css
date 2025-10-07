@@ -42,7 +42,7 @@
    }
    
    .main-dashboard {
-       padding: 20px;
+       padding: 120px;
        min-height: 100vh;
        background: linear-gradient(135deg, #FFF1F2 0%, #F9FAFB 100%);
    }

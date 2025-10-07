@@ -21,14 +21,13 @@
 
 <div class="overview-container">
   {{-- Header --}}
-  <h1 class="dashboard-title">Dashboard Administrador</h1>
+  <h1 class="dashboard-title fade-in" style="animation-delay: 0.2s;">Dashboard Administrador</h1>
 
 {{-- 1. Banner de Boas-vindas (Full Width) --}}
-<div class="welcome-banner">
+<div class="welcome-banner zoom-in-banner" style="animation-delay: 0.4s;">
     <div class="banner-left">
         {{-- Logo Prontuário+ --}}
         <div class="banner-logo-container">
-            {{-- Usando o logo2.png do template (ou ajuste o caminho conforme o logo real) --}}
             <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo Prontuário+" class="banner-logo">
         </div>
     </div>
@@ -44,8 +43,8 @@
 
   {{-- Métricas --}}
   <div class="metrics">
-    @foreach($metrics as $metric)
-      <div class="metric-card">
+    @foreach($metrics as $index => $metric)
+      <div class="metric-card slide-up" style="animation-delay: {{ 0.6 + ($index * 0.2) }}s;">
         <div class="container-img">
             <img src="{{ asset('img/usuario-de-perfil.png') }}">
           <span>{{ $metric['title'] }}</span>
@@ -62,12 +61,12 @@
     <div class="charts">
 
       {{-- Gráfico de Barras (Especialidades) --}}
-      <div class="chart-container">
+      <div class="chart-container slide-up" style="animation-delay: 1.2s;">
         <canvas id="graficoEspecialidades"></canvas>
       </div>
 
       {{-- Gráfico de Linha (Crescimento) --}}
-      <div class="chart-container">
+      <div class="chart-container slide-up" style="animation-delay: 1.4s;">
         
         <canvas id="graficoLinha"></canvas>
       </div>
@@ -77,7 +76,7 @@
     <div class="info-cards-container">
         
       {{-- Card de Gênero (gráfico Donut) --}}
-      <div class="info-card">
+      <div class="info-card slide-up" style="animation-delay: 1.6s;">
         <h3>Índice de Gênero</h3>
         <div class="donut-chart">
           <canvas id="graficoDonutGenero"></canvas>
@@ -85,16 +84,16 @@
       </div>
 
       {{-- Card 75% IDOSOS --}}
-      <div class="info-card">
+      <div class="info-card slide-up" style="animation-delay: 1.8s;">
           <div class="container-card-idosos">
-              <img class="img-pessoas" src="{{ asset('img/icon-pessoas.png') }}" alt="Ícone de idoso">
-              <h3 class="h3-pessoas">75% IDOSOS</h3>
+            <img class="img-pessoas" src="{{ asset('img/icon-pessoas.png') }}" alt="Ícone de idoso">
+            <h3 class="h3-pessoas">75% IDOSOS</h3>
           </div>
           <img class="img-logo-prontuario" src="{{ asset('img/adm-logo1.png') }}">
       </div>
 
       {{-- Card UBS cadastradas com mapa --}}
-      <div class="info-card">
+      <div class="info-card slide-up" style="animation-delay: 2.0s;">
         <h3>UBS Cadastradas</h3>
         <div class="container-ubs">
           <strong>10</strong>
@@ -102,8 +101,8 @@
         </div>
       </div>
       
-      <div class="info-card-user">
-         <img class="dez-pessoas" src="{{ asset('img/icon-dezpessoas.png') }}" alt="logo do SUS">
+      <div class="info-card-user slide-up" style="animation-delay: 2.2s;">
+          <img class="dez-pessoas" src="{{ asset('img/icon-dezpessoas.png') }}" alt="logo do SUS">
         <h3>A Cada 10 Usuários do Aplicativo...</h3>
         <ul>
         @php
@@ -171,8 +170,8 @@
                 text: 'Quantidade de Médicos por Especialidade',
                 color: '#0618b9',
                 font: {
-                size: 20, // Aumenta o tamanho da fonte para 20px
-                weight: 'bold' // Deixa o texto em negrito
+                size: 20, 
+                weight: 'bold' 
                 }
                 }
             }
@@ -200,12 +199,12 @@ new Chart(ctxLinha, {
     },
     options: {
         responsive: true,
-        scales: { // Adiciona a configuração de escala aqui
+        scales: { 
             y: {
                 beginAtZero: true,
-                max: 100, // Eixo Y vai até 1000
+                max: 100, 
                 ticks: {
-                    stepSize: 10 // Intervalos de 100
+                    stepSize: 10 
                 }
             }
         },
@@ -215,8 +214,8 @@ new Chart(ctxLinha, {
                 text: 'Crescimento de Cadastro de Pacientes nos Últimos Meses',
                 color: '#0618b9',
                 font: {
-                size: 20, // Aumenta o tamanho da fonte para 20px
-                weight: 'bold' // Deixa o texto em negrito
+                size: 20, 
+                weight: 'bold' 
                 }
             }
         }
@@ -241,10 +240,10 @@ new Chart(ctxLinha, {
           responsive: true,
           plugins: {
               legend: {
-                  position: 'top', // Coloca a legenda na parte inferior
-                  align: 'center', // Alinha os itens da legenda ao centro
+                  position: 'top', 
+                  align: 'center', 
                   labels: {
-                      usePointStyle: true, // Usa o estilo de ponto para a legenda
+                      usePointStyle: true, 
                   }
                   
               }

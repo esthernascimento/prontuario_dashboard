@@ -1,66 +1,81 @@
-/* Importação da fonte Montserrat */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
+/* ============================================
+    CENTRAL DE AJUDA - TEMA: VERMELHO MÉDICO
+    ============================================ */
 
-/* Cores principais: 
-   - #8c1007 (Vermelho Principal - Forte, usado no template)
-   - #a33e38 (Vermelho Mais Claro/Rose para Cards de Background)
-   - #7b0e06 (Vermelho Escuro para Destaque)
-   - #004d99 (Azul SUS Profissional)
-*/
-
-body {
-    font-family: 'Montserrat', sans-serif;
-    /* Aplica a fonte globalmente */
-    overflow-x: hidden;
-    height: 100vh;
+/* Variáveis de cores do seu CSS de Prontuário */
+:root {
+  --primary-red: #DC2626;
+  --primary-red-dark: #991B1B;
+  --primary-red-light: #EF4444;
+  --bg-white: #FFFFFF;
+  --bg-gray-50: #F9FAFB;
+  --bg-gray-100: #F3F4F6;
+  --text-primary: #111827;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --border-color: #E5E7EB;
+  --border-focus: #EF4444;
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --radius-sm: 8px;
+  --radius-md: 12px;
 }
 
- .main-dashboardAjuda{
-    padding: 20px;
-    min-height: 100vh;
-  }
+/* Base e Layout */
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background: linear-gradient(135deg, #FFF1F2 0%, #F9FAFB 100%);
+  min-height: 100vh;
+}
 
+.main-dashboardAjuda {
+  padding: 40px; 
+  min-height: 100vh;
+}
 
 .help-container {
   max-width: 800px;
   margin: auto;
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
 }
 
-.help-container h1 {
-  color: #8c1007;
-  margin: 0;
-  margin-bottom: 10px;
-}
-
-.help-container h2 {
-  color: #8c1007;
-  border-bottom: 2px solid #8c1007;
-  padding-bottom: 10px;
-  margin-top: 40px;
-}
-
-h1 i {
-  gap: 10px;
-  margin-right: 10px;
-}
-
-/* NOVO: Container para alinhar o título e a busca */
+/* Título e Busca */
 .title-bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 30px;
+  justify-content: space-between; 
+  margin-bottom: 30px; 
 }
 
-/* NOVO: Estilo da caixa de pesquisa */
+.help-container h1 {
+  color: var(--primary-red-dark);
+  margin: 0; 
+  font-size: 2em; 
+  flex-shrink: 0; 
+  font-weight: 700;
+}
+
+h1 i {
+  margin-right: 10px;
+  color: var(--primary-red-dark);
+}
+
+.help-container h2 {
+  color: var(--primary-red-dark);
+  border-bottom: 2px solid var(--primary-red-light);
+  padding-bottom: 10px;
+  margin-top: 40px;
+  font-weight: 600;
+}
+
+/* Estilos da busca */
 .search-box {
   position: relative;
   flex: 1;
   min-width: 300px;
-  margin-left: 8%;
+  margin-left: 10%;
 }
 
 .search-box i {
@@ -68,97 +83,168 @@ h1 i {
   left: 15px;
   top: 50%;
   transform: translateY(-50%);
-  color: #8c1007;
-  /* Cor vermelha para o ícone */
+  color: var(--primary-red);
 }
 
 .search-box input {
-  cursor: text;
-  width: 300px;
+  width: 100%;
   padding: 12px 15px 12px 45px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 0.3s;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  background-color: var(--bg-white);
 }
 
 .search-box input:focus {
   outline: none;
-  border-color: #8c1007;
-  /* Cor vermelha no foco */
-  box-shadow: 0 0 0 2px rgba(140, 16, 7, 0.1);
-  /* Sombra vermelha suave no foco */
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
 }
 
-.search-bar {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  margin-bottom: 30px;
-}
-
-/* Estilo para o FAQ com <details> */
+/* Estilos do FAQ */
 details {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  padding: 15px;
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-bottom: 15px;
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s;
+  box-shadow: var(--shadow-sm);
 }
 
 summary {
-  font-weight: bold;
+  font-weight: 600;
   cursor: pointer;
   font-size: 1.1em;
-  color: #333;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+}
+
+details:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
 }
 
 details[open] {
-  border-color: #8c1007;
+  border-color: var(--primary-red-dark);
+  background-color: #FFF7F7;
+}
+
+details[open] summary {
+  color: var(--primary-red);
 }
 
 details p {
   margin-top: 15px;
   line-height: 1.6;
-  color: #555;
+  color: var(--text-secondary);
 }
 
+/* Formulário de Contato */
 .contact-form {
+  padding: 30px;
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
 .contact-form input,
-.contact-form textarea,
-.contact-form button {
+.contact-form textarea {
   padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
   font-size: 1em;
-  cursor: pointer;
-  transition: border-color 0.3s;
+  background-color: var(--bg-gray-50);
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .contact-form input:focus,
 .contact-form textarea:focus {
-  border-color: #8c1007;
+  border-color: var(--border-focus);
   outline: none;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
 }
 
 .contact-form button {
-  background-color: #8c1007;
+  background-color: var(--primary-red);
   color: white;
-  font-weight: bold;
+  padding: 14px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease, transform 0.2s;
 }
 
 .contact-form button:hover {
-  background-color: #551010;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
+  background-color: var(--primary-red-dark);
+  transform: translateY(-2px);
+}
+
+/* -------------------- ANIMAÇÕES -------------------- */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.8s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+
+.slide-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+@keyframes slideUp {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .main-dashboardAjuda {
+      padding: 20px;
+  }
+  .title-bar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+  }
+  .search-box {
+      margin-left: 0;
+      width: 100%;
+      min-width: unset;
+  }
+  .search-box input {
+      width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+      font-size: 1.5em;
+  }
+  h2 {
+      font-size: 1.2em;
+  }
+  details {
+      padding: 15px;
+  }
+  summary {
+      font-size: 1em;
+  }
 }
