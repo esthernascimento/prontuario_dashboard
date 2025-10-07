@@ -19,9 +19,9 @@ use Carbon\Carbon;
         </div>
 
         @if(session('success'))
-        <div class="alert alert-success" style="margin-bottom: 20px;">
-            {{ session('success') }}
-        </div>
+            <div class="alert alert-success" style="margin-bottom: 20px;">
+                {{ session('success') }}
+            </div>
         @endif
 
         {{-- BARRA DE PESQUISA E FILTROS (Com base no exemplo do enfermeiro) --}}
@@ -30,7 +30,7 @@ use Carbon\Carbon;
                 <i class="bi bi-search"></i>
                 <input type="text" id="searchInput" placeholder="Pesquisar por nome, CPF ou SUS..." onkeyup="filterPacientes()">
             </div>
-
+            
             {{-- FILTRO DE STATUS (Custom Select) --}}
             <div class="custom-select" id="customStatus">
                 <div class="selected">Status</div>
@@ -42,7 +42,7 @@ use Carbon\Carbon;
             </div>
             <input type="hidden" id="filterStatus" value="">
         </div>
-
+        
         <div class="table-wrapper">
             <table class="patients-table">
                 <thead>
@@ -55,65 +55,65 @@ use Carbon\Carbon;
                         <th>AÇÕES</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @forelse($pacientes as $paciente)
-                    @php
-                    $idade = $paciente->dataNascPaciente ? Carbon::parse($paciente->dataNascPaciente)->age : 'N/A';
-                    // statusPaciente é boolean: true = ativo, false = inativo
-                    $statusAtivo = $paciente->statusPaciente;
-                    $statusTexto = $statusAtivo ? 'ativo' : 'inativo';
-                    $nomeEscapado = json_encode($paciente->nomePaciente);
-                    @endphp
-                    <tr data-status="{{ $statusTexto }}"
-                        data-name="{{ $paciente->nomePaciente }}"
-                        data-cpf="{{ $paciente->cpfPaciente }}"
-                        data-sus="{{ $paciente->cartaoSusPaciente ?? '' }}">
-                        <td>{{ $paciente->nomePaciente }}</td>
-                        <td>{{ $paciente->cpfPaciente }}</td>
-                        <td>{{ $idade }} anos</td>
-                        <td>{{ $paciente->cartaoSusPaciente ?? 'N/A' }}</td>
-                        <td>
-                            <span class="status-badge status-{{ $statusTexto }}">
-                                {{ ucfirst($statusTexto) }}
-                            </span>
-                        </td>
-                        <td>
-                            <div class="action-buttons">
-                                {{-- Botão de Edição - CORRIGIDO: usa idPaciente --}}
-                                <a href="{{ route('admin.pacientes.edit', $paciente->idPaciente) }}"
-                                    class="btn-action btn-edit"
-                                    title="Editar">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
+           <tbody>
+    @forelse($pacientes as $paciente)
+        @php
+            $idade = $paciente->dataNascPaciente ? Carbon::parse($paciente->dataNascPaciente)->age : 'N/A';
+            // statusPaciente é boolean: true = ativo, false = inativo
+            $statusAtivo = $paciente->statusPaciente;
+            $statusTexto = $statusAtivo ? 'ativo' : 'inativo';
+            $nomeEscapado = json_encode($paciente->nomePaciente);
+        @endphp
+        <tr data-status="{{ $statusTexto }}" 
+            data-name="{{ $paciente->nomePaciente }}" 
+            data-cpf="{{ $paciente->cpfPaciente }}" 
+            data-sus="{{ $paciente->cartaoSusPaciente ?? '' }}">
+            <td>{{ $paciente->nomePaciente }}</td>
+            <td>{{ $paciente->cpfPaciente }}</td>
+            <td>{{ $idade }} anos</td>
+            <td>{{ $paciente->cartaoSusPaciente ?? 'N/A' }}</td>
+            <td>
+                <span class="status-badge status-{{ $statusTexto }}">
+                    {{ ucfirst($statusTexto) }}
+                </span>
+            </td>
+            <td>
+                <div class="action-buttons">
+                    {{-- Botão de Edição - CORRIGIDO: usa idPaciente --}}
+                    <a href="{{ route('admin.pacientes.edit', $paciente->idPaciente) }}" 
+                       class="btn-action btn-edit" 
+                       title="Editar">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    
+                    {{-- Botão de Alterar Status - CORRIGIDO --}}
+                    <a href="#"
+                        onclick="openStatusPacienteModal('{{ $paciente->idPaciente }}', {{ $nomeEscapado }}, '{{ $statusTexto }}')"
+                        class="btn-action" 
+                        title="{{ $statusAtivo ? 'Desativar' : 'Ativar' }}">
+                        @if($statusAtivo)
+                            <i class="bi bi-slash-circle text-danger"></i>
+                        @else
+                            <i class="bi bi-check-circle text-success"></i>
+                        @endif
+                    </a>
 
-                                {{-- Botão de Alterar Status - CORRIGIDO --}}
-                                <a href="#"
-                                    onclick="openStatusPacienteModal('{{ $paciente->idPaciente }}', {{ $nomeEscapado }}, '{{ $statusTexto }}')"
-                                    class="btn-action"
-                                    title="{{ $statusAtivo ? 'Desativar' : 'Ativar' }}">
-                                    @if($statusAtivo)
-                                    <i class="bi bi-slash-circle text-danger"></i>
-                                    @else
-                                    <i class="bi bi-check-circle text-success"></i>
-                                    @endif
-                                </a>
-
-                                {{-- Botão de Exclusão - CORRIGIDO --}}
-                                <a href="#"
-                                    onclick="openDeletePacienteModal('{{ $paciente->idPaciente }}', {{ $nomeEscapado }})"
-                                    class="btn-action btn-delete"
-                                    title="Excluir">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr data-status="empty-list">
-                        <td colspan="6" class="no-patients">Nenhum paciente encontrado.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
+                    {{-- Botão de Exclusão - CORRIGIDO --}}
+                    <a href="#"
+                        onclick="openDeletePacienteModal('{{ $paciente->idPaciente }}', {{ $nomeEscapado }})"
+                        class="btn-action btn-delete" 
+                        title="Excluir">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </div>
+            </td>
+        </tr>
+    @empty
+        <tr data-status="empty-list">
+            <td colspan="6" class="no-patients">Nenhum paciente encontrado.</td>
+        </tr>
+    @endforelse
+</tbody>
             </table>
         </div>
 
@@ -130,7 +130,7 @@ use Carbon\Carbon;
             <i class="bi bi-trash-fill" style="color: #DC2626;"></i>
             <h2>Excluir Paciente</h2>
         </div>
-
+        
         <p>Tem certeza que deseja excluir o(a) paciente <span id="pacienteNome"></span>? Esta ação pode ser desfeita posteriormente.</p>
 
         <form id="deletePacienteForm" method="POST">
@@ -152,7 +152,7 @@ use Carbon\Carbon;
             <i class="bi bi-toggle-on" style="color: #0618b9;"></i>
             <h2>Alterar Status</h2>
         </div>
-
+        
         <p>Tem certeza que deseja <span id="statusAction"></span> o(a) paciente <span id="statusPacienteNome"></span>?</p>
 
         <form id="statusPacienteForm" method="POST">
@@ -172,7 +172,7 @@ use Carbon\Carbon;
             <i class="bi bi-check-circle-fill"></i>
             <h2>Sucesso!</h2>
         </div>
-
+        
         <p id="successMessage"></p>
 
         <div class="modal-buttons">
@@ -216,10 +216,10 @@ use Carbon\Carbon;
                 row.style.display = 'none';
             }
         });
-
+        
         if (emptyRow) {
             if (visibleRowsCount === 0) {
-                emptyRow.style.display = '';
+                emptyRow.style.display = ''; 
             } else {
                 emptyRow.style.display = 'none';
             }
@@ -263,14 +263,14 @@ use Carbon\Carbon;
 
         // Verifica se há mensagem de sucesso na sessão para abrir o modal
         @if(session('success'))
-        openSuccessModal("{{ session('success') }}");
+            openSuccessModal("{{ session('success') }}");
         @endif
     });
-
+    
     // ------------------------------------------
     // LÓGICA DOS MODAIS
     // ------------------------------------------
-
+    
     // Modal de Sucesso
     function openSuccessModal(message) {
         document.getElementById('successMessage').textContent = message;
@@ -279,16 +279,16 @@ use Carbon\Carbon;
 
     function closeSuccessModal() {
         document.getElementById('statusSuccessModal').style.display = 'none';
-        window.location.reload();
+        window.location.reload(); 
     }
-
+    
     // Modal de Exclusão (Soft Delete)
-    z
+  z
 
     function closeDeletePacienteModal() {
         document.getElementById('deletePacienteModal').style.display = 'none';
     }
-
+    
     // Modal de Alteração de Status
     function openStatusPacienteModal(pacienteId, pacienteNome, currentStatus) {
         const modal = document.getElementById('statusPacienteModal');
@@ -296,7 +296,7 @@ use Carbon\Carbon;
         const actionSpan = document.getElementById('statusAction');
         const confirmText = document.getElementById('confirmStatusText');
         const form = document.getElementById('statusPacienteForm');
-
+        
         // Define a ação baseada no status atual (ativo -> desativar; inativo -> ativar)
         const action = currentStatus == 'ativo' ? 'desativar' : 'ativar';
         const confirmAction = currentStatus == 'ativo' ? 'desativar' : 'ativar';
@@ -308,7 +308,7 @@ use Carbon\Carbon;
         // Rota de alteração de status (toggleStatus)
         const statusRoute = "{{ route('admin.pacientes.toggleStatus', ['paciente' => 'PLACEHOLDER_ID']) }}";
         form.action = statusRoute.replace('PLACEHOLDER_ID', pacienteId);
-
+        
         modal.style.display = 'flex';
     }
 
