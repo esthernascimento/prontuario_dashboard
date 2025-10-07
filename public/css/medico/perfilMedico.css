@@ -1,63 +1,218 @@
-/* Importação da fonte Montserrat */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
+/* ============================================
+    EDITAR PERFIL - CSS MÉDICO
+    (Baseado no design do Administrador, adaptado para a paleta do Médico)
+    ============================================ */
 
-/* Cores principais: 
-   - #8c1007 (Vermelho Principal - Forte, usado no template)
-   - #a33e38 (Vermelho Mais Claro/Rose para Cards de Background)
-   - #7b0e06 (Vermelho Escuro para Destaque)
-   - #004d99 (Azul SUS Profissional)
-*/
+:root {
+    /* Cores do Médico (Vermelho/Vinho) */
+    --primary-red: #8c1007; /* Vermelho Principal (Forte) */
+    --primary-red-dark: #7b0e06; /* Vermelho Escuro para Destaque/Gradiente */
+    --primary-red-light: #a33e38; /* Vermelho Mais Claro/Rose */
+
+    /* Cores de Base (Mantidas do Admin para consistência) */
+    --bg-white: #FFFFFF;
+    --bg-gray-50: #F9FAFB;
+    --bg-gray-100: #F3F4F6;
+    --text-primary: #111827;
+    --text-secondary: #6B7280;
+    --text-muted: #9CA3AF;
+    --border-color: #E5E7EB;
+    --border-focus: var(--primary-red); /* Foco na cor principal do médico */
+    --success-green: #10B981;
+    --error-red: #EF4444;
+
+    /* Sombras e Bordas */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+}
 
 body {
     margin: 0;
-    font-family: 'Montserrat', sans-serif;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    /* Aplica a fonte globalmente */
-    height: 100vh;
-    padding: 40px;
-
-}
-
-  .main-dashboard {
     padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Adaptação de cor de fundo, mantendo o gradiente suave */
+    background: linear-gradient(135deg, #FFF0F0 0%, #F9FAFB 100%); 
     min-height: 100vh;
-  }
-
-/* Container Principal */
-.cadastrar-container {
-    background-color: white; 
-    max-width: 450px; /* Um pouco menor para ficar mais compacto */
-    margin: 50px auto;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center; 
 }
 
-/* Cabeçalho */
+/* ============================================
+    CONTAINER PRINCIPAL DO FORMULÁRIO
+    ============================================ */
+
+.cadastrar-container {
+    background: var(--bg-white);
+    max-width: 580px;
+    margin: 50px auto;
+    padding: 0; /* Removido padding para deixar o cabeçalho "colado" */
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+    animation: slideUp 0.6s ease-out;
+    text-align: center;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+    CABEÇALHO "PERFIL DO MÉDICO"
+    ============================================ */
+
 .cadastrar-header {
+    /* Cor do Médico */
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%); 
+    padding: 32px 36px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    color: #8c1007;
-    margin-bottom: 25px;
-    justify-content: center; 
+    gap: 16px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    justify-content: center;
+}
+
+.cadastrar-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.cadastrar-header i {
+    font-size: 2.5rem;
+    color: white;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    animation: iconRotate 3s ease-in-out infinite;
+}
+
+@keyframes iconRotate {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
 }
 
 .cadastrar-header h1 {
-    font-size: 22px;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: white;
     margin: 0;
-    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.5px;
 }
 
-/* =================================== */
-/* Estilo da Foto e Overlay (Bloco Azul) */
-/* =================================== */
+/* ============================================
+    FORMULÁRIO
+    ============================================ */
+
+.cadastrar-container form {
+    padding: 32px 36px;
+}
+
+/* ============================================
+    GRUPOS DE INPUT
+    ============================================ */
+
+.input-group {
+    margin-bottom: 18px;
+    animation: fadeIn 0.6s ease-out backwards;
+    text-align: left;
+}
+
+.input-group:nth-child(1) { animation-delay: 0.1s; }
+.input-group:nth-child(2) { animation-delay: 0.15s; }
+.input-group:nth-child(3) { animation-delay: 0.2s; }
+.input-group:nth-child(4) { animation-delay: 0.25s; }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+    INPUTS E SELECTS
+    ============================================ */
+
+.cadastrar-container form input:not([type="submit"]):not([type="button"]),
+.custom-select {
+    width: 100%;
+    padding: 11px 16px;
+    border-radius: var(--radius-md);
+    border: 2px solid var(--border-color);
+    background: var(--bg-gray-50);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    font-family: inherit;
+}
+
+.cadastrar-container form input::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.cadastrar-container form input:hover,
+.custom-select:hover {
+    border-color: var(--primary-red-light); /* Hover com tom mais claro */
+    background: white;
+}
+
+.cadastrar-container form input:focus,
+.custom-select:focus {
+    border-color: var(--border-focus);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(140, 16, 7, 0.15); /* Sombra de foco com cor do médico */
+    transform: translateY(-2px);
+}
+
+.cadastrar-container form input:not(:placeholder-shown) {
+    background: white;
+    border-color: var(--success-green);
+}
+
+.cadastrar-container form input[disabled] {
+    background: var(--bg-gray-100);
+    color: var(--text-secondary);
+    cursor: not-allowed;
+}
+
+/* ============================================
+    FOTO DE PERFIL E OVERLAY
+    ============================================ */
 
 .foto-upload-container {
-    background-color: #8c1007; 
-    border-radius: 12px;
+    background-color: var(--primary-red); /* Cor do Médico */
+    border-radius: var(--radius-md);
     margin-bottom: 25px;
     padding: 30px 20px;
     display: flex; 
@@ -65,6 +220,7 @@ body {
     align-items: center;
     position: relative;
     height: 180px; 
+    box-shadow: var(--shadow-md);
 }
 
 .foto-upload-label {
@@ -83,6 +239,8 @@ body {
     object-fit: cover;
     border-radius: 50%;
     z-index: 10;
+    border: 4px solid var(--bg-white);
+    box-shadow: var(--shadow-sm);
 }
 
 .overlay {
@@ -99,10 +257,14 @@ body {
     z-index: 20;
     opacity: 0;
     transition: opacity 0.3s;
+    background-color: rgba(0, 0, 0, 0.4); 
+    border-radius: 50%;
+    width: 130px;
+    height: 130px;
+    pointer-events: none;
 }
 
 .foto-upload-label:hover .overlay {
-    /* Torna o overlay visível ao passar o mouse */
     opacity: 1; 
 }
 
@@ -111,40 +273,9 @@ body {
     margin-bottom: 5px;
 }
 
-/* =================================== */
-/* Inputs de Dados (Nome e Email) */
-/* =================================== */
-
-.input-group {
-    margin-bottom: 20px;
-    text-align: left; /* Garante que os inputs comecem da esquerda */
-}
-
-form input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    background-color: #ffffff; 
-    color: #333; 
-    font-size: 16px;
-    box-sizing: border-box;
-    cursor: pointer;
-    transition: border-color 0.3s;
-}
-
-form input::placeholder {
-    color: #aaa;
-}
-
-form input:focus {
-    border-color: #8c1007; 
-    outline: none;
-}
-
-/* =================================== */
-/* Botões de Ação */
-/* =================================== */
+/* ============================================
+    BOTÕES DE AÇÃO
+    ============================================ */
 
 .button-group {
     display: flex;
@@ -153,11 +284,9 @@ form input:focus {
     margin-top: 25px;
 }
 
-/* Botão Salvar (Principal) */
 .save-button {
-    /* Sobrescreve o estilo base do form button */
-    display: inline-block;
-    background-color: #8c1007;
+    /* Cor do Médico */
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
     color: white;
     padding: 12px 25px;
     border: none;
@@ -168,29 +297,151 @@ form input:focus {
     width: auto; 
     flex-grow: 1;
     margin: 0;
-    transition: background-color 0.3s;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.save-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.save-button:hover::before {
+    left: 100%;
 }
 
 .save-button:hover {
-    background-color: #4d1414;
+    transform: translateY(-3px);
+    /* Sombra de hover com cor do médico */
+    box-shadow: 0 12px 24px -6px rgba(140, 16, 7, 0.5); 
+}
+
+.save-button:active {
+    transform: translateY(-1px);
 }
 
 .btn-trocar-senha {
     display: inline-block;
-    background-color: #e0e0e0; 
-    color: #333;
+    background-color: var(--bg-gray-100); 
+    color: var(--text-primary);
     text-decoration: none;
     padding: 12px 25px;
-    border: none;
+    border: 2px solid var(--border-color);
     border-radius: 25px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     width: auto; 
     flex-grow: 1;
-    transition: background-color 0.3s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-trocar-senha:hover {
-    background-color: #ccc;
+    background-color: var(--bg-gray-50);
+    border-color: var(--text-secondary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-trocar-senha:active {
+    transform: translateY(0);
+}
+
+/* ============================================
+    RESPONSIVIDADE (Copiada do Admin para manter o comportamento)
+    ============================================ */
+
+@media (max-width: 768px) {
+    .cadastrar-container {
+        margin: 20px auto;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .cadastrar-container form {
+        padding: 20px;
+    }
+
+    .cadastrar-header {
+        padding: 24px 20px;
+    }
+
+    .cadastrar-header h1 {
+        font-size: 1.4rem;
+    }
+
+    .save-button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .cadastrar-container {
+        margin: 10px auto;
+    }
+
+    .cadastrar-header {
+        padding: 20px 15px;
+    }
+
+    .cadastrar-header h1 {
+        font-size: 1.2rem;
+    }
+
+    .cadastrar-container form {
+        padding: 15px;
+    }
+
+    .cadastrar-container form input:not([type="submit"]):not([type="button"]),
+    .custom-select {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+
+    .save-button {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+    }
+
+    .foto-upload-container {
+        height: 150px;
+        padding: 20px 15px;
+    }
+
+    .box-foto img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .overlay {
+        width: 100px;
+        height: 100px;
+        font-size: 12px;
+    }
+
+    .overlay i {
+        font-size: 24px;
+    }
+
+    .button-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn-trocar-senha {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+    }
 }

@@ -202,6 +202,7 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         outline: none;
         font-family: inherit;
+        cursor: pointer;
     }
     
     .form-group input::placeholder {
@@ -223,7 +224,7 @@
     
     .form-group input:not(:placeholder-shown) {
         background: white;
-        border-color: var(--success-green);
+        border-color: var(--primary-blue-dark);
     }
     
     .form-hint {
@@ -391,7 +392,7 @@
         }
     
         .icon-success {
-            color: var(--primary-green); /* Ícone de sucesso no tema verde */
+            color: var(--primary-blue); /* Ícone de sucesso no tema verde */
             filter: drop-shadow(0 4px 12px rgba(10, 64, 12, 0.3));
         }
     
@@ -452,7 +453,7 @@
     
         .modal-btn-confirm {
             /* Usa o tema verde para o botão de confirmação dentro do modal */
-            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
             color: white;
             box-shadow: var(--shadow-md);
         }
