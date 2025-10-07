@@ -22,13 +22,14 @@
           <div class="selected">Status</div>
           <div class="options">
             <div data-value="">Todos</div>
-            <div data-value="internado">Internado</div>
-            <div data-value="alta">Alta</div>
+            <div data-value="1">Ativo</div>
+            <div data-value="0">Inativo</div>
           </div>
         </div>
         <input type="hidden" id="filterStatus" value="">
       </div>
     </div>
+    
     <div class="box-table">
       <table>
         <thead>
@@ -41,25 +42,31 @@
           </tr>
         </thead>
         <tbody>
-          @foreach ($pacientes as $paciente)
-          <tr data-status="{{ $paciente->status }}">
-            <td>{{ $paciente->nome }}</td>
-            <td>{{ $paciente->cpf }}</td>
-            <td>{{ \Carbon\Carbon::parse($paciente->data_nascimento)->format('d/m/Y') }}</td>
+          @forelse ($pacientes as $paciente)
+          <tr data-status="{{ $paciente->statusPaciente ? '1' : '0' }}" 
+              data-name="{{ strtolower($paciente->nomePaciente) }}" 
+              data-cpf="{{ $paciente->cpfPaciente }}">
+            <td>{{ $paciente->nomePaciente }}</td>
+            <td>{{ $paciente->cpfPaciente }}</td>
+            <td>{{ $paciente->dataNascPaciente ? \Carbon\Carbon::parse($paciente->dataNascPaciente)->format('d/m/Y') : 'N/A' }}</td>
             <td>
-              @if($paciente->status === 'internado')
-                <span style="color: #0a400c;">Internado</span>
+              @if($paciente->statusPaciente)
+                <span style="color: #0a400c;">Ativo</span>
               @else
-                <span style="color: red;">Alta</span>
+                <span style="color: red;">Inativo</span>
               @endif
             </td>
             <td class="actions">
-              <a href="{{ route('medico.paciente.prontuario', $paciente->id) }}" title="Visualizar Prontuário">
+              <a href="{{ route('medico.paciente.prontuario', $paciente->idPaciente) }}" title="Visualizar Prontuário">
                 <i class="bi bi-eye-fill"></i>
               </a>
             </td>
           </tr>
-          @endforeach
+          @empty
+          <tr>
+            <td colspan="5" style="text-align: center;">Nenhum paciente encontrado.</td>
+          </tr>
+          @endforelse
         </tbody>
       </table>
     </div>
@@ -73,8 +80,11 @@
     const rows = document.querySelectorAll('tbody tr');
 
     rows.forEach(row => {
-      const name = row.children[0].textContent.toLowerCase();
-      const cpf = row.children[1].textContent.toLowerCase();
+      // Pula a linha de "nenhum paciente"
+      if (!row.dataset.name) return;
+
+      const name = row.dataset.name;
+      const cpf = row.dataset.cpf;
       const status = row.dataset.status;
 
       const matchesSearch = name.includes(searchInput) || cpf.includes(searchInput);

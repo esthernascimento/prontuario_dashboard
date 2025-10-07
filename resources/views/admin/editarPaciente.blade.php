@@ -13,7 +13,8 @@
             <h1>Editar Paciente</h1>
         </div>
 
-        <form action="{{ route('admin.pacientes.update', $paciente->idPacientePK) }}" method="POST" id="editPacienteForm">
+
+        <form action="{{ route('admin.pacientes.update', $paciente->idPaciente) }}" method="POST" id="editPacienteForm">
             @csrf
             @method('PUT')
 
@@ -54,8 +55,8 @@
             <div class="input-group">
                 <label for="statusPaciente">Status</label>
                 <select id="statusPaciente" name="statusPaciente">
-                    <option value="Ativo" {{ $paciente->statusPaciente == 'Ativo' ? 'selected' : '' }}>Ativo</option>
-                    <option value="Inativo" {{ $paciente->statusPaciente == 'Inativo' ? 'selected' : '' }}>Inativo</option>
+                    <option value="1" {{ $paciente->statusPaciente ? 'selected' : '' }}>Ativo</option>
+                    <option value="0" {{ !$paciente->statusPaciente ? 'selected' : '' }}>Inativo</option>
                 </select>
             </div>
 
@@ -80,17 +81,19 @@
 </div>
 
 <script>
-function openEditModal() {
-    document.getElementById('editPacienteModal').style.display = 'flex';
-}
-function closeEditModal() {
-    document.getElementById('editPacienteModal').style.display = 'none';
-}
-function submitEditForm() {
-    document.getElementById('editPacienteForm').submit();
-}
-document.getElementById('editPacienteModal').addEventListener('click', e => {
-    if(e.target.id === 'editPacienteModal') closeEditModal();
-});
+    function openEditModal() {
+        document.getElementById('editPacienteModal').style.display = 'flex';
+    }
+
+    function closeEditModal() {
+        document.getElementById('editPacienteModal').style.display = 'none';
+    }
+
+    function submitEditForm() {
+        document.getElementById('editPacienteForm').submit();
+    }
+    document.getElementById('editPacienteModal').addEventListener('click', e => {
+        if (e.target.id === 'editPacienteModal') closeEditModal();
+    });
 </script>
 @endsection

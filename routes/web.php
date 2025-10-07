@@ -10,10 +10,10 @@ use App\Http\Controllers\Admin\ConfiguracaoController;
 use App\Http\Controllers\Admin\MedicoController;
 use App\Http\Controllers\Admin\EnfermeiroController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\Admin\UnidadeController; // Adicionado
+use App\Http\Controllers\Admin\UnidadeController;
 
-// Paciente (via Admin)
-use App\Http\Controllers\API\PacienteController;
+// Paciente
+use App\Http\Controllers\Paciente\PacienteController as AdminPacienteController;
 
 // Médico
 use App\Http\Controllers\Medico\LoginController as MedicoLoginController;
@@ -28,7 +28,6 @@ use App\Http\Controllers\Enfermeiro\DashboardController as EnfermeiroDashboardCo
 use App\Http\Controllers\Enfermeiro\ConfiguracaoController as ConfiguracaoEnfermeiroController;
 use App\Http\Controllers\Enfermeiro\SegurancaController as SegurancaEnfermeiroController;
 use App\Http\Controllers\Enfermeiro\ProntuarioController;
-use Illuminate\Routing\Route as RoutingRoute;
 
 // ----------------------------------------------------------------------------------
 // --- 1. ROTAS GERAIS / PÚBLICAS ---
@@ -41,9 +40,34 @@ Route::get('/loginAdm', [AdminLoginController::class, 'showLoginForm'])->name('a
 Route::post('/loginAdm', [AdminLoginController::class, 'login']);
 Route::post('/logoutAdm', [AdminLoginController::class, 'logout'])->name('admin.logout');
 
+// ----------------------------------------------------------------------------------
+// --- 2. ROTAS DO MÉDICO ---
+// ----------------------------------------------------------------------------------
+
+Route::get('/loginMedico', [MedicoLoginController::class, 'showLoginForm'])->name('medico.login');
+Route::post('/loginMedico', [MedicoLoginController::class, 'login'])->name('medico.login.submit');
+Route::post('/medico/profile/complete', [MedicoLoginController::class, 'completarPerfil'])->name('api.medico.profile.complete');
+Route::post('/medico/login/check', [MedicoLoginController::class, 'login'])->name('api.medico.login.check');
+
+Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () {
+    Route::get('/dashboard', [MedicoDashboardController::class, 'index'])->name('dashboard');
+    Route::post('/logout', [MedicoLoginController::class, 'logout'])->name('logout');
+    Route::get('/perfil', [MedicoConfiguracaoController::class, 'perfil'])->name('perfil');
+    Route::post('/perfil/update', [MedicoConfiguracaoController::class, 'atualizarPerfil'])->name('perfil.update');
+    Route::get('/seguranca', [MedicoSegurancaController::class, 'showAlterarSenhaForm'])->name('seguranca');
+    Route::post('/alterar-senha', [MedicoSegurancaController::class, 'alterarSenha'])->name('alterarSenha');
+    
+    // Prontuário
+    Route::get('/prontuario', [MedicoProntuarioController::class, 'index'])->name('prontuario');
+    Route::get('/prontuario/{id}', [MedicoProntuarioController::class, 'show'])->name('paciente.prontuario');
+    Route::get('/prontuario/{id}/cadastrar', [MedicoProntuarioController::class, 'create'])->name('cadastrarProntuario');
+    Route::post('/prontuario/{id}/cadastrar', [MedicoProntuarioController::class, 'store'])->name('prontuario.store');
+    
+    Route::get('/ajuda', fn() => view('medico.ajudaMedico'))->name('ajuda');
+});
 
 // ----------------------------------------------------------------------------------
-// --- 2. ROTAS DO ENFERMEIRO ---
+// --- 3. ROTAS DO ENFERMEIRO ---
 // ----------------------------------------------------------------------------------
 
 Route::prefix('enfermeiro')->name('enfermeiro.')->group(function () {
@@ -65,27 +89,6 @@ Route::prefix('enfermeiro')->name('enfermeiro.')->group(function () {
 });
 
 // ----------------------------------------------------------------------------------
-// --- 3. ROTAS DO MÉDICO ---
-// ----------------------------------------------------------------------------------
-
-Route::get('/loginMedico', [MedicoLoginController::class, 'showLoginForm'])->name('medico.login');
-Route::post('/loginMedico', [MedicoLoginController::class, 'login'])->name('medico.login.submit');
-Route::post('/medico/profile/complete', [MedicoLoginController::class, 'completarPerfil'])->name('api.medico.profile.complete');
-Route::post('/medico/login/check', [MedicoLoginController::class, 'login'])->name('api.medico.login.check');
-
-Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () {
-    Route::get('/dashboard', [MedicoDashboardController::class, 'index'])->name('dashboard');
-    Route::post('/logout', [MedicoLoginController::class, 'logout'])->name('logout');
-    Route::get('/perfil', [MedicoConfiguracaoController::class, 'perfil'])->name('perfil');
-    Route::post('/perfil/update', [MedicoConfiguracaoController::class, 'atualizarPerfil'])->name('perfil.update');
-    Route::get('/seguranca', [MedicoSegurancaController::class, 'showAlterarSenhaForm'])->name('seguranca');
-    Route::post('/alterar-senha', [MedicoSegurancaController::class, 'alterarSenha'])->name('alterarSenha');
-    Route::get('/prontuario', [MedicoProntuarioController::class, 'index'])->name('prontuario');
-    Route::get('/prontuario/{id}', [MedicoProntuarioController::class, 'show'])->name('paciente.prontuario');
-    Route::get('/ajuda', fn() => view('medico.ajudaMedico'))->name('ajuda');
-});
-
-// ----------------------------------------------------------------------------------
 // --- 4. PAINEL ADMIN (PROTEGIDO) ---
 // ----------------------------------------------------------------------------------
 Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function () {
@@ -99,24 +102,15 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::get('/perfil', [ConfiguracaoController::class, 'perfil'])->name('perfil');
     Route::post('/perfil/update', [ConfiguracaoController::class, 'atualizarPerfil'])->name('perfil.update');
 
-    // Gestão de Pacientes
-    Route::get('/pacientes', function () {
-        $pacientes = \App\Models\Paciente::orderBy('nomePaciente')->paginate(10);
-        return view('geral.pacientes', compact('pacientes'));
-    })->name('pacientes.index');
-    Route::get('/cadastroPaciente', function () {
-        return view('admin.cadastroPaciente');
-    })->name('cadastroPaciente');
-    Route::post('/paciente/store', [PacienteController::class, 'store'])->name('paciente.store');
-
-
-    // ...
-    Route::get('/paciente/{id}/editar', [PacienteController::class, 'edit'])->name('paciente.edit');
-    Route::put('/paciente/{id}', [PacienteController::class, 'update'])->name('paciente.update');
-    // ...
-    Route::get('/paciente/{id}/excluir', [PacienteController::class, 'confirmarExclusao'])->name('pacientes.confirmarExclusao');
-    Route::delete('/paciente/{id}', [PacienteController::class, 'destroy'])->name('pacientes.excluir');
-    Route::post('/paciente/{id}/toggle-status', [PacienteController::class, 'toggleStatus'])->name('pacientes.toggleStatus');
+    // =======================================================================
+    // --- GESTÃO DE PACIENTES ---
+    // IMPORTANTE: A rota toggle-status DEVE vir ANTES do resource
+    // =======================================================================
+    Route::post('pacientes/{paciente}/toggle-status', [AdminPacienteController::class, 'toggleStatus'])
+        ->name('pacientes.toggleStatus');
+    
+    Route::resource('pacientes', AdminPacienteController::class);
+    // =======================================================================
 
     // CRUD MÉDICOS
     Route::get('/manutencaoMedicos', [MedicoController::class, 'index'])->name('manutencaoMedicos');
@@ -127,8 +121,8 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::get('/medicos/{id}/excluir', [MedicoController::class, 'confirmarExclusao'])->name('medicos.confirmarExclusao');
     Route::delete('/medicos/{id}', [MedicoController::class, 'excluir'])->name('medicos.excluir');
     Route::post('/medicos/{id}/toggle-status', [MedicoController::class, 'toggleStatus'])->name('medicos.toggleStatus');
-    // ADICIONADO: Rota para associar unidades a um médico
     Route::post('/medicos/{medico}/unidades', [MedicoController::class, 'syncUnidades'])->name('medicos.syncUnidades');
+
     // CRUD ENFERMEIROS
     Route::get('/manutencaoEnfermeiro', [EnfermeiroController::class, 'index'])->name('manutencaoEnfermeiro');
     Route::get('/cadastroEnfermeiro', [EnfermeiroController::class, 'create'])->name('enfermeiro.create');
@@ -138,10 +132,9 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::get('/enfermeiro/{id}/excluir', [EnfermeiroController::class, 'confirmarExclusao'])->name('enfermeiro.confirmarExclusao');
     Route::delete('/enfermeiro/{id}', [EnfermeiroController::class, 'excluir'])->name('enfermeiro.excluir');
     Route::post('/enfermeiro/{id}/toggle-status', [EnfermeiroController::class, 'toggleStatus'])->name('enfermeiro.toggleStatus');
-    // ADICIONADO: Rota para associar unidades a um enfermeiro
     Route::post('/enfermeiro/{enfermeiro}/unidades', [EnfermeiroController::class, 'syncUnidades'])->name('enfermeiro.syncUnidades');
 
-    // ADICIONADO: CRUD UNIDADES
+    // CRUD UNIDADES
     Route::get('/unidades', [UnidadeController::class, 'index'])->name('unidades.index');
     Route::get('/unidades/create', [UnidadeController::class, 'create'])->name('unidades.create');
     Route::post('/unidades', [UnidadeController::class, 'store'])->name('unidades.store');
@@ -150,4 +143,3 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::delete('/unidades/{unidade}', [UnidadeController::class, 'destroy'])->name('unidades.destroy');
     Route::post('/unidades/{id}/toggle-status', [UnidadeController::class, 'toggleStatus'])->name('unidades.toggleStatus');
 });
-
