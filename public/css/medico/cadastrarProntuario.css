@@ -1,0 +1,57 @@
+
+
+.paciente-info {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    border-left: 4px solid #0d6efd;
+}
+
+.paciente-info h3 {
+    margin: 0 0 10px 0;
+    color: #0d6efd;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.paciente-info p {
+    margin: 5px 0;
+    color: #495057;
+}
+
+.split-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.button-group {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    margin-top: 30px;
+}
+
+.btn-cancelar {
+    padding: 12px 24px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-cancelar:hover {
+    background-color: #5a6268;
+}
+
+.error {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 5px;
+    display: block;
+}
