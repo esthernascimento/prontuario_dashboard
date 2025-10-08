@@ -17,11 +17,15 @@ return new class extends Migration
                   ->cascadeOnUpdate()
                   ->cascadeOnDelete();
 
-            // FK -> tbMedico.idMedicoPK (histórico costuma não ser apagado ao excluir médico)
+            // FK -> tbMedico.idMedicoPK
             $table->foreignId('idMedicoFK')
                   ->constrained('tbMedico', 'idMedicoPK')
                   ->cascadeOnUpdate()
-                  ->restrictOnDelete(); // ou ->noAction()
+                  ->restrictOnDelete();
+
+            // Dados do médico (denormalizados para histórico)
+            $table->string('nomeMedico', 255);
+            $table->string('crmMedico', 50);
 
             // FK -> tbEnfermeiro.idEnfermeiroPK (nullable; se excluir, fica null)
             $table->foreignId('idEnfermeiroFK')
@@ -30,20 +34,30 @@ return new class extends Migration
                   ->cascadeOnUpdate()
                   ->nullOnDelete();
 
-            // FK -> tbUnidade.idUnidadePK
+            // FK -> tbUnidade.idUnidadePK (nullable se não for obrigatório)
             $table->foreignId('idUnidadeFK')
+                  ->nullable()
                   ->constrained('tbUnidade', 'idUnidadePK')
                   ->cascadeOnUpdate()
-                  ->restrictOnDelete(); // ajuste se quiser cascata
+                  ->restrictOnDelete();
 
-            $table->dateTime('dataConsulta');
-            $table->text('obsConsulta')->nullable();
+            // Nome da unidade (denormalizado para histórico)
+            $table->string('unidade', 255)->nullable();
+
+            // Data da consulta
+            $table->date('dataConsulta');
+
+            // Campos principais do prontuário
+            $table->text('observacoes')->nullable();
+            $table->text('examesSolicitados')->nullable();
+            $table->text('medicamentosPrescritos')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
 
-            // (Opcional) Índices auxiliares de busca:
-            // $table->index(['idProntuarioFK', 'dataConsulta']);
+            // Índices auxiliares de busca
+            $table->index(['idProntuarioFK', 'dataConsulta']);
+            $table->index('dataConsulta');
         });
     }
 

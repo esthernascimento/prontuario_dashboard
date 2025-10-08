@@ -1,21 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
-/* dashboard.css ATUALIZADO */
-
-  body {
-    font-family: 'Montserrat', sans-serif;
-    background-color: #f4f6f8;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-  }
-
 /* ============================================
-   CADASTRO DE PRONTUÁRIO - CSS PROFISSIONAL
+   CADASTRO DE PRONTUÁRIO - CSS ATUALIZADO
    TEMA: VERMELHO MÉDICO
    ============================================ */
 
-   :root {
+:root {
     --primary-red: #DC2626;
     --primary-red-dark: #991B1B;
     --primary-red-light: #EF4444;
@@ -39,6 +29,14 @@
     --radius-lg: 16px;
 }
 
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
 .main-dashboard {
     padding: 40px;
     background: linear-gradient(135deg, #FFF1F2 0%, #F9FAFB 100%);
@@ -46,7 +44,7 @@
 }
 
 .cadastrar-container {
-    max-width: 900px;
+    max-width: 950px;
     margin: 0 auto;
     background: var(--bg-white);
     border-radius: var(--radius-lg);
@@ -121,12 +119,12 @@
 }
 
 /* ============================================
-   CARD DE INFORMAÇÕES DO PACIENTE
+   CARD DE INFORMAÇÕES DO PACIENTE E MÉDICO
    ============================================ */
 
 .paciente-info {
     margin: 32px 36px;
-    padding: 24px 28px;
+    padding: 28px;
     background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
     border: 2px solid #FECACA;
     border-left: 6px solid var(--primary-red);
@@ -149,7 +147,7 @@
 .paciente-info h3 {
     color: var(--primary-red-dark);
     font-size: 1.15rem;
-    margin: 0 0 16px 0;
+    margin: 0 0 20px 0;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -161,17 +159,30 @@
     color: var(--primary-red);
 }
 
-.paciente-info p {
-    margin: 8px 0;
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    line-height: 1.6;
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
 }
 
-.paciente-info strong {
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-item strong {
     color: var(--text-primary);
     font-weight: 600;
-    margin-right: 6px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-item span {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
 }
 
 /* ============================================
@@ -220,7 +231,9 @@ form {
 .input-group:nth-child(6) { animation-delay: 0.6s; }
 
 .input-group label {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-weight: 600;
     font-size: 0.95rem;
     color: var(--text-primary);
@@ -228,8 +241,15 @@ form {
     transition: color 0.3s ease;
 }
 
-.input-group textarea {
-    width: 90%;
+.input-group label i {
+    color: var(--primary-red);
+    font-size: 1.1rem;
+}
+
+/* Inputs de Texto e Data */
+.input-group input.input-date,
+.input-group input.input-text {
+    width: 100%;
     padding: 14px 16px;
     font-size: 0.95rem;
     color: var(--text-primary);
@@ -238,9 +258,46 @@ form {
     border-radius: var(--radius-md);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     outline: none;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+.input-group input.input-date {
+    max-width: 250px;
+}
+
+.input-group input::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.input-group input:hover {
+    border-color: var(--primary-red-light);
+    background: white;
+}
+
+.input-group input:focus {
+    border-color: var(--border-focus);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Textareas */
+.input-group textarea {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    background: var(--bg-gray-50);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
     resize: vertical;
     line-height: 1.6;
+    min-height: 100px;
 }
 
 .input-group textarea::placeholder {
@@ -261,6 +318,7 @@ form {
 }
 
 /* Efeito de preenchimento */
+.input-group input:not(:placeholder-shown):valid,
 .input-group textarea:not(:placeholder-shown):valid {
     background: white;
     border-color: var(--success-green);
@@ -280,23 +338,6 @@ form {
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-8px); }
     75% { transform: translateX(8px); }
-}
-
-/* ============================================
-   GRUPOS DIVIDIDOS (SPLIT)
-   ============================================ */
-
-.split-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin-bottom: 26px;
-    animation: fadeIn 0.6s ease-out 0.55s backwards;
-}
-
-.split-group .input-group {
-    margin-bottom: 0;
-    animation: none;
 }
 
 /* ============================================
@@ -376,17 +417,6 @@ form {
     box-shadow: var(--shadow-md);
 }
 
-.save-button::after {
-    content: '→';
-    margin-left: 4px;
-    display: inline-block;
-    transition: transform 0.3s ease;
-}
-
-.save-button:hover::after {
-    transform: translateX(5px);
-}
-
 /* ============================================
    RESPONSIVIDADE
    ============================================ */
@@ -423,6 +453,11 @@ form {
         font-size: 1.05rem;
     }
 
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
     form {
         padding: 0 20px 24px 20px;
     }
@@ -431,13 +466,8 @@ form {
         font-size: 1.1rem;
     }
 
-    .split-group {
-        grid-template-columns: 1fr;
-        gap: 0;
-    }
-
-    .split-group .input-group {
-        margin-bottom: 26px;
+    .input-group input.input-date {
+        max-width: 100%;
     }
 
     .button-group {
@@ -465,10 +495,15 @@ form {
         font-size: 1rem;
     }
 
-    .paciente-info p {
+    .info-item strong {
+        font-size: 0.8rem;
+    }
+
+    .info-item span {
         font-size: 0.9rem;
     }
 
+    .input-group input,
     .input-group textarea {
         padding: 12px 14px;
         font-size: 0.9rem;
@@ -482,11 +517,11 @@ form {
 }
 
 /* ============================================
-   MICRO INTERAÇÕES E POLIMENTO
+   MICRO INTERAÇÕES
    ============================================ */
 
-/* Efeito de foco suave em textareas */
-textarea:focus {
+textarea:focus,
+input:focus {
     animation: focusPulse 0.3s ease-out;
 }
 
@@ -496,29 +531,6 @@ textarea:focus {
     100% { transform: scale(1) translateY(-2px); }
 }
 
-/* Transição suave ao carregar a página */
-form > * {
-    animation: fadeInSequence 0.6s ease-out backwards;
-}
-
-@keyframes fadeInSequence {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Destaque no textarea ao digitar */
-textarea:focus {
-    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1), 
-                0 8px 16px -4px rgba(0, 0, 0, 0.1);
-}
-
-/* Estado de loading no botão de salvar */
 .save-button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
@@ -528,18 +540,4 @@ textarea:focus {
 .save-button:disabled:hover {
     transform: none;
     box-shadow: var(--shadow-md);
-}
-
-/* Contador de caracteres opcional */
-.char-counter {
-    text-align: right;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin-top: 6px;
-    font-weight: 500;
-}
-
-.char-counter.warning {
-    color: var(--primary-red);
-    font-weight: 700;
 }

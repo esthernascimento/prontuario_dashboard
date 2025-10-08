@@ -60,7 +60,7 @@ Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () 
     Route::get('/ajuda', fn() => view('medico.ajudaMedico'))->name('ajuda');
     
     // =======================================================================
-    // --- ROTAS DE PRONTUÁRIO ---
+    // --- ROTAS DE PRONTUÁRIO E CONSULTAS ---
     // IMPORTANTE: Rotas específicas devem vir ANTES das rotas com parâmetros genéricos
     // =======================================================================
     
@@ -73,14 +73,19 @@ Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () 
     // Salva nova consulta
     Route::post('/cadastrar-prontuario/{id}', [MedicoProntuarioController::class, 'store'])->name('prontuario.store');
     
-    // Visualiza prontuário completo do paciente (histórico de consultas)
-    Route::get('/prontuario/{id}', [MedicoProntuarioController::class, 'show'])->name('paciente.prontuario');
-    
-    // Edita uma consulta específica
+    // Formulário para editar uma consulta específica (DEVE VIR ANTES da rota show genérica)
     Route::get('/prontuario/editar/{id}', [MedicoProntuarioController::class, 'edit'])->name('prontuario.edit');
     
     // Atualiza uma consulta
     Route::put('/prontuario/atualizar/{id}', [MedicoProntuarioController::class, 'update'])->name('prontuario.update');
+    
+    // Exclui uma consulta (soft delete)
+    Route::delete('/prontuario/deletar/{id}', [MedicoProntuarioController::class, 'destroy'])->name('prontuario.destroy');
+    
+    // Visualiza prontuário completo do paciente (histórico de consultas)
+    // IMPORTANTE: Esta rota DEVE vir DEPOIS das rotas /prontuario/editar e /prontuario/atualizar
+    Route::get('/prontuario/{id}', [MedicoProntuarioController::class, 'show'])->name('paciente.prontuario');
+    
     // =======================================================================
 });
 
@@ -140,7 +145,7 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::delete('/medicos/{id}', [MedicoController::class, 'excluir'])->name('medicos.excluir');
     Route::post('/medicos/{id}/toggle-status', [MedicoController::class, 'toggleStatus'])->name('medicos.toggleStatus');
     Route::post('/medicos/{medico}/unidades', [MedicoController::class, 'syncUnidades'])->name('medicos.syncUnidades');
-
+  
     // CRUD ENFERMEIROS
     Route::get('/manutencaoEnfermeiro', [EnfermeiroController::class, 'index'])->name('manutencaoEnfermeiro');
     Route::get('/cadastroEnfermeiro', [EnfermeiroController::class, 'create'])->name('enfermeiro.create');

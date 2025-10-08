@@ -23,7 +23,6 @@
           <div class="options">
             <div data-value="">Todos</div>
             <div data-value="1">Ativo</div>
-            <div data-value="0">Inativo</div>
           </div>
         </div>
         <input type="hidden" id="filterStatus" value="">
@@ -43,18 +42,14 @@
         </thead>
         <tbody>
           @forelse ($pacientes as $paciente)
-          <tr data-status="{{ $paciente->statusPaciente ? '1' : '0' }}" 
+          <tr data-status="1"
               data-name="{{ strtolower($paciente->nomePaciente) }}" 
               data-cpf="{{ $paciente->cpfPaciente }}">
             <td>{{ $paciente->nomePaciente }}</td>
             <td>{{ $paciente->cpfPaciente }}</td>
             <td>{{ $paciente->dataNascPaciente ? \Carbon\Carbon::parse($paciente->dataNascPaciente)->format('d/m/Y') : 'N/A' }}</td>
             <td>
-              @if($paciente->statusPaciente)
-                <span class="status-badge status-ativo">Ativo</span>
-              @else
-                <span class="status-badge status-inativo">Inativo</span>
-              @endif
+              <span class="status-badge status-ativo">Ativo</span>
             </td>
             <td class="actions">
               <a href="{{ route('medico.paciente.prontuario', $paciente->idPaciente) }}" 
@@ -83,28 +78,22 @@
 <script>
   function filterPatients() {
     const searchInput = document.getElementById('searchInput').value.toLowerCase();
-    const filterStatus = document.getElementById('filterStatus').value;
     const rows = document.querySelectorAll('tbody tr');
 
     rows.forEach(row => {
-      // Pula a linha de "nenhum paciente"
       if (!row.dataset.name) return;
 
       const name = row.dataset.name;
       const cpf = row.dataset.cpf;
-      const status = row.dataset.status;
-
       const matchesSearch = name.includes(searchInput) || cpf.includes(searchInput);
-      const matchesStatus = !filterStatus || status === filterStatus;
 
-      row.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
+      row.style.display = matchesSearch ? '' : 'none';
     });
   }
 
   const customSelect = document.getElementById("customStatus");
   const selected = customSelect.querySelector(".selected");
   const options = customSelect.querySelector(".options");
-  const hiddenInput = document.getElementById("filterStatus");
 
   selected.addEventListener("click", () => {
     options.style.display = options.style.display === "flex" ? "none" : "flex";
@@ -113,7 +102,6 @@
   options.querySelectorAll("div").forEach(option => {
     option.addEventListener("click", () => {
       selected.textContent = option.textContent;
-      hiddenInput.value = option.dataset.value;
       options.style.display = "none";
       filterPatients();
     });
