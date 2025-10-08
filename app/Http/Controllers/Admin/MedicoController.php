@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Medico;
 use App\Models\Usuario;
+use App\Models\Unidade; // Adicionado para buscar as unidades
 use Illuminate\Validation\ValidationException;
 use App\Mail\emailMedico;
 use Illuminate\Support\Str;
@@ -20,24 +21,34 @@ class MedicoController extends Controller
         return view('admin.manutencaoMedicos', compact('medicos'));
     }
 
+    /**
+     * AJUSTADO: Mostra o formulário de cadastro E envia a lista de unidades.
+     */
     public function create()
     {
-        return view('admin.cadastroMedico');
+        // Busca todas as unidades para listarmos no formulário de seleção
+        $unidades = Unidade::orderBy('nomeUnidade')->get();
+        return view('admin.cadastroMedico', compact('unidades'));
     }
 
+    /**
+     * AJUSTADO: Salva o novo médico E as suas unidades de trabalho.
+     */
     public function store(Request $request)
     {
         try {
             $validated = $request->validate([
                 'nomeMedico'      => 'required|string|max:255',
-                'crmMedico'       => 'required|string|max:20',
+                'crmMedico'       => 'required|string|max:20|unique:tbMedico,crmMedico',
                 'emailUsuario'    => 'required|email|max:255|unique:tbUsuario,emailUsuario',
-
+                'especialidadeMedico' => 'nullable|string|max:100',
+                'unidades'        => 'nullable|array', // Valida que 'unidades' é uma lista (se enviada)
+                'unidades.*'      => 'exists:tbUnidade,idUnidadePK', // Valida cada ID da lista
             ], [
                 'nomeMedico.required' => 'O nome do médico é obrigatório.',
                 'crmMedico.required' => 'O CRM é obrigatório.',
                 'emailUsuario.required' => 'O e-mail é obrigatório.',
-                'emailUsuario.unique' => 'Este e-mail já está cadastrado.',           
+                'emailUsuario.unique' => 'Este e-mail já está cadastrado.',
             ]);
 
             $senhaTemporaria = Str::random(10);
@@ -54,11 +65,15 @@ class MedicoController extends Controller
             $medico->id_usuarioFK = $usuario->idUsuarioPK;
             $medico->nomeMedico = $request->nomeMedico;
             $medico->crmMedico = $request->crmMedico;
-            $medico->especialidadeMedico = $request->especialidadeMedico;
+            $medico->especialidadeMedico = $request->input('especialidadeMedico', ''); // Valor padrão vazio se não for fornecido
             $medico->save();
 
-            Mail::to($usuario->emailUsuario)->send(new emailMedico($usuario, $senhaTemporaria));
+            // Se o admin selecionou unidades no formulário, associa-as ao médico
+            if ($request->has('unidades')) {
+                $medico->unidades()->sync($request->unidades);
+            }
 
+            Mail::to($usuario->emailUsuario)->send(new emailMedico($usuario, $senhaTemporaria));
 
             return response()->json([
                 'success' => true,
@@ -72,11 +87,12 @@ class MedicoController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Erro interno ao cadastrar médico.'
+                'message' => 'Erro interno ao cadastrar médico: ' . $e->getMessage() // Adicionado para ajudar a depurar
             ], 500);
         }
     }
-public function confirmarExclusao($id)
+    
+    public function confirmarExclusao($id)
     {
         $medico = Medico::findOrFail($id);
         return view('admin.excluirMedico', compact('medico'));
@@ -142,8 +158,5 @@ public function confirmarExclusao($id)
 
         return redirect()->route('admin.manutencaoMedicos')->with('success', 'Status do médico atualizado com sucesso!');
     }
-
 }
-
-?>
 

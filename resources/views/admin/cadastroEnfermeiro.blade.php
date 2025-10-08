@@ -65,6 +65,21 @@
       <input type="email" id="email" name="emailEnfermeiro" required />
     </div>
   </div>
+  
+  <div class="input-group">
+    <label for="unidades">Unidades de Trabalho...</label>
+    <div class="input-wrapper">
+        <i class="fa-solid fa-hospital icon-left"></i>
+        <select name="unidades[]" id="unidades" multiple>
+            @forelse($unidades as $unidade)
+                <option value="{{ $unidade->idUnidadePK }}">{{ $unidade->nomeUnidade }}</option>
+            @empty
+                ...
+            @endforelse
+        </select>
+    </div>
+</div>
+
 
   <button type="submit">CADASTRAR</button>
   <div id="form-messages" style="display:none;"></div>
