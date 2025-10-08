@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\Enfermeiro;
 use App\Models\Usuario;
-use App\Models\Unidade; // Adicionado para buscar as unidades
+use App\Models\Unidade; 
 
 class EnfermeiroController extends Controller
 {
