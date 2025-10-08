@@ -1,145 +1,369 @@
-body {
+/* ============================================
+ * PRONTUÁRIO DOS PACIENTES - CSS ENFERMEIRO
+ * TEMA: VERDE ENFERMAGEM
+ * * Este CSS adapta o estilo profissional (Vermelho Médico)
+ * para o tema de Enfermagem (Verde).
+ * ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
+
+:root {
+    /* Cores de Enfermagem (VERDE) */
+    --primary-green: #0a400c;
+    /* Verde Principal */
+    --primary-green-dark: #0a400c;
+    /* Verde Escuro */
+    --primary-green-light: #5cb85c;
+    /* Verde Claro */
+
+    --bg-white: #FFFFFF;
+    --bg-gray-50: #F9FAFB;
+    --bg-gray-100: #F3F4F6;
+    --text-primary: #111827;
+    --text-secondary: #6B7280;
+    --text-muted: #9CA3AF;
+    --border-color: #E5E7EB;
+
+    /* Cores de Status */
+    --success-color: #28a745;
+    --error-color: #dc3545;
+
+    /* Sombras e Bordas */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+}
+
+* {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f9f9f9;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background: #f4f6f8;
+    color: #333;
+    overflow-x: hidden;
 }
 
 .main-dashboard {
-    padding: 30px;
-    margin-left: 10px;
+    padding: 120px;
+    min-height: 100vh;
+    /* Adaptação: Gradiente de fundo levemente esverdeado */
+    background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
 }
 
 .enfermeiro-container {
     max-width: 1200px;
-    display: flex;
-    flex-direction: column;
     margin: 0 auto;
-    align-self: center;
 }
 
+/* ============================================
+ * ANIMAÇÕES
+ * ============================================ */
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animação de surgimento das linhas da tabela */
+@keyframes slideInRow {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Efeito de pulse no ícone de adicionar consulta */
+@keyframes pulsePlus {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Efeito de brilho na tabela */
+@keyframes tableShine {
+    0% {
+        left: -100%;
+    }
+
+    50%,
+    100% {
+        left: 100%;
+    }
+}
+
+/* ============================================
+ * HEADER (VERDE)
+ * ============================================ */
 .enfermeiro-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
-    margin-left: 5px;
-    flex-direction: row;
+    margin-bottom: 25px;
+    padding: 0 10px;
+    margin-top: 20px;
+    animation: fadeInDown 0.6s ease-out;
+    /* Adicionado */
 }
 
 .enfermeiro-header h1 {
-    color: #0a400c;
-    margin: 0;
+    color: var(--primary-green-dark);
+    font-size: 28px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .enfermeiro-header h1 i {
-    margin-right: 10px;
+    color: var(--primary-green);
+    /* Adaptado para verde */
+    filter: drop-shadow(0 2px 4px rgba(40, 167, 69, 0.3));
 }
 
+/* Mantive o estilo do botão do médico, mas com cores verdes, caso o usuário queira usá-lo. */
+.btn-add-enfermeiro {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+    color: white;
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    /* Se você quiser ocultar, use 'display: none;' */
+}
+
+.btn-add-enfermeiro:hover {
+    transform: translateY(-2px);
+    /* Adaptado para verde */
+    box-shadow: 0 12px 24px -6px rgba(40, 167, 69, 0.4);
+}
+
+/* ============================================
+ * BARRA DE PESQUISA E FILTROS (VERDE)
+ * ============================================ */
 .search-filters {
     display: flex;
-    flex-direction: row;
-    width: 450px;
-    gap: 80px;
-    margin-bottom: 30px;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding: 20px;
+    border-radius: var(--radius-md);
+    flex-wrap: wrap;
+    animation: fadeIn 0.6s ease-out 0.2s backwards;
+    /* Adicionado */
 }
 
 .search-box {
     position: relative;
     flex: 1;
-    min-width: 300px;
+    min-width: 250px;
 }
 
 .search-box i {
+    color: var(--primary-green);
     position: absolute;
     left: 15px;
     top: 50%;
     transform: translateY(-50%);
-    color: #666;
+    z-index: 2;
+    font-size: 1.1rem;
 }
 
 .search-box input {
-    cursor: pointer;
     width: 100%;
-    padding: 12px 15px 12px 45px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: border-color 0.3s;
+    padding: 14px 15px 14px 45px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    height: 48px;
+    background: var(--bg-white);
+    /* Adicionado */
+    transition: all 0.3s ease;
+    /* Adicionado */
+    font-family: 'Montserrat', sans-serif;
+    /* Adicionado */
 }
 
 .search-box input:focus {
     outline: none;
-    border-color: #0a400c;
-    box-shadow: 0 0 0 2px rgba(10, 64, 12, 0.1);
+    /* Adicionado */
+    border-color: var(--primary-green);
+    /* Alterado */
+    background: white;
+    /* Adicionado */
+    /* Adaptado para verde */
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
 }
 
-.filters {
-    display: flex;
-    gap: 15px;
+.search-box input::placeholder {
+    color: var(--text-muted);
 }
 
+/* Adicionado */
+
+
+/* FILTRO CUSTOMIZADO */
 .custom-select {
     position: relative;
-    width: 140px;
-    font-size: 14px;
+    width: 150px;
     cursor: pointer;
 }
 
-.custom-select .selected {
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    background: white;
-    user-select: none;
-    position: relative;
+/* Estilo do Input que substituiu o 'selected' */
+.selected-filter-input {
+    width: 100%;
+    padding: 14px 40px 14px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    height: 48px;
+    background-color: var(--bg-white);
+    cursor: pointer;
+    box-shadow: none;
+    transition: border-color 0.3s;
+    font-weight: 500;
+    /* Adicionado */
+    color: var(--text-primary);
+    /* Adicionado */
+    font-size: 14px;
+    /* Adicionado */
 }
 
-.custom-select .selected::after {
-    content: "▼";
-    font-size: 12px;
+.selected-filter-input:hover {
+    border-color: var(--primary-green);
+}
+
+.selected-filter-input:focus {
+    border-color: var(--primary-green);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+    cursor: text;
+}
+
+.select-icon {
     position: absolute;
-    right: 10px;
+    right: 15px;
     top: 50%;
     transform: translateY(-50%);
+    color: var(--primary-green);
+    /* Alterado */
     pointer-events: none;
-    color: #555;
+    font-size: 12px;
+    /* Adicionado */
 }
 
+/* Opções (Dropdown) */
 .custom-select .options {
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
-    border: 1px solid #ddd;
-    border-radius: 6px;
     background: white;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
     margin-top: 5px;
+    box-shadow: var(--shadow-lg);
     display: none;
-    flex-direction: column;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    z-index: 10;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.custom-select.active .options {
+    /* Adicionado para mostrar o dropdown */
+    display: block;
 }
 
 .custom-select .options div {
-    padding: 10px 15px;
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--bg-gray-100);
+    transition: all 0.2s ease;
+    /* Adicionado */
     cursor: pointer;
 }
 
 .custom-select .options div:hover {
-    background: #f0f0f0;
+    /* Adaptado para verde */
+    background: linear-gradient(135deg, #F0FFF0 0%, #D1FAE5 100%);
+    color: var(--primary-green-dark);
+    font-weight: 600;
 }
 
-/* Tabela */
+.custom-select .options div:last-child {
+    border-bottom: none;
+    /* Adicionado */
+}
 
+/* ============================================
+ * TABELA (VERDE)
+ * ============================================ */
 .box-table {
-    background-color: #eef4ef;
-    width: 90%;
-    max-width: 900px;
-    margin: 30px auto;
-    padding: 0;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: white;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-xl);
     overflow: hidden;
+    border: 1px solid var(--border-color);
+    position: relative;
+    margin-bottom: 20px;
+    /* Adicionado */
+    animation: fadeIn 0.6s ease-out 0.4s backwards;
+    /* Adicionado */
+}
+
+/* Efeito de brilho na tabela - Restaurado */
+.box-table::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: tableShine 3s infinite;
+    pointer-events: none;
+    z-index: 1;
+    /* Adicionado para garantir que o brilho esteja sobre a tabela, mas sob o conteúdo */
 }
 
 table {
@@ -148,90 +372,342 @@ table {
 }
 
 thead {
-    background-color: #0a400c;
-    color: white;
-    text-align: left;
+    /* Adaptado para verde */
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
 }
 
-thead tr th {
-    padding: 20px;
-    font-weight: bold;
+th {
+    background: transparent;
+    /* Adicionado */
+    color: white;
+    padding: 18px 20px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    /* Adicionado */
+    border-bottom: none;
+    /* Adicionado */
 }
 
 tbody tr {
-    background-color: #eef4ef;
-    color: #0a400c;
+    background-color: #FFFFFF;
+    transition: all 0.3s ease;
+    /* Animação de linha de tabela - Restaurado */
+    animation: slideInRow 0.4s ease-out backwards;
 }
 
-tbody td {
-    padding: 12px 14px;
-    vertical-align: middle;
-    font-weight: bold;
+tbody tr:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+tbody tr:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+tbody tr:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+tbody tr:nth-child(4) {
+    animation-delay: 0.25s;
+}
+
+tbody tr:nth-child(5) {
+    animation-delay: 0.3s;
+}
+
+tbody tr:nth-child(even) {
+    /* Adaptado para verde (Fundo claro) */
+    background-color: #F0FFF0;
 }
 
 tbody tr:hover {
-    background-color: #c7e3c8;
-    color: #0a400c;
+    /* Adaptado para verde (Fundo hover) */
+    background-color: #ecfff6;
+    /* Adaptado para verde (Sombra hover) */
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.1);
+    transform: scale(1.01);
 }
+
+td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--bg-gray-100);
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+/* Centraliza o cabeçalho das colunas de status e ações */
+.status-header,
+.actions-header {
+    text-align: center !important;
+}
+
+/* ============================================
+ * STATUS BADGE
+ * ============================================ */
+
+.status-cell {
+    text-align: center;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    /* Arredondamento completo */
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: capitalize;
+    letter-spacing: 0.3px;
+    text-align: center;
+    min-width: 70px;
+}
+
+.status-ativo {
+    /* COR: VERDE para Ativo/Internado */
+    background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+    /* Adicionado gradiente */
+    color: #065F46;
+    border: 1px solid #6EE7B7;
+}
+
+.status-alta {
+    /* COR: VERMELHO para Alta (Usando a cor de erro padrão) */
+    background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+    /* Adicionado gradiente */
+    color: var(--error-color);
+    border: 1px solid #FCA5A5;
+}
+
+/* ============================================
+ * AÇÕES (TOOLTIP CORRIGIDO)
+ * ============================================ */
 
 .actions {
     display: flex;
-    justify-content: center;
+    gap: 8px;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    position: relative;
 }
 
-.actions i {
+.btn-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 16px;
+    position: relative;
+    z-index: 20;
+    background: transparent;
     cursor: pointer;
-    font-size: 18px;
-    transition: 0.3s;
+    border: none;
+    /* Adicionado */
+    text-decoration: none;
     color: #0a400c;
+    /* Adicionado */
 }
 
-.actions i:hover {
-    color: #6c7ae0;
+.btn-view {
+    color: var(--text-secondary);
 }
 
-/* Largura das colunas */
-
-table th:nth-child(1),
-table td:nth-child(1) {
-    width: 28%;
+.btn-view:hover {
+    background: #E5E7EB;
+    transform: scale(1.15);
+    color: var(--text-primary);
 }
 
-table th:nth-child(2),
-table td:nth-child(2) {
-    width: 20%;
+.btn-add-consulta {
+    color: var(--primary-green);
+    /* Adaptado para verde */
 }
 
-table th:nth-child(3),
-table td:nth-child(3) {
-    width: 20%;
+.btn-add-consulta:hover {
+    /* Adaptado para verde */
+    background: linear-gradient(135deg, #F0FFF0 0%, #D1FAE5 100%);
+    transform: scale(1.15) rotate(90deg);
+    /* Efeito de rotação do original */
 }
 
-table th:nth-child(4),
-table td:nth-child(4) {
-    width: 15%;
+/* Aplica o pulsePlus no ícone se estiver presente */
+.btn-add-consulta i {
+    animation: pulsePlus 2s ease-in-out infinite;
+}
+
+.btn-edit {
+    color: #0d6efd;
+    /* Azul padrão */
+}
+
+.btn-edit:hover {
+    background: #E0E7FF;
+    transform: scale(1.15);
+    color: #1E40AF;
+}
+
+.btn-delete {
+    color: var(--error-color);
+    /* Usando a cor de erro (vermelho) */
+}
+
+.btn-delete:hover {
+    background: #FEE2E2;
+    transform: scale(1.15);
+}
+
+.delete-form {
+    display: inline;
+}
+
+.delete-form button.btn-action {
+    padding: 0;
+}
+
+/* TOOLTIP - Restaurado o estilo e animação */
+.btn-action::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    /* Corrigido para cima */
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+    /* Corrigido para cima */
+    background: #1f2937;
+    color: white;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    /* Transição completa */
+    z-index: 10000;
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-action::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    /* Corrigido para cima */
+    left: 50%;
+    transform: translateX(-50%) translateY(-2px);
+    /* Corrigido para cima */
+    border: 5px solid transparent;
+    border-top-color: #1f2937;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    /* Transição completa */
+    z-index: 10001;
+}
+
+.btn-action:hover::after,
+.btn-action:hover::before {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    /* Corrigido: move para a posição final */
+}
+
+/* ============================================
+ * MENSAGEM VAZIA (Restaurado)
+ * ============================================ */
+
+.no-enfermeiros {
     text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+    font-style: italic;
+    background: var(--bg-gray-50);
+    font-size: 1rem;
 }
 
-table th:nth-child(5),
-table td:nth-child(5) {
-    width: 17%;
-    text-align: center;
+
+/* ============================================
+ * PAGINAÇÃO (Restaurado)
+ * ============================================ */
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
 
-/* Cores de status */
+/* ============================================
+ * RESPONSIVIDADE (Restaurado e Unificado)
+ * ============================================ */
 
-td span {
-    font-weight: bold;
+@media (max-width: 768px) {
+    .main-dashboard {
+        padding: 40px 20px;
+        /* Ajuste para melhor visualização em telas menores */
+    }
+
+    .enfermeiro-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .search-filters {
+        flex-direction: column;
+        gap: 15px;
+        padding: 10px;
+    }
+
+    .search-box,
+    .custom-select {
+        min-width: 100%;
+        width: 100%;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        /* Impede que o conteúdo da tabela quebre */
+    }
+
+    .actions {
+        gap: 5px;
+        min-width: 120px;
+        /* Adiciona largura mínima para as ações */
+    }
+
+    .btn-action {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+
+    /* Desabilita tooltip em mobile */
+    .btn-action::after,
+    .btn-action::before {
+        display: none;
+    }
 }
 
-td span[style*="green"],
-td span[style*="#0a400c"] {
-    color: #0a400c;
-}
+@media (max-width: 480px) {
+    .enfermeiro-header h1 {
+        font-size: 1.5rem;
+    }
 
-td span[style*="red"] {
-    color: red;
+    th,
+    td {
+        padding: 12px 10px;
+        font-size: 12px;
+    }
+
+    .status-badge {
+        font-size: 11px;
+        padding: 5px 10px;
+        min-width: 60px;
+    }
 }
