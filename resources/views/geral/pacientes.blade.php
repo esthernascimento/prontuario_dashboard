@@ -2,63 +2,47 @@
 
 @section('content')
 @php
-    $admin = auth()->guard('admin')->user();
-    use App\Models\Paciente;
-    $pacientes = $pacientes ?? Paciente::orderBy('nomePaciente')->paginate(10);
+use Carbon\Carbon;
 @endphp
 
 <link rel="stylesheet" href="{{ asset('css/admin/pacientes.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <main class="main-dashboard">
     <div class="patients-container">
         <div class="patients-header">
             <h1><i class="bi bi-people-fill"></i> Gerenciamento de Pacientes</h1>
-            <a href="{{ route('admin.cadastroPaciente') }}" class="btn-add-paciente">
+            {{-- BOTÃO DE CADASTRAR PACIENTE --}}
+            <a href="{{ route('admin.pacientes.create') }}" class="btn-add-paciente">
                 <i class="bi bi-plus-circle"></i> Cadastrar Paciente
             </a>
         </div>
 
-        <!-- Barra de pesquisa e filtros -->
+        @if(session('success'))
+            <div class="alert alert-success" style="margin-bottom: 20px;">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        {{-- BARRA DE PESQUISA E FILTROS (Com base no exemplo do enfermeiro) --}}
         <div class="search-filters">
             <div class="search-box">
                 <i class="bi bi-search"></i>
-                <input type="text" id="searchInput" placeholder="Pesquisar por nome, CPF ou cartão SUS..." onkeyup="filterPatients()">
+                <input type="text" id="searchInput" placeholder="Pesquisar por nome, CPF ou SUS..." onkeyup="filterPacientes()">
             </div>
             
-            <div class="custom-select" id="customAge">
-                <div class="selected">Todas as idades</div>
-                <div class="options">
-                    <div data-value="">Todas as idades</div>
-                    <div data-value="crianca">Crianças (0-12)</div>
-                    <div data-value="adolescente">Adolescentes (13-17)</div>
-                    <div data-value="adulto">Adultos (18-59)</div>
-                    <div data-value="idoso">Idosos (60+)</div>
-                </div>
-            </div>
-            <input type="hidden" id="filterAge" value="">
-
-            <div class="custom-select" id="customGender">
-                <div class="selected">Todos os gêneros</div>
-                <div class="options">
-                    <div data-value="">Todos os gêneros</div>
-                    <div data-value="M">Masculino</div>
-                    <div data-value="F">Feminino</div>
-                </div>
-            </div>
-            <input type="hidden" id="filterGender" value="">
-
+            {{-- FILTRO DE STATUS (Custom Select) --}}
             <div class="custom-select" id="customStatus">
-                <div class="selected">Todos os Status</div>
+                <div class="selected">Status</div>
                 <div class="options">
-                    <div data-value="">Todos os Status</div>
+                    <div data-value="">Todos</div>
                     <div data-value="ativo">Ativo</div>
                     <div data-value="inativo">Inativo</div>
                 </div>
             </div>
             <input type="hidden" id="filterStatus" value="">
         </div>
-
-        <!-- Tabela de Pacientes -->
+        
         <div class="table-wrapper">
             <table class="patients-table">
                 <thead>
@@ -71,73 +55,115 @@
                         <th>AÇÕES</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @if(isset($pacientes) && count($pacientes) > 0)
-                        @foreach($pacientes as $paciente)
-                            @php
-                                $idade = \Carbon\Carbon::parse($paciente->dataNascPaciente)->age;
-                                $statusDisplay = ucfirst($paciente->statusPaciente);
+           <tbody>
+    @forelse($pacientes as $paciente)
+        @php
+            $idade = $paciente->dataNascPaciente ? Carbon::parse($paciente->dataNascPaciente)->age : 'N/A';
+            // statusPaciente é boolean: true = ativo, false = inativo
+            $statusAtivo = $paciente->statusPaciente;
+            $statusTexto = $statusAtivo ? 'ativo' : 'inativo';
+            $nomeEscapado = json_encode($paciente->nomePaciente);
+        @endphp
+        <tr data-status="{{ $statusTexto }}" 
+            data-name="{{ $paciente->nomePaciente }}" 
+            data-cpf="{{ $paciente->cpfPaciente }}" 
+            data-sus="{{ $paciente->cartaoSusPaciente ?? '' }}">
+            <td>{{ $paciente->nomePaciente }}</td>
+            <td>{{ $paciente->cpfPaciente }}</td>
+            <td>{{ $idade }} anos</td>
+            <td>{{ $paciente->cartaoSusPaciente ?? 'N/A' }}</td>
+            <td>
+                <span class="status-badge status-{{ $statusTexto }}">
+                    {{ ucfirst($statusTexto) }}
+                </span>
+            </td>
+            <td>
+                <div class="action-buttons">
+                    {{-- Botão de Edição - CORRIGIDO: usa idPaciente --}}
+                    <a href="{{ route('admin.pacientes.edit', $paciente->idPaciente) }}" 
+                       class="btn-action btn-edit" 
+                       title="Editar">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    
+                    {{-- Botão de Alterar Status - CORRIGIDO --}}
+                    <a href="#"
+                        onclick="openStatusPacienteModal('{{ $paciente->idPaciente }}', {{ $nomeEscapado }}, '{{ $statusTexto }}')"
+                        class="btn-action" 
+                        title="{{ $statusAtivo ? 'Desativar' : 'Ativar' }}">
+                        @if($statusAtivo)
+                            <i class="bi bi-slash-circle text-danger"></i>
+                        @else
+                            <i class="bi bi-check-circle text-success"></i>
+                        @endif
+                    </a>
 
-                                // Lógica para o grupo de idade
-                                if ($idade <= 12) {
-                                    $ageGroup = 'crianca';
-                                } elseif ($idade >= 13 && $idade <= 17) {
-                                    $ageGroup = 'adolescente';
-                                } elseif ($idade >= 18 && $idade <= 59) {
-                                    $ageGroup = 'adulto';
-                                } else {
-                                    $ageGroup = 'idoso';
-                                }
-
-                                // Para o filtro de gênero
-                                $genderCode = strtoupper(substr($paciente->generoPaciente ?? '', 0, 1));
-                            @endphp
-                            <tr 
-                                data-age-group="{{ $ageGroup }}" 
-                                data-gender="{{ $genderCode }}"
-                                data-status="{{ strtolower($paciente->statusPaciente) }}"
-                            >
-                                <td>{{ $paciente->nomePaciente }}</td>
-                                <td>{{ $paciente->cpfPaciente }}</td>
-                                <td>{{ $idade }} anos</td>
-                                <td>{{ $paciente->cartaoSusPaciente ?? 'N/A' }}</td>
-                                <td>
-                                    <span class="status-badge status-{{ strtolower($paciente->statusPaciente) }}">
-                                        {{ $statusDisplay }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <a href="#" class="btn-action btn-view" title="Ver detalhes">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a href="#" class="btn-action btn-edit" title="Editar">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <a href="#" class="btn-action btn-delete" title="Excluir">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    @else
-                        <tr>
-                            <td colspan="6" class="no-patients">Nenhum paciente encontrado.</td>
-                        </tr>
-                    @endif
-                </tbody>
+                    {{-- Botão de Exclusão - CORRIGIDO --}}
+                    <a href="#"
+                        onclick="openDeletePacienteModal('{{ $paciente->idPaciente }}', {{ $nomeEscapado }})"
+                        class="btn-action btn-delete" 
+                        title="Excluir">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </div>
+            </td>
+        </tr>
+    @empty
+        <tr data-status="empty-list">
+            <td colspan="6" class="no-patients">Nenhum paciente encontrado.</td>
+        </tr>
+    @endforelse
+</tbody>
             </table>
         </div>
 
-        <!-- Paginação -->
         <div class="pagination-container">
-            @if(method_exists($pacientes, 'links'))
-                {{ $pacientes->links() }}
-            @endif
+            {{ $pacientes->links() }}
         </div>
     </div>
 </main>
+
+{{-- MODAL DE EXCLUSÃO (Soft Delete) --}}
+<div id="deletePacienteModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <i class="bi bi-trash-fill" style="color: #DC2626;"></i>
+            <h2>Excluir Paciente</h2>
+        </div>
+        
+        <p>Tem certeza que deseja excluir o(a) paciente <span id="pacienteNome"></span>? Esta ação pode ser desfeita posteriormente.</p>
+
+        <form id="deletePacienteForm" method="POST">
+            @csrf
+            @method('DELETE')
+
+            <div class="modal-buttons">
+                <button type="button" onclick="closeDeletePacienteModal()" class="btn-cancelar">Cancelar</button>
+                <button type="submit" class="btn-excluir">Sim, excluir</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{-- MODAL DE ALTERAÇÃO DE STATUS --}}
+<div id="statusPacienteModal" class="modal-overlay modal-confirm-edit">
+    <div class="modal-content">
+        <div class="modal-header">
+            <i class="bi bi-toggle-on" style="color: #0618b9;"></i>
+            <h2>Alterar Status</h2>
+        </div>
+        
+        <p>Tem certeza que deseja <span id="statusAction"></span> o(a) paciente <span id="statusPacienteNome"></span>?</p>
+
+        <form id="statusPacienteForm" method="POST">
+            @csrf
+            <div class="modal-buttons">
+                <button type="button" onclick="closeStatusPacienteModal()" class="btn-cancelar">Cancelar</button>
+                <button type="submit" class="btn-excluir">Sim, <span id="confirmStatusText"></span></button>
+            </div>
+        </form>
+    </div>
+</div>
 
 {{-- MODAL DE SUCESSO UNIFICADO --}}
 <div id="statusSuccessModal" class="modal-overlay">
@@ -157,76 +183,61 @@
 
 <script>
     // ------------------------------------------
-    // LÓGICA DO MODAL DE SUCESSO UNIFICADO
+    // LÓGICA DE FILTRAGEM (Baseada no seu exemplo)
     // ------------------------------------------
 
-    function openSuccessModal(message) {
-        document.getElementById('successMessage').textContent = message;
-        document.getElementById('statusSuccessModal').style.display = 'flex';
-    }
-
-    function closeSuccessModal() {
-        document.getElementById('statusSuccessModal').style.display = 'none';
-        window.location.reload(); 
-    }
-
-    document.getElementById('statusSuccessModal').addEventListener('click', function(event) {
-        if (event.target.id === 'statusSuccessModal') {
-            closeSuccessModal();
-        }
-    });
-
-    @if(session('success'))
-        document.addEventListener('DOMContentLoaded', () => {
-            const message = "{{ session('success') }}"; 
-            openSuccessModal(message);
-        });
-    @endif
-
-    // ------------------------------------------
-    // LÓGICA DE FILTRAGEM
-    // ------------------------------------------
-
-    function filterPatients() {
+    function filterPacientes() {
         const searchInput = document.getElementById('searchInput').value.toLowerCase();
-        const filterAge = document.getElementById('filterAge').value;
-        const filterGender = document.getElementById('filterGender').value;
         const filterStatus = document.getElementById('filterStatus').value;
-        const rows = document.querySelectorAll('tbody tr');
-        let visibleCount = 0;
+
+        const rows = document.querySelectorAll('.patients-table tbody tr');
+        let visibleRowsCount = 0;
+        let emptyRow = null;
 
         rows.forEach(row => {
-            const name = row.children[0].textContent.toLowerCase();
-            const cpf = row.children[1].textContent.toLowerCase();
-            const cartaoSus = row.children[3].textContent.toLowerCase();
-            const ageGroup = row.dataset.ageGroup; 
-            const gender = row.dataset.gender;
+            if (row.dataset.status === 'empty-list') {
+                emptyRow = row;
+                row.style.display = 'none';
+                return;
+            }
+
+            const name = row.dataset.name.toLowerCase();
+            const cpf = row.dataset.cpf.toLowerCase();
+            const sus = row.dataset.sus.toLowerCase();
             const status = row.dataset.status;
 
-            const matchesSearch = name.includes(searchInput) || cpf.includes(searchInput) || cartaoSus.includes(searchInput);
-            const matchesAge = !filterAge || ageGroup === filterAge;
-            const matchesGender = !filterGender || gender === filterGender;
+            const matchesSearch = name.includes(searchInput) || cpf.includes(searchInput) || sus.includes(searchInput);
             const matchesStatus = !filterStatus || status === filterStatus;
 
-            if (matchesSearch && matchesAge && matchesGender && matchesStatus) {
+            if (matchesSearch && matchesStatus) {
                 row.style.display = '';
-                visibleCount++;
+                visibleRowsCount++;
             } else {
                 row.style.display = 'none';
             }
         });
+        
+        if (emptyRow) {
+            if (visibleRowsCount === 0) {
+                emptyRow.style.display = ''; 
+            } else {
+                emptyRow.style.display = 'none';
+            }
+        }
     }
 
+    // Inicializa o Custom Select para o filtro de Status
     function initializeCustomSelect(containerId) {
         const customSelect = document.getElementById(containerId);
         const selected = customSelect.querySelector(".selected");
         const options = customSelect.querySelector(".options");
-        const hiddenInput = document.getElementById(containerId.replace('custom', 'filter'));
+        const hiddenInput = document.getElementById('filterStatus'); // Hardcoded para o ID do filtro
 
         selected.addEventListener("click", (e) => {
             e.stopPropagation();
-            document.querySelectorAll(".custom-select .options").forEach(opt => {
-                if (opt !== options) opt.parentElement.classList.remove('active');
+            // Fecha outros selects
+            document.querySelectorAll(".custom-select.active").forEach(sel => {
+                if (sel !== customSelect) sel.classList.remove('active');
             });
             customSelect.classList.toggle('active');
         });
@@ -236,7 +247,7 @@
                 selected.textContent = option.textContent;
                 hiddenInput.value = option.dataset.value;
                 customSelect.classList.remove('active');
-                filterPatients();
+                filterPacientes(); // Chama a função de filtro
             });
         });
 
@@ -246,10 +257,87 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-        initializeCustomSelect("customAge");
-        initializeCustomSelect("customGender");
+        // Inicializa o filtro de status e a escuta da barra de pesquisa
         initializeCustomSelect("customStatus");
-        document.getElementById('searchInput').addEventListener('input', filterPatients);
+        document.getElementById('searchInput').addEventListener('input', filterPacientes);
+
+        // Verifica se há mensagem de sucesso na sessão para abrir o modal
+        @if(session('success'))
+            openSuccessModal("{{ session('success') }}");
+        @endif
+    });
+    
+    // ------------------------------------------
+    // LÓGICA DOS MODAIS
+    // ------------------------------------------
+    
+    // Modal de Sucesso
+    function openSuccessModal(message) {
+        document.getElementById('successMessage').textContent = message;
+        document.getElementById('statusSuccessModal').style.display = 'flex';
+    }
+
+    function closeSuccessModal() {
+        document.getElementById('statusSuccessModal').style.display = 'none';
+        window.location.reload(); 
+    }
+    
+    // Modal de Exclusão (Soft Delete)
+    function openDeletePacienteModal(pacienteId, pacienteNome) {
+        const modal = document.getElementById('deletePacienteModal');
+        const nomeSpan = document.getElementById('pacienteNome');
+        const form = document.getElementById('deletePacienteForm');
+
+        nomeSpan.textContent = pacienteNome;
+
+        // Monta a URL para o formulário de exclusão
+        // Assumindo que a rota de exclusão usa o ID do paciente: admin.pacientes.destroy/{paciente}
+        const deleteRoute = "{{ route('admin.pacientes.destroy', ['paciente' => 'PLACEHOLDER_ID']) }}";
+        form.action = deleteRoute.replace('PLACEHOLDER_ID', pacienteId);
+
+        modal.style.display = 'flex';
+    }
+
+    function closeDeletePacienteModal() {
+        document.getElementById('deletePacienteModal').style.display = 'none';
+    }
+    
+    // Modal de Alteração de Status
+    function openStatusPacienteModal(pacienteId, pacienteNome, currentStatus) {
+        const modal = document.getElementById('statusPacienteModal');
+        const nomeSpan = document.getElementById('statusPacienteNome');
+        const actionSpan = document.getElementById('statusAction');
+        const confirmText = document.getElementById('confirmStatusText');
+        const form = document.getElementById('statusPacienteForm');
+        
+        // Define a ação baseada no status atual (ativo -> desativar; inativo -> ativar)
+        const action = currentStatus == 'ativo' ? 'desativar' : 'ativar';
+        const confirmAction = currentStatus == 'ativo' ? 'desativar' : 'ativar';
+
+        nomeSpan.textContent = pacienteNome;
+        actionSpan.textContent = action;
+        confirmText.textContent = confirmAction;
+
+        // Rota de alteração de status (toggleStatus)
+        const statusRoute = "{{ route('admin.pacientes.toggleStatus', ['paciente' => 'PLACEHOLDER_ID']) }}";
+        form.action = statusRoute.replace('PLACEHOLDER_ID', pacienteId);
+        
+        modal.style.display = 'flex';
+    }
+
+    function closeStatusPacienteModal() {
+        document.getElementById('statusPacienteModal').style.display = 'none';
+    }
+
+    // Fechamento dos modais clicando fora
+    ['deletePacienteModal', 'statusPacienteModal', 'statusSuccessModal'].forEach(id => {
+        document.getElementById(id)?.addEventListener('click', function(event) {
+            if (event.target.id === id) {
+                if (id === 'deletePacienteModal') closeDeletePacienteModal();
+                if (id === 'statusPacienteModal') closeStatusPacienteModal();
+                if (id === 'statusSuccessModal') closeSuccessModal();
+            }
+        });
     });
 </script>
 @endsection

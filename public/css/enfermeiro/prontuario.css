@@ -2,12 +2,10 @@ body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
     background-color: #f9f9f9;
-    height: 100vh;
 }
 
 .main-dashboard {
-    padding: 20px;
-    min-height: 100vh;
+    padding: 30px;
     margin-left: 10px;
 }
 
@@ -15,7 +13,7 @@ body {
     max-width: 1200px;
     display: flex;
     flex-direction: column;
-    margin: 5% auto;
+    margin: 0 auto;
     align-self: center;
 }
 
@@ -31,7 +29,6 @@ body {
 .enfermeiro-header h1 {
     color: #0a400c;
     margin: 0;
-    margin-left: 5%;
 }
 
 .enfermeiro-header h1 i {
@@ -44,7 +41,6 @@ body {
     width: 450px;
     gap: 80px;
     margin-bottom: 30px;
-    margin-left: 5%;
 }
 
 .search-box {
@@ -154,12 +150,12 @@ table {
 thead {
     background-color: #0a400c;
     color: white;
+    text-align: left;
 }
 
 thead tr th {
-    padding: 15px 20px; 
+    padding: 20px;
     font-weight: bold;
-    text-align: left; 
 }
 
 tbody tr {
@@ -168,10 +164,9 @@ tbody tr {
 }
 
 tbody td {
-    padding: 12px 20px; 
+    padding: 12px 14px;
     vertical-align: middle;
     font-weight: bold;
-    text-align: left; 
 }
 
 tbody tr:hover {
@@ -186,48 +181,47 @@ tbody tr:hover {
     gap: 10px;
 }
 
+.actions i {
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.3s;
+    color: #0a400c;
+}
 
+.actions i:hover {
+    color: #6c7ae0;
+}
+
+/* Largura das colunas */
 
 table th:nth-child(1),
 table td:nth-child(1) {
-    width: 22%;
-    text-align: left;
+    width: 28%;
 }
 
 table th:nth-child(2),
 table td:nth-child(2) {
-    width: 18%;
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto; 
+    width: 20%;
 }
 
 table th:nth-child(3),
 table td:nth-child(3) {
-    width: 18%;
-    text-align: center; 
-    margin-left: auto;
-    margin-right: auto;
+    width: 20%;
 }
-
 
 table th:nth-child(4),
 table td:nth-child(4) {
-    width: 16%;
+    width: 15%;
     text-align: center;
-    margin-left: auto;
-    margin-right: auto;
 }
-
 
 table th:nth-child(5),
 table td:nth-child(5) {
-    width: 20%;
-    text-align: center; 
-    margin-left: auto;
-    margin-right: auto;
+    width: 17%;
+    text-align: center;
 }
 
+/* Cores de status */
 
 td span {
     font-weight: bold;

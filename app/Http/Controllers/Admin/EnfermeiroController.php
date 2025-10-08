@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\Enfermeiro;
 use App\Models\Usuario;
+use App\Models\Unidade; 
 
 class EnfermeiroController extends Controller
 {
@@ -17,13 +18,19 @@ class EnfermeiroController extends Controller
         return view('admin.manutencaoEnfermeiro', compact('enfermeiros'));
     }
 
-    // Formulário de cadastro
+    /**
+     * AJUSTADO: Mostra o formulário de cadastro E envia a lista de unidades.
+     */
     public function create()
     {
-        return view('admin.cadastroEnfermeiro');
+        // Busca todas as unidades para listarmos no formulário de seleção
+        $unidades = Unidade::orderBy('nomeUnidade')->get();
+        return view('admin.cadastroEnfermeiro', compact('unidades'));
     }
 
-    // Salvar cadastro
+    /**
+     * AJUSTADO: Salva o novo enfermeiro E as suas unidades de trabalho.
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -36,6 +43,8 @@ class EnfermeiroController extends Controller
             'corenEnfermeiro' => 'required|string|max:50',
             'especialidadeEnfermeiro' => 'nullable|string|max:100',
             'genero' => 'required|string|max:20',
+            'unidades' => 'nullable|array', // Valida que 'unidades' é uma lista (se enviada)
+            'unidades.*' => 'exists:tbUnidade,idUnidadePK', // Valida cada ID da lista
         ]);
 
         $usuario = Usuario::create([
@@ -45,7 +54,7 @@ class EnfermeiroController extends Controller
             'statusAtivoUsuario' => true,
         ]);
 
-        Enfermeiro::create([
+        $enfermeiro = Enfermeiro::create([
             'nomeEnfermeiro' => $request->nomeEnfermeiro,
             'emailEnfermeiro' => $request->emailEnfermeiro,
             'corenEnfermeiro' => $request->corenEnfermeiro,
@@ -53,6 +62,11 @@ class EnfermeiroController extends Controller
             'genero' => $request->genero,
             'id_usuario' => $usuario->idUsuarioPK,
         ]);
+
+        // Se o admin selecionou unidades no formulário, associa-as ao enfermeiro
+        if ($request->has('unidades')) {
+            $enfermeiro->unidades()->sync($request->unidades);
+        }
 
         return response()->json(['message' => 'Enfermeiro pré-cadastrado com sucesso!']);
     }
@@ -161,4 +175,20 @@ class EnfermeiroController extends Controller
             'deleted' => true // NOVA FLAG para exclusão
         ]);
     }
+
+    public function syncUnidades(Request $request, Enfermeiro $enfermeiro)
+    {
+        $request->validate([
+            'unidades' => 'required|array',
+            'unidades.*' => 'exists:tbUnidade,idUnidadePK',
+        ]);
+
+        $enfermeiro->unidades()->sync($request->unidades);
+
+        return response()->json([
+            'message' => 'Unidades do enfermeiro atualizadas com sucesso!',
+            'enfermeiro' => $enfermeiro->load('unidades')
+        ]);
+    }
 }
+

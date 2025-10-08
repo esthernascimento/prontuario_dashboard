@@ -2,10 +2,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
 /* Cores principais: 
-   - #8c1007 (Vermelho Principal - Forte, usado no template)
-   - #a33e38 (Vermelho Mais Claro/Rose para Cards de Background)
-   - #7b0e06 (Vermelho Escuro para Destaque)
-   - #004d99 (Azul SUS Profissional)
+   - #8c1007 (Vermelho Principal - Forte, usado no template)
+   - #a33e38 (Vermelho Mais Claro/Rose para Cards de Background)
+   - #7b0e06 (Vermelho Escuro para Destaque)
+   - #004d99 (Azul SUS Profissional)
 */
 
 body {
@@ -20,21 +20,15 @@ body {
     padding: 0;
 }
 
-
-
 .main-dashboard h1 {
     color: #8c1007;
     font-size: 30px;
     font-weight: 600;
 }
 
-
-
 .banner-logo {
     width: 150px;
 }
-
-
 
 .funcionarios-image {
     width: 100%;
@@ -42,8 +36,6 @@ body {
     margin-bottom: 0px;
     margin-top: 40px;
 }
-
-
 
 .icon-prontuario {
     width: 150px;
@@ -58,8 +50,6 @@ body {
     padding: 0 0 10px 0;
     /* Espaçamento interno */
 }
-
-
 
 /* --- 2. Banner de Boas-vindas --- */
 
@@ -353,4 +343,76 @@ body {
     .chart-container {
         height: 300px;
     }
+}
+
+
+/* ======================================= */
+/* ====== ANIMAÇÕES DE TRANSIÇÃO CSS ===== */
+/* ======================================= */
+
+/* 1. Keyframes: Fade In & Slide Up */
+@keyframes fadeInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px); /* Começa 20px abaixo */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 2. Keyframes: Apenas Fade In (para elementos menos impactantes, como o título) */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* --- Aplicação da Animação (Começa tudo com opacidade 0 e o "forwards" garante que termine em 1) --- */
+
+/* 1. Título principal: Aparece primeiro (apenas fade) */
+.dashboard-title {
+    opacity: 0; /* Começa invisível */
+    animation: fadeIn 0.8s ease-out 0.1s forwards;
+}
+
+/* 2. Banner de Boas-vindas */
+.welcome-banner {
+    opacity: 0; /* Começa invisível */
+    animation: fadeInSlideUp 0.8s ease-out 0.3s forwards;
+}
+
+/* 3. Wrapper de Métricas (Cards e SUS) */
+.main-metrics-wrapper {
+    opacity: 0; /* Começa invisível */
+    animation: fadeInSlideUp 0.8s ease-out 0.5s forwards;
+}
+
+/* 4. Wrapper de Gráficos */
+.chart-and-logo-wrapper {
+    opacity: 0; /* Começa invisível */
+    animation: fadeInSlideUp 0.8s ease-out 0.7s forwards;
+}
+
+
+/* Animação individual dos quadrados de métricas para efeito cascata */
+.metric-square {
+    /* Mantém os estilos existentes, adicionando animação */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    /* Animação de entrada mais rápida para não competir com o wrapper */
+    opacity: 0;
+    animation: fadeInSlideUp 0.6s ease-out forwards;
+}
+
+/* Atraso individual nos quadrados (ajustados para serem acionados após o wrapper) */
+.metric-square:nth-child(1) {
+    animation-delay: 0.8s; 
+}
+.metric-square:nth-child(2) {
+    animation-delay: 0.9s; 
 }

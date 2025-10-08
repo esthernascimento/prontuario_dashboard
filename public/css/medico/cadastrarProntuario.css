@@ -1,0 +1,543 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
+
+/* ============================================
+   CADASTRO DE PRONTUÁRIO - CSS ATUALIZADO
+   TEMA: VERMELHO MÉDICO
+   ============================================ */
+
+:root {
+    --primary-red: #DC2626;
+    --primary-red-dark: #991B1B;
+    --primary-red-light: #EF4444;
+    --accent-pink: #EC4899;
+    --bg-white: #FFFFFF;
+    --bg-gray-50: #F9FAFB;
+    --bg-gray-100: #F3F4F6;
+    --text-primary: #111827;
+    --text-secondary: #6B7280;
+    --text-muted: #9CA3AF;
+    --border-color: #E5E7EB;
+    --border-focus: #EF4444;
+    --success-green: #10B981;
+    --error-red: #DC2626;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.main-dashboard {
+    padding: 40px;
+    background: linear-gradient(135deg, #FFF1F2 0%, #F9FAFB 100%);
+    min-height: 100vh;
+}
+
+.cadastrar-container {
+    max-width: 950px;
+    margin: 0 auto;
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   HEADER DO FORMULÁRIO
+   ============================================ */
+
+.cadastrar-header {
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+    padding: 32px 36px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.cadastrar-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.cadastrar-header .icon {
+    font-size: 2.5rem;
+    color: white;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    animation: iconBounce 2s ease-in-out infinite;
+    z-index: 1;
+}
+
+@keyframes iconBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.cadastrar-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.5px;
+    z-index: 1;
+}
+
+/* ============================================
+   CARD DE INFORMAÇÕES DO PACIENTE E MÉDICO
+   ============================================ */
+
+.paciente-info {
+    margin: 32px 36px;
+    padding: 28px;
+    background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+    border: 2px solid #FECACA;
+    border-left: 6px solid var(--primary-red);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    animation: fadeIn 0.6s ease-out 0.2s backwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.paciente-info h3 {
+    color: var(--primary-red-dark);
+    font-size: 1.15rem;
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+}
+
+.paciente-info h3 i {
+    font-size: 1.3rem;
+    color: var(--primary-red);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-item strong {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-item span {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* ============================================
+   FORMULÁRIO
+   ============================================ */
+
+form {
+    padding: 0 36px 36px 36px;
+}
+
+.form-section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 28px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid var(--primary-red);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    animation: fadeIn 0.6s ease-out 0.3s backwards;
+}
+
+.form-section-title::before {
+    content: '';
+    width: 6px;
+    height: 26px;
+    background: linear-gradient(180deg, var(--primary-red) 0%, var(--accent-pink) 100%);
+    border-radius: 3px;
+}
+
+/* ============================================
+   GRUPOS DE INPUT
+   ============================================ */
+
+.input-group {
+    margin-bottom: 26px;
+    animation: fadeIn 0.6s ease-out backwards;
+}
+
+.input-group:nth-child(2) { animation-delay: 0.4s; }
+.input-group:nth-child(3) { animation-delay: 0.45s; }
+.input-group:nth-child(4) { animation-delay: 0.5s; }
+.input-group:nth-child(5) { animation-delay: 0.55s; }
+.input-group:nth-child(6) { animation-delay: 0.6s; }
+
+.input-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+}
+
+.input-group label i {
+    color: var(--primary-red);
+    font-size: 1.1rem;
+}
+
+/* Inputs de Texto e Data */
+.input-group input.input-date,
+.input-group input.input-text {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    background: var(--bg-gray-50);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+.input-group input.input-date {
+    max-width: 250px;
+}
+
+.input-group input::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.input-group input:hover {
+    border-color: var(--primary-red-light);
+    background: white;
+}
+
+.input-group input:focus {
+    border-color: var(--border-focus);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Textareas */
+.input-group textarea {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    background: var(--bg-gray-50);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+    resize: vertical;
+    line-height: 1.6;
+    min-height: 100px;
+}
+
+.input-group textarea::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.input-group textarea:hover {
+    border-color: var(--primary-red-light);
+    background: white;
+}
+
+.input-group textarea:focus {
+    border-color: var(--border-focus);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Efeito de preenchimento */
+.input-group input:not(:placeholder-shown):valid,
+.input-group textarea:not(:placeholder-shown):valid {
+    background: white;
+    border-color: var(--success-green);
+}
+
+/* Mensagem de erro */
+.input-group .error {
+    display: block;
+    color: var(--error-red);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 6px;
+    animation: shakeError 0.4s ease-out;
+}
+
+@keyframes shakeError {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
+
+/* ============================================
+   BOTÕES DE AÇÃO
+   ============================================ */
+
+.button-group {
+    display: flex;
+    gap: 16px;
+    margin-top: 40px;
+    justify-content: flex-end;
+    padding-top: 32px;
+    border-top: 2px solid var(--bg-gray-100);
+    animation: fadeIn 0.6s ease-out 0.7s backwards;
+}
+
+.btn-cancelar,
+.save-button {
+    padding: 14px 32px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.btn-cancelar {
+    background: var(--bg-gray-100);
+    color: var(--text-secondary);
+    border: 2px solid var(--border-color);
+}
+
+.btn-cancelar:hover {
+    background: var(--bg-gray-50);
+    border-color: var(--text-secondary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.save-button {
+    color: white;
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+    box-shadow: var(--shadow-lg);
+}
+
+.save-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.save-button:hover::before {
+    left: 100%;
+}
+
+.save-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 35px -5px rgba(220, 38, 38, 0.4);
+}
+
+.save-button:active,
+.btn-cancelar:active {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .main-dashboard {
+        padding: 20px;
+    }
+
+    .cadastrar-container {
+        border-radius: var(--radius-md);
+    }
+
+    .cadastrar-header {
+        padding: 24px 20px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .cadastrar-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .cadastrar-header .icon {
+        font-size: 2.2rem;
+    }
+
+    .paciente-info {
+        margin: 24px 20px;
+        padding: 20px;
+    }
+
+    .paciente-info h3 {
+        font-size: 1.05rem;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    form {
+        padding: 0 20px 24px 20px;
+    }
+
+    .form-section-title {
+        font-size: 1.1rem;
+    }
+
+    .input-group input.input-date {
+        max-width: 100%;
+    }
+
+    .button-group {
+        flex-direction: column-reverse;
+        gap: 12px;
+    }
+
+    .btn-cancelar,
+    .save-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .cadastrar-header h1 {
+        font-size: 1.3rem;
+    }
+
+    .paciente-info {
+        padding: 16px;
+    }
+
+    .paciente-info h3 {
+        font-size: 1rem;
+    }
+
+    .info-item strong {
+        font-size: 0.8rem;
+    }
+
+    .info-item span {
+        font-size: 0.9rem;
+    }
+
+    .input-group input,
+    .input-group textarea {
+        padding: 12px 14px;
+        font-size: 0.9rem;
+    }
+
+    .save-button,
+    .btn-cancelar {
+        padding: 14px 24px;
+        font-size: 0.95rem;
+    }
+}
+
+/* ============================================
+   MICRO INTERAÇÕES
+   ============================================ */
+
+textarea:focus,
+input:focus {
+    animation: focusPulse 0.3s ease-out;
+}
+
+@keyframes focusPulse {
+    0% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.005) translateY(-2px); }
+    100% { transform: scale(1) translateY(-2px); }
+}
+
+.save-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%);
+}
+
+.save-button:disabled:hover {
+    transform: none;
+    box-shadow: var(--shadow-md);
+}

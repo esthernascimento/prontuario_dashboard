@@ -1,136 +1,295 @@
+/* ============================================
+   SEGURANÇA - CSS PROFISSIONAL (TEMA VERDE)
+   ============================================ */
+
+   :root {
+    --primary-green: #0a400c;
+    --primary-green-dark: #062806;
+    --primary-green-light: #0d5810;
+    --bg-white: #FFFFFF;
+    --bg-gray-50: #F9FAFB;
+    --bg-gray-100: #F3F4F6;
+    --text-primary: #111827;
+    --text-secondary: #6B7280;
+    --text-muted: #9CA3AF;
+    --border-color: #E5E7EB;
+    --border-focus: #0a400c;
+    --success-green: #10B981;
+    --error-red: #EF4444;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #F0FFF1 0%, #F9FAFB 100%);
+    min-height: 100vh;
+}
+
 .main-dashboard {
-    padding: 30px;
+    padding: 0;
+    min-height: 100vh;
 }
 
-/* --- Container da Página de Segurança --- */
+/* ============================================
+   CONTAINER PRINCIPAL DA PÁGINA DE SEGURANÇA
+   ============================================ */
 .security-container {
-    max-width: 800px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 20px;
-    box-sizing: border-box;
+    background: var(--bg-white);
+    max-width: 580px;
+    margin: 50px auto;
+    padding: 0;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+    animation: slideUp 0.6s ease-out;
 }
 
-/* --- Título Principal da Página --- */
-.security-container h1 {
-    color: #0a400c;
-    margin-top: 20px;
-    margin-bottom: 5px;
-    font-size: 28px;
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   CABEÇALHO (h1 e p diretos)
+   ============================================ */
+.security-container > h1 {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+    padding: 32px 36px;
     display: flex;
     align-items: center;
-    justify-content: center; /* Centraliza o título */
-    gap: 10px;
-}
-.security-container h1 i {
-    font-size: 30px;
-}
-
-/* --- Subtítulo / Descrição da Página --- */
-.security-container p {
-    color: #666;
-    margin-bottom: 30px;
-    text-align: center; /* Centraliza a descrição */
-    font-size: 16px;
+    gap: 16px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    justify-content: center;
+    font-size: 1.65rem;
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.5px;
 }
 
-/* --- Seção de Alterar Senha --- */
+.security-container > h1 i {
+    font-size: 2.5rem;
+    color: white;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    animation: iconRotate 3s ease-in-out infinite;
+}
+
+@keyframes iconRotate {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
+}
+
+.security-container > h1::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.security-container > p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin: 15px 36px 30px 36px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+/* ============================================
+   SEÇÃO DE ALTERAR SENHA
+   ============================================ */
 .security-section {
-    background-color: #fff;
-    border-radius: 12px;
-    padding: 30px;
-    margin-bottom: 25px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    background: var(--bg-white);
+    padding: 32px 36px;
+    margin-bottom: 0;
+    box-shadow: none;
 }
 
 .security-section h2 {
-    color: #0a400c;
-    margin-bottom: 25px;
-    font-size: 1.4em;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    margin-top: 8px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid var(--primary-green);
     display: flex;
     align-items: center;
     gap: 10px;
+    position: relative;
 }
 
-.security-section h2 i {
-    font-size: 20px;
+.security-section h2::before {
+    content: '';
+    width: 6px;
+    height: 24px;
+    background: linear-gradient(180deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+    border-radius: 3px;
 }
 
-/* --- Formulário de Alteração de Senha --- */
+/* ============================================
+   FORMULÁRIO DE SEGURANÇA
+   ============================================ */
 .security-form {
-    max-width: 450px;
+    max-width: 100%;
     margin: 0 auto;
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 18px;
+    animation: fadeIn 0.6s ease-out backwards;
+    text-align: left;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 8px;
     font-weight: 600;
-    color: #333;
-    font-size: 15px;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    transition: color 0.3s ease;
 }
 
 .form-group input {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 16px;
-    background-color: #fdfdfd;
-    transition: border-color 0.3s, box-shadow 0.3s;
+    padding: 11px 16px;
+    border-radius: var(--radius-md);
+    border: 2px solid var(--border-color);
+    background: var(--bg-gray-50);
+    color: var(--text-primary);
+    font-size: 0.95rem;
     box-sizing: border-box;
-    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    font-family: inherit;
+}
+
+.form-group input::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.form-group input:hover {
+    border-color: var(--primary-green-light);
+    background: white;
 }
 
 .form-group input:focus {
-    outline: none;
-    border-color: #0a400c;
+    border-color: var(--border-focus);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(10, 64, 12, 0.15);
+    transform: translateY(-2px);
+}
+
+.form-group input:not(:placeholder-shown) {
+    background: white;
+    border-color: var(--success-green);
 }
 
 .form-hint {
-    color: #888;
-    font-size: 12px;
-    margin-top: 5px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: 8px;
     display: block;
 }
 
 .error-message {
-    color: #dc3545;
-    font-size: 12px;
-    margin-top: 5px;
+    color: var(--error-red);
+    font-size: 0.85rem;
+    margin-top: 8px;
     display: block;
 }
 
-/* --- Botão Primário (Alterar Senha) --- */
+/* ============================================
+   BOTÃO PRIMÁRIO (ALTERAR SENHA)
+   ============================================ */
 .btn-primary {
-    background-color: #0a400c;
+    display: block;
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
     color: white;
-    padding: 12px 24px;
+    padding: 14px 28px;
     border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
+    border-radius: var(--radius-md);
+    font-size: 1.05rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-    margin-top: 15px;
+    width: 80%;
+    margin: 28px auto 0 auto;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
     width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.btn-primary:hover::before {
+    left: 100%;
 }
 
 .btn-primary:hover {
-    background-color: #76d879;
+    transform: translateY(-3px);
+    box-shadow: 0 20px 35px -5px rgba(10, 64, 12, 0.4);
+}
+
+.btn-primary:active {
     transform: translateY(-1px);
 }
 
-/* --- Mensagens de Alerta (Sucesso/Erro) --- */
+/* ============================================
+   MENSAGENS DE ALERTA (SUCESSO/ERRO)
+   ============================================ */
 .alert {
     padding: 15px 20px;
-    margin-bottom: 25px;
-    border-radius: 8px;
-    font-size: 15px;
+    margin: 25px 36px;
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
     font-weight: 500;
     line-height: 1.5;
     animation: fadeIn 0.5s ease-out;
@@ -154,92 +313,284 @@
     list-style-type: disc;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* =================================== */
-/* Estilos dos Modais (Copiado do Perfil) */
-/* =================================== */
+/* ============================================
+   MODAIS
+   ============================================ */
 .modal-overlay {
-    display: none;
     position: fixed;
-    z-index: 1000;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.6);
-    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: none;
     align-items: center;
-    padding: 20px;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeInModal 0.3s ease-out;
 }
 
 .modal-overlay.show {
     display: flex;
 }
 
+@keyframes fadeInModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 .modal-box {
-    background-color: #fff;
-    border-radius: 15px;
-    padding: 30px 40px;
-    width: 100%;
-    max-width: 400px;
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    max-width: 480px;
+    width: 90%;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     text-align: center;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    animation: fadeIn 0.3s ease-out;
+    animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
 }
 
 .modal-icon {
-    font-size: 48px;
-    margin-bottom: 15px;
+    font-size: 4rem;
+    margin-bottom: 20px;
+    display: inline-block;
+    animation: iconPulse 2s ease-in-out infinite;
 }
-.icon-success { color: #28a745; }
-.icon-warning { color: #ffc107; }
+
+.icon-warning {
+    color: #f59e0b;
+    filter: drop-shadow(0 4px 12px rgba(245, 158, 11, 0.3));
+}
+
+.icon-success {
+    color: var(--primary-green);
+    filter: drop-shadow(0 4px 12px rgba(10, 64, 12, 0.3));
+}
+
+@keyframes iconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
 
 .modal-box h2 {
-    margin-top: 0;
-    font-size: 22px;
-    color: #333;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
 }
 
 .modal-box p {
-    font-size: 16px;
-    color: #666;
-    margin-bottom: 25px;
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+    line-height: 1.6;
 }
 
+/* ============================================
+   BOTÕES DO MODAL
+   ============================================ */
 .modal-buttons {
     display: flex;
+    gap: 12px;
     justify-content: center;
-    gap: 15px;
 }
 
 .modal-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 20px;
-    font-size: 16px;
+    padding: 12px 28px;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
     font-weight: 600;
+    border: none;
     cursor: pointer;
-    min-width: 120px;
-    transition: all 0.2s;
-}
-
-.modal-btn-confirm {
-    background-color: #0a400c;
-    color: white;
-}
-.modal-btn-confirm:hover {
-    background-color: #0d5c10;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    flex: 1;
 }
 
 .modal-btn-cancel {
-    background-color: #e0e0e0;
-    color: #333;
+    background: var(--bg-gray-100);
+    color: var(--text-secondary);
+    border: 2px solid var(--border-color);
 }
+
 .modal-btn-cancel:hover {
-    background-color: #ccc;
+    background: var(--bg-gray-50);
+    border-color: var(--text-secondary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.modal-btn-confirm {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+.modal-btn-confirm::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.modal-btn-confirm:hover::before {
+    left: 100%;
+}
+
+.modal-btn-confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -6px rgba(10, 64, 12, 0.5);
+}
+
+.modal-btn:active {
+    transform: translateY(0);
+}
+
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .security-container {
+        margin: 20px auto;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .security-container > h1 {
+        padding: 24px 20px;
+        font-size: 1.4rem;
+    }
+
+    .security-container > h1 i {
+        font-size: 2rem;
+    }
+
+    .security-container > p {
+        margin: 15px 20px 30px 20px;
+    }
+
+    .security-section {
+        padding: 20px;
+    }
+
+    .security-section h2 {
+        font-size: 1.2em;
+    }
+
+    .btn-primary {
+        width: 100%;
+    }
+
+    .alert {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .modal-box {
+        width: 95%;
+        padding: 30px;
+    }
+
+    .modal-box h2 {
+        font-size: 1.5rem;
+    }
+
+    .modal-box p {
+        font-size: 0.95rem;
+    }
+
+    .modal-buttons {
+        flex-direction: column;
+    }
+
+    .modal-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 5px;
+    }
+
+    .security-container {
+        margin: 10px auto;
+    }
+
+    .security-container > h1 {
+        padding: 20px 15px;
+        font-size: 1.2rem;
+        flex-direction: column;
+    }
+
+    .security-container > h1 i {
+        font-size: 1.8rem;
+    }
+
+    .security-container > p {
+        font-size: 0.9rem;
+        margin: 10px 15px 20px 15px;
+    }
+
+    .security-section {
+        padding: 15px;
+    }
+
+    .security-section h2 {
+        font-size: 1.1em;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-size: 0.85rem;
+    }
+
+    .form-group input {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+
+    .btn-primary {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+    }
+
+    .alert {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
 }

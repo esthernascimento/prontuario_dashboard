@@ -13,9 +13,11 @@ class Medico extends Model
     protected $table = 'tbMedico';
     protected $primaryKey = 'idMedicoPK';
 
+    /**
+     * A CORREÇÃO ESTÁ AQUI:
+     * Esta linha diz ao Laravel para NÃO gerir as colunas created_at e updated_at.
+     */
     public $timestamps = false; 
-
-    protected $dates = ['deleted_at'];
 
     protected $fillable = [
         'foto',
@@ -25,9 +27,14 @@ class Medico extends Model
         'id_usuarioFK',
     ];
 
-
     public function usuario()
     {
         return $this->belongsTo(Usuario::class, 'id_usuarioFK', 'idUsuarioPK');
     }
+
+    public function unidades()
+    {
+        return $this->belongsToMany(Unidade::class, 'tbMedicoUnidade', 'idMedicoFK', 'idUnidadeFK');
+    }
 }
+

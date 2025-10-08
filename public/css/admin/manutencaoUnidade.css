@@ -1,0 +1,465 @@
+/* ============================================
+    GERENCIAMENTO DE UNIDADES - CSS PROFISSIONAL
+    (Baseado em manutencaoEnfermeiros.css para consistência)
+    ============================================ */
+
+    :root {
+        /* Cores (Mantidas iguais para consistência) */
+        --primary-blue: #0618b9;
+        --primary-blue-dark: #04108a;
+        --primary-blue-light: #0820e0;
+        --bg-white: #FFFFFF;
+        --bg-gray-50: #F9FAFB;
+        --bg-gray-100: #F3F4F6;
+        --bg-table-even: #F7F7FF;
+        --bg-table-odd: #F0F0F5;
+        --text-primary: #111827;
+        --text-secondary: #6B7280;
+        --text-muted: #9CA3AF;
+        --border-color: #E5E7EB;
+        --success-green: #10B981;
+        --error-red: #DC2626;
+    
+        /* Sombras e Bordas */
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+    }
+    
+    /* Base e Layout (Mantidos iguais) */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+        background: linear-gradient(135deg, #F0F9FF 0%, var(--bg-gray-50) 100%);
+        min-height: 100vh;
+        color: var(--text-primary);
+    }
+    
+    .main-dashboard {
+        padding: 40px;
+        min-height: 100vh;
+    }
+    
+    /* Ajuste o container se for uma classe de layout.
+       Se a classe 'medico-container' no HTML for genérica, use-a. 
+       Aqui, vou assumir um container de layout genérico. */
+    .medico-container { 
+        max-width: 1400px;
+        margin: 0 auto;
+        animation: fadeIn 0.6s ease-out;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* --------------------------------------------
+        HEADER (Ajustado para o novo ícone e botão)
+        -------------------------------------------- */
+    
+    .medico-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+        padding: 0 10px;
+        animation: slideDown 0.6s ease-out;
+    }
+    
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .medico-header h1 {
+        color: var(--primary-blue);
+        font-size: 2rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        letter-spacing: -0.5px;
+    }
+    
+    .medico-header h1 i { /* Ícone da Unidade */
+        font-size: 2.2rem;
+        filter: drop-shadow(0 2px 4px rgba(6, 24, 185, 0.2));
+    }
+    
+    /* Renomeei o botão de 'btn-add-medico' para 'btn-add-unidade' apenas 
+       para melhor semântica, mas mantive o estilo do seu código anterior. */
+    .btn-add-medico, .btn-add-unidade { 
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+        color: white;
+        padding: 12px 24px;
+        border-radius: var(--radius-md);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 10px -2px rgba(6, 24, 185, 0.3);
+    }
+    
+    .btn-add-medico:hover, .btn-add-unidade:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px -4px rgba(6, 24, 185, 0.5);
+    }
+    
+    /* --------------------------------------------
+        BARRA DE PESQUISA E FILTROS (Mantidos iguais)
+        -------------------------------------------- */
+    
+    .search-filters {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 28px;
+        padding: 24px;
+        flex-wrap: wrap;
+        animation: slideUp 0.6s ease-out 0.2s backwards;
+    }
+    
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .search-box {
+        position: relative;
+        flex: 1;
+        min-width: 300px;
+    }
+    
+    .search-box i {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        z-index: 2;
+    }
+    
+    .search-box input {
+        width: 100%;
+        padding: 12px 16px 12px 48px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        font-size: 0.95rem;
+        background: var(--bg-gray-50);
+        height: 48px;
+        transition: all 0.3s ease;
+        outline: none;
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .search-box input:focus {
+        border-color: var(--primary-blue);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(6, 24, 185, 0.1);
+    }
+    
+    .custom-select {
+        position: relative;
+        width: 180px;
+        cursor: pointer;
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .custom-select .selected {
+        padding: 12px 40px 12px 16px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        background: var(--bg-gray-50);
+        height: 48px;
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+        font-size: 0.95rem;
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+        user-select: none;
+    }
+    
+    .custom-select.active .selected {
+        border-color: var(--primary-blue);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(6, 24, 185, 0.1);
+    }
+    
+    .custom-select .options {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        display: none;
+        z-index: 1000;
+    }
+    
+    .custom-select.active .options {
+        display: block;
+    }
+    
+    .custom-select .options div {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--bg-gray-100);
+        transition: all 0.2s ease;
+        cursor: pointer;
+        font-size: 0.95rem;
+    }
+    
+    .custom-select .options div:hover {
+        background: var(--bg-gray-50);
+        color: var(--primary-blue);
+    }
+    
+    /* --------------------------------------------
+        TABELA (Mantida igual, apenas o colspan muda)
+        -------------------------------------------- */
+    
+    .box-table {
+        background: white;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
+        margin-bottom: 24px;
+        border: 1px solid var(--border-color);
+        animation: slideUp 0.6s ease-out 0.4s backwards;
+        overflow-x: auto;
+    }
+    
+    .box-table table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 900px;
+    }
+    
+    .box-table thead {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+        color: white;
+    }
+    
+    .box-table th {
+        padding: 14px 20px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        border-bottom: 2px solid var(--primary-blue-dark);
+        white-space: nowrap;
+    }
+    
+    .box-table tbody tr {
+        background-color: var(--bg-table-even);
+        transition: all 0.3s ease;
+    }
+    
+    .box-table tbody tr:nth-child(even) {
+        background-color: var(--bg-table-odd);
+    }
+    
+    .box-table tbody tr:hover {
+        background-color: #E6E6F2;
+        box-shadow: inset 3px 0 0 0 var(--primary-blue);
+    }
+    
+    .box-table td {
+        padding: 12px 20px;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-primary);
+        font-size: 0.95rem;
+    }
+    
+    .box-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+    
+    /* Adaptei o seletor para a mensagem de lista vazia */
+    .no-doctors, .no-unidades { 
+        text-align: center;
+        padding: 40px 20px !important;
+        color: var(--text-muted) !important;
+        font-style: italic;
+        background: var(--bg-gray-50) !important;
+    }
+    
+    /* Status Badge e Ações (Mantidos iguais) */
+    .status-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 9999px; 
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: capitalize;
+        min-width: 70px;
+        text-align: center;
+    }
+    
+    .status-ativo {
+        background: #D1FAE5;
+        color: #059669;
+    }
+    
+    .status-inativo {
+        background: #FEE2E2;
+        color: var(--error-red);
+    }  /* ============================================
+       AÇÕES - ÍCONES LADO A LADO (CORRIGIDO)
+       ============================================ */
+    
+    .action-buttons {
+        display: flex !important;
+        gap: 8px;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row !important;
+    }
+    
+    .btn-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius-sm);
+        text-decoration: none;
+        border: 1px solid var(--border-color);
+        background: var(--bg-gray-50);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+    }
+    
+    .btn-action:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+    
+    .btn-edit {
+        color: var(--primary-blue);
+        background: rgba(6, 24, 185, 0.1);
+    }
+    
+    .btn-edit:hover {
+        background: rgba(6, 24, 185, 0.2);
+        border-color: var(--primary-blue);
+    }
+    
+    .btn-delete {
+        color: var(--error-red);
+        background: rgba(220, 38, 38, 0.1);
+    }
+    
+    .btn-delete:hover {
+        background: rgba(220, 38, 38, 0.2);
+        border-color: var(--error-red);
+    }
+    
+    
+    
+    /* --------------------------------------------
+        MODAIS (Mantidos iguais)
+        -------------------------------------------- */
+    
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        backdrop-filter: blur(4px);
+    }
+    
+    .modal-content {
+        background-color: var(--bg-white);
+        padding: 30px 40px;
+        border-radius: var(--radius-lg);
+        width: 90%;
+        max-width: 450px;
+        box-shadow: var(--shadow-xl);
+        text-align: center;
+        animation: modalPopIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    
+    @keyframes modalPopIn {
+        from { opacity: 0; transform: scale(0.9); }
+        to { opacity: 1; transform: scale(1); }
+    }
+    
+    .modal-header { margin-bottom: 20px; }
+    .modal-header h2 { font-size: 1.5rem; color: var(--text-primary); font-weight: 700; margin-top: 10px; }
+    
+    /* Estilo dos Ícones nos Modais */
+    #deleteModal .modal-header i { font-size: 3rem; color: var(--error-red); }
+    #statusModal .modal-header i { font-size: 3rem; color: var(--primary-blue); }
+    #successModal .modal-header i { font-size: 3rem; color: var(--success-green); }
+    
+    .modal-content p { color: var(--text-secondary); font-size: 1rem; line-height: 1.6; margin-bottom: 30px; }
+    .modal-content p span { font-weight: 600; color: var(--text-primary); }
+    
+    .modal-buttons { display: flex; justify-content: center; gap: 15px; }
+    
+    .btn-cancelar, .btn-excluir {
+        padding: 12px 24px; 
+        border-radius: var(--radius-sm); 
+        font-weight: 600; 
+        cursor: pointer; 
+        border: none; 
+        transition: all 0.3s ease; 
+        font-size: 0.95rem; 
+        flex: 1;
+    }
+    
+    .btn-cancelar { background: var(--bg-gray-100); color: var(--text-secondary); }
+    .btn-cancelar:hover { background: #EBEBEB; }
+    
+    .btn-excluir { background: var(--error-red); color: var(--bg-white); }
+    .btn-excluir:hover { background: #C22020; transform: translateY(-1px); }
+    
+    /* Botão de Confirmação para Status/Sucesso (Azul Primário) */
+    #statusModal .btn-excluir,
+    #successModal .btn-excluir { background: var(--primary-blue); }
+    
+    #statusModal .btn-excluir:hover,
+    #successModal .btn-excluir:hover { background: var(--primary-blue-dark); }
+    
+    
+    /* --------------------------------------------
+        MEDIA QUERIES (Responsividade)
+        -------------------------------------------- */
+    @media (max-width: 768px) {
+        .main-dashboard { padding: 20px; }
+        .medico-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+        .medico-header h1 { font-size: 1.75rem; }
+        .btn-add-medico, .btn-add-unidade { width: 100%; justify-content: center; }
+        .search-filters { flex-direction: column; align-items: stretch; padding: 15px; }
+        .search-box, .custom-select { min-width: 100%; width: 100%; }
+        .box-table { overflow-x: auto; }
+        .modal-buttons { flex-direction: column; gap: 10px; }
+        .btn-cancelar, .btn-excluir { flex: none; width: 100%; }
+    }
