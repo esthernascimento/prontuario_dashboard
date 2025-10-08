@@ -117,9 +117,6 @@ use Carbon\Carbon;
             </table>
         </div>
 
-        <div class="pagination-container">
-            {{ $pacientes->links() }}
-        </div>
     </div>
 </main>
 
