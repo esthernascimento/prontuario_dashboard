@@ -8,13 +8,18 @@ use App\Models\Paciente;
 use App\Models\Enfermeiro;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // Contagens para os cards
+        $admin = Auth::guard('admin')->user();
+        
+        $nomeAdmin = $admin->nomeAdmin ?? 'Administrador'; 
+        
+        
         $adminCount = Medico::count();
         $patientsCount = Paciente::count();
         $pendingExamsCount = 0; 
@@ -23,17 +28,13 @@ class DashboardController extends Controller
         
         // 📊 Gráfico de Profissionais por Área
         
-        // 1. Desativa temporariamente o modo estrito do MySQL para evitar erro 1055
         DB::statement("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
 
-        // 2. CORREÇÃO: Remove a lógica de 'Não Especificada' e filtra
-        // agora apenas especialidades preenchidas (não NULL e não string vazia)
         $medicosPorEspecialidade = DB::table('tbMedico')
             ->select(
                 'especialidadeMedico',
                 DB::raw('count(*) as total')
             )
-            // Filtra registros que tenham a especialidade definida (não nula)
             ->whereNotNull('especialidadeMedico')
             // E também filtra registros onde a especialidade não é uma string vazia após remover espaços
             ->where(DB::raw("TRIM(especialidadeMedico)"), '!=', '')
@@ -72,13 +73,13 @@ class DashboardController extends Controller
             'Idosos'  => $idosos,
         ];
 
-        // Variável 'medicosPorEspecialidade' já está formatada corretamente
         return view('admin.dashboard', compact(
+            'nomeAdmin', 
             'adminCount',
             'patientsCount',
             'pendingExamsCount',
             'nursesCount',
-            'medicosPorEspecialidade', // Variável crucial para o gráfico de barras
+            'medicosPorEspecialidade', 
             'dadosLinha',
             'dadosGenero'
         ));

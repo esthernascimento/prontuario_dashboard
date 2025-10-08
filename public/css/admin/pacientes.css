@@ -284,7 +284,7 @@
     }
     
     /* ============================================
-        TABELA (Continuação)
+        TABELA
         ============================================ */
     
     .table-wrapper {
@@ -349,7 +349,7 @@
         padding: 16px 20px;
         border-bottom: 1px solid rgba(229, 231, 235, 0.5);
         color: var(--text-primary);
-        font-size: 0.95rem; /* Valor que faltava na sua linha */
+        font-size: 0.95rem;
     }
     
     .patients-table tbody tr:last-child td {
@@ -360,7 +360,7 @@
     .status-badge {
         display: inline-block;
         padding: 6px 12px;
-        border-radius: 9999px; /* Pill shape */
+        border-radius: 9999px;
         font-weight: 600;
         font-size: 0.8rem;
         text-transform: capitalize;
@@ -379,54 +379,86 @@
         color: var(--error-red);
     }
     
-    /* Ações */
-
+    /* ============================================
+       AÇÕES - ÍCONES LADO A LADO (CORRIGIDO)
+       ============================================ */
     
-    .actions {
+    .action-buttons {
         display: flex !important;
-        gap: 10px;
+        gap: 8px;
         align-items: center;
+        justify-content: center;
         flex-direction: row !important;
-        width: 100%; 
     }
     
     .btn-action {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 36px; 
+        width: 36px;
         height: 36px;
-        border-radius: var(--radius-md); 
+        border-radius: var(--radius-sm);
         text-decoration: none;
         border: 1px solid var(--border-color);
         background: var(--bg-gray-50);
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
         font-size: 1.1rem;
         color: var(--text-secondary);
     }
     
     .btn-action:hover {
-        transform: translateY(-1px);
-        box-shadow: var(--shadow-sm);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+    
+    .btn-edit {
+        color: var(--primary-blue);
+        background: rgba(6, 24, 185, 0.1);
     }
     
     .btn-edit:hover {
-        background: #EBF8FF;
-        color: #2563EB;
+        background: rgba(6, 24, 185, 0.2);
+        border-color: var(--primary-blue);
+    }
+    
+    .btn-delete {
+        color: var(--error-red);
+        background: rgba(220, 38, 38, 0.1);
     }
     
     .btn-delete:hover {
-        background: #FEE2E2;
-        color: var(--error-red);
+        background: rgba(220, 38, 38, 0.2);
+        border-color: var(--error-red);
     }
     
-    .text-danger { color: var(--error-red) !important; }
-    .text-success { color: var(--success-green) !important; }
+    /* Ícone de Status Toggle */
+    .btn-action i.text-danger {
+        color: var(--error-red) !important;
+    }
     
+    .btn-action i.text-success {
+        color: var(--success-green) !important;
+    }
+    
+    .text-danger { 
+        color: var(--error-red) !important; 
+    }
+    
+    .text-success { 
+        color: var(--success-green) !important; 
+    }
+    
+    /* Estado vazio da tabela */
+    .no-patients {
+        text-align: center;
+        padding: 60px 20px !important;
+        color: var(--text-muted);
+        font-size: 1.1rem;
+    }
     
     /* ============================================
-        MODAIS (PARTE ADICIONADA)
+        MODAIS
         ============================================ */
     
     .modal-overlay {
@@ -436,7 +468,7 @@
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.6);
-        display: none; /* Deve ser controlado por JS para mostrar */
+        display: none;
         justify-content: center;
         align-items: center;
         z-index: 2000;
@@ -455,7 +487,7 @@
         border-radius: var(--radius-lg);
         width: 90%;
         max-width: 450px;
-        box-shadow: var(--shadow-xl); /* Sombra mais forte para destaque */
+        box-shadow: var(--shadow-xl);
         text-align: center;
         transform: scale(0.9);
         animation: modalPopIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
@@ -477,16 +509,17 @@
         margin-top: 10px;
     }
     
-    /* Estilo para ícones dos modais */
-    #deletePacienteModal .modal-header i { /* Exclusão */
+    #deletePacienteModal .modal-header i {
         font-size: 3rem;
         color: var(--error-red);
     }
-    #statusPacienteModal .modal-header i { /* Status */
+    
+    #statusPacienteModal .modal-header i {
         font-size: 3rem;
         color: var(--primary-blue);
     }
-    #statusSuccessModal .modal-header i { /* Sucesso */
+    
+    #statusSuccessModal .modal-header i {
         font-size: 3rem;
         color: var(--success-green);
     }
@@ -527,9 +560,10 @@
     
     .btn-cancelar:hover {
         background: var(--bg-gray-50);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-sm);
     }
     
-    /* Botão de exclusão (Vermelho) */
     .btn-excluir {
         background: var(--error-red);
         color: var(--bg-white);
@@ -541,7 +575,6 @@
         box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
     }
     
-    /* Botão de Confirmação para Status/Sucesso (Azul Primário) */
     #statusPacienteModal .btn-excluir,
     #statusSuccessModal .btn-excluir {
         background: var(--primary-blue);
@@ -553,48 +586,110 @@
         box-shadow: 0 4px 8px rgba(6, 24, 185, 0.3);
     }
     
+    /* Alert de Sucesso */
+    .alert {
+        padding: 16px 20px;
+        border-radius: var(--radius-md);
+        margin-bottom: 20px;
+        animation: slideDown 0.5s ease-out;
+    }
+    
+    .alert-success {
+        background: #D1FAE5;
+        color: #059669;
+        border-left: 4px solid var(--success-green);
+    }
+    
+    /* Paginação */
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        padding: 20px 0;
+    }
+    
     /* ============================================
-        MEDIA QUERIES (Responsividade)
+        RESPONSIVIDADE
         ============================================ */
+    
     @media (max-width: 768px) {
         .main-dashboard {
             padding: 20px;
         }
+        
         .patients-header {
             flex-direction: column;
             align-items: flex-start;
             gap: 15px;
         }
+        
         .patients-header h1 {
             font-size: 1.75rem;
         }
+        
         .btn-add-paciente {
             width: 100%;
             justify-content: center;
         }
+        
         .search-filters {
             flex-direction: column;
             align-items: stretch;
             padding: 15px;
         }
+        
         .search-box {
             min-width: 100%;
         }
+        
         .custom-select {
             width: 100%;
         }
+        
         .table-wrapper {
             overflow-x: auto;
         }
+        
         .patients-table {
-            min-width: 800px; /* Garante que a tabela não fique muito estreita */
+            min-width: 800px;
         }
+        
+        .action-buttons {
+            gap: 6px;
+        }
+        
+        .btn-action {
+            width: 32px;
+            height: 32px;
+            font-size: 1rem;
+        }
+        
         .modal-buttons {
             flex-direction: column;
             gap: 10px;
         }
+        
         .btn-cancelar, .btn-excluir {
             flex: none;
             width: 100%;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .patients-header h1 {
+            font-size: 1.5rem;
+        }
+        
+        .patients-header h1 i {
+            font-size: 1.8rem;
+        }
+        
+        .action-buttons {
+            gap: 4px;
+        }
+        
+        .btn-action {
+            width: 30px;
+            height: 30px;
+            font-size: 0.95rem;
         }
     }

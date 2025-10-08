@@ -326,43 +326,75 @@
         color: var(--error-red);
     }
     
-    /* Ações (Action Buttons) */
-    .actions {
-        width: 120px;
-        text-align: right;
-        display: flex; /* Garante que os botões fiquem em linha */
-        gap: 8px; 
+   /* ============================================
+       AÇÕES - ÍCONES LADO A LADO (CORRIGIDO)
+       ============================================ */
+    
+    .action-buttons {
+        display: flex !important;
+        gap: 8px;
         align-items: center;
-        justify-content: flex-end; /* Alinha os botões na direita */
+        justify-content: center;
+        flex-direction: row !important;
     }
     
     .btn-action {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 32px;
-        height: 32px;
+        width: 36px;
+        height: 36px;
         border-radius: var(--radius-sm);
         text-decoration: none;
-        border: none;
-        background: transparent;
+        border: 1px solid var(--border-color);
+        background: var(--bg-gray-50);
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
         font-size: 1.1rem;
         color: var(--text-secondary);
     }
     
     .btn-action:hover {
-        transform: none;
-        box-shadow: none;
-        background: var(--bg-gray-100);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
     }
     
-    .btn-edit { color: #2563EB; } 
-    .btn-delete { color: var(--error-red); }
+    .btn-edit {
+        color: var(--primary-blue);
+        background: rgba(6, 24, 185, 0.1);
+    }
     
-    .text-danger { color: var(--error-red) !important; }
-    .text-success { color: var(--success-green) !important; }
+    .btn-edit:hover {
+        background: rgba(6, 24, 185, 0.2);
+        border-color: var(--primary-blue);
+    }
+    
+    .btn-delete {
+        color: var(--error-red);
+        background: rgba(220, 38, 38, 0.1);
+    }
+    
+    .btn-delete:hover {
+        background: rgba(220, 38, 38, 0.2);
+        border-color: var(--error-red);
+    }
+    
+    /* Ícone de Status Toggle */
+    .btn-action i.text-danger {
+        color: var(--error-red) !important;
+    }
+    
+    .btn-action i.text-success {
+        color: var(--success-green) !important;
+    }
+    
+    .text-danger { 
+        color: var(--error-red) !important; 
+    }
+    
+    .text-success { 
+        color: var(--success-green) !important; 
+    }
     
     /* --------------------------------------------
         PAGINAÇÃO
