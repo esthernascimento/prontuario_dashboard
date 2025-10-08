@@ -126,7 +126,6 @@
         padding: 24px;
         flex-wrap: wrap;
         animation: slideUp 0.6s ease-out 0.2s backwards;
-      
     }
     
     @keyframes slideUp {
@@ -326,9 +325,9 @@
         color: var(--error-red);
     }
     
-   /* ============================================
-       AÇÕES - ÍCONES LADO A LADO (CORRIGIDO)
-       ============================================ */
+    /* ============================================
+        AÇÕES - ÍCONES LADO A LADO (CORRIGIDO)
+        ============================================ */
     
     .action-buttons {
         display: flex !important;

@@ -6,16 +6,16 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-  
     public function up(): void
     {
         Schema::create('tbAnotacaoEnfermagem', function (Blueprint $table) {
             $table->id('idAnotacao');
 
             $table->foreignId('idPacienteFK')->constrained('tbPaciente', 'idPaciente');
-
-            $table->unsignedBigInteger('idEnfermeiroFK');
-            $table->foreign('idEnfermeiroFK')->references('idEnfermeiroPK')->on('tbEnfermeiro');
+            
+            // 2. Chave para Enfermeiro: assume que tbEnfermeiro tem 'idEnfermeiro'
+            // O 'constrained' garante que o tipo (unsignedBigInteger) e a referência estejam corretos.
+            $table->foreignId('idEnfermeiroFK')->constrained('tbEnfermeiro', 'idEnfermeiro'); 
 
             $table->dateTime('data_hora');
             $table->string('tipo_registro', 50);
@@ -31,6 +31,9 @@ return new class extends Migration
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('tbAnotacaoEnfermagem');

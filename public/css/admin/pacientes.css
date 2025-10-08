@@ -380,8 +380,8 @@
     }
     
     /* ============================================
-       AÇÕES - ÍCONES LADO A LADO (CORRIGIDO)
-       ============================================ */
+        AÇÕES - ÍCONES LADO A LADO (CORRIGIDO)
+        ============================================ */
     
     .action-buttons {
         display: flex !important;
@@ -551,11 +551,6 @@
         transition: all 0.3s ease;
         font-size: 0.95rem;
         flex: 1;
-    }
-    
-    .btn-cancelar {
-        background: var(--bg-gray-100);
-        color: var(--text-secondary);
     }
     
     .btn-cancelar:hover {

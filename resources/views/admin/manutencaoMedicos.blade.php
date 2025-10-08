@@ -1,4 +1,3 @@
-
 @extends('admin.templates.admTemplate')
 
 @section('title', 'Gerenciamento de Médicos')
@@ -72,10 +71,7 @@
                                     @endif
                                 </a>
                             @endif
-
-                            <a href="#" onclick="openDeleteMedicoModal('{{ $medico->idMedicoPK }}', '{{ $medico->nomeMedico }}')" class="btn-action btn-delete" title="Excluir">
-                                <i class="bi bi-trash"></i>
-                            </a>
+                            {{-- REMOVEMOS O BOTÃO DE EXCLUSÃO DEFINITIVAMENTE --}}
                         </td>
                     </tr>
                     @endforeach
@@ -97,29 +93,9 @@
     </div>
 </main>
 
-{{-- MODAL DE EXCLUSÃO --}}
-<div id="deleteMedicoModal" class="modal-overlay">
-    <div class="modal-content">
-        <div class="modal-header">
-            <i class="bi bi-trash-fill"></i>
-            <h2>Excluir Médico(a)</h2>
-        </div>
-        
-        <p>Tem certeza que deseja excluir o(a) médico(a) <span id="medicoNome"></span>?</p>
+{{-- MODAL DE EXCLUSÃO FOI REMOVIDO --}}
 
-        <form id="deleteMedicoForm" method="POST">
-            @csrf
-            @method('DELETE')
-
-            <div class="modal-buttons">
-                <button type="button" onclick="closeDeleteMedicoModal()" class="btn-cancelar">Cancelar</button>
-                <button type="submit" class="btn-excluir">Sim, excluir</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-{{-- MODAL DE ALTERAÇÃO DE STATUS --}}
+{{-- MODAL DE ALTERAÇÃO DE STATUS (EXISTENTE) --}}
 <div id="statusMedicoModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -139,7 +115,7 @@
     </div>
 </div>
 
-{{-- MODAL DE SUCESSO UNIFICADO --}}
+{{-- MODAL DE SUCESSO UNIFICADO (EXISTENTE) --}}
 <div id="statusSuccessModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -186,28 +162,8 @@
     // ------------------------------------------
     // LÓGICA DOS MODAIS DE MÉDICO
     // ------------------------------------------
-
-    function openDeleteMedicoModal(medicoId, medicoNome) {
-        const modal = document.getElementById('deleteMedicoModal');
-        const nomeSpan = document.getElementById('medicoNome');
-        const form = document.getElementById('deleteMedicoForm');
-
-        nomeSpan.textContent = medicoNome;
-        const deleteRoute = "{{ route('admin.medicos.excluir', ['id' => 'PLACEHOLDER_ID']) }}";
-        form.action = deleteRoute.replace('PLACEHOLDER_ID', medicoId);
-        
-        modal.style.display = 'flex';
-    }
-
-    function closeDeleteMedicoModal() {
-        document.getElementById('deleteMedicoModal').style.display = 'none';
-    }
-
-    document.getElementById('deleteMedicoModal').addEventListener('click', function(event) {
-        if (event.target.id === 'deleteMedicoModal') {
-            closeDeleteMedicoModal();
-        }
-    });
+    
+    // As funções openDeleteMedicoModal e closeDeleteMedicoModal foram removidas.
 
     function openStatusModal(medicoId, medicoNome, currentStatus) {
         const modal = document.getElementById('statusMedicoModal');

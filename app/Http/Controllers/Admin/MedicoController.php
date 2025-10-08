@@ -92,6 +92,10 @@ class MedicoController extends Controller
         }
     }
     
+    // REMOVEMOS AS FUNÇÕES 'confirmarExclusao' e 'excluir'
+    // A ação de "excluir" agora será uma desativação através do toggleStatus.
+    // O código abaixo pode ser removido do seu controller.
+    /*
     public function confirmarExclusao($id)
     {
         $medico = Medico::findOrFail($id);
@@ -105,6 +109,7 @@ class MedicoController extends Controller
 
         return redirect()->route('admin.manutencaoMedicos')->with('success', 'Médico excluído com sucesso!');
     }
+    */
 
     public function editar($id)
     {
@@ -147,16 +152,20 @@ class MedicoController extends Controller
     public function toggleStatus($id)
     {
         $medico = Medico::with('usuario')->findOrFail($id);
+        $mensagem = '';
 
         if (!$medico->usuario) {
             return redirect()->route('admin.manutencaoMedicos')->with('error', 'Este médico não está vinculado a um usuário.');
         }
 
         $usuario = $medico->usuario;
-        $usuario->statusAtivoUsuario = $usuario->statusAtivoUsuario == 1 ? 0 : 1;
+        $novoStatus = !$usuario->statusAtivoUsuario;
+        $usuario->statusAtivoUsuario = $novoStatus;
         $usuario->save();
 
-        return redirect()->route('admin.manutencaoMedicos')->with('success', 'Status do médico atualizado com sucesso!');
+        $acao = $novoStatus ? 'ativado' : 'desativado';
+        $mensagem = "O médico foi {$acao} com sucesso!";
+
+        return redirect()->route('admin.manutencaoMedicos')->with('success', $mensagem);
     }
 }
-

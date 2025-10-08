@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class UnidadeController extends Controller
 {
     /**
-     * Mostra a página de listagem de unidades.
+     * Mostra a página de listagem de unidades, incluindo as "excluídas".
      */
     public function index()
     {
@@ -83,14 +83,8 @@ class UnidadeController extends Controller
         return redirect()->route('admin.unidades.index')->with('success', 'Unidade atualizada com sucesso!');
     }
 
-    /**
-     * Remove (soft delete) a unidade.
-     */
-    public function destroy(Unidade $unidade)
-    {
-        $unidade->delete();
-        return redirect()->route('admin.unidades.index')->with('success', 'Unidade excluída com sucesso.');
-    }
+    // REMOVEMOS A FUNÇÃO 'destroy' PARA UNIFICAR A LÓGICA NO 'toggleStatus'.
+    // A ação de "excluir" agora será uma desativação.
 
     /**
      * Ativa ou desativa (soft delete) uma unidade.
@@ -110,4 +104,3 @@ class UnidadeController extends Controller
         return redirect()->route('admin.unidades.index')->with('success', $mensagem);
     }
 }
-
