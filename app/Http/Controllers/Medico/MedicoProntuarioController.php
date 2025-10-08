@@ -26,8 +26,8 @@ class MedicoProntuarioController extends Controller
 
     /**
      * Exibe o prontuário completo de um paciente (histórico de consultas)
-     * Rota: /medico/prontuario/{id}
-     * View: medico.prontuario_detalhe
+     * Rota: /medico/visualizar-prontuario/{id}
+     * View: medico.visualizarProntuario
      */
     public function show($id)
     {
@@ -47,7 +47,7 @@ class MedicoProntuarioController extends Controller
             ->orderBy('dataConsulta', 'desc')
             ->get();
         
-        return view('medico.prontuario_detalhe', compact('paciente', 'prontuario', 'consultas'));
+        return view('medico.visualizarProntuario', compact('paciente', 'prontuario', 'consultas'));
     }
 
     /**

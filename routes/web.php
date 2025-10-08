@@ -64,7 +64,7 @@ Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () 
     // IMPORTANTE: Rotas específicas devem vir ANTES das rotas com parâmetros genéricos
     // =======================================================================
     
-    // Lista todos os pacientes com prontuários (tela principal)
+    // Lista todos os pacientes com prontuários (tela principal - prontuarioMedico.blade.php)
     Route::get('/prontuario', [MedicoProntuarioController::class, 'index'])->name('prontuario');
     
     // Formulário para criar nova consulta (cadastrarProntuario.blade.php)
@@ -82,8 +82,11 @@ Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () 
     // Exclui uma consulta (soft delete)
     Route::delete('/prontuario/deletar/{id}', [MedicoProntuarioController::class, 'destroy'])->name('prontuario.destroy');
     
-    // Visualiza prontuário completo do paciente (histórico de consultas)
+    // Visualiza prontuário completo do paciente (histórico de consultas - visualizarProntuario.blade.php)
     // IMPORTANTE: Esta rota DEVE vir DEPOIS das rotas /prontuario/editar e /prontuario/atualizar
+    Route::get('/visualizar-prontuario/{id}', [MedicoProntuarioController::class, 'show'])->name('visualizarProntuario');
+    
+    // Rota alternativa (mantida por compatibilidade)
     Route::get('/prontuario/{id}', [MedicoProntuarioController::class, 'show'])->name('paciente.prontuario');
     
     // =======================================================================
