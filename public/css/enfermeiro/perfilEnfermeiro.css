@@ -28,7 +28,7 @@
 body {
     margin: 0;
     padding: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Montserrat', sans-serif;
     background: linear-gradient(135deg, #F0FFF1 0%, #F9FAFB 100%);
     min-height: 100vh;
 }

@@ -1,0 +1,566 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
+
+:root {
+    --primary-green: #0a400c;
+    --primary-green-dark: #1e7e34;
+    --primary-green-light: #0a400c;
+    --accent-blue: #0EA5E9;
+    --bg-white: #FFFFFF;
+    --bg-gray-50: #F9FAFB;
+    --bg-gray-100: #F3F4F6;
+    --text-primary: #111827;
+    --text-secondary: #6B7280;
+    --text-muted: #9CA3AF;
+    --border-color: #E5E7EB;
+    --success-green: #10B981;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f4f6f8;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+.main-dashboard {
+    padding: 30px;
+    /* Reduzido de 40px para 30px */
+    background: linear-gradient(135deg, #ffffff 0%, #F9FAFB 100%);
+    min-height: 100vh;
+}
+
+.prontuario-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header-prontuario {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+    width: 1400px;
+    padding: 30px 35px;
+    /* Reduzido o padding */
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 50px;
+    /* Reduzido a margem */
+    position: relative;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header-prontuario::before {
+     content: '';
+    position: absolute;
+    top: -40%;
+    right: -5%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1.15);
+        opacity: 0.8;
+    }
+}
+
+.header-prontuario h1 {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    /* Reduzido o gap */
+    z-index: 1;
+    color: white;
+    font-size: 1.8rem;
+    /* Reduzido de 2rem para 1.8rem */
+    font-weight: 800;
+    margin: 0;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    letter-spacing: -0.5px;
+}
+
+.header-prontuario h1 i {
+    font-size: 3rem;
+    /* Reduzido de 3.5rem para 3rem */
+    color: white;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
+.btn-nova-anotacao {
+    background: white;
+    color: var(--primary-green);
+    padding: 12px 25px;
+    /* Reduzido o padding */
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 1rem;
+    /* Reduzido de 1.05rem para 1rem */
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* Reduzido o gap */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-nova-anotacao:hover {
+    transform: translateY(-2px) scale(1.02);
+    /* Ajustado o hover */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.btn-nova-anotacao i {
+    font-size: 1.2rem;
+    /* Reduzido de 1.3rem para 1.2rem */
+}
+
+.card-paciente-info {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    margin-bottom: 25px;
+    /* Reduzido a margem */
+    animation: fadeIn 0.6s ease-out 0.2s backwards;
+    width: 1470px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.paciente-header {
+    background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+    padding: 20px 25px;
+    /* Reduzido o padding */
+    border-bottom: 4px solid var(--primary-green);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    /* Reduzido o gap */
+    flex-wrap: wrap;
+}
+
+.profile-icon {
+    font-size: 3.5rem;
+    /* Reduzido de 4rem para 3.5rem */
+    color: var(--primary-green);
+    line-height: 1;
+}
+
+.paciente-header h2 {
+    color: var(--text-primary);
+    font-size: 1.6rem;
+    /* Reduzido de 1.8rem para 1.6rem */
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.3px;
+    flex-grow: 1;
+}
+
+.status-badge {
+    padding: 6px 14px;
+    /* Reduzido o padding */
+    border-radius: 20px;
+    font-size: 0.8rem;
+    /* Reduzido de 0.85rem para 0.8rem */
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    /* Reduzido o gap */
+}
+
+.status-ativo {
+    background: #D1FAE5;
+    color: #065F46;
+}
+
+.prontuario-numero {
+    font-size: 0.9rem;
+    /* Reduzido de 0.95rem para 0.9rem */
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.paciente-stats {
+    padding: 25px;
+    /* Reduzido de 32px para 25px */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    /* Reduzido o minmax */
+    gap: 20px;
+    /* Reduzido o gap */
+}
+
+.paciente-stats strong {
+    display: block;
+    font-size: 0.8rem;
+    /* Reduzido de 0.85rem para 0.8rem */
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.paciente-stats span {
+    font-size: 1rem;
+    /* Reduzido de 1.1rem para 1rem */
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.historico-container {
+    width: 1420px;
+    padding: 25px;
+    /* Reduzido de 32px para 25px */
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.historico-container h3 {
+    color: var(--text-primary);
+    font-size: 1.4rem;
+    /* Reduzido de 1.6rem para 1.4rem */
+    font-weight: 800;
+    margin: 0 0 25px 0;
+    /* Reduzido a margem */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Reduzido o gap */
+    padding-bottom: 12px;
+    /* Reduzido o padding */
+    border-bottom: 2px solid var(--primary-green-light);
+}
+
+.historico-container h3 i {
+    color: var(--primary-green);
+}
+
+.historico-container::before {
+    content: '';
+    position: absolute;
+    top: 85px;
+    /* Ajustado para compensar o padding e título menores */
+    bottom: 20px;
+    left: 42px;
+    width: 4px;
+    background: var(--primary-green-light);
+    border-radius: 2px;
+    z-index: 1;
+}
+
+.anotacao-item {
+    position: relative;
+    padding-left: 50px;
+    margin-bottom: 20px;
+    /* Reduzido de 30px para 20px */
+    z-index: 2;
+    background: white;
+}
+
+.anotacao-item::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 33px;
+    width: 18px;
+    /* Reduzido de 20px para 18px */
+    height: 18px;
+    /* Reduzido de 20px para 18px */
+    background: var(--primary-green);
+    border: 3px solid #fff;
+    /* Reduzido de 4px para 3px */
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px #D1FAE5;
+    /* Reduzido de 4px para 3px */
+    z-index: 3;
+}
+
+.anotacao-info {
+    background: var(--bg-gray-50);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: 18px;
+    /* Reduzido de 20px para 18px */
+    transition: all 0.3s ease;
+}
+
+.anotacao-info:hover {
+    transform: translateY(-1px);
+    /* Ajustado o hover */
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-green-light);
+}
+
+.anotacao-data {
+    position: absolute;
+    top: 0;
+    left: -160px;
+    /* Reduzido de -180px para -160px */
+    width: 130px;
+    /* Reduzido de 150px para 130px */
+    text-align: right;
+    font-size: 0.85rem;
+    /* Reduzido de 0.9rem para 0.85rem */
+    font-weight: 700;
+    color: var(--primary-green-dark);
+}
+
+.anotacao-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+    /* Reduzido o padding */
+    margin-bottom: 8px;
+    /* Reduzido a margem */
+    border-bottom: 1px dashed var(--border-color);
+}
+
+.anotacao-header-content strong {
+    font-size: 1.1rem;
+    /* Reduzido de 1.2rem para 1.1rem */
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.enfermeiro-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    /* Reduzido o gap */
+    font-size: 0.9rem;
+    /* Reduzido de 0.95rem para 0.9rem */
+    font-weight: 600;
+    color: var(--accent-blue);
+}
+
+.enfermeiro-info i {
+    color: var(--accent-blue);
+    font-size: 1rem;
+    /* Reduzido de 1.1rem para 1rem */
+}
+
+.anotacao-details p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 12px;
+    /* Reduzido de 15px para 12px */
+}
+
+.anotacao-details p strong {
+    color: var(--text-primary);
+}
+
+.sinais-vitais {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    /* Reduzido os gaps */
+    margin-top: 12px;
+    /* Reduzido de 15px para 12px */
+    padding: 12px;
+    /* Reduzido de 15px para 12px */
+    background: #E6F7E6;
+    border-radius: var(--radius-sm);
+    border-left: 5px solid var(--primary-green);
+}
+
+.sinais-vitais strong {
+    color: var(--primary-green-dark);
+    font-size: 0.85rem;
+    /* Reduzido de 0.9rem para 0.85rem */
+}
+
+.sinais-vitais span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    /* Reduzido o gap */
+    font-size: 0.9rem;
+    /* Reduzido de 0.95rem para 0.9rem */
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.sinais-vitais span i {
+    color: var(--primary-green);
+}
+
+.unidade {
+    display: block;
+    margin-top: 8px;
+    /* Reduzido de 10px para 8px */
+    font-size: 0.8rem;
+    /* Reduzido de 0.85rem para 0.8rem */
+    color: var(--text-muted);
+}
+
+.no-records {
+    text-align: center;
+    padding: 30px;
+    /* Reduzido de 40px para 30px */
+}
+
+.no-records p {
+    font-style: italic;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    /* Reduzido de 1.1rem para 1rem */
+    margin-bottom: 15px;
+    /* Reduzido de 20px para 15px */
+}
+
+.no-records p i {
+    color: var(--primary-green);
+    margin-right: 5px;
+}
+
+.btn-sm-primary {
+    background: var(--primary-green);
+    color: white;
+    padding: 10px 20px;
+    /* Reduzido o padding */
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.btn-sm-primary:hover {
+    background: var(--primary-green-dark);
+}
+
+@media (max-width: 992px) {
+
+    .anotacao-data {
+        position: static;
+        text-align: left;
+        color: var(--text-secondary);
+        margin-bottom: 8px;
+        /* Reduzido de 10px para 8px */
+        width: auto;
+    }
+
+    .historico-container::before {
+        left: 20px;
+    }
+
+    .anotacao-item::before {
+        left: 11px;
+    }
+
+    .anotacao-item {
+        padding-left: 35px;
+    }
+
+    .historico-container {
+        padding: 20px;
+    }
+
+    .paciente-stats {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 768px) {
+    .main-dashboard {
+        padding: 15px;
+    }
+
+    .header-prontuario {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 20px;
+    }
+
+    .header-prontuario h1 {
+        font-size: 1.4rem;
+        /* Reduzido de 1.5rem para 1.4rem */
+    }
+
+    .header-prontuario h1 i {
+        font-size: 2.5rem;
+    }
+
+    .btn-nova-anotacao {
+        width: 100%;
+        justify-content: center;
+        padding: 10px;
+        /* Reduzido de 12px para 10px */
+        font-size: 0.9rem;
+        /* Reduzido de 0.95rem para 0.9rem */
+    }
+
+    .paciente-header {
+        padding: 15px;
+        /* Reduzido de 20px para 15px */
+    }
+
+    .paciente-header h2 {
+        font-size: 1.3rem;
+        /* Reduzido de 1.4rem para 1.3rem */
+    }
+
+    .paciente-stats {
+        padding: 15px;
+        /* Reduzido de 20px para 15px */
+    }
+
+}

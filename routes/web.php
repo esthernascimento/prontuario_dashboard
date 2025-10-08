@@ -60,8 +60,7 @@ Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () 
     Route::get('/ajuda', fn() => view('medico.ajudaMedico'))->name('ajuda');
     
     // =======================================================================
-    // --- ROTAS DE PRONTUÁRIO E CONSULTAS ---
-    // IMPORTANTE: Rotas específicas devem vir ANTES das rotas com parâmetros genéricos
+    // --- ROTAS DE PRONTUÁRIO E CONSULTAS (MÉDICO) ---
     // =======================================================================
     
     // Lista todos os pacientes com prontuários (tela principal - prontuarioMedico.blade.php)
@@ -73,7 +72,7 @@ Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () 
     // Salva nova consulta
     Route::post('/cadastrar-prontuario/{id}', [MedicoProntuarioController::class, 'store'])->name('prontuario.store');
     
-    // Formulário para editar uma consulta específica (DEVE VIR ANTES da rota show genérica)
+    // Formulário para editar uma consulta específica
     Route::get('/prontuario/editar/{id}', [MedicoProntuarioController::class, 'edit'])->name('prontuario.edit');
     
     // Atualiza uma consulta
@@ -83,7 +82,6 @@ Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () 
     Route::delete('/prontuario/deletar/{id}', [MedicoProntuarioController::class, 'destroy'])->name('prontuario.destroy');
     
     // Visualiza prontuário completo do paciente (histórico de consultas - visualizarProntuario.blade.php)
-    // IMPORTANTE: Esta rota DEVE vir DEPOIS das rotas /prontuario/editar e /prontuario/atualizar
     Route::get('/visualizar-prontuario/{id}', [MedicoProntuarioController::class, 'show'])->name('visualizarProntuario');
     
     // Rota alternativa (mantida por compatibilidade)
@@ -96,7 +94,7 @@ Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () 
 // --- 3. ROTAS DO ENFERMEIRO ---
 // ----------------------------------------------------------------------------------
 
-Route::prefix('enfermeiro')->name('enfermeiro.')->group(function () {
+Route::group(['prefix' => 'enfermeiro', 'as' => 'enfermeiro.'], function () {
     Route::get('/login', [EnfermeiroLoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [EnfermeiroLoginController::class, 'login'])->name('login.submit');
 
@@ -109,8 +107,38 @@ Route::prefix('enfermeiro')->name('enfermeiro.')->group(function () {
         Route::post('/alterar-senha', [SegurancaEnfermeiroController::class, 'alterarSenha'])->name('alterarSenha');
         Route::get('/paciente', fn() => view('enfermeiro.pacientes'))->name('pacientes');
         Route::get('/ajuda', fn() => view('enfermeiro.ajuda'))->name('ajuda');
-        Route::get('/prontuarioEnfermeiro', [ProntuarioController::class, 'index'])->name('prontuario');
-        Route::get('/prontuario/{id}', [ProntuarioController::class, 'show'])->name('paciente.prontuario');
+        
+        // =======================================================================
+        // --- ROTAS DE PRONTUÁRIO E REGISTROS (ENFERMEIRO) - CORRIGIDAS ---
+        // =======================================================================
+
+        // Lista todos os pacientes com prontuários (tela principal)
+        Route::get('/prontuario', [ProntuarioController::class, 'index'])->name('prontuario'); 
+
+        // Visualiza prontuário completo do paciente (histórico de anotações)
+        // O Canvas 'visualizarProntuarioEnfermeiro.blade.php' está usando esta rota.
+        Route::get('/visualizar-prontuario/{id}', [ProntuarioController::class, 'show'])->name('visualizarProntuario');
+        
+        // Rota alternativa de visualização
+        Route::get('/prontuario/{id}', [ProntuarioController::class, 'show'])->name('prontuario.show');
+        
+        // Formulário para criar novo Registro/Anotação (Usado no Canvas: enfermeiro.anotacao.create)
+        Route::get('/prontuario/{id}/anotacao/criar', [ProntuarioController::class, 'createAnotacao'])->name('anotacao.create');
+
+        // Salva novo Registro/Anotação
+        Route::post('/prontuario/{id}/anotacao/salvar', [ProntuarioController::class, 'storeAnotacao'])->name('anotacao.store');
+        
+        // Formulário para editar um Registro/Anotação específica (Usado no Canvas: enfermeiro.anotacao.edit)
+        Route::get('/prontuario/anotacao/editar/{id}', [ProntuarioController::class, 'editAnotacao'])->name('anotacao.edit');
+        
+        // Atualiza um Registro/Anotação
+        Route::put('/prontuario/anotacao/atualizar/{id}', [ProntuarioController::class, 'updateAnotacao'])->name('anotacao.update');
+        
+        // Exclui um Registro/Anotação (soft delete) (Usado no Canvas: enfermeiro.anotacao.destroy)
+        Route::delete('/prontuario/anotacao/deletar/{id}', [ProntuarioController::class, 'destroyAnotacao'])->name('anotacao.destroy');
+        
+        // =======================================================================
+
     });
 });
 
@@ -148,7 +176,7 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::delete('/medicos/{id}', [MedicoController::class, 'excluir'])->name('medicos.excluir');
     Route::post('/medicos/{id}/toggle-status', [MedicoController::class, 'toggleStatus'])->name('medicos.toggleStatus');
     Route::post('/medicos/{medico}/unidades', [MedicoController::class, 'syncUnidades'])->name('medicos.syncUnidades');
-  
+ 
     // CRUD ENFERMEIROS
     Route::get('/manutencaoEnfermeiro', [EnfermeiroController::class, 'index'])->name('manutencaoEnfermeiro');
     Route::get('/cadastroEnfermeiro', [EnfermeiroController::class, 'create'])->name('enfermeiro.create');

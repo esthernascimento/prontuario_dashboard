@@ -44,8 +44,8 @@ class Paciente extends Authenticatable
     ];
 
     protected $casts = [
+        'datanascimento' => 'date',
         'statusPaciente'   => 'boolean',
-        'dataNascPaciente' => 'date',
     ];
 
     // Usado pelo Guard/Auth para saber qual coluna é a senha
@@ -68,5 +68,14 @@ class Paciente extends Authenticatable
         // supondo que alergias.idPacienteFK -> tbPaciente.idPaciente
         return $this->hasMany(Alergia::class, 'idPacienteFK', 'idPaciente');
     }
+
+    public function anotacoesEnfermagem()
+    {
+        // ASSUMINDO que o Model de Anotação se chama AnotacaoEnfermagem
+        // e que a FK na tabela de anotações é 'idPacienteFK'.
+        // Se a FK for diferente, ajuste o segundo parâmetro.
+        return $this->hasMany(AnotacaoEnfermagem::class, 'idPacienteFK', 'idPaciente');
+    }
+
 
 }
