@@ -6,12 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Paciente;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
 
 class PacienteController extends Controller
 {
-    /**
-     * Exibe a lista de pacientes com filtros para o painel administrativo.
-     */
+    
     public function index(Request $request)
     {
         $query = Paciente::query();
@@ -78,23 +77,38 @@ class PacienteController extends Controller
      * Atualiza um paciente existente no banco de dados.
      * CORRIGIDO: usa idPaciente
      */
-    public function update(Request $request, $id)
-    {
-        $paciente = Paciente::where('idPaciente', $id)->firstOrFail();
-        
-        $validatedData = $request->validate([
-            'nomePaciente'      => 'required|string|min:2',
-            'cpfPaciente'       => ['required', 'string', 'size:11', Rule::unique('tbPaciente', 'cpfPaciente')->ignore($paciente->idPaciente, 'idPaciente')],
-            'dataNascPaciente'  => 'required|date',
-            'cartaoSusPaciente' => ['nullable', 'string', 'max:20', Rule::unique('tbPaciente', 'cartaoSusPaciente')->ignore($paciente->idPaciente, 'idPaciente')],
-            'generoPaciente'    => 'required|string',
-            'statusPaciente'    => 'required|boolean',
-        ]);
+ public function update(Request $request, $id)
+{
+    // Log para debug
+    Log::info('Update iniciado', [
+        'id' => $id,
+        'dados' => $request->all()
+    ]);
 
-        $paciente->update($validatedData);
+    $paciente = Paciente::where('idPaciente', $id)->firstOrFail();
+    
+    $validatedData = $request->validate([
+        'nomePaciente'      => 'required|string|min:2|max:255',
+        'cpfPaciente'       => ['required', 'string', 'size:11', Rule::unique('tbPaciente', 'cpfPaciente')->ignore($paciente->idPaciente, 'idPaciente')],
+        'dataNascPaciente'  => 'required|date',
+        'cartaoSusPaciente' => ['nullable', 'string', 'max:20', Rule::unique('tbPaciente', 'cartaoSusPaciente')->ignore($paciente->idPaciente, 'idPaciente')],
+        'generoPaciente'    => 'required|string|in:Masculino,Feminino,Outro',
+        'statusPaciente'    => 'required|in:0,1',
+    ]);
 
-        return redirect()->route('admin.pacientes.index')->with('success', 'Paciente atualizado com sucesso!');
-    }
+    // Converte statusPaciente para boolean
+    $validatedData['statusPaciente'] = (bool) $validatedData['statusPaciente'];
+
+    Log::info('Dados validados', $validatedData);
+
+    // Atualiza o paciente
+    $paciente->update($validatedData);
+
+    Log::info('Paciente atualizado', $paciente->fresh()->toArray());
+
+    return redirect()->route('admin.pacientes.index')
+        ->with('success', 'Paciente atualizado com sucesso!');
+}
 
     /**
      * Exclusão (Soft Delete)
