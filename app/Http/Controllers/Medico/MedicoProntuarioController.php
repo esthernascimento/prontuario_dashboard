@@ -9,6 +9,7 @@ use App\Models\Prontuario;
 use App\Models\Consulta;
 use App\Models\Medico;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Unidade;
 
 class MedicoProntuarioController extends Controller
 {
@@ -67,7 +68,6 @@ class MedicoProntuarioController extends Controller
         
         // Busca os dados do médico logado
         $medico = Auth::user()->medico;
-        // Alternativa: $medico = Medico::where('id_usuarioFK', Auth::id())->firstOrFail();
         
         // Verifica se o paciente tem prontuário, se não, cria um
         $prontuario = Prontuario::firstOrCreate(
@@ -113,19 +113,27 @@ class MedicoProntuarioController extends Controller
             ['dataAbertura' => now()->toDateString()]
         );
 
+        // Busca o ID da unidade com base no nome fornecido
+        $unidade = Unidade::where('nomeUnidade', $validated['unidade'])->first();
+        
         // Cria a consulta
         $consulta = new Consulta();
         $consulta->idProntuarioFK = $prontuario->idProntuarioPK;
         $consulta->idMedicoFK = $medico->idMedicoPK;
+        
+        // Atribuimos os valores às colunas que agora existem na sua tabela
         $consulta->nomeMedico = $medico->nomeMedico;
         $consulta->crmMedico = $medico->crmMedico;
+        $consulta->idUnidadeFK = $unidade->idUnidadePK ?? null; 
         $consulta->dataConsulta = $validated['dataConsulta'];
         $consulta->unidade = $validated['unidade'] ?? null;
         $consulta->observacoes = $validated['observacoes'] ?? null;
         $consulta->examesSolicitados = $validated['examesSolicitados'] ?? null;
         $consulta->medicamentosPrescritos = $validated['medicamentosPrescritos'] ?? null;
+
         $consulta->save();
 
+        
         return redirect()
             ->route('medico.paciente.prontuario', $id)
             ->with('success', 'Consulta registrada com sucesso!');
@@ -179,7 +187,11 @@ class MedicoProntuarioController extends Controller
             'dataConsulta.date' => 'Data inválida.',
         ]);
 
+        // Busca o ID da unidade com base no nome fornecido
+        $unidade = Unidade::where('nomeUnidade', $validated['unidade'])->first();
+        
         $consulta->dataConsulta = $validated['dataConsulta'];
+        $consulta->idUnidadeFK = $unidade->idUnidadePK ?? null;
         $consulta->unidade = $validated['unidade'] ?? null;
         $consulta->observacoes = $validated['observacoes'] ?? null;
         $consulta->examesSolicitados = $validated['examesSolicitados'] ?? null;
