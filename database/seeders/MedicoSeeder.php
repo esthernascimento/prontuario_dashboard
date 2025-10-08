@@ -49,7 +49,7 @@ class MedicoSeeder extends Seeder
         };
 
         // LOOP ALTERADO PARA 50 INSERTS
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 120; $i++) {
             $nomeCompleto = $faker->name();
             $email = $faker->unique()->safeEmail();
 

@@ -24,10 +24,10 @@ class PacienteController extends Controller
             });
         }
 
-        $pacientes = $query->orderBy('nomePaciente', 'asc')->paginate(10);
+        $pacientes = $query->orderBy('nomePaciente', 'asc')->get();
 
         return view('geral.pacientes', [
-            'pacientes' => $pacientes->appends($request->query())
+            'pacientes' => $pacientes
         ]);
     }
 

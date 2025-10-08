@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Faker\Factory as Faker;
+use Carbon\Carbon;
 
 class PacienteSeeder extends Seeder
 {
@@ -21,11 +22,9 @@ class PacienteSeeder extends Seeder
         $generos = ['Masculino', 'Feminino', 'Outro'];
         $estados = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
 
-        // Usado para garantir a unicidade de CPF e Cartão SUS
         $usedCpfs = [];
         $usedSusCards = [];
         
-        // Função para gerar um CPF único (11 dígitos)
         $generateUniqueCpf = function () use ($faker, &$usedCpfs) {
             do {
                 $cpf = str_replace(['.', '-'], '', $faker->cpf(false));
@@ -34,7 +33,6 @@ class PacienteSeeder extends Seeder
             return $cpf;
         };
 
-        // Função para gerar um Cartão SUS único
         $generateUniqueSusCard = function () use ($faker, &$usedSusCards) {
             do {
                 $susCard = $faker->numerify('###############');
@@ -43,8 +41,10 @@ class PacienteSeeder extends Seeder
             return $susCard;
         };
 
-        // LOOP ALTERADO PARA 50 INSERTS
-        for ($i = 0; $i < 50; $i++) {
+        $startDate = Carbon::create(2025, 5, 1);
+        $endDate = Carbon::now();
+
+        for ($i = 0; $i < 100; $i++) {
             $genero = $faker->randomElement($generos);
             $uf = $faker->randomElement($estados);
             
@@ -52,6 +52,8 @@ class PacienteSeeder extends Seeder
                     (($genero === 'Feminino') ? $faker->firstNameFemale() . ' ' . $faker->lastName() : 
                     $faker->name());
 
+            $createdAt = $faker->dateTimeBetween($startDate, $endDate);
+            
             Paciente::create([
                 'nomePaciente'          => $nome,
                 'cpfPaciente'           => $generateUniqueCpf(),
@@ -71,6 +73,8 @@ class PacienteSeeder extends Seeder
                 'ufPaciente'            => $uf,
                 'estadoPaciente'        => $faker->state(),
                 'paisPaciente'          => 'Brasil',
+                'created_at'            => $createdAt,
+                'updated_at'            => $createdAt,
             ]);
         }
     }
