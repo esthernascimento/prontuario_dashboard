@@ -12,6 +12,7 @@ use App\Mail\emailEnfermeiro;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log; // Importado para debug
 
 class EnfermeiroController extends Controller
 {
@@ -52,7 +53,6 @@ class EnfermeiroController extends Controller
         ]);
 
         $senhaTemporaria = Str::random(10);
-
 
         $usuario = Usuario::create([
             'nomeUsuario' => $request->nomeEnfermeiro,
@@ -163,29 +163,29 @@ class EnfermeiroController extends Controller
         ]);
     }
 
+    // REMOVEMOS A FUNÇÃO 'confirmarExclusao' E 'excluir' PARA ADOTAR A LÓGICA DE INATIVAR
+    // O código original ainda tinha essas funções, agora elas serão removidas para seguir a nova lógica.
+    
+    /*
     public function confirmarExclusao($id)
     {
         $enfermeiro = Enfermeiro::findOrFail($id);
         return view('admin.desativarEnfermeiro', compact('enfermeiro'));
     }
 
-    // MÉTODO EXCLUIR (EDITADO PARA MODAL DE SUCESSO)
     public function excluir($id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
-
         if ($enfermeiro->usuario) {
             $enfermeiro->usuario->delete();
         }
-
         $enfermeiro->delete();
-
-        // ADICIONANDO A FLAG 'deleted' PARA DISPARAR O MODAL DE SUCESSO NO BLADE
         return redirect()->route('admin.manutencaoEnfermeiro')->with([
             'success' => 'Enfermeiro e usuário excluídos com sucesso.',
-            'deleted' => true // NOVA FLAG para exclusão
+            'deleted' => true 
         ]);
     }
+    */
 
     public function syncUnidades(Request $request, Enfermeiro $enfermeiro)
     {
@@ -202,4 +202,3 @@ class EnfermeiroController extends Controller
         ]);
     }
 }
-

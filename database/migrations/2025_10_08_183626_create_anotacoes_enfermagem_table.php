@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('tbAnotacaoEnfermagem', function (Blueprint $table) {
@@ -16,9 +19,10 @@ return new class extends Migration
             // 1. Chave para Paciente: assume que tbPaciente tem 'idPaciente'
             $table->foreignId('idPacienteFK')->constrained('tbPaciente', 'idPaciente');
             
-            // 2. Chave para Enfermeiro: assume que tbEnfermeiro tem 'idEnfermeiro'
-            // O 'constrained' garante que o tipo (unsignedBigInteger) e a referência estejam corretos.
-            $table->foreignId('idEnfermeiroFK')->constrained('tbEnfermeiro', 'idEnfermeiro'); 
+            // 2. Chave para Enfermeiro: CORRIGIDO para usar a chave primária correta 'idEnfermeiroPK'
+            // Você pode usar o método `foreign` e `references` para especificar explicitamente a coluna.
+            $table->unsignedBigInteger('idEnfermeiroFK');
+            $table->foreign('idEnfermeiroFK')->references('idEnfermeiroPK')->on('tbEnfermeiro');
 
             // Dados Principais da Anotação
             $table->dateTime('data_hora');
@@ -36,6 +40,9 @@ return new class extends Migration
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('tbAnotacaoEnfermagem');

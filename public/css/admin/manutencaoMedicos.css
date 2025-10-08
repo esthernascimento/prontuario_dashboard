@@ -386,9 +386,9 @@ body {
     background: #FEE2E2;
     color: var(--error-red);
 }
-  /* ============================================
-       AÇÕES - ÍCONES LADO A LADO (CORRIGIDO)
-       ============================================ */
+    /* ============================================
+        AÇÕES - ÍCONES LADO A LADO (CORRIGIDO)
+        ============================================ */
     
     .action-buttons {
         display: flex !important;

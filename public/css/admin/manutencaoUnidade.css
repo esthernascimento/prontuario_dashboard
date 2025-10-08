@@ -49,8 +49,8 @@
     }
     
     /* Ajuste o container se for uma classe de layout.
-       Se a classe 'medico-container' no HTML for genérica, use-a. 
-       Aqui, vou assumir um container de layout genérico. */
+        Se a classe 'medico-container' no HTML for genérica, use-a. 
+        Aqui, vou assumir um container de layout genérico. */
     .medico-container { 
         max-width: 1400px;
         margin: 0 auto;
@@ -96,7 +96,7 @@
     }
     
     /* Renomeei o botão de 'btn-add-medico' para 'btn-add-unidade' apenas 
-       para melhor semântica, mas mantive o estilo do seu código anterior. */
+        para melhor semântica, mas mantive o estilo do seu código anterior. */
     .btn-add-medico, .btn-add-unidade { 
         background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
         color: white;
@@ -322,9 +322,11 @@
     .status-inativo {
         background: #FEE2E2;
         color: var(--error-red);
-    }  /* ============================================
-       AÇÕES - ÍCONES LADO A LADO (CORRIGIDO)
-       ============================================ */
+    } 
+    
+      /* ============================================
+        AÇÕES - ÍCONES LADO A LADO (CORRIGIDO)
+        ============================================ */
     
     .action-buttons {
         display: flex !important;
@@ -373,6 +375,23 @@
     .btn-delete:hover {
         background: rgba(220, 38, 38, 0.2);
         border-color: var(--error-red);
+    }
+    
+    /* Ícone de Status Toggle */
+    .btn-action i.text-danger {
+        color: var(--error-red) !important;
+    }
+    
+    .btn-action i.text-success {
+        color: var(--success-green) !important;
+    }
+    
+    .text-danger { 
+        color: var(--error-red) !important; 
+    }
+    
+    .text-success { 
+        color: var(--success-green) !important; 
     }
     
     

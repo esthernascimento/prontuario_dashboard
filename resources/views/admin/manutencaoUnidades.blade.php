@@ -72,9 +72,7 @@
                                 @endif
                             </a>
 
-                            <a href="#" onclick="openDeleteModal('{{ $unidade->idUnidadePK }}', '{{ $unidade->nomeUnidade }}')" class="btn-action btn-delete" title="Excluir">
-                                <i class="bi bi-trash"></i>
-                            </a>
+                            {{-- REMOVEMOS O BOTÃO DE EXCLUIR PERMANENTEMENTE --}}
                         </td>
                     </tr>
                     @empty
@@ -94,22 +92,9 @@
     </div>
 </main>
 
-{{-- MODAIS (Adaptados para Unidade) --}}
-<div id="deleteModal" class="modal-overlay">
-    <div class="modal-content">
-        <div class="modal-header"><i class="bi bi-trash-fill"></i><h2>Excluir Unidade</h2></div>
-        <p>Tem certeza que deseja excluir a unidade <span id="deleteNome"></span>?</p>
-        <form id="deleteForm" method="POST">
-            @csrf
-            @method('DELETE')
-            <div class="modal-buttons">
-                <button type="button" onclick="closeDeleteModal()" class="btn-cancelar">Cancelar</button>
-                <button type="submit" class="btn-excluir">Sim, excluir</button>
-            </div>
-        </form>
-    </div>
-</div>
+{{-- O MODAL DE EXCLUSÃO FOI REMOVIDO, POIS NÃO É MAIS NECESSÁRIO. --}}
 
+{{-- MODAL DE ALTERAÇÃO DE STATUS --}}
 <div id="statusModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header"><i class="bi bi-toggle-on"></i><h2>Alterar Status</h2></div>
@@ -124,6 +109,7 @@
     </div>
 </div>
 
+{{-- MODAL DE SUCESSO UNIFICADO --}}
 <div id="successModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header"><i class="bi bi-check-circle-fill"></i><h2>Sucesso!</h2></div>
@@ -148,15 +134,9 @@
         document.addEventListener('DOMContentLoaded', () => openSuccessModal("{{ session('success') }}"));
     @endif
 
-    function openDeleteModal(id, nome) {
-        document.getElementById('deleteNome').textContent = nome;
-        const form = document.getElementById('deleteForm');
-        let url = "{{ route('admin.unidades.destroy', ['unidade' => ':id']) }}";
-        form.action = url.replace(':id', id);
-        document.getElementById('deleteModal').style.display = 'flex';
-    }
-    function closeDeleteModal() { document.getElementById('deleteModal').style.display = 'none'; }
-
+    // As funções openDeleteModal e closeDeleteModal não são mais necessárias.
+    // O código a seguir já estava em sua view e está adaptado para a nova lógica.
+    
     function openStatusModal(id, nome, currentStatus) {
         const action = currentStatus == 1 ? 'desativar' : 'ativar';
         document.getElementById('statusNome').textContent = nome;
@@ -169,24 +149,85 @@
     }
     function closeStatusModal() { document.getElementById('statusModal').style.display = 'none'; }
 
+    // Fechamento dos modais clicando fora
+    ['statusModal', 'successModal'].forEach(id => {
+        document.getElementById(id)?.addEventListener('click', function(event) {
+            if (event.target.id === id) {
+                if (id === 'statusModal') closeStatusModal();
+                if (id === 'successModal') closeSuccessModal();
+            }
+        });
+    });
+
     // LÓGICA DE FILTRAGEM
     function filterUnidades() {
         const searchInput = document.getElementById('searchInput').value.toLowerCase();
         const filterStatus = document.getElementById('filterStatus').value;
-        document.querySelectorAll('tbody tr').forEach(row => {
-            if (row.dataset.status === 'empty-list') return;
+        const rows = document.querySelectorAll('tbody tr');
+        let visibleRowsCount = 0;
+        let emptyRow = null;
+
+        rows.forEach(row => {
+            if (row.dataset.status === 'empty-list') {
+                emptyRow = row;
+                row.style.display = 'none';
+                return;
+            }
             const nome = row.children[0].textContent.toLowerCase();
             const tipo = row.children[1].textContent.toLowerCase();
             const endereco = row.children[2].textContent.toLowerCase();
             const status = row.dataset.status;
             const matchesSearch = nome.includes(searchInput) || tipo.includes(searchInput) || endereco.includes(searchInput);
             const matchesStatus = !filterStatus || status === filterStatus;
-            row.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
+            
+            if (matchesSearch && matchesStatus) {
+                row.style.display = '';
+                visibleRowsCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        if (emptyRow) {
+            if (visibleRowsCount === 0) {
+                emptyRow.style.display = '';
+            } else {
+                emptyRow.style.display = 'none';
+            }
+        }
+    }
+
+    function initializeCustomSelect(containerId) {
+        const customSelect = document.getElementById(containerId);
+        const selected = customSelect.querySelector(".selected");
+        const options = customSelect.querySelector(".options");
+        const hiddenInput = document.getElementById(containerId.replace('custom', 'filter'));
+
+        selected.addEventListener("click", (e) => {
+            e.stopPropagation();
+            document.querySelectorAll(".custom-select .options").forEach(opt => {
+                if (opt !== options) opt.parentElement.classList.remove('active');
+            });
+            customSelect.classList.toggle('active');
+        });
+
+        options.querySelectorAll("div").forEach(option => {
+            option.addEventListener("click", () => {
+                selected.textContent = option.textContent;
+                hiddenInput.value = option.dataset.value;
+                customSelect.classList.remove('active');
+                filterUnidades();
+            });
+        });
+
+        document.addEventListener("click", () => {
+            customSelect.classList.remove('active');
         });
     }
 
-    // LÓGICA DO CUSTOM SELECT (Pode ser mantida como está)
-    // ...
+    document.addEventListener("DOMContentLoaded", () => {
+        initializeCustomSelect("customStatus");
+        document.getElementById('searchInput').addEventListener('input', filterUnidades);
+    });
 </script>
 @endsection
-
