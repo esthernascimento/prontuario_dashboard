@@ -112,6 +112,21 @@ body {
     overflow: hidden;
 }
 
+.btn-add-medico::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.btn-add-medico:hover::before {
+    left: 100%;
+}
+
 .btn-add-medico:hover {
     transform: translateY(-3px);
     box-shadow: 0 12px 24px -6px rgba(6, 24, 185, 0.4);
@@ -129,7 +144,6 @@ body {
     padding: 24px;
     flex-wrap: wrap;
     animation: slideUp 0.6s ease-out 0.2s backwards;
-
 }
 
 @keyframes slideUp {
@@ -171,6 +185,10 @@ body {
     box-shadow: 0 0 0 4px rgba(6, 24, 185, 0.1);
 }
 
+.search-box input::placeholder {
+    color: var(--text-muted);
+}
+
 /* Custom Select */
 .custom-select {
     position: relative;
@@ -191,6 +209,11 @@ body {
     color: var(--text-primary);
     transition: all 0.3s ease;
     user-select: none;
+}
+
+.custom-select .selected:hover {
+    border-color: var(--primary-blue-light);
+    background: white;
 }
 
 .custom-select.active .selected {
@@ -220,7 +243,7 @@ body {
     left: 0;
     right: 0;
     background: white;
-    border: 1px solid var(--border-color);
+    border: 2px solid var(--border-color);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
     display: none;
@@ -248,13 +271,18 @@ body {
 .custom-select .options div:hover {
     background: var(--bg-gray-50);
     color: var(--primary-blue);
+    padding-left: 20px;
+}
+
+.custom-select .options div:last-child {
+    border-bottom: none;
 }
 
 /* --------------------------------------------
     TABELA
     -------------------------------------------- */
 
-.box-table { /* Container da tabela */
+.box-table {
     background: white;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-md);
@@ -262,29 +290,40 @@ body {
     margin-bottom: 24px;
     border: 1px solid var(--border-color);
     animation: slideUp 0.6s ease-out 0.4s backwards;
-    overflow-x: auto; /* Garante scroll em telas menores */
+    overflow-x: auto;
 }
 
-.box-table table { /* O elemento <table> */
+.box-table table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 700px; /* Para melhor visualização em mobile */
-    flex-direction: row;
+    min-width: 700px;
 }
 
 .box-table thead {
-    background: var(--primary-blue);
-    color: white;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+    position: relative;
+}
+
+.box-table thead::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
 }
 
 .box-table th {
+    background: transparent;
+    color: white;
     padding: 18px 20px;
     text-align: left;
     font-weight: 600;
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    border-bottom: 2px solid var(--primary-blue-dark);
+    border-bottom: none;
     white-space: nowrap;
 }
 
@@ -299,12 +338,13 @@ body {
 
 .box-table tbody tr:hover {
     background-color: #E6E6F2;
-    box-shadow: inset 3px 0 0 0 var(--primary-blue);
+    transform: scale(1.01);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .box-table td {
     padding: 16px 20px;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid rgba(229, 231, 235, 0.5);
     color: var(--text-primary);
     font-size: 0.95rem;
 }
@@ -315,21 +355,20 @@ body {
 
 .no-doctors {
     text-align: center;
-    padding: 40px 20px !important;
-    color: var(--text-muted) !important;
-    font-style: italic;
-    background: var(--bg-gray-50) !important;
+    padding: 60px 20px !important;
+    color: var(--text-muted);
+    font-size: 1.1rem;
 }
 
 /* --------------------------------------------
-    STATUS E AÇÕES
+    STATUS E AÇÕES - PADRONIZADO COM PACIENTES
     -------------------------------------------- */
 
 /* Status Badge */
 .status-badge {
     display: inline-block;
     padding: 6px 12px;
-    border-radius: 9999px; 
+    border-radius: 9999px;
     font-weight: 600;
     font-size: 0.8rem;
     text-transform: capitalize;
@@ -339,80 +378,94 @@ body {
 }
 
 .status-ativo {
-    background: #D1FAE5; /* Light Green */
-    color: #059669; /* Darker Green */
+    background: #D1FAE5;
+    color: #059669;
 }
 
 .status-inativo {
-    background: #FEE2E2; /* Light Red */
-    color: var(--error-red); /* Darker Red */
-}
-
-/* Ações */
-.actions {
-    display: flex;
-    width: 150px; /* Garante espaço para os botões */
-    text-align: center;
-    flex-direction: row;
-}
-
-.actions .action-buttons { /* Novo wrapper de botões */
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-action {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px; 
-    height: 36px;
-    border-radius: var(--radius-sm);
-    text-decoration: none;
-    border: 1px solid var(--border-color);
-    background: var(--bg-gray-50);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-}
-
-.btn-action:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
-    border-color: #D1D5DB;
-}
-
-.btn-edit:hover {
-    background: #EBF8FF;
-    color: #2563EB;
-}
-
-.btn-delete:hover {
     background: #FEE2E2;
     color: var(--error-red);
 }
-
-.text-danger { /* Classe usada para o ícone de desativar */
-    color: var(--error-red) !important;
-}
-
-.text-success { /* Classe usada para o ícone de ativar */
-    color: var(--success-green) !important;
-}
+  /* ============================================
+       AÇÕES - ÍCONES LADO A LADO (CORRIGIDO)
+       ============================================ */
+    
+    .action-buttons {
+        display: flex !important;
+        gap: 8px;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row !important;
+    }
+    
+    .btn-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius-sm);
+        text-decoration: none;
+        border: 1px solid var(--border-color);
+        background: var(--bg-gray-50);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+    }
+    
+    .btn-action:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+    
+    .btn-edit {
+        color: var(--primary-blue);
+        background: rgba(6, 24, 185, 0.1);
+    }
+    
+    .btn-edit:hover {
+        background: rgba(6, 24, 185, 0.2);
+        border-color: var(--primary-blue);
+    }
+    
+    .btn-delete {
+        color: var(--error-red);
+        background: rgba(220, 38, 38, 0.1);
+    }
+    
+    .btn-delete:hover {
+        background: rgba(220, 38, 38, 0.2);
+        border-color: var(--error-red);
+    }
+    
+    /* Ícone de Status Toggle */
+    .btn-action i.text-danger {
+        color: var(--error-red) !important;
+    }
+    
+    .btn-action i.text-success {
+        color: var(--success-green) !important;
+    }
+    
+    .text-danger { 
+        color: var(--error-red) !important; 
+    }
+    
+    .text-success { 
+        color: var(--success-green) !important; 
+    }
+    
 
 /* --------------------------------------------
     PAGINAÇÃO
     -------------------------------------------- */
+
 .pagination-container {
     display: flex;
     justify-content: center;
-    margin-top: 32px;
+    padding: 20px 0;
 }
-/* Estilos da paginação do Laravel (links) - Adicione conforme seu tema */
-
 
 /* --------------------------------------------
     MODAIS
@@ -425,7 +478,7 @@ body {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
-    display: none; /* Inicia oculto */
+    display: none;
     justify-content: center;
     align-items: center;
     z-index: 2000;
@@ -444,7 +497,7 @@ body {
     border-radius: var(--radius-lg);
     width: 90%;
     max-width: 450px;
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-xl);
     text-align: center;
     transform: scale(0.9);
     animation: modalPopIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
@@ -466,15 +519,16 @@ body {
     margin-top: 10px;
 }
 
-/* Ícones de Modal */
 #deleteMedicoModal .modal-header i {
     font-size: 3rem;
     color: var(--error-red);
 }
+
 #statusMedicoModal .modal-header i {
     font-size: 3rem;
     color: var(--primary-blue);
 }
+
 #statusSuccessModal .modal-header i {
     font-size: 3rem;
     color: var(--success-green);
@@ -499,7 +553,7 @@ body {
 }
 
 .btn-cancelar, .btn-excluir {
-    padding: 10px 20px;
+    padding: 12px 24px;
     border-radius: var(--radius-sm);
     font-weight: 600;
     cursor: pointer;
@@ -515,20 +569,22 @@ body {
 }
 
 .btn-cancelar:hover {
-    background: #EBEBEB;
+    background: var(--bg-gray-50);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
 }
 
-.btn-excluir { /* Padrão Vermelho para Excluir */
+.btn-excluir {
     background: var(--error-red);
     color: var(--bg-white);
 }
 
 .btn-excluir:hover {
     background: #C22020;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
 }
 
-/* Sobrescreve para Ativar/Desativar e Sucesso (Azul) */
 #statusMedicoModal .btn-excluir,
 #statusSuccessModal .btn-excluir {
     background: var(--primary-blue);
@@ -537,42 +593,90 @@ body {
 #statusMedicoModal .btn-excluir:hover,
 #statusSuccessModal .btn-excluir:hover {
     background: var(--primary-blue-dark);
+    box-shadow: 0 4px 8px rgba(6, 24, 185, 0.3);
 }
 
 /* --------------------------------------------
-    MEDIA QUERIES (Responsividade)
+    RESPONSIVIDADE
     -------------------------------------------- */
+
 @media (max-width: 768px) {
     .main-dashboard {
         padding: 20px;
     }
+    
     .medico-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 15px;
     }
+    
     .medico-header h1 {
         font-size: 1.75rem;
     }
+    
     .btn-add-medico {
         width: 100%;
         justify-content: center;
     }
+    
     .search-filters {
         flex-direction: column;
         align-items: stretch;
         padding: 15px;
     }
-    .search-box, .custom-select {
+    
+    .search-box {
         min-width: 100%;
+    }
+    
+    .custom-select {
         width: 100%;
     }
+    
+    .box-table {
+        overflow-x: auto;
+    }
+    
+    .box-table table {
+        min-width: 800px;
+    }
+    
+    .actions > a,
+    .actions > button,
+    .btn-action {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+        margin: 0 3px;
+    }
+    
     .modal-buttons {
         flex-direction: column;
         gap: 10px;
     }
+    
     .btn-cancelar, .btn-excluir {
         flex: none;
         width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .medico-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .medico-header h1 i {
+        font-size: 1.8rem;
+    }
+    
+    .actions > a,
+    .actions > button,
+    .btn-action {
+        width: 30px;
+        height: 30px;
+        font-size: 0.95rem;
+        margin: 0 2px;
     }
 }

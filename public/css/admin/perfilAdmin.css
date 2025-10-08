@@ -40,7 +40,7 @@ body {
 .cadastrar-container {
     background: var(--bg-white);
     max-width: 580px;
-    margin: 50px auto;
+    margin: 120px auto;
     padding: 0;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-xl);

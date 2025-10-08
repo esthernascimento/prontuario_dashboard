@@ -10,7 +10,8 @@ body {
 
 .main-dashboardAjuda {
   /* Novo espaçamento para garantir que não haja sobreposição */
-  padding: 40px !important;
+  margin-top: 110px;
+  padding: 20px !important;
   min-height: 100vh;
 }
 

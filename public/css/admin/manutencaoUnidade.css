@@ -322,42 +322,60 @@
     .status-inativo {
         background: #FEE2E2;
         color: var(--error-red);
-    }
+    }  /* ============================================
+       AÇÕES - ÍCONES LADO A LADO (CORRIGIDO)
+       ============================================ */
     
-    .actions {
-        width: 120px;
-        text-align: right;
-        display: flex;
-        gap: 8px; 
+    .action-buttons {
+        display: flex !important;
+        gap: 8px;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: center;
+        flex-direction: row !important;
     }
     
     .btn-action {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 32px;
-        height: 32px;
+        width: 36px;
+        height: 36px;
         border-radius: var(--radius-sm);
         text-decoration: none;
-        border: none;
-        background: transparent;
+        border: 1px solid var(--border-color);
+        background: var(--bg-gray-50);
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
         font-size: 1.1rem;
         color: var(--text-secondary);
     }
     
     .btn-action:hover {
-        background: var(--bg-gray-100);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
     }
     
-    .btn-edit { color: #2563EB; } 
-    .btn-delete { color: var(--error-red); }
+    .btn-edit {
+        color: var(--primary-blue);
+        background: rgba(6, 24, 185, 0.1);
+    }
     
-    .text-danger { color: var(--error-red) !important; }
-    .text-success { color: var(--success-green) !important; }
+    .btn-edit:hover {
+        background: rgba(6, 24, 185, 0.2);
+        border-color: var(--primary-blue);
+    }
+    
+    .btn-delete {
+        color: var(--error-red);
+        background: rgba(220, 38, 38, 0.1);
+    }
+    
+    .btn-delete:hover {
+        background: rgba(220, 38, 38, 0.2);
+        border-color: var(--error-red);
+    }
+    
+    
     
     /* --------------------------------------------
         MODAIS (Mantidos iguais)
