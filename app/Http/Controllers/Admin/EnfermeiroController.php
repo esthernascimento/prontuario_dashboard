@@ -7,7 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\Enfermeiro;
 use App\Models\Usuario;
-use App\Models\Unidade; 
+use App\Models\Unidade;
+use App\Mail\emailEnfermeiro;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
 
 class EnfermeiroController extends Controller
 {
@@ -47,11 +51,15 @@ class EnfermeiroController extends Controller
             'unidades.*' => 'exists:tbUnidade,idUnidadePK', // Valida cada ID da lista
         ]);
 
+        $senhaTemporaria = Str::random(10);
+
+
         $usuario = Usuario::create([
             'nomeUsuario' => $request->nomeEnfermeiro,
             'emailUsuario' => $request->emailEnfermeiro,
-            'senhaUsuario' => bcrypt('12345678'),
+            'senhaUsuario' => Hash::make($senhaTemporaria),
             'statusAtivoUsuario' => true,
+            'statusSenhaUsuario' => true,
         ]);
 
         $enfermeiro = Enfermeiro::create([
@@ -67,6 +75,9 @@ class EnfermeiroController extends Controller
         if ($request->has('unidades')) {
             $enfermeiro->unidades()->sync($request->unidades);
         }
+
+        Mail::to($request->emailEnfermeiro)->send(new emailEnfermeiro($usuario, $senhaTemporaria));
+
 
         return response()->json(['message' => 'Enfermeiro pré-cadastrado com sucesso!']);
     }
