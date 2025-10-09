@@ -5,9 +5,8 @@
 @section('content')
 
 <body>
-{{-- IMPORTANTE: O CSS foi atualizado para o tema Ciano/Verde para diferenciar do tema Médico (vermelho) --}}
+{{-- O CSS está sendo referenciado aqui e deve estar na pasta 'public/css/enfermeiro/cadastrarProntuario.css' --}}
 <link rel="stylesheet" href="{{ asset('css/enfermeiro/cadastrarProntuario.css') }}">
-{{-- Você pode precisar de Font Awesome ou Bootstrap Icons. Exemplo de link para Bootstrap Icons: --}}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> 
 
 <main class="main-dashboard">
@@ -56,6 +55,9 @@
         {{-- Rota de POST: enfermeiro.anotacao.store (Definida no web.php) --}}
         <form action="{{ route('enfermeiro.anotacao.store', $paciente->idPaciente) }}" method="POST">
             @csrf
+
+            {{-- CORREÇÃO DE ERRO: Campo tipo_registro é REQUIRED no Controller mas não existia no form --}}
+            <input type="hidden" name="tipo_registro" value="Anotação de Rotina"> 
 
             <div class="form-section-title">Dados da Anotação</div>
 
@@ -174,20 +176,21 @@
                 @enderror
             </div>
             
-            {{-- Campo Unidade --}}
+            {{-- CAMPO DE SELEÇÃO DE UNIDADE AJUSTADO --}}
             <div class="input-group">
-                <label for="unidade">
-                    <i class="bi bi-hospital"></i> Unidade de Atendimento
+                <label for="unidade_atendimento">
+                    <i class="bi bi-hospital"></i> Unidade de Atendimento *
                 </label>
-                <input 
-                    type="text" 
-                    id="unidade" 
-                    name="unidade" 
-                    value="{{ old('unidade') }}"
-                    placeholder=""
-                    class="input-text"
-                >
-                @error('unidade')
+                <select id="unidade_atendimento" name="unidade_atendimento" class="input-select" required>
+                    <option value="" disabled selected>Selecione a unidade</option>
+                    {{-- Percorre a coleção de unidades e cria uma opção para cada uma --}}
+                    @foreach($unidades as $unidade)
+                        <option value="{{ $unidade->idUnidadePK }}" {{ old('unidade_atendimento') == $unidade->idUnidadePK ? 'selected' : '' }}>
+                            {{ $unidade->nomeUnidade }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('unidade_atendimento')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>

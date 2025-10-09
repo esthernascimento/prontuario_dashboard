@@ -221,7 +221,7 @@ $admin = auth()->guard('admin')->user();
                 label: 'Unidades por Região',
                 data: Object.values(unidadesPorRegiao),
                 backgroundColor: [
-                    '#0618b9',
+                    '#0618b9ff',
                     '#0a27d6',
                     '#0e36e8',
                     '#1245fa',
