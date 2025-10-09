@@ -46,6 +46,7 @@ class Paciente extends Authenticatable
     protected $casts = [
         'datanascimento' => 'date',
         'statusPaciente'   => 'boolean',
+        'dataNascPaciente' => 'date',
     ];
 
     // Usado pelo Guard/Auth para saber qual coluna é a senha

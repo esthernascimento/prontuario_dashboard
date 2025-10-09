@@ -11,18 +11,18 @@ return new class extends Migration
         Schema::create('tbAnotacaoEnfermagem', function (Blueprint $table) {
             $table->id('idAnotacao');
 
+            // Chave estrangeira para tbPaciente
             $table->foreignId('idPacienteFK')->constrained('tbPaciente', 'idPaciente');
-            
-            // 2. Chave para Enfermeiro: assume que tbEnfermeiro tem 'idEnfermeiro'
-            // O 'constrained' garante que o tipo (unsignedBigInteger) e a referência estejam corretos.
-            $table->foreignId('idEnfermeiroFK')->constrained('tbEnfermeiro', 'idEnfermeiro'); 
+
+            // Chave estrangeira para tbEnfermeiro (corrigida para usar idEnfermeiroPK)
+            $table->foreignId('idEnfermeiroFK')->constrained('tbEnfermeiro', 'idEnfermeiroPK');
 
             $table->dateTime('data_hora');
             $table->string('tipo_registro', 50);
             $table->string('unidade_atendimento', 255);
             $table->text('descricao');
-            
-            $table->decimal('temperatura', 4, 1)->nullable(); 
+
+            $table->decimal('temperatura', 4, 1)->nullable();
             $table->string('pressao_arterial', 20)->nullable();
             $table->integer('frequencia_cardiaca')->nullable();
             $table->integer('saturacao')->nullable();
@@ -31,9 +31,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('tbAnotacaoEnfermagem');
