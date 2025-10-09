@@ -54,7 +54,8 @@
         <h2 class="fade-in" style="animation-delay: 1.2s;"><i class="bi bi-headset"></i> Não encontrou o que procurava?</h2>
         <p class="fade-in" style="animation-delay: 1.4s;">Envie sua dúvida diretamente para nossa equipe de suporte através do formulário abaixo.</p>
 
-        <form action="enviar_ajuda.php" method="POST" class="contact-form slide-up" style="animation-delay: 1.6s;">
+        <form action="{{ route('admin.ajuda.enviar') }}" method="POST" class="contact-form slide-up" style="animation-delay: 1.6s;">
+            @csrf
             <input type="text" name="assunto" placeholder="Assunto" required>
             <textarea name="mensagem" rows="6" placeholder="Digite sua mensagem aqui..." required></textarea>
             <button type="submit">Enviar Mensagem</button>

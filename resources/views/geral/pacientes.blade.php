@@ -79,14 +79,14 @@ use Carbon\Carbon;
             </td>
             <td>
                 <div class="action-buttons">
-                    {{-- Botão de Edição - CORRIGIDO: usa idPaciente --}}
+                    {{-- Botão de Edição --}}
                     <a href="{{ route('admin.pacientes.edit', $paciente->idPaciente) }}" 
-                       class="btn-action btn-edit" 
-                       title="Editar">
+                        class="btn-action btn-edit" 
+                        title="Editar">
                         <i class="bi bi-pencil"></i>
                     </a>
                     
-                    {{-- Botão de Alterar Status - CORRIGIDO --}}
+                    {{-- Botão de Alterar Status --}}
                     <a href="#"
                         onclick="openStatusPacienteModal('{{ $paciente->idPaciente }}', {{ $nomeEscapado }}, '{{ $statusTexto }}')"
                         class="btn-action" 
@@ -98,13 +98,7 @@ use Carbon\Carbon;
                         @endif
                     </a>
 
-                    {{-- Botão de Exclusão - CORRIGIDO --}}
-                    <a href="#"
-                        onclick="openDeletePacienteModal('{{ $paciente->idPaciente }}', {{ $nomeEscapado }})"
-                        class="btn-action btn-delete" 
-                        title="Excluir">
-                        <i class="bi bi-trash"></i>
-                    </a>
+                    {{-- REMOVEMOS O BOTÃO DE EXCLUIR DEFINITIVAMENTE --}}
                 </div>
             </td>
         </tr>
@@ -117,35 +111,12 @@ use Carbon\Carbon;
             </table>
         </div>
 
-        <div class="pagination-container">
-            {{ $pacientes->links() }}
-        </div>
     </div>
 </main>
 
-{{-- MODAL DE EXCLUSÃO (Soft Delete) --}}
-<div id="deletePacienteModal" class="modal-overlay">
-    <div class="modal-content">
-        <div class="modal-header">
-            <i class="bi bi-trash-fill" style="color: #DC2626;"></i>
-            <h2>Excluir Paciente</h2>
-        </div>
-        
-        <p>Tem certeza que deseja excluir o(a) paciente <span id="pacienteNome"></span>? Esta ação pode ser desfeita posteriormente.</p>
+{{-- MODAL DE EXCLUSÃO (Soft Delete) FOI REMOVIDO --}}
 
-        <form id="deletePacienteForm" method="POST">
-            @csrf
-            @method('DELETE')
-
-            <div class="modal-buttons">
-                <button type="button" onclick="closeDeletePacienteModal()" class="btn-cancelar">Cancelar</button>
-                <button type="submit" class="btn-excluir">Sim, excluir</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-{{-- MODAL DE ALTERAÇÃO DE STATUS --}}
+{{-- MODAL DE ALTERAÇÃO DE STATUS (EXISTENTE) --}}
 <div id="statusPacienteModal" class="modal-overlay modal-confirm-edit">
     <div class="modal-content">
         <div class="modal-header">
@@ -165,7 +136,7 @@ use Carbon\Carbon;
     </div>
 </div>
 
-{{-- MODAL DE SUCESSO UNIFICADO --}}
+{{-- MODAL DE SUCESSO UNIFICADO (EXISTENTE) --}}
 <div id="statusSuccessModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -282,25 +253,18 @@ use Carbon\Carbon;
         window.location.reload(); 
     }
     
-    // Modal de Exclusão (Soft Delete)
+    // O modal de exclusão foi removido, então as funções openDeletePacienteModal e closeDeletePacienteModal também devem ser removidas.
+    // O código original ainda tem essas funções. A forma correta seria assim:
+
+    /*
     function openDeletePacienteModal(pacienteId, pacienteNome) {
-        const modal = document.getElementById('deletePacienteModal');
-        const nomeSpan = document.getElementById('pacienteNome');
-        const form = document.getElementById('deletePacienteForm');
-
-        nomeSpan.textContent = pacienteNome;
-
-        // Monta a URL para o formulário de exclusão
-        // Assumindo que a rota de exclusão usa o ID do paciente: admin.pacientes.destroy/{paciente}
-        const deleteRoute = "{{ route('admin.pacientes.destroy', ['paciente' => 'PLACEHOLDER_ID']) }}";
-        form.action = deleteRoute.replace('PLACEHOLDER_ID', pacienteId);
-
-        modal.style.display = 'flex';
+        // Esta função não é mais necessária, pois o botão de exclusão foi removido.
     }
 
     function closeDeletePacienteModal() {
-        document.getElementById('deletePacienteModal').style.display = 'none';
+        // Esta função não é mais necessária.
     }
+    */
     
     // Modal de Alteração de Status
     function openStatusPacienteModal(pacienteId, pacienteNome, currentStatus) {
@@ -311,9 +275,10 @@ use Carbon\Carbon;
         const form = document.getElementById('statusPacienteForm');
         
         // Define a ação baseada no status atual (ativo -> desativar; inativo -> ativar)
+        // O botão de "excluir" agora também usará essa lógica para inativar
         const action = currentStatus == 'ativo' ? 'desativar' : 'ativar';
         const confirmAction = currentStatus == 'ativo' ? 'desativar' : 'ativar';
-
+        
         nomeSpan.textContent = pacienteNome;
         actionSpan.textContent = action;
         confirmText.textContent = confirmAction;
@@ -330,10 +295,9 @@ use Carbon\Carbon;
     }
 
     // Fechamento dos modais clicando fora
-    ['deletePacienteModal', 'statusPacienteModal', 'statusSuccessModal'].forEach(id => {
+    ['statusPacienteModal', 'statusSuccessModal'].forEach(id => {
         document.getElementById(id)?.addEventListener('click', function(event) {
             if (event.target.id === id) {
-                if (id === 'deletePacienteModal') closeDeletePacienteModal();
                 if (id === 'statusPacienteModal') closeStatusPacienteModal();
                 if (id === 'statusSuccessModal') closeSuccessModal();
             }

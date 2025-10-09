@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Medico;
 use App\Models\Paciente;
 use App\Models\Enfermeiro;
+use App\Models\Unidade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -17,72 +18,73 @@ class DashboardController extends Controller
     {
         $admin = Auth::guard('admin')->user();
         
-        $nomeAdmin = $admin->nomeAdmin ?? 'Administrador'; 
+        $nomeAdmin = $admin->nomeAdmin ?? 'Administrador';
         
-        
-        $adminCount = Medico::count();
+        $medicosCount = Medico::count();
         $patientsCount = Paciente::count();
-        $pendingExamsCount = 0; 
-        $nursesCount = Enfermeiro::count(); 
+        $nursesCount = Enfermeiro::count();
+        $unidadesCount = Unidade::count();
 
-        
         // 📊 Gráfico de Profissionais por Área
-        
         DB::statement("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
-
         $medicosPorEspecialidade = DB::table('tbMedico')
-            ->select(
-                'especialidadeMedico',
-                DB::raw('count(*) as total')
-            )
+            ->select('especialidadeMedico', DB::raw('count(*) as total'))
             ->whereNotNull('especialidadeMedico')
-            // E também filtra registros onde a especialidade não é uma string vazia após remover espaços
             ->where(DB::raw("TRIM(especialidadeMedico)"), '!=', '')
-            ->groupBy('especialidadeMedico') 
+            ->groupBy('especialidadeMedico')
             ->orderBy('total', 'desc')
             ->get();
         
-        // 📊 Crescimento de Admins e Pacientes por mês (Últimos 6 meses)
+        // 📊 Crescimento de Pacientes por mês (Últimos 6 meses)
         $dadosLinha = [
             'meses' => [],
-            'admins' => [],
             'pacientes' => [],
         ];
-
         for ($i = 5; $i >= 0; $i--) {
             $mes = Carbon::now()->subMonths($i);
-            $dadosLinha['meses'][] = $mes->format('M Y'); 
-            
-            $dadosLinha['admins'][] = Medico::whereYear('dataCadastroMedico', $mes->year)
-                ->whereMonth('dataCadastroMedico', $mes->month)
-                ->count();
-            
+            $dadosLinha['meses'][] = $mes->format('M Y');
             $dadosLinha['pacientes'][] = Paciente::whereYear('created_at', $mes->year)
                 ->whereMonth('created_at', $mes->month)
                 ->count();
         }
 
-        // 📊 Distribuição de gênero (Homens, Mulheres, Idosos)
+        // 📊 Distribuição de gênero e idosos
+        $totalPacientes = Paciente::count();
         $homens = Paciente::where('generoPaciente', 'Masculino')->count();
         $mulheres = Paciente::where('generoPaciente', 'Feminino')->count();
-        $idosos = Paciente::where('dataNascPaciente', '<=', Carbon::now()->subYears(60)->toDateString())->count();
+        $idososCount = Paciente::where('dataNascPaciente', '<=', Carbon::now()->subYears(60)->toDateString())->count();
 
+        $percentualIdosos = $totalPacientes > 0 ? round(($idososCount / $totalPacientes) * 100) : 0;
+        
         $dadosGenero = [
-            'Homens'  => $homens,
+            'Homens' => $homens,
             'Mulheres' => $mulheres,
-            'Idosos'  => $idosos,
         ];
+        
+        // 🗺️ Dados para o novo gráfico de Unidades por Região
+        $regioesBrasil = [
+            'Norte' => ['AC', 'AP', 'AM', 'PA', 'RO', 'RR', 'TO'],
+            'Nordeste' => ['AL', 'BA', 'CE', 'MA', 'PB', 'PE', 'PI', 'RN', 'SE'],
+            'Centro-Oeste' => ['DF', 'GO', 'MT', 'MS'],
+            'Sudeste' => ['ES', 'MG', 'RJ', 'SP'],
+            'Sul' => ['PR', 'RS', 'SC']
+        ];
+        $unidadesPorRegiao = [];
+        foreach ($regioesBrasil as $regiao => $ufs) {
+            $unidadesPorRegiao[$regiao] = Unidade::whereIn('ufUnidade', $ufs)->count();
+        }
 
         return view('admin.dashboard', compact(
-            'nomeAdmin', 
-            'adminCount',
+            'nomeAdmin',
+            'medicosCount',
             'patientsCount',
-            'pendingExamsCount',
             'nursesCount',
-            'medicosPorEspecialidade', 
+            'unidadesCount',
+            'medicosPorEspecialidade',
             'dadosLinha',
-            'dadosGenero'
+            'dadosGenero',
+            'percentualIdosos', // Nova variável para o card de idosos
+            'unidadesPorRegiao'
         ));
     }
-
 }

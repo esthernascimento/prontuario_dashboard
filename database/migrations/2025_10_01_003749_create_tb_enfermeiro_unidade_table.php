@@ -6,25 +6,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('tbEnfermeiroUnidade', function (Blueprint $table) {
             $table->id('idEnfermeiroUnidadePK');
-            $table->foreignId('idEnfermeiroFK')->constrained('tbEnfermeiro', 'idEnfermeiroPK');
-            $table->foreignId('idUnidadeFK')->constrained('tbUnidade', 'idUnidadePK');
+
+            // Chaves estrangeiras
+            $table->unsignedBigInteger('idEnfermeiroFK');
+            $table->unsignedBigInteger('idUnidadeFK');
+
+            // Relacionamentos
+            $table->foreign('idEnfermeiroFK')->references('idEnfermeiroPK')->on('tbEnfermeiro')->onDelete('cascade');
+            $table->foreign('idUnidadeFK')->references('idUnidadePK')->on('tbUnidade')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('tbEnfermeiroUnidade');
     }
 };
-

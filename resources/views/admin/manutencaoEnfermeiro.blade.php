@@ -63,18 +63,15 @@
                             </a>
 
                             @if($enfermeiro->usuario)
-                                <a href="#" onclick="openStatusModal('{{ $enfermeiro->idEnfermeiroPK }}', '{{ $enfermeiro->nomeEnfermeiro }}', {{ $enfermeiro->usuario->statusAtivoUsuario }})" class="btn-action" title="{{ $enfermeiro->usuario->statusAtivoUsuario == 1 ? 'Desativar' : 'Ativar' }}">
-                                    @if($enfermeiro->usuario->statusAtivoUsuario == 1)
+                                <a href="#" onclick="openStatusModal('{{ $enfermeiro->idEnfermeiroPK }}', '{{ $enfermeiro->nomeEnfermeiro }}', {{ optional($enfermeiro->usuario)->statusAtivoUsuario }})" class="btn-action" title="{{ optional($enfermeiro->usuario)->statusAtivoUsuario == 1 ? 'Desativar' : 'Ativar' }}">
+                                    @if(optional($enfermeiro->usuario)->statusAtivoUsuario == 1)
                                         <i class="bi bi-slash-circle text-danger"></i>
                                     @else
                                         <i class="bi bi-check-circle text-success"></i>
                                     @endif
                                 </a>
                             @endif
-
-                            <a href="#" onclick="openDeleteEnfermeiroModal('{{ $enfermeiro->idEnfermeiroPK }}', '{{ $enfermeiro->nomeEnfermeiro }}')" class="btn-action btn-delete" title="Excluir">
-                                <i class="bi bi-trash"></i>
-                            </a>
+                            {{-- REMOVEMOS O BOTÃO DE EXCLUSÃO DEFINITIVAMENTE --}}
                         </td>
                     </tr>
                     @endforeach
@@ -96,29 +93,9 @@
     </div>
 </main>
 
-{{-- MODAL DE EXCLUSÃO --}}
-<div id="deleteEnfermeiroModal" class="modal-overlay">
-    <div class="modal-content">
-        <div class="modal-header">
-            <i class="bi bi-trash-fill"></i>
-            <h2>Excluir Enfermeiro(a)</h2>
-        </div>
-        
-        <p>Tem certeza que deseja excluir o(a) enfermeiro(a) <span id="enfermeiroNome"></span>?</p>
+{{-- MODAL DE EXCLUSÃO FOI REMOVIDO --}}
 
-        <form id="deleteEnfermeiroForm" method="POST">
-            @csrf
-            @method('DELETE')
-
-            <div class="modal-buttons">
-                <button type="button" onclick="closeDeleteEnfermeiroModal()" class="btn-cancelar">Cancelar</button>
-                <button type="submit" class="btn-excluir">Sim, excluir</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-{{-- MODAL DE ALTERAÇÃO DE STATUS --}}
+{{-- MODAL DE ALTERAÇÃO DE STATUS (EXISTENTE) --}}
 <div id="statusEnfermeiroModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -138,7 +115,7 @@
     </div>
 </div>
 
-{{-- MODAL DE SUCESSO UNIFICADO --}}
+{{-- MODAL DE SUCESSO UNIFICADO (EXISTENTE) --}}
 <div id="statusSuccessModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -175,7 +152,7 @@
         }
     });
 
-    @if(session('status_changed') || session('updated') || session('deleted') || session('success'))
+    @if(session('success'))
         document.addEventListener('DOMContentLoaded', () => {
             const message = "{{ session('success') }}"; 
             openSuccessModal(message);
@@ -185,28 +162,8 @@
     // ------------------------------------------
     // LÓGICA DOS MODAIS DE ENFERMEIRO
     // ------------------------------------------
-
-    function openDeleteEnfermeiroModal(enfermeiroId, enfermeiroNome) {
-        const modal = document.getElementById('deleteEnfermeiroModal');
-        const nomeSpan = document.getElementById('enfermeiroNome');
-        const form = document.getElementById('deleteEnfermeiroForm');
-
-        nomeSpan.textContent = enfermeiroNome;
-        const deleteRoute = "{{ route('admin.enfermeiro.excluir', ['id' => 'PLACEHOLDER_ID']) }}";
-        form.action = deleteRoute.replace('PLACEHOLDER_ID', enfermeiroId);
-        
-        modal.style.display = 'flex';
-    }
-
-    function closeDeleteEnfermeiroModal() {
-        document.getElementById('deleteEnfermeiroModal').style.display = 'none';
-    }
-
-    document.getElementById('deleteEnfermeiroModal').addEventListener('click', function(event) {
-        if (event.target.id === 'deleteEnfermeiroModal') {
-            closeDeleteEnfermeiroModal();
-        }
-    });
+    
+    // As funções openDeleteEnfermeiroModal e closeDeleteEnfermeiroModal foram removidas.
 
     function openStatusModal(enfermeiroId, enfermeiroNome, currentStatus) {
         const modal = document.getElementById('statusEnfermeiroModal');

@@ -1,0 +1,431 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
+
+/* ============================================
+    CADASTRO DE ANOTAÇÃO - CSS TEMA ENFERMEIRO
+    TEMA: VERDE/SAÚDE
+    ============================================ */
+
+:root {
+    /* Cores Primárias: Verde/Saúde */
+    --primary-green: #0a400c;
+    --primary-green-dark: #047857;
+    --primary-green-light: #34d399;
+    
+    /* Cor de Destaque: Verde Lima/Claro */
+    --accent-lime: #4ade80;
+    
+    /* Cores Neutras */
+    --bg-white: #FFFFFF;
+    --bg-gray-50: #F9FAFB;
+    --bg-gray-100: #F3F4F6;
+    --text-primary: #111827;
+    --text-secondary: #6B7280;
+    --text-muted: #9CA3AF;
+    --border-color: #E5E7EB;
+    --success-green: #10B981;
+    --error-red: #DC2626;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    
+    /* Cores Adaptadas */
+    --border-focus: var(--primary-green);
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.main-dashboard {
+    padding: 40px;
+    /* CORRIGIDO: Fundo neutro */
+    background: linear-gradient(135deg, #F9FAFB 0%, #FFFFFF 100%); 
+    min-height: 100vh;
+}
+
+.cadastrar-container {
+    max-width: 950px; 
+    margin: 0 auto;
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+    HEADER DO FORMULÁRIO (TEMA VERDE)
+    ============================================ */
+
+.cadastrar-header {
+    /* CORRIGIDO: Gradiente Verde/Saúde */
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+    padding: 32px 36px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.cadastrar-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.cadastrar-header .icon {
+    font-size: 2.5rem;
+    color: white;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    animation: iconBounce 2s ease-in-out infinite;
+    z-index: 1;
+}
+
+@keyframes iconBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.cadastrar-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.5px;
+    z-index: 1;
+}
+
+/* ============================================
+    CARD DE INFORMAÇÕES
+    ============================================ */
+
+.paciente-info {
+    margin: 32px 36px;
+    padding: 28px;
+    /* CORRIGIDO: Fundo verde claro */
+    background: linear-gradient(135deg, #F0FFF4 0%, #D1FAE5 100%); 
+    border: 2px solid #D1FAE5; 
+    border-left: 6px solid var(--primary-green);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    animation: fadeIn 0.6s ease-out 0.2s backwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.paciente-info h3 {
+    color: var(--primary-green-dark); 
+    font-size: 1.15rem;
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+}
+
+.paciente-info h3 i {
+    font-size: 1.3rem;
+    color: var(--primary-green);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-item strong {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-item span {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* ============================================
+    FORMULÁRIO
+    ============================================ */
+
+form {
+    padding: 0 36px 36px 36px;
+}
+
+.form-section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 28px;
+    padding-bottom: 12px;
+    /* Borda em verde */
+    border-bottom: 3px solid var(--primary-green); 
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    animation: fadeIn 0.6s ease-out 0.3s backwards;
+}
+
+.form-section-title::before {
+    content: '';
+    width: 6px;
+    height: 26px;
+    /* Gradiente em verde */
+    background: linear-gradient(180deg, var(--primary-green) 0%, var(--accent-lime) 100%); 
+    border-radius: 3px;
+}
+
+/* ============================================
+    INPUTS, TEXTAREAS E SELECTS
+    ============================================ */
+
+.input-group {
+    margin-bottom: 26px;
+    animation: fadeIn 0.6s ease-out backwards;
+}
+
+.input-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+}
+
+.input-group label i {
+    color: var(--primary-green); 
+    font-size: 1.1rem;
+}
+
+/* Estilo padrão para todos os inputs, textareas e SELECTS (largura total, sem centralização) */
+.input-group input,
+.input-group textarea,
+.input-select {
+    width: 100%; /* Largura total */
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    background: var(--bg-gray-50);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+}
+
+/* Ajustes específicos para o SELECT para parecer um campo de input */
+.input-select {
+    appearance: none; /* Remove a seta padrão do navegador */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236B7280'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.2em;
+    padding-right: 2.5rem; /* Espaço para a seta */
+}
+
+/* Efeito hover e focus (Verde) */
+.input-group input:hover,
+.input-group textarea:hover,
+.input-select:hover {
+    border-color: var(--primary-green-dark);
+    background: white;
+}
+
+.input-group input:focus,
+.input-group textarea:focus,
+.input-select:focus {
+    border-color: var(--border-focus);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1); 
+    transform: translateY(-2px);
+}
+
+.input-group input::placeholder,
+.input-group textarea::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* Textareas */
+.input-group textarea {
+    resize: vertical;
+    line-height: 1.6;
+    min-height: 100px;
+}
+
+/* Mensagem de erro */
+.input-group .error {
+    display: block;
+    color: var(--error-red);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 6px;
+    animation: shakeError 0.4s ease-out;
+}
+
+@keyframes shakeError {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
+
+/* Estilo de grid para Sinais Vitais */
+.input-group-row-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 40px; 
+    margin-bottom: 30px; 
+}
+
+
+/* ============================================
+    BOTÕES
+    ============================================ */
+
+.button-group {
+    display: flex;
+    gap: 16px;
+    margin-top: 40px;
+    justify-content: flex-end;
+    padding-top: 32px;
+    border-top: 2px solid var(--bg-gray-100);
+}
+
+.btn-cancelar,
+.save-button {
+    padding: 14px 32px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.btn-cancelar {
+    background: var(--bg-gray-100);
+    color: var(--text-secondary);
+    border: 2px solid var(--border-color);
+}
+
+.btn-cancelar:hover {
+    background: var(--bg-gray-50);
+    border-color: var(--text-secondary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.save-button {
+    color: white;
+    /* Botão Verde/Saúde */
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%); 
+    box-shadow: var(--shadow-lg);
+}
+
+.save-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.save-button:hover::before {
+    left: 100%;
+}
+
+.save-button:hover {
+    transform: translateY(-3px);
+    /* Sombra verde */
+    box-shadow: 0 20px 35px -5px rgba(5, 150, 105, 0.4); 
+}
+
+/* ============================================
+    RESPONSIVO
+    ============================================ */
+
+@media (max-width: 768px) {
+    .main-dashboard { padding: 20px; }
+    form { padding: 0 20px 24px 20px; }
+    /* Ajuste responsivo para input/textarea/select */
+    .input-group input, .input-group textarea, .input-select { width: 100%; }
+    .input-group-row-3 { grid-template-columns: 1fr; gap: 16px; }
+    .button-group { flex-direction: column-reverse; gap: 12px; }
+    .btn-cancelar, .save-button { width: 100%; justify-content: center; }
+}
+
+@media (max-width: 480px) {
+    .cadastrar-header h1 { font-size: 1.3rem; }
+    .paciente-info { padding: 16px; }
+    .paciente-info h3 { font-size: 1rem; }
+    .info-item strong { font-size: 0.8rem; }
+    .info-item span { font-size: 0.9rem; }
+    .input-group input, .input-group textarea, .input-select { padding: 12px 14px; font-size: 0.9rem; }
+    .save-button, .btn-cancelar { padding: 14px 24px; font-size: 0.95rem; }
+}

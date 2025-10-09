@@ -5,6 +5,7 @@
 @section('content')
 
 <link rel="stylesheet" href="{{ asset('css/medico/dashboardMedico.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <div class="main-dashboard">
     {{-- Título principal --}}
@@ -15,12 +16,11 @@
         <div class="banner-left">
             {{-- Logo Prontuário+ --}}
             <div class="banner-logo-container">
-                {{-- Usando o logo2.png do template (ou ajuste o caminho conforme o logo real) --}}
                 <img src="{{ asset('img/medico-logo2.png') }}" alt="Logo Prontuário+" class="banner-logo">
             </div>
         </div>
         <div class="banner-center">
-            <h2>Bem-vindo(a) <span class="doctor-name">Dr(a). {{ $nome ?? 'Esther' }}</span></h2>
+            <h2>Bem-vindo(a) <span class="doctor-name">Dr(a). {{ $nome ?? 'Médico' }}</span></h2>
             <p>O Prontuário+ fica feliz com a sua presença e dedicação à saúde.</p>
         </div>
         <div class="banner-right">
@@ -34,12 +34,14 @@
         <div class="metric-square-container">
             <div class="metric-square">
                 <img src="{{ asset('img/icon-pessoa.png') }}" alt="Ícone Pacientes" class="icon-metric">
-                <strong>{{ $patientsCount ?? '1.006' }}</strong>
+                {{-- Valor do banco de dados --}}
+                <strong>{{ $patientsCount }}</strong>
                 <span>Pacientes ativos</span>
             </div>
             <div class="metric-square">
                 <img src="{{ asset('img/icon-prontuario.png') }}" alt="Ícone Prontuários" class="icon-metric">
-                <strong>{{ $adminsCount ?? '1.006' }}</strong>
+                {{-- Valor do banco de dados --}}
+                <strong>{{ $prontuariosCount }}</strong>
                 <span>Prontuários registrados</span>
             </div>
         </div>
@@ -52,10 +54,8 @@
         </div>
     </div>
 
-
     {{-- 3. Área de Gráficos --}}
     <div class="chart-and-logo-wrapper">
-
         {{-- Coluna Esquerda: Gráfico de Barras (Menor) --}}
         <div class="chart-column-left">
             <div id="bar-chart-container" class="chart-container">
@@ -72,7 +72,81 @@
             </div>
         </div>
     </div>
-
 </div>
+
+<script>
+    // Dados para o Gráfico de Barras (Atendimentos por Mês)
+    const atendimentosData = @json($atendimentosPorMes);
+    const labelsBarras = atendimentosData.map(item => {
+        const date = new Date(null, item.mes - 1);
+        return date.toLocaleString('default', { month: 'short' });
+    });
+    const dataBarras = atendimentosData.map(item => item.total);
+
+    const ctxBarras = document.getElementById('graficoBarras').getContext('2d');
+    new Chart(ctxBarras, {
+        type: 'bar',
+        data: {
+            labels: labelsBarras,
+            datasets: [{
+                label: 'Atendimentos',
+                data: dataBarras,
+                backgroundColor: 'rgba(140, 16, 7, 0.8)',
+                borderColor: 'rgba(123, 14, 6, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Número de Atendimentos'
+                    }
+                }
+            }
+        }
+    });
+
+    // Dados para o Gráfico de Linha (Evolução de Atendimentos)
+    const evolucaoData = @json($evolucaoAtendimentos);
+    const labelsLinha = evolucaoData.map(item => {
+        const date = new Date(item.ano, item.mes - 1);
+        return date.toLocaleString('default', { month: 'short', year: '2-digit' });
+    });
+    const dataLinha = evolucaoData.map(item => item.total);
+
+    const ctxLinha = document.getElementById('graficoLinha').getContext('2d');
+    new Chart(ctxLinha, {
+        type: 'line',
+        data: {
+            labels: labelsLinha,
+            datasets: [{
+                label: 'Total de Atendimentos',
+                data: dataLinha,
+                borderColor: 'rgba(140, 16, 7, 1)',
+                backgroundColor: 'rgba(140, 16, 7, 0.2)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Número de Atendimentos'
+                    }
+                }
+            }
+        }
+    });
+</script>
 
 @endsection

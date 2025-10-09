@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Acesso de Médico — Prontuário+</title>
+    <title>Acesso de Enfermeiro — Prontuário+</title>
     <style type="text/css">
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -28,11 +28,11 @@
             background-color: #ffffff;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(140, 16, 7, 0.3);
+            box-shadow: 0 20px 60px rgba(10, 64, 12, 0.3);
         }
 
         .header {
-            background: linear-gradient(135deg, #8c1007 0%, #d63c2e 100%);
+            background: linear-gradient(135deg, #0a400c 0%, #53b15f 100%);
             padding: 48px 40px;
             text-align: center;
             position: relative;
@@ -49,11 +49,12 @@
             opacity: 0.3;
         }
 
+        /* --- OTIMIZAÇÕES PARA O LOGO NO HEADER --- */
         .logo-container {
-            width: 200px;
-            height: 120px;
+            width: 200px; /* Adapta-se ao tamanho do logo */
+            height: 120px; /* Adapta-se ao tamanho do logo */
             margin: 0 auto 24px;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAaVBMVEUAAAAAAAAAAAAAAACgoKAgICAAAACOjo6Dg4MAAAD///+qqqra2trW1tbt7e3y8vLu7u7FxcU2NjY+Pj5BQUHj4+PNzc3CwsLT09OEhIShoaGnp6eSkpI7Ozs+Pj4bGxvR0dGvr69ubm7vWj8EAAAACXBIWXMAAAsTAAALEwEAjssnAAACfklEQVR4nO3c61LCUBRG4U/tI4iKgKACjL3/W+yXw1U6dUpSjKkK+aYxczQzM+OEEgAAAAAAAAAAAAAAAADAa+N93R3f3t3F3x33r/j23j3d7m6q756R14Xv13d3YXeL7/t3cffzR/O91x2f+s3v809E3+k52L/d1X3s7+5u0H/T3x37p/9W92e/D9y/v7m7yP/dvdndLbjfB/+7vPv78/7n213E38fvd3d3eD+/d7v/Wf3pP5r88/1L35+L/r53d3d3z/P5/mY9d8ePz98v7++vT8ff2d09/n2/Vl7n15/63P3a8Pnt5f0Vf5+3+8/6+P5n+6d9fGf1f2v7/P2/5/v/d3Xvd3eL72/uXu/6+c+v/n54X7x/qf954fO/a+P7m4v05n79+eL94e33S//R5c/+f2f2/c3d3D/9v76/3F/d3fHf/d3d3d0tvr/f7fD7n5Lz7+f79e3h+f3H1f2d+/u/xO/V+V5/6zO7y7sL/N3n7h58/2vQf9Pd//v3R73v7v+Ld8d322/nO+j/s7u7u7tJ+7n3vLu9u8P//d3h+f3P3/9j33t3t/z/d7v/d3d1d2s+dnd3Xh98X93eXd/d4f//f0//D3T3f+b27u7vT++3d3Xf7+f768u7u7vTu7u7u7v5f/e3u7u7u/u9+v7s/u7tJ+7n3f3d3i+//v/v7v7u7u7vT+7u7u7u7u/u/fHf393f3d3f4/f7u7u/u7u7u7tL+v/v7u7u7u7u7w/v93d3d3V3d3d1d2s8fAABQ8f29AAAAfL29AAAA/F5fB+8AAAAA4fF1fgAAAAAAAP8B/Qf/NncAAAAASUVORK5CYII=');
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAaVBMVEUAAAAAAAAAAAAAAACgoKAgICAAAACOjo6Dg4MAAAD///+qqqra2trW1tbt7e3y8vLu7u7FxcU2NjY+Pj5BQUHj4+PNzc3CwsLT09OEhIShoaGnp6eSkpI7Ozs+Pj4bGxvR0dGvr69ubm7vWj8EAAAACXBIWXMAAAsTAAALEwEAjssnAAACfklEQVR4nO3c61LCUBRG4U/tI4iKgKACjL3/W+yXw1U6dUpSjKkK+aYxczQzM+OEEgAAAAAAAAAAAAAAAADAa+N93R3f3t3F3x33r/j23j3d7m6q756R14Xv13d3YXeL7/t3cffzR/O91x2f+s3v809E3+k52L/d1X3s7+5u0H/T3x37p/9W92e/D9y/v7m7yP/dvdndLbjfB/+7vPv78/7n213E38fvd3d3eD+/d7v/Wf3pP5r88/1L35+L/r53d3d3z/P5/mY9d8ePz98v7++vT8ff2d09/n2/Vl7n15/63P3a8Pnt5f0Vf5+3+8/6+P5n+6d9fGf1f2v7/P2/5/v/d3Xvd3eL72/uXu/6+c+v/n54X7x/qf954fO/a+P7m4v05n79+eL94e33S//R5c/+f2f2/c3d3D/9v76/3F/d3fHf/d3d3d0tvr/f7fD7n5Lz7+f79e3h+f3H1f2d+/u/xO/V+V5/6zO7y7sL/N3n7h58/2vQf9Pd//v3R73v7v+Ld8d322/nO+j/s7u7u7tJ+7n3vLu9u8P//d3h+f3P3/9j33t3t/z/d7v/d3d1d2s+dnd3Xh98X93eXd/d4f//f0//D3T3f+b27u7vT++3d3Xf7+f768u7u7vTu7u7u7v5f/e3u7u7u/u9+v7s/u7tJ+7n3f3d3i+//v/v7v7u7u7vT+7u7u7u7u/u/fHf393f3d3f4/f7u7u/u7u7u7tL+v/v7u7u7u7u7w/v93d3d3V3d3d1d2s8fAABQ8f29AAAAfL29AAAA/F5fB+8AAAAA4fF1fgAAAAAAAP8B/Qf/NncAAAAASUVORK5CYII');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -62,7 +63,7 @@
         .header h1 {
             font-size: 28px;
             font-weight: 700;
-            color: #fff;
+            color: #ffffff;
             margin: 0;
             line-height: 1.3;
             position: relative;
@@ -85,18 +86,18 @@
         .welcome-text {
             text-align: center;
             font-size: 16px;
-            color: #555555;
+            color: #4a5568;
             line-height: 1.6;
             margin: 0 0 40px 0;
         }
 
         .welcome-text strong {
-            color: #8c1007;
+            color: #0a400c;
             font-weight: 600;
         }
 
         .credential-card {
-            background: linear-gradient(135deg, #f7f7f7 0%, #ececec 100%);
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
             border-radius: 12px;
             padding: 24px;
             margin-bottom: 20px;
@@ -106,7 +107,7 @@
 
         .credential-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(140, 16, 7, 0.15);
+            box-shadow: 0 8px 20px rgba(10, 64, 12, 0.15);
         }
 
         .credential-label {
@@ -125,7 +126,7 @@
             content: '';
             width: 4px;
             height: 4px;
-            background: #d63c2e;
+            background: #53b15f;
             border-radius: 50%;
         }
 
@@ -135,7 +136,7 @@
             padding: 16px 20px;
             font-size: 17px;
             font-weight: 600;
-            color: #8c1007;
+            color: #0a400c;
             text-align: center;
             border: 2px solid #dcdcdc;
             word-break: break-all;
@@ -150,7 +151,7 @@
             font-family: 'Courier New', monospace;
             letter-spacing: 2px;
             font-size: 20px;
-            color: #8c1007;
+            color: #0a400c;
             font-weight: 700;
         }
 
@@ -180,8 +181,8 @@
 
         .cta-button {
             display: inline-block;
-            background: linear-gradient(135deg, #8c1007 0%, #d63c2e 100%);
-            color: #fff !important;
+            background: linear-gradient(135deg, #0a400c 0%, #53b15f 100%);
+            color: #ffffff !important;
             text-decoration: none;
             padding: 16px 40px;
             border-radius: 8px;
@@ -189,17 +190,17 @@
             font-size: 16px;
             text-align: center;
             margin: 24px 0;
-            box-shadow: 0 8px 20px rgba(140, 16, 7, 0.15);
+            box-shadow: 0 8px 20px rgba(10, 64, 12, 0.15);
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .cta-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(140, 16, 7, 0.25);
+            box-shadow: 0 8px 20px rgba(10, 64, 12, 0.25);
         }
 
         .footer-section {
-            background: #f7f7f7;
+            background: #f7fafc;
             padding: 32px 40px;
             text-align: center;
             border-top: 1px solid #dcdcdc;
@@ -214,7 +215,7 @@
 
         .footer-section .signature {
             font-weight: 600;
-            color: #8c1007;
+            color: #0a400c;
             margin-top: 20px;
         }
 
@@ -239,6 +240,7 @@
             .logo-container {
                 width: 140px !important;
                 height: 90px !important;
+                padding: 15px !important;
             }
             .header h1 {
                 font-size: 22px !important;
@@ -311,7 +313,7 @@
     </style>
 </head>
 <body style="margin: 0; padding: 0;">
-    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f7f7f7; min-height: 100vh;">
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #ffffff; min-height: 100vh;">
         <tr>
             <td align="center" valign="top" style="padding: 40px 20px;">
                 <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" class="container" style="max-width: 640px;">
@@ -326,7 +328,7 @@
                         <td class="content">
                             <p class="welcome-text">
                                 Olá, <strong>{{ $usuario->nomeUsuario }}</strong>! 👋<br><br>
-                                Você foi cadastrado como <strong>médico(a)</strong> no sistema Prontuário+. 
+                                Você foi cadastrado como <strong>enfermeiro(a)</strong> no sistema Prontuário+. 
                                 Estamos felizes em tê-lo(a) conosco!
                             </p>
                             

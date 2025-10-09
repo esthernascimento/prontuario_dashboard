@@ -77,43 +77,41 @@ class PacienteController extends Controller
      * Atualiza um paciente existente no banco de dados.
      * CORRIGIDO: usa idPaciente
      */
- public function update(Request $request, $id)
-{
-    // Log para debug
-    Log::info('Update iniciado', [
-        'id' => $id,
-        'dados' => $request->all()
-    ]);
+    public function update(Request $request, $id)
+    {
+        // Log para debug
+        Log::info('Update iniciado', [
+            'id' => $id,
+            'dados' => $request->all()
+        ]);
 
-    $paciente = Paciente::where('idPaciente', $id)->firstOrFail();
+        $paciente = Paciente::where('idPaciente', $id)->firstOrFail();
+        
+        $validatedData = $request->validate([
+            'nomePaciente'      => 'required|string|min:2|max:255',
+            'cpfPaciente'       => ['required', 'string', 'size:11', Rule::unique('tbPaciente', 'cpfPaciente')->ignore($paciente->idPaciente, 'idPaciente')],
+            'dataNascPaciente'  => 'required|date',
+            'cartaoSusPaciente' => ['nullable', 'string', 'max:20', Rule::unique('tbPaciente', 'cartaoSusPaciente')->ignore($paciente->idPaciente, 'idPaciente')],
+            'generoPaciente'    => 'required|string|in:Masculino,Feminino,Outro',
+            'statusPaciente'    => 'required|in:0,1',
+        ]);
+
+        // Converte statusPaciente para boolean
+        $validatedData['statusPaciente'] = (bool) $validatedData['statusPaciente'];
+
+        Log::info('Dados validados', $validatedData);
+
+        // Atualiza o paciente
+        $paciente->update($validatedData);
+
+        Log::info('Paciente atualizado', $paciente->fresh()->toArray());
+
+        return redirect()->route('admin.pacientes.index')
+            ->with('success', 'Paciente atualizado com sucesso!');
+    }
     
-    $validatedData = $request->validate([
-        'nomePaciente'      => 'required|string|min:2|max:255',
-        'cpfPaciente'       => ['required', 'string', 'size:11', Rule::unique('tbPaciente', 'cpfPaciente')->ignore($paciente->idPaciente, 'idPaciente')],
-        'dataNascPaciente'  => 'required|date',
-        'cartaoSusPaciente' => ['nullable', 'string', 'max:20', Rule::unique('tbPaciente', 'cartaoSusPaciente')->ignore($paciente->idPaciente, 'idPaciente')],
-        'generoPaciente'    => 'required|string|in:Masculino,Feminino,Outro',
-        'statusPaciente'    => 'required|in:0,1',
-    ]);
-
-    // Converte statusPaciente para boolean
-    $validatedData['statusPaciente'] = (bool) $validatedData['statusPaciente'];
-
-    Log::info('Dados validados', $validatedData);
-
-    // Atualiza o paciente
-    $paciente->update($validatedData);
-
-    Log::info('Paciente atualizado', $paciente->fresh()->toArray());
-
-    return redirect()->route('admin.pacientes.index')
-        ->with('success', 'Paciente atualizado com sucesso!');
-}
-
-    /**
-     * Exclusão (Soft Delete)
-     * CORRIGIDO: usa idPaciente
-     */
+    // REMOVENDO A FUNÇÃO 'DESTROY' PARA ADOTAR A LÓGICA DE INATIVAR
+    /*
     public function destroy($id)
     {
         $paciente = Paciente::where('idPaciente', $id)->firstOrFail();
@@ -122,10 +120,11 @@ class PacienteController extends Controller
         return redirect()->route('admin.pacientes.index')
             ->with('success', 'Paciente excluído com sucesso!');
     }
+    */
     
     /**
-     * Toggle Status (Ativo/Inativo)
-     * CORRIGIDO: usa idPaciente e trabalha com boolean
+     * Alterna o status do paciente entre Ativo e Inativo.
+     * Esta função unifica a lógica de ativação e "exclusão".
      */
     public function toggleStatus($id)
     {
@@ -135,9 +134,10 @@ class PacienteController extends Controller
         $paciente->statusPaciente = !$paciente->statusPaciente;
         $paciente->save();
 
-        $statusTexto = $paciente->statusPaciente ? 'Ativo' : 'Inativo';
+        $acao = $paciente->statusPaciente ? 'ativado' : 'desativado';
+        $mensagem = "O paciente foi {$acao} com sucesso!";
 
         return redirect()->route('admin.pacientes.index')
-            ->with('success', 'Status do paciente alterado para ' . $statusTexto . ' com sucesso!');
+            ->with('success', $mensagem);
     }
 }
