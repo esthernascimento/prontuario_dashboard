@@ -158,3 +158,9 @@ Route::prefix('enfermeiro')->name('enfermeiro.')->group(function () {
         Route::delete('/prontuario/anotacao/deletar/{id}', [ProntuarioController::class, 'destroy'])->name('anotacao.destroy');
     });
 });
+
+// ===================================================================================
+// --- ROTAS DO RECEPCIONISTA ---
+// ===================================================================================
+
+Route::get('/dashboardRecepcionista', function () {return view('recepcionista.dashboardRecepcionista');});
