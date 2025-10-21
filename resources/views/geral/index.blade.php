@@ -12,7 +12,7 @@
         <!-- Conteúdo do lado esquerdo -->
         <div class="box-content">
             <h1>Seja bem-vindo<br>ao Prontuário+</h1>
-            
+
             <div class="subtitle">SELECIONE A SUA ÁREA DE ATUAÇÃO</div>
 
             <div class="area-selection">
@@ -25,12 +25,15 @@
                 <a href="{{ url('/enfermeiro/login') }}" class="area-button enfermeiro">
                     Enfermeiro
                 </a>
+                <a class="area-button recepcionista">
+                Recepcionista
+                </a>
             </div>
         </div>
 
         <!-- Logo do lado direito -->
         <div class="logo-container">
-       
+
         </div>
     </main>
 </body>
