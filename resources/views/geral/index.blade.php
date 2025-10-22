@@ -25,7 +25,7 @@
                 <a href="{{ url('/enfermeiro/login') }}" class="area-button enfermeiro">
                     Enfermeiro
                 </a>
-                <a class="area-button recepcionista">
+                <a href="{{ url('loginRecepcionista') }}" class="area-button recepcionista">
                 Recepcionista
                 </a>
             </div>

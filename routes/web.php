@@ -33,6 +33,12 @@ use App\Http\Controllers\Enfermeiro\ConfiguracaoController as ConfiguracaoEnferm
 use App\Http\Controllers\Enfermeiro\SegurancaController as SegurancaEnfermeiroController;
 use App\Http\Controllers\Enfermeiro\ProntuarioController;
 
+
+// --------------------- RECEPCIONISTA ---------------------
+use App\Http\Controllers\Recepcionista\LoginController as RecepcionistaLoginController;
+use App\Http\Controllers\Recepcionista\RecepcionistaDashboardController;
+
+
 // ===================================================================================
 // --- ROTAS PÚBLICAS ---
 // ===================================================================================
@@ -164,3 +170,8 @@ Route::prefix('enfermeiro')->name('enfermeiro.')->group(function () {
 // ===================================================================================
 
 Route::get('/dashboardRecepcionista', function () {return view('recepcionista.dashboardRecepcionista');});
+
+
+Route::get('/loginRecepcionista', function () {
+    return view('recepcionista.loginRecepcionista');
+})->name('loginRecepcionista');
