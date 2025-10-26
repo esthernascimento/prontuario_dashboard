@@ -5,25 +5,30 @@
     VARIÁVEIS DE TEMA (VERMELHO/VINHO)
     ============================================ */
 :root {
-    --primary-red: #8c1007; /* Vermelho Principal */
-    --primary-red-dark: #7b0e06; /* Vermelho Escuro (Hover) */
+    --primary-red: #8c1007;
+    --primary-red-dark: #7b0e06;
+    --primary-red-light: #a33e38;
     --bg-white: #FFFFFF;
     --bg-gray-50: #F9FAFB;
+    --bg-gray-100: #F3F4F6;
     --text-primary: #333;
     --text-secondary: #666;
     --text-muted: #888;
     --border-color: #e0e0e0;
     --border-focus: #8c1007;
-    --success-green: #10B981;
+    --success-red: #EF4444;
     --error-red: #EF4444;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 6px 20px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
     --radius-md: 8px;
     --radius-lg: 12px;
 }
 
 body {
     font-family: 'Montserrat', sans-serif;
-    background-color: #f7f7f7; /* Cor de fundo suave */
+    background-color: #f7f7f7;
 }
 
 .main-dashboard {
@@ -36,7 +41,7 @@ body {
     ============================================ */
 .security-container {
     background: var(--bg-white);
-    max-width: 580px; /* Largura igual ao admin para consistência visual do card */
+    max-width: 580px;
     margin: 50px auto;
     padding: 0;
     border-radius: var(--radius-lg);
@@ -50,15 +55,13 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Título Principal --- */
 .security-container h1 {
-    /* Cor de fundo do cabeçalho */
     background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
     padding: 32px 36px;
     display: flex;
     align-items: center;
     gap: 16px;
-    color: white; /* Texto em branco */
+    color: white;
     justify-content: center;
     font-size: 1.65rem;
     font-weight: 700;
@@ -75,7 +78,6 @@ body {
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
 }
 
-/* --- Subtítulo / Descrição --- */
 .security-container > p {
     font-size: 1rem;
     color: var(--text-secondary);
@@ -85,7 +87,7 @@ body {
 }
 
 /* ============================================
-    SEÇÃO DE ALTERAR SENHA (CARD BRANCO INTERNO)
+    SEÇÃO DE ALTERAR SENHA
     ============================================ */
 .security-section {
     background: var(--bg-white);
@@ -114,18 +116,33 @@ body {
     height: 24px;
     background: linear-gradient(180deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
     border-radius: 3px;
-    margin-right: -5px; /* Ajusta a posição para ficar mais próximo */
+    margin-right: -5px;
 }
 
-/* --- Formulário de Alteração de Senha --- */
+/* ============================================
+    FORMULÁRIO DE SEGURANÇA
+    ============================================ */
 .security-form {
-    max-width: 100%; /* Largura total dentro da seção */
+    max-width: 100%;
     margin: 0 auto;
 }
 
 .form-group {
     margin-bottom: 18px;
+    animation: fadeIn 0.6s ease-out backwards;
     text-align: left;
+    position: relative;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .form-group label {
@@ -137,9 +154,18 @@ body {
     transition: color 0.3s ease;
 }
 
+/* ============================================
+   WRAPPER DO INPUT COM OLHINHO
+   ============================================ */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
 .form-group input {
     width: 100%;
-    padding: 11px 16px;
+    padding: 11px 45px 11px 16px;
     border-radius: var(--radius-md);
     border: 2px solid var(--border-color);
     background: var(--bg-gray-50);
@@ -151,11 +177,51 @@ body {
     font-family: inherit;
 }
 
+.form-group input::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.form-group input:hover {
+    border-color: var(--primary-red-light);
+    background: white;
+}
+
 .form-group input:focus {
     border-color: var(--border-focus);
     background: white;
-    box-shadow: 0 0 0 4px rgba(140, 16, 7, 0.15); /* Sombra vermelha suave */
+    box-shadow: 0 0 0 4px rgba(140, 16, 7, 0.15);
     transform: translateY(-2px);
+}
+
+.form-group input:not(:placeholder-shown) {
+    background: white;
+}
+
+/* ============================================
+   ÍCONE DO OLHINHO
+   ============================================ */
+.toggle-password {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    z-index: 10;
+    padding: 5px;
+    user-select: none;
+}
+
+.toggle-password:hover {
+    color: var(--primary-red);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.toggle-password:active {
+    transform: translateY(-50%) scale(0.95);
 }
 
 .form-hint {
@@ -165,10 +231,18 @@ body {
     display: block;
 }
 
-/* --- Botão Primário (Alterar Senha) --- */
+.error-message {
+    color: var(--error-red);
+    font-size: 0.85rem;
+    margin-top: 8px;
+    display: block;
+}
+
+/* ============================================
+   BOTÃO PRIMÁRIO
+   ============================================ */
 .btn-primary {
     display: block;
-    /* Tema de cor do botão: Vermelho Principal */
     background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
     color: white;
     padding: 14px 28px;
@@ -177,49 +251,59 @@ body {
     font-size: 1.05rem;
     font-weight: 700;
     cursor: pointer;
-    width: 80%; /* Ocupa 80% da largura, centralizado */
+    width: 80%;
     margin: 28px auto 0 auto;
-    box-shadow: 0 10px 15px -3px rgba(140, 16, 7, 0.3); /* Sombra vermelha */
+    box-shadow: 0 10px 15px -3px rgba(140, 16, 7, 0.3);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
 }
 
 .btn-primary::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-        transition: left 0.5s;
-    }
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
 
-    .btn-primary:hover::before {
-        left: 100%;
-    }
+.btn-primary:hover::before {
+    left: 100%;
+}
 
 .btn-primary:hover {
     transform: translateY(-3px);
     box-shadow: 0 20px 35px -5px rgba(140, 16, 7, 0.4);
-    background: var(--primary-red-dark);
 }
 
-/* --- Mensagens de Alerta (Sucesso/Erro) --- */
+.btn-primary:active {
+    transform: translateY(-1px);
+}
+
+/* ============================================
+   ALERTAS
+   ============================================ */
 .alert {
     padding: 15px 20px;
-    margin: 25px 0; /* Ajustado para dentro da seção */
+    margin: 25px 36px;
     border-radius: var(--radius-md);
     font-size: 0.95rem;
     font-weight: 500;
     line-height: 1.5;
-    animation: fadeIn 0.5s ease-out;
+    animation: fadeInAlert 0.5s ease-out;
+}
+
+@keyframes fadeInAlert {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .alert-success {
     background-color: #d4edda;
-    color: #0c4013; /* Cor de texto mais escura para contraste */
+    color: #0c4013;
     border: 1px solid #c3e6cb;
 }
 
@@ -235,67 +319,18 @@ body {
     list-style-type: disc;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
 /* ============================================
-    RESPONSIVIDADE
-    ============================================ */
-@media (max-width: 768px) {
-    .security-container {
-        margin: 20px auto;
-    }
-    .security-container h1 {
-        padding: 24px 20px;
-        font-size: 1.4rem;
-    }
-    .security-section {
-        padding: 20px;
-    }
-    .btn-primary {
-        width: 100%;
-    }
-}
-
-@media (max-width: 480px) {
-    .security-container {
-        margin: 10px auto;
-        border-radius: 0;
-        box-shadow: none;
-    }
-    .security-container h1 {
-        font-size: 1.2rem;
-        flex-direction: column;
-    }
-    .security-container h1 i {
-        font-size: 1.8rem;
-    }
-    .security-container > p {
-        font-size: 0.9rem;
-    }
-    .security-section h2 {
-        font-size: 1.1em;
-    }
-    .form-group input {
-        padding: 10px 12px;
-        font-size: 0.9rem;
-    }
-}
-
-/* ============================================
-    MODAIS (ESTILOS ESSENCIAIS PARA ENFERMEIRO)
-    ============================================ */
+   MODAIS
+   ============================================ */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    display: none; /* Inicia escondido */
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(6px);
+    display: none;
     align-items: center;
     justify-content: center;
     z-index: 9999;
@@ -303,7 +338,7 @@ body {
 }
 
 .modal-overlay.show {
-    display: flex; /* EXIBE quando a classe 'show' é adicionada pelo JS */
+    display: flex;
 }
 
 @keyframes fadeInModal {
@@ -314,22 +349,20 @@ body {
 .modal-box {
     background: var(--bg-white);
     border-radius: var(--radius-lg);
-    padding: 40px;
+    padding: 45px 40px;
     max-width: 480px;
     width: 90%;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
     text-align: center;
     animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     overflow: hidden;
 }
 
-
-
 @keyframes scaleIn {
     from {
         opacity: 0;
-        transform: scale(0.8) translateY(20px);
+        transform: scale(0.85) translateY(30px);
     }
     to {
         opacity: 1;
@@ -337,46 +370,43 @@ body {
     }
 }
 
-/* Linha de destaque no topo do modal (Tema Vinho) */
 .modal-box::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 6px;
-    /* Usa as cores do tema Vinho */
+    height: 5px;
     background: linear-gradient(90deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
 }
 
 .modal-icon {
-    font-size: 4rem;
+    font-size: 4.5rem;
     margin-bottom: 20px;
     display: inline-block;
     animation: iconPulse 2s ease-in-out infinite;
 }
 
-/* Icone de Aviso (Amarelo/Laranja) */
 .icon-warning {
-    color: #f59e0b; 
-    filter: drop-shadow(0 4px 12px rgba(245, 158, 11, 0.3));
+    color: #f59e0b;
+    filter: drop-shadow(0 4px 16px rgba(245, 158, 11, 0.4));
 }
 
 .icon-success-medico {
-    color: var(--primary-red); /* Cor do ícone de check: Vinho */
-    filter: drop-shadow(0 4px 12px rgba(140, 16, 7, 0.3)); /* Sombra Vinho */
+    color: var(--primary-red);
+    filter: drop-shadow(0 4px 16px rgba(140, 16, 7, 0.4));
 }
 
 @keyframes iconPulse {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+    50% { transform: scale(1.08); }
 }
 
 .modal-box h2 {
-    font-size: 1.75rem;
+    font-size: 1.85rem;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     letter-spacing: -0.5px;
 }
 
@@ -388,8 +418,8 @@ body {
 }
 
 /* ============================================
-    BOTÕES DO MODAL
-    ============================================ */
+   BOTÕES DO MODAL
+   ============================================ */
 .modal-buttons {
     display: flex;
     gap: 12px;
@@ -397,7 +427,7 @@ body {
 }
 
 .modal-btn {
-    padding: 12px 28px;
+    padding: 13px 32px;
     border-radius: var(--radius-md);
     font-size: 1rem;
     font-weight: 600;
@@ -407,9 +437,9 @@ body {
     position: relative;
     overflow: hidden;
     flex: 1;
+    font-family: inherit;
 }
 
-/* Botão CANCELAR (Cinza) */
 .modal-btn-cancel {
     background: var(--bg-gray-50);
     color: var(--text-secondary);
@@ -423,21 +453,12 @@ body {
     box-shadow: var(--shadow-md);
 }
 
-/* Botão CONFIRMAR (Tema Vermelho/Vinho) */
 .modal-btn-confirm-medico {
-    /* Usa as cores do tema Vinho */
     background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
     color: white;
     box-shadow: 0 10px 15px -3px rgba(140, 16, 7, 0.3);
 }
 
-.modal-btn-confirm-medico:hover {
-    transform: translateY(-2px);
-    /* Sombra mais forte no hover */
-    box-shadow: 0 12px 24px -6px rgba(140, 16, 7, 0.5);
-}
-
-/* Efeito de brilho ao passar o mouse */
 .modal-btn-confirm-medico::before {
     content: '';
     position: absolute;
@@ -453,16 +474,126 @@ body {
     left: 100%;
 }
 
+.modal-btn-confirm-medico:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -6px rgba(140, 16, 7, 0.5);
+}
+
 .modal-btn:active {
     transform: translateY(0);
 }
 
-/* Ajustes de responsividade para os modais */
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
 @media (max-width: 768px) {
-    .modal-box {
-        padding: 30px;
+    .security-container {
+        margin: 20px auto;
     }
+    
+    .security-container h1 {
+        padding: 24px 20px;
+        font-size: 1.4rem;
+    }
+    
+    .security-section {
+        padding: 20px;
+    }
+    
+    .btn-primary {
+        width: 100%;
+    }
+    
+    .alert {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+    
+    .modal-box {
+        padding: 40px 30px;
+        width: 95%;
+    }
+    
+    .modal-box h2 {
+        font-size: 1.6rem;
+    }
+    
+    .modal-box p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .security-container {
+        margin: 10px auto;
+        border-radius: 0;
+        box-shadow: none;
+    }
+    
+    .security-container h1 {
+        font-size: 1.2rem;
+        flex-direction: column;
+    }
+    
+    .security-container h1 i {
+        font-size: 1.8rem;
+    }
+    
+    .security-container > p {
+        font-size: 0.9rem;
+        margin: 10px 15px 20px 15px;
+    }
+    
+    .security-section {
+        padding: 15px;
+    }
+    
+    .security-section h2 {
+        font-size: 1.1em;
+    }
+    
+    .form-group input {
+        padding: 10px 40px 10px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .toggle-password {
+        font-size: 1.1rem;
+        right: 12px;
+    }
+    
+    .btn-primary {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+    }
+    
+    .alert {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+    
+    .modal-box {
+        width: 95%;
+        padding: 35px 25px;
+    }
+    
+    .modal-icon {
+        font-size: 3.5rem;
+    }
+    
+    .modal-box h2 {
+        font-size: 1.5rem;
+    }
+    
+    .modal-box p {
+        font-size: 0.95rem;
+    }
+    
     .modal-buttons {
         flex-direction: column;
+    }
+    
+    .modal-btn {
+        width: 100%;
     }
 }

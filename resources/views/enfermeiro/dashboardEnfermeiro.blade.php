@@ -2,6 +2,8 @@
 
 @section('content')
 
+
+
 <link rel="stylesheet" href="{{ asset('css/enfermeiro/dashboardEnfermeiro.css') }}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -16,24 +18,29 @@
                     <img src="{{ asset('img/enfermeiro-logo2.png') }}" alt="Logo Prontuário+" class="banner-logo">
                 </div>
             </div>
+
             <div class="banner-center">
-                <h2>Bem-vindo(a) <span class="name">Enfermeiro(a) {{ $nome ?? 'Esther' }}</span></h2>
+                <h2>
+                    Bem-vindo(a)
+                    <span class="name">
+                        Enfermeiro(a) {{ $enfermeiro->nomeEnfermeiro ?? 'Usuário' }}
+                    </span>
+                </h2>
                 <p>O Prontuário+ fica feliz com a sua presença e dedicação à saúde.</p>
             </div>
+
             <div class="banner-right">
-                <img src="{{ asset('img/enfermeiros.png') }}" alt="Ilustração de Médicos" class="enfermeiros-image">
+                <img src="{{ asset('img/enfermeiros.png') }}" alt="Ilustração de Enfermeiros" class="enfermeiros-image">
             </div>
         </div>
 
         <div class="metrics">
             <div class="metric-card">
                 <i class="bi bi-person-fill"></i> Pacientes no sistema
-                {{-- Aqui o valor 5 foi substituído pela variável do banco --}}
                 <strong>{{ $patientsCount ?? 0 }}</strong>
             </div>
             <div class="metric-card">
                 <i class="bi bi-file-earmark-text-fill"></i> Prontuários disponíveis
-                {{-- Aqui o valor 350 foi substituído pela variável do banco --}}
                 <strong>{{ $prontuariosCount ?? 0 }}</strong>
             </div>
         </div>
@@ -41,7 +48,6 @@
         <div class="content-wrapper">
             <div class="charts-left chart-container">
                 <h4 style="color: #0a400c; margin-bottom: 20px;">Gráfico de Pacientes por Mês</h4>
-                {{-- O gráfico estático foi substituído por um canvas real --}}
                 <canvas id="graficoPacientesMes"></canvas>
             </div>
 
@@ -55,7 +61,6 @@
                     <div class="text-info">
                         Enfermeiros(a) ativos:<br>Homens e Mulheres
                     </div>
-                    {{-- O gráfico de donut foi mantido e passará dados do controlador --}}
                     <canvas id="graficoDonutEnfermeiro" class="donut-chart-canvas"></canvas>
                 </div>
             </div>
@@ -65,7 +70,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Script para o Gráfico de Donut de Gênero
+    // Gráfico de Donut
     const ctxEnfermeiro = document.getElementById('graficoDonutEnfermeiro');
     new Chart(ctxEnfermeiro, {
         type: 'pie',
@@ -87,7 +92,7 @@
                     labels: {
                         usePointStyle: true,
                         font: { size: 14 },
-                        color: '#0a400c' // Cor corrigida para o texto da legenda
+                        color: '#0a400c'
                     }
                 },
                 tooltip: {
@@ -100,16 +105,16 @@
             }
         }
     });
-    
-    // Script para o Gráfico de Barras de exemplo
+
+    // Gráfico de Barras (Pacientes)
     const ctxPacientesMes = document.getElementById('graficoPacientesMes');
     new Chart(ctxPacientesMes, {
         type: 'bar',
         data: {
-            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'], // Substitua por labels dinâmicos
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'],
             datasets: [{
                 label: 'Pacientes Cadastrados',
-                data: [12, 19, 3, 5, 2], // Dados de exemplo. Você deve buscar dados reais no controlador.
+                data: [12, 19, 3, 5, 2],
                 backgroundColor: '#0a400c'
             }]
         },
@@ -123,9 +128,7 @@
                     color: '#0a400c'
                 }
             },
-            scales: {
-                y: { beginAtZero: true }
-            }
+            scales: { y: { beginAtZero: true } }
         }
     });
 </script>
