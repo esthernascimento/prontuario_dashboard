@@ -351,8 +351,8 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(6px);
     display: none;
     align-items: center;
     justify-content: center;
@@ -360,18 +360,22 @@ body {
     animation: fadeInModal 0.3s ease-out;
 }
 
+.modal-overlay.show {
+    display: flex;
+}
+
 @keyframes fadeInModal {
     from { opacity: 0; }
     to { opacity: 1; }
 }
 
-.modal-content {
+.modal-box {
     background: white;
     border-radius: var(--radius-lg);
-    padding: 40px;
+    padding: 45px 40px;
     max-width: 480px;
     width: 90%;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
     text-align: center;
     animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
@@ -381,7 +385,7 @@ body {
 @keyframes scaleIn {
     from {
         opacity: 0;
-        transform: scale(0.8) translateY(20px);
+        transform: scale(0.85) translateY(30px);
     }
     to {
         opacity: 1;
@@ -389,39 +393,47 @@ body {
     }
 }
 
-.modal-content::before {
+.modal-box::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 6px;
+    height: 5px;
     background: linear-gradient(90deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
 }
 
-.modal-content i {
-    font-size: 4rem;
-    color: var(--primary-green);
+.modal-icon {
+    font-size: 4.5rem;
     margin-bottom: 20px;
     display: inline-block;
     animation: iconPulse 2s ease-in-out infinite;
-    filter: drop-shadow(0 4px 12px rgba(10, 64, 12, 0.3));
+}
+
+.icon-warning {
+    color: #F59E0B;
+    filter: drop-shadow(0 4px 16px rgba(245, 158, 11, 0.4));
+}
+
+.icon-success {
+    color: var(--success-green);
+    filter: drop-shadow(0 4px 16px rgba(16, 185, 129, 0.4));
 }
 
 @keyframes iconPulse {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+    50% { transform: scale(1.08); }
 }
 
-.modal-content h2 {
-    font-size: 1.75rem;
+.modal-box h2 {
+    font-size: 1.85rem;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     letter-spacing: -0.5px;
 }
 
-.modal-content p {
+.modal-box p {
     font-size: 1.05rem;
     color: var(--text-secondary);
     margin-bottom: 32px;
@@ -438,9 +450,8 @@ body {
     justify-content: center;
 }
 
-.btn-cancelar,
-.btn-excluir {
-    padding: 12px 28px;
+.modal-btn {
+    padding: 13px 32px;
     border-radius: var(--radius-md);
     font-size: 1rem;
     font-weight: 600;
@@ -450,28 +461,29 @@ body {
     position: relative;
     overflow: hidden;
     flex: 1;
+    font-family: inherit;
 }
 
-.btn-cancelar {
+.modal-btn-cancel {
     background: var(--bg-gray-100);
     color: var(--text-secondary);
     border: 2px solid var(--border-color);
 }
 
-.btn-cancelar:hover {
+.modal-btn-cancel:hover {
     background: var(--bg-gray-50);
     border-color: var(--text-secondary);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
 
-.btn-excluir {
+.modal-btn-confirm {
     background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
     color: white;
     box-shadow: var(--shadow-md);
 }
 
-.btn-excluir::before {
+.modal-btn-confirm::before {
     content: '';
     position: absolute;
     top: 0;
@@ -482,17 +494,16 @@ body {
     transition: left 0.5s;
 }
 
-.btn-excluir:hover::before {
+.modal-btn-confirm:hover::before {
     left: 100%;
 }
 
-.btn-excluir:hover {
+.modal-btn-confirm:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 24px -6px rgba(10, 64, 12, 0.5);
 }
 
-.btn-excluir:active,
-.btn-cancelar:active {
+.modal-btn:active {
     transform: translateY(0);
 }
 
@@ -532,25 +543,17 @@ body {
         width: 100%;
     }
 
-    .modal-content {
+    .modal-box {
         width: 95%;
-        padding: 30px;
+        padding: 40px 30px;
     }
 
-    .modal-content h2 {
-        font-size: 1.5rem;
+    .modal-box h2 {
+        font-size: 1.6rem;
     }
 
-    .modal-content p {
-        font-size: 0.95rem;
-    }
-
-    .modal-buttons {
-        flex-direction: column;
-    }
-
-    .btn-cancelar, .btn-excluir {
-        width: 100%;
+    .modal-box p {
+        font-size: 1rem;
     }
 }
 
@@ -623,8 +626,29 @@ body {
         padding: 10px 20px;
         font-size: 0.95rem;
     }
-}
 
-.modal-overlay.show {
-    display: flex;
+    .modal-box {
+        width: 95%;
+        padding: 35px 25px;
+    }
+
+    .modal-icon {
+        font-size: 3.5rem;
+    }
+
+    .modal-box h2 {
+        font-size: 1.5rem;
+    }
+
+    .modal-box p {
+        font-size: 0.95rem;
+    }
+
+    .modal-buttons {
+        flex-direction: column;
+    }
+
+    .modal-btn {
+        width: 100%;
+    }
 }

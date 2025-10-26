@@ -119,8 +119,11 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
 Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () {
     Route::get('/dashboard', [MedicoDashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [MedicoLoginController::class, 'logout'])->name('logout');
+    
+    // 🔥 CORREÇÃO: Mudar de POST para PUT
     Route::get('/perfil', [MedicoConfiguracaoController::class, 'perfil'])->name('perfil');
-    Route::post('/perfil/update', [MedicoConfiguracaoController::class, 'atualizarPerfil'])->name('perfil.update');
+    Route::put('/perfil/update', [MedicoConfiguracaoController::class, 'atualizarPerfil'])->name('perfil.update'); // MUDOU PARA PUT
+    
     Route::get('/seguranca', [MedicoSegurancaController::class, 'showAlterarSenhaForm'])->name('seguranca');
     Route::post('/alterar-senha', [MedicoSegurancaController::class, 'alterarSenha'])->name('alterarSenha');
     Route::get('/ajuda', fn() => view('medico.ajudaMedico'))->name('ajuda');
@@ -146,7 +149,10 @@ Route::prefix('enfermeiro')->name('enfermeiro.')->group(function () {
         Route::get('/dashboard', [EnfermeiroDashboardController::class, 'index'])->name('dashboard');
         Route::post('/logout', [EnfermeiroLoginController::class, 'logout'])->name('logout');
         Route::get('/perfil', [ConfiguracaoEnfermeiroController::class, 'perfil'])->name('perfil');
-        Route::post('/perfil/update', [ConfiguracaoEnfermeiroController::class, 'atualizarPerfil'])->name('perfil.update');
+        
+        // 🔥 CORREÇÃO: Mudar de POST para PUT
+        Route::put('/perfil/update', [ConfiguracaoEnfermeiroController::class, 'atualizarPerfil'])->name('perfil.update');
+        
         Route::get('/seguranca', [SegurancaEnfermeiroController::class, 'showAlterarSenhaForm'])->name('seguranca');
         Route::post('/alterar-senha', [SegurancaEnfermeiroController::class, 'alterarSenha'])->name('alterarSenha');
 
@@ -164,7 +170,6 @@ Route::prefix('enfermeiro')->name('enfermeiro.')->group(function () {
         Route::delete('/prontuario/anotacao/deletar/{id}', [ProntuarioController::class, 'destroy'])->name('anotacao.destroy');
     });
 });
-
 // ===================================================================================
 // --- ROTAS DO RECEPCIONISTA ---
 // ===================================================================================

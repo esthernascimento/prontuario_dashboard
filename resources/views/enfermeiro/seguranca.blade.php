@@ -2,6 +2,15 @@
 
 @section('content')
 
+@php
+    if (!isset($enfermeiro)) {
+        $usuarioLogado = auth()->guard('enfermeiro')->user(); 
+        if ($usuarioLogado) {
+            $enfermeiro = \App\Models\Enfermeiro::where('id_usuario', $usuarioLogado->idUsuarioPK)->first();
+        }
+    }
+@endphp
+
 <link rel="stylesheet" href="{{ asset('css/enfermeiro/seguranca.css') }}">
 
 <main class="main-dashboard">
@@ -26,29 +35,44 @@
             {{-- Formulário com ID e botão modificado --}}
             <form id="securityForm" action="{{ route('enfermeiro.alterarSenha') }}" method="POST" class="security-form">
                 @csrf
+                
+                {{-- Senha Atual com Olhinho --}}
                 <div class="form-group">
                     <label for="senha_atual">Senha Atual:</label>
-                    <input type="password" id="senha_atual" name="senha_atual" required>
+                    <div class="password-wrapper">
+                        <input type="password" id="senha_atual" name="senha_atual" required>
+                        <i class="bi bi-eye toggle-password" onclick="togglePassword('senha_atual', this)"></i>
+                    </div>
                 </div>
+
+                {{-- Nova Senha com Olhinho --}}
                 <div class="form-group">
                     <label for="nova_senha">Nova Senha:</label>
-                    <input type="password" id="nova_senha" name="nova_senha" required>
+                    <div class="password-wrapper">
+                        <input type="password" id="nova_senha" name="nova_senha" required>
+                        <i class="bi bi-eye toggle-password" onclick="togglePassword('nova_senha', this)"></i>
+                    </div>
                     <small class="form-hint">Mínimo de 8 caracteres.</small>
                 </div>
+
+                {{-- Confirmar Nova Senha com Olhinho --}}
                 <div class="form-group">
                     <label for="nova_senha_confirmation">Confirmar Nova Senha:</label>
-                    <input type="password" id="nova_senha_confirmation" name="nova_senha_confirmation" required>
+                    <div class="password-wrapper">
+                        <input type="password" id="nova_senha_confirmation" name="nova_senha_confirmation" required>
+                        <i class="bi bi-eye toggle-password" onclick="togglePassword('nova_senha_confirmation', this)"></i>
+                    </div>
                 </div>
-                {{-- Botão agora chama o modal de confirmação --}}
-                <button type="button" class="btn-primary" onclick="showConfirmationModal()">Alterar Senha</button>
+
+                {{-- BOTÃO FALTANDO ADICIONADO AQUI --}}
+                <button type="button" class="btn-primary" onclick="showConfirmationModal()">
+                    Alterar Senha
+                </button>
             </form>
         </div>
     </div>
 </main>
 
-{{-- ======================================================== --}}
-{{-- HTML DOS MODAIS ADICIONADO AQUI                     --}}
-{{-- ======================================================== --}}
 
 <div id="confirmationModal" class="modal-overlay">
     <div class="modal-box">
@@ -75,33 +99,46 @@
 </div>
 @endif
 
-{{-- ======================================================== --}}
-{{-- JAVASCRIPT DE CONTROLE DOS MODAIS                   --}}
-{{-- ======================================================== --}}
+
 <script>
-    // Pega os elementos do DOM para os modais
     const securityForm = document.getElementById('securityForm');
     const confirmationModal = document.getElementById('confirmationModal');
     const successModal = document.getElementById('successModal');
 
-    // --- Funções para o Modal de Confirmação ---
+    function togglePassword(inputId, iconElement) {
+        const input = document.getElementById(inputId);
+        
+        if (input.type === 'password') {
+            input.type = 'text';
+            iconElement.classList.remove('bi-eye');
+            iconElement.classList.add('bi-eye-slash');
+        } else {
+            input.type = 'password';
+            iconElement.classList.remove('bi-eye-slash');
+            iconElement.classList.add('bi-eye');
+        }
+    }
+
     function showConfirmationModal() {
         if (confirmationModal) confirmationModal.classList.add('show');
     }
+    
     function hideConfirmationModal() {
         if (confirmationModal) confirmationModal.classList.remove('show');
     }
+    
     function submitSecurityForm() {
         hideConfirmationModal();
         if (securityForm) securityForm.submit();
     }
 
-    // --- Funções para o Modal de Sucesso ---
     function hideSuccessModal() {
-        if (successModal) successModal.classList.remove('show');
+        if (successModal) {
+            successModal.classList.remove('show');
+            window.location.href = "{{ route('enfermeiro.perfil') }}";
+        }
     }
 
-    // Opcional: Fechar o modal clicando fora da caixa
     window.onclick = function(event) {
         if (event.target == confirmationModal) {
             hideConfirmationModal();

@@ -11,7 +11,10 @@
             <h1>Perfil do Enfermeiro</h1>
         </div>
 
-        {{-- As mensagens de erro continuam aqui --}}
+        {{-- Mensagens de alerta --}}
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
         @if(session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
@@ -29,12 +32,14 @@
             {{-- Adicionado um ID ao formulário para o JavaScript poder encontrá-lo --}}
             <form id="profileForm" action="{{ route('enfermeiro.perfil.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
 
                 <div class="foto-upload-container">
                     <label for="foto" class="foto-upload-label">
                         <div class="box-foto">
+                            {{-- 🔥 CORREÇÃO: Foto vem do usuário, não do enfermeiro --}}
                             <img id="preview-img"
-                                 src="{{ $enfermeiro->foto ? asset('storage/fotos/' . $enfermeiro->foto) : asset('img/usuario-de-perfil.png') }}"
+                                 src="{{ $enfermeiro->usuario && $enfermeiro->usuario->foto ? asset('storage/fotos/' . $enfermeiro->usuario->foto) : asset('img/usuario-de-perfil.png') }}"
                                  alt="Foto atual">
                         </div>
                         <div class="overlay">
@@ -77,10 +82,7 @@
     </div>
 </main>
 
-{{-- ======================================================== --}}
-{{-- HTML DOS MODAIS ADICIONADO AQUI                     --}}
-{{-- ======================================================== --}}
-
+{{-- Modal de Confirmação --}}
 <div id="confirmationModal" class="modal-overlay">
     <div class="modal-box">
         <i class="bi bi-exclamation-triangle-fill modal-icon icon-warning"></i>
@@ -93,8 +95,9 @@
     </div>
 </div>
 
+{{-- Modal de Sucesso --}}
 @if(session('success'))
-<div id="successModal" class="modal-overlay show"> {{-- A classe 'show' faz ele aparecer --}}
+<div id="successModal" class="modal-overlay show">
     <div class="modal-box">
         <i class="bi bi-check-circle-fill modal-icon icon-success"></i>
         <h2>Sucesso!</h2>
@@ -106,10 +109,6 @@
 </div>
 @endif
 
-
-{{-- ======================================================== --}}
-{{-- JAVASCRIPT DE CONTROLE (FOTO E MODAIS)              --}}
-{{-- ======================================================== --}}
 <script>
     // Função para preview da imagem
     function previewFoto(event) {
@@ -146,7 +145,7 @@
         if (successModal) successModal.classList.remove('show');
     }
 
-    // Opcional: Fechar o modal clicando fora da caixa
+    // Fechar o modal clicando fora da caixa
     window.onclick = function(event) {
         if (event.target == confirmationModal) {
             hideConfirmationModal();
@@ -155,6 +154,13 @@
             hideSuccessModal();
         }
     }
+
+    // Fechar modal de sucesso automaticamente após 5 segundos
+    @if(session('success'))
+    setTimeout(function() {
+        hideSuccessModal();
+    }, 5000);
+    @endif
 </script>
 
 @endsection

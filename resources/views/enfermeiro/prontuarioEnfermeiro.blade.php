@@ -3,6 +3,8 @@
 @section('title', 'Prontuário dos Pacientes')
 
 @section('content')
+
+
 <link rel="stylesheet" href="{{ asset('css/enfermeiro/prontuario.css') }}">
 
 <main class="main-dashboard">
