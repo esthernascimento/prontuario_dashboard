@@ -27,7 +27,12 @@ return [
             'driver' => 'session',
             'provider' => 'enfermeiros', // usa Usuario para autenticação
         ],
+        'recepcionista' => [
+            'driver' => 'session',
+            'provider' => 'recepcionistas',
+        ],
     ],
+
 
     'providers' => [
 
@@ -49,6 +54,10 @@ return [
         'enfermeiros' => [
             'driver' => 'eloquent',
             'model' => App\Models\Usuario::class, // 🔹 MUDANÇA AQUI
+        ],
+        'recepcionistas' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Recepcionista::class,
         ],
     ],
 

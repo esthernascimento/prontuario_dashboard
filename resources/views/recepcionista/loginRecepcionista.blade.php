@@ -59,17 +59,20 @@
             const submitButton = document.getElementById('submit-button');
             const emailInput = document.getElementById('email');
             const senhaInput = document.getElementById('senha');
+            
+            // --- AJUSTE PRINCIPAL ---
+            // Define a URL para onde o AJAX vai enviar o formulário
+            const url = "{{ route('recepcionista.login.submit') }}";
+            // --- FIM DO AJUSTE ---
 
             form.addEventListener('submit', async function (event) {
                 event.preventDefault();
 
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        
-
                 let body = {
                     email: emailInput.value,
-                    senha: senhaInput.value
+                    senha: senhaInput.value 
                 };
 
                 submitButton.disabled = true;
@@ -77,7 +80,7 @@
                 notification.style.display = 'none';
 
                 try {
-                    const response = await fetch(url, {
+                    const response = await fetch(url, { // A variável 'url' agora está definida
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -93,10 +96,12 @@
                         notification.textContent = 'Login realizado com sucesso!';
                         notification.className = 'notification success';
                         notification.style.display = 'block';
-                        window.location.href = responseData.redirect_url;
+                        // Redireciona para a URL enviada pelo Controller
+                        window.location.href = responseData.redirect_url; 
                     } else {
                         let errorMessage = responseData.message || 'Ocorreu um erro.';
                         if (responseData.errors) {
+                            // Pega a primeira mensagem de erro (ex: "Credenciais incorretas")
                             errorMessage = Object.values(responseData.errors)[0][0];
                         }
                         notification.textContent = errorMessage;
@@ -141,3 +146,4 @@
     </script>
 </body>
 </html>
+
