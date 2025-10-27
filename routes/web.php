@@ -38,6 +38,7 @@ use App\Http\Controllers\Enfermeiro\ProntuarioController;
 use App\Http\Controllers\Recepcionista\LoginController as RecepcionistaLoginController;
 use App\Http\Controllers\Recepcionista\RecepcionistaDashboardController;
 use App\Http\Controllers\Recepcionista\AcolhimentoController;
+use App\Http\Controllers\Recepcionista\RecepcionistaConfiguracaoController;
 
 
 // ===================================================================================
@@ -210,6 +211,7 @@ Route::middleware(['web', 'auth:recepcionista'])->prefix('recepcionista')->name(
 
     Route::get('/perfil', [RecepcionistaConfiguracaoController::class, 'perfil'])->name('perfil');
     Route::post('/perfil/atualizar', [RecepcionistaConfiguracaoController::class, 'atualizarPerfil'])->name('atualizarPerfil');
+    Route::post('/trocar-senha', [RecepcionistaConfiguracaoController::class, 'trocarSenha'])->name('trocarSenha');
     
 });
 

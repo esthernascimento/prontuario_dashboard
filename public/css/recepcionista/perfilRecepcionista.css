@@ -1,7 +1,6 @@
 :root {
     --primary-color: #606060; 
     --primary-color-dark: #505050; 
-    --primary-color-light: #808080; 
     --bg-white: #FFFFFF;
     --bg-gray-50: #F9FAFB;
     --bg-gray-100: #F3F4F6;
@@ -9,37 +8,26 @@
     --text-secondary: #6B7280;
     --text-muted: #9CA3AF;
     --border-color: #E5E7EB;
-    --border-focus: #808080; /* Cinza Médio */
+    --border-focus: #808080;
     --success-green: #10B981;
-    --error-red: #EF4444;
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
 }
 
-body {
-    margin: 0;
-    padding: 20px;
-    font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(135deg, #f4f7f6 0%, #F9FAFB 100%);
-    min-height: 100vh;
-}
-
-
+/* ============================================
+   CONTAINER PRINCIPAL
+   ============================================ */
 .cadastrar-container {
     background: var(--bg-white);
-    max-width: 580px;
+    max-width: 680px;
     margin: 50px auto;
     padding: 0;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-xl);
     overflow: hidden;
     animation: slideUp 0.6s ease-out;
-    text-align: center;
 }
 
 @keyframes slideUp {
@@ -53,8 +41,10 @@ body {
     }
 }
 
+/* ============================================
+   HEADER
+   ============================================ */
 .cadastrar-header {
-    /* Gradiente cinza */
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-dark) 100%);
     padding: 32px 36px;
     display: flex;
@@ -63,7 +53,6 @@ body {
     color: white;
     position: relative;
     overflow: hidden;
-    justify-content: center;
 }
 
 .cadastrar-header::before {
@@ -105,23 +94,22 @@ body {
     letter-spacing: -0.5px;
 }
 
-
+/* ============================================
+   FORMULÁRIO
+   ============================================ */
 .cadastrar-container form {
-    padding: 32px 36px;
+    padding: 40px 48px;
 }
 
-
 .input-group {
-    margin-bottom: 18px;
+    margin-bottom: 22px;
     animation: fadeIn 0.6s ease-out backwards;
     text-align: left;
 }
 
-.input-group:nth-child(1) { animation-delay: 0.1s; }
-.input-group:nth-child(2) { animation-delay: 0.15s; }
+.input-group:nth-child(2) { animation-delay: 0.1s; }
 .input-group:nth-child(3) { animation-delay: 0.2s; }
-.input-group:nth-child(4) { animation-delay: 0.25s; }
-.input-group:nth-child(5) { animation-delay: 0.3s; }
+.input-group:nth-child(4) { animation-delay: 0.3s; }
 
 @keyframes fadeIn {
     from {
@@ -134,16 +122,24 @@ body {
     }
 }
 
+.input-group label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
 
-.cadastrar-container form input:not([type="submit"]):not([type="button"]),
-.custom-select {
+.cadastrar-container form input[type="text"],
+.cadastrar-container form input[type="email"],
+.cadastrar-container form input[type="password"] {
     width: 100%;
-    padding: 11px 16px;
+    padding: 13px 18px;
     border-radius: var(--radius-md);
     border: 2px solid var(--border-color);
     background: var(--bg-gray-50);
     color: var(--text-primary);
-    font-size: 0.95rem;
+    font-size: 1rem;
     box-sizing: border-box;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     outline: none;
@@ -155,52 +151,70 @@ body {
     font-weight: 400;
 }
 
-.cadastrar-container form input:hover,
-.custom-select:hover {
-    border-color: var(--primary-color-light);
+.cadastrar-container form input:hover {
+    border-color: var(--primary-color);
     background: white;
 }
 
-.cadastrar-container form input:focus,
-.custom-select:focus {
+.cadastrar-container form input:focus {
     border-color: var(--border-focus); 
     background: white;
-    /* Adaptado para o cinza */
     box-shadow: 0 0 0 4px rgba(128, 128, 128, 0.15); 
     transform: translateY(-2px);
 }
 
-.cadastrar-container form input:not(:placeholder-shown) {
+.cadastrar-container form input:not(:placeholder-shown):valid {
     background: white;
-    border-color: var(--success-green); 
 }
 
+/* ============================================
+   ALERTAS
+   ============================================ */
+.alert {
+    padding: 14px 18px;
+    border-radius: var(--radius-md);
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
 
+.alert-success {
+    background-color: #D1FAE5;
+    color: #065F46;
+    border: 1px solid #6EE7B7;
+}
+
+.alert-danger {
+    background-color: #FEE2E2;
+    color: #991B1B;
+    border: 1px solid #FCA5A5;
+}
+
+/* ============================================
+   BOTÕES
+   ============================================ */
 .button-group {
     display: flex;
-    justify-content: center;
-    gap: 15px; 
-    margin-top: 25px;
+    justify-content: space-between;
+    gap: 18px;
+    margin-top: 32px;
 }
 
 .save-button {
-    display: inline-block;
-    /* Gradiente cinza */
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-dark) 100%);
     color: white;
-    padding: 12px 25px;
+    padding: 14px 32px;
     border: none;
-    border-radius: 25px;
-    font-size: 16px;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    width: auto; 
-    flex-grow: 1;
-    margin: 0;
+    flex: 1;
     box-shadow: var(--shadow-md);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+    font-family: inherit;
 }
 
 .save-button::before {
@@ -220,7 +234,6 @@ body {
 
 .save-button:hover {
     transform: translateY(-3px);
-    /* Sombra cinza */
     box-shadow: 0 12px 24px -6px rgba(96, 96, 96, 0.5);
 }
 
@@ -229,19 +242,21 @@ body {
 }
 
 .btn-trocar-senha {
-    display: inline-block;
     background-color: var(--bg-gray-100); 
     color: var(--text-primary);
-    text-decoration: none;
-    padding: 12px 25px;
+    padding: 14px 32px;
     border: 2px solid var(--border-color);
-    border-radius: 25px;
-    font-size: 16px;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    width: auto; 
-    flex-grow: 1;
+    flex: 1;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
 }
 
 .btn-trocar-senha:hover {
@@ -255,7 +270,9 @@ body {
     transform: translateY(0);
 }
 
-
+/* ============================================
+   MODAL
+   ============================================ */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -284,7 +301,7 @@ body {
     background: white;
     border-radius: var(--radius-lg);
     padding: 45px 40px;
-    max-width: 480px;
+    max-width: 520px;
     width: 90%;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
     text-align: center;
@@ -311,7 +328,6 @@ body {
     left: 0;
     right: 0;
     height: 5px;
-    /* Gradiente cinza */
     background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-color-dark) 100%);
 }
 
@@ -325,11 +341,6 @@ body {
 .icon-warning {
     color: #F59E0B;
     filter: drop-shadow(0 4px 16px rgba(245, 158, 11, 0.4));
-}
-
-.icon-success {
-    color: var(--success-green);
-    filter: drop-shadow(0 4px 16px rgba(16, 185, 129, 0.4));
 }
 
 @keyframes iconPulse {
@@ -352,12 +363,16 @@ body {
     line-height: 1.6;
 }
 
-
+.modal-box .input-group {
+    text-align: left;
+    margin-bottom: 18px;
+}
 
 .modal-buttons {
     display: flex;
     gap: 12px;
     justify-content: center;
+    margin-top: 28px;
 }
 
 .modal-btn {
@@ -388,7 +403,6 @@ body {
 }
 
 .modal-btn-confirm {
-    /* Gradiente cinza */
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-dark) 100%);
     color: white;
     box-shadow: var(--shadow-md);
@@ -411,7 +425,6 @@ body {
 
 .modal-btn-confirm:hover {
     transform: translateY(-2px);
-    /* Sombra cinza */
     box-shadow: 0 12px 24px -6px rgba(96, 96, 96, 0.5);
 }
 
@@ -422,91 +435,75 @@ body {
 /* ============================================
    RESPONSIVIDADE
    ============================================ */
-
 @media (max-width: 768px) {
     .cadastrar-container {
-        margin: 20px auto;
-        border-radius: 0;
-        box-shadow: none;
+        margin: 20px;
+        max-width: 100%;
     }
 
     .cadastrar-container form {
-        padding: 20px;
+        padding: 32px 28px;
     }
 
     .cadastrar-header {
-        padding: 24px 20px;
+        padding: 24px 28px;
     }
 
     .cadastrar-header h1 {
         font-size: 1.4rem;
     }
 
-    .input-group {
-        margin-bottom: 18px;
-    }
-
-    .save-button {
-        width: 100%;
+    .button-group {
+        flex-direction: column;
+        gap: 12px;
     }
 
     .modal-box {
-        width: 95%;
+        width: 92%;
         padding: 40px 30px;
     }
 
-    .modal-box h2 {
-        font-size: 1.6rem;
-    }
-
-    .modal-box p {
-        font-size: 1rem;
+    .modal-buttons {
+        flex-direction: column;
     }
 }
 
 @media (max-width: 480px) {
-    body {
-        padding: 10px;
-    }
-
     .cadastrar-container {
-        margin: 10px auto;
+        margin: 10px;
+        border-radius: var(--radius-md);
     }
 
     .cadastrar-header {
-        padding: 20px 15px;
+        padding: 20px;
     }
 
     .cadastrar-header h1 {
         font-size: 1.2rem;
     }
 
+    .cadastrar-header i {
+        font-size: 2rem;
+    }
+
     .cadastrar-container form {
-        padding: 15px;
+        padding: 24px 20px;
     }
 
     .input-group label {
-        font-size: 0.85rem;
-    }
-
-    .cadastrar-container form input:not([type="submit"]):not([type="button"]),
-    .custom-select {
-        padding: 10px 12px;
         font-size: 0.9rem;
     }
 
-    .save-button {
-        padding: 12px 20px;
+    .cadastrar-container form input[type="text"],
+    .cadastrar-container form input[type="email"],
+    .cadastrar-container form input[type="password"] {
+        padding: 12px 16px;
         font-size: 0.95rem;
     }
 
-    .button-group {
-        flex-direction: column;
-        gap: 10px;
-    }
-
+    .save-button,
     .btn-trocar-senha {
-        padding: 10px 20px;
+        padding: 12px 24px;
         font-size: 0.95rem;
     }
 
@@ -525,13 +522,5 @@ body {
 
     .modal-box p {
         font-size: 0.95rem;
-    }
-
-    .modal-buttons {
-        flex-direction: column;
-    }
-
-    .modal-btn {
-        width: 100%;
     }
 }
