@@ -207,6 +207,10 @@ Route::middleware(['web', 'auth:recepcionista'])->prefix('recepcionista')->name(
 
     // Rota de Logout
     Route::post('/logout', [RecepcionistaLoginController::class, 'logout'])->name('logout');
+
+    Route::get('/perfil', [RecepcionistaConfiguracaoController::class, 'perfil'])->name('perfil');
+    Route::post('/perfil/atualizar', [RecepcionistaConfiguracaoController::class, 'atualizarPerfil'])->name('atualizarPerfil');
+    
 });
 
 // (As suas rotas /dashboardRecepcionista e /loginRecepcionista antigas foram

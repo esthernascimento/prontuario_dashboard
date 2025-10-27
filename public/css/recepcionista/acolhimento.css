@@ -1,128 +1,422 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
+
+:root {
+    --cinza-escuro: #606060;
+    --cinza-medio: #808080;
+    --cinza-claro: #dcdcdc;
+    --cinza-hover: #505050;
+    --cinza-light: #f5f5f5;
+}
 
 body {
+    font-family: 'Montserrat', sans-serif;
     background-color: #f4f7f6;
-    font-family: 'Inter', sans-serif;
     color: #333;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    min-height: 100vh;
 }
 
-.container {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
+.logo-recepcionista{
+    width: 220px;
+    margin-bottom: 30px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
+.sidebar {
+    width: 260px;
+    background: linear-gradient(180deg, var(--cinza-escuro) 0%, var(--cinza-medio) 100%);
+    color: white;
+    padding: 24px 16px;
+    flex-shrink: 0;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar .sidebar-header {
+    font-size: 26px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 40px;
+    letter-spacing: 0.5px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 17px;
+    font-weight: 500;
+    padding: 14px 19px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+.sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    transform: translateX(5px);
+}
+
+.sidebar .nav-link.active {
+    background-color: #ffffff;
+    color: var(--cinza-escuro);
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar .nav-link i {
+    font-size: 19px;
+    margin-right: 12px;
+}
+
+.sidebar .logout-btn {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-weight: 600;
+    padding: 12px;
+    transition: all 0.3s ease;
+}
+
+.sidebar .logout-btn:hover {
+    background-color: rgba(220, 53, 69, 0.9);
+    border-color: #333;
+    transform: translateY(-2px);
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 40px 48px;
+    overflow-y: auto;
+    background-color: #f4f7f6;
+}
+
+.container-fluid {
+    max-width: 1400px;
+}
+
+h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--cinza-escuro);
+    margin-bottom: 32px;
+    letter-spacing: -0.5px;
+}
+
+h4 {
+    font-size: 21px;
+    font-weight: 700;
+    color: var(--cinza-escuro);
+}
+
+/* ========== ALERTAS ========== */
+.alert {
+    border: none;
+    border-radius: 12px;
+    padding: 20px 24px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #e8e8e8 0%, var(--cinza-claro) 100%);
+    color: var(--cinza-escuro);
+    border-left: 4px solid var(--cinza-medio);
+}
+
+.alert i {
+    font-size: 19px;
+}
+
+/* ========== CARDS ========== */
 .card {
     border: none;
-    border-radius: 0.75rem;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.07);
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
     overflow: hidden;
+    transition: all 0.3s ease;
+    background-color: #ffffff;
+}
+
+.card:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    transform: translateY(-3px);
 }
 
 .card-header {
-    background-color: #ffffff;
-    border-bottom: 1px solid #e9ecef;
-    padding: 1.25rem 1.75rem;
+    background: linear-gradient(135deg, var(--cinza-escuro) 0%, var(--cinza-medio) 100%);
+    color: white;
+    border-bottom: none;
+    padding: 24px 32px;
 }
 
 .card-header h4 {
-    font-weight: 700;
-    color: #0d6efd;
+    color: white;
     margin-bottom: 0;
+    font-weight: 700;
+    font-size: 22px;
 }
 
+.card-body {
+    padding: 32px 40px;
+}
+
+/* ========== FORMULÁRIOS ========== */
 .form-label {
     font-weight: 600;
-    color: #555;
-    margin-bottom: 0.5rem;
+    color: #333;
+    margin-bottom: 12px;
+    font-size: 17px;
 }
 
-.form-control:focus {
-    border-color: #0d6efd;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+.form-control,
+.form-control-lg {
+    border: 2px solid #e0e6ed;
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    font-family: 'Montserrat', sans-serif;
 }
 
+.form-control:focus,
+.form-control-lg:focus {
+    border-color: var(--cinza-medio);
+    box-shadow: 0 0 0 4px rgba(128, 128, 128, 0.15);
+    transform: translateY(-2px);
+}
+
+.form-control:disabled {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* ========== BUSCA DE PACIENTES ========== */
 #busca-container {
     position: relative;
 }
 
 #resultados_busca_paciente {
-    position: absolute;
-    top: 100%;
+    position: relative;
     left: 0;
     right: 0;
     z-index: 1000;
-    border-top: none;
-    border-radius: 0 0 0.5rem 0.5rem;
-    max-height: 300px;
+    border-radius: 12px;
+    max-height: 600px;
     overflow-y: auto;
     background-color: #fff;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    display: none; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    display: none;
+    border: 2px solid var(--cinza-medio);
+}
+
+#resultados_busca_paciente .list-group-item {
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 20px 24px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+#resultados_busca_paciente .list-group-item:last-child {
+    border-bottom: none;
 }
 
 #resultados_busca_paciente .list-group-item-action:hover {
-    background-color: #f0f7ff;
+    background: linear-gradient(90deg, #f5f5f5 0%, #e8e8e8 100%);
+    transform: translateX(35px);
 }
 
+#resultados_busca_paciente strong {
+    color: var(--cinza-escuro);
+    font-weight: 700;
+    font-size: 18px;
+   
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+#resultados_busca_paciente small {
+    color: #6c757d;
+    font-weight: 500;
+    display: block;
+    margin-top: 4px;
+}
+
+/* ========== INFO PACIENTE SELECIONADO ========== */
 #paciente_selecionado_info {
-    background-color: #e6f7ff;
-    border-color: #b3e0ff;
-    color: #0056b3;
+    background: linear-gradient(135deg, #f5f5f5 0%, var(--cinza-claro) 100%);
+    border: 2px solid var(--cinza-medio);
+    border-radius: 12px;
+    padding: 24px 32px;
+    margin-top: 24px;
+    box-shadow: 0 4px 12px rgba(96, 96, 96, 0.1);
+}
+
+#paciente_selecionado_info strong {
+    color: var(--cinza-escuro);
+    font-weight: 700;
+    font-size: 17px;
+}
+
+#paciente_selecionado_info span {
+    color: var(--cinza-medio);
+    font-weight: 600;
+}
+
+/* ========== CLASSIFICAÇÃO DE RISCO ========== */
+/* ========== CLASSIFICAÇÃO DE RISCO - VERSÃO PROFISSIONAL ========== */
+#botoes_risco {
+    gap: 12px; /* Reduzi o gap para ficarem mais unidos */
 }
 
 #botoes_risco .btn {
     font-weight: 700;
     letter-spacing: 0.5px;
-    padding: 1rem;
-    min-height: 80px;
-    transition: all 0.2s ease-in-out;
+    padding: 16px 10px; /* Reduzi o padding para acomodar a quebra de linha */
+    min-height: 90px;
+    transition: all 0.3s ease;
     display: flex;
+    flex-direction: column; /* Coloca os itens em coluna (ícone e texto) */
     align-items: center;
     justify-content: center;
     text-align: center;
+    border: 3px solid transparent;
+    font-size: 14px; /* Tamanho da fonte do texto secundário */
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    line-height: 1.2; /* Espaçamento entre as linhas */
+}
+
+#botoes_risco .btn i {
+    font-size: 20px; /* Tamanho do ícone */
+    margin-bottom: 4px; /* Espaço entre o ícone e o texto */
 }
 
 #botoes_risco .btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* Mantive o efeito de levantar, mas você pode mudar para algo mais sutil como box-shadow */
+    transform: translateY(-3px); 
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 #botoes_risco .btn-check:checked + .btn {
-    transform: scale(1.03);
-    box-shadow: 0 0 0 4px #ffffff, 0 6px 20px rgba(0, 0, 0, 0.2);
+    /* Efeito de seleção mais sutil e direto */
+    transform: scale(1); /* Removido o scale(1.05) */
+    box-shadow: 0 0 0 4px #ffffff, 0 0 0 8px rgba(0, 0, 0, 0.4); /* Anel de foco mais limpo */
     z-index: 10;
+    border-width: 4px;
+}
+
+/* ------------------------------------------- */
+/* Cores (Mantidas, mas ajustando a cor do texto do Amarelo) */
+
+#risco_vermelho + label {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+#risco_vermelho:checked + label {
+    border-color: #a71d2a;
+}
+
+#risco_laranja + label {
+    background-color: #fd7e14;
+    border-color: #fd7e14;
+}
+#risco_laranja:checked + label {
+    border-color: #ca6510;
 }
 
 #risco_amarelo + label {
     background-color: #ffc107;
-    color: #000;
-    border-color: #ffc107;
-}
-#risco_amarelo:hover + label {
-    background-color: #ffca2c;
+    color: #000; /* Preto para contraste no amarelo */
     border-color: #ffc107;
 }
 #risco_amarelo:checked + label {
-    background-color: #ffca2c;
+    border-color: #cc9a06;
     color: #000;
-    border-color: #ffc107;
 }
 
+#risco_verde + label {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+#risco_verde:checked + label {
+    border-color: #1e7e34;
+}
+
+#risco_azul + label {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+#risco_azul:checked + label {
+    border-color: #0056b3;
+}
+
+@media (max-width: 992px) {
+    #botoes_risco {
+        gap: 8px; /* Reduz o gap no mobile */
+    }
+    #botoes_risco .btn {
+        min-height: 80px;
+        font-size: 13px;
+    }
+    #botoes_risco .btn i {
+        font-size: 18px;
+    }
+}
+/* ========== BOTÃO DE SUBMIT ========== */
 button[type="submit"] {
     font-weight: 700;
+    font-size: 20px;
+    padding: 20px 32px;
+    border-radius: 12px;
     transition: all 0.3s ease;
+    background: linear-gradient(135deg, var(--cinza-escuro) 0%, var(--cinza-medio) 100%);
+    border: none;
+    box-shadow: 0 6px 20px rgba(96, 96, 96, 0.3);
+    color: white;
 }
 
 button[type="submit"]:hover {
-    background-color: #0b5ed7;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+    background: linear-gradient(135deg, var(--cinza-medio) 0%, var(--cinza-hover) 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(96, 96, 96, 0.4);
 }
 
+button[type="submit"]:active {
+    transform: translateY(-1px);
+}
+
+/* ========== ANIMAÇÕES ========== */
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(30px);
     }
     to {
         opacity: 1;
@@ -130,6 +424,154 @@ button[type="submit"]:hover {
     }
 }
 
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 #passo_2_acolhimento {
     animation: fadeIn 0.6s ease-out;
+}
+
+.card {
+    animation: slideIn 0.5s ease-out;
+}
+
+#resultados_busca_paciente::-webkit-scrollbar {
+    width: 8px;
+}
+
+#resultados_busca_paciente::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+#resultados_busca_paciente::-webkit-scrollbar-thumb {
+    background: var(--cinza-medio);
+    border-radius: 10px;
+}
+
+#resultados_busca_paciente::-webkit-scrollbar-thumb:hover {
+    background: var(--cinza-escuro);
+}
+
+/* ========== RESPONSIVIDADE ========== */
+@media (max-width: 992px) {
+    .main-content {
+        padding: 24px 32px;
+    }
+    
+    #botoes_risco .btn {
+        min-height: 70px;
+        font-size: 15px;
+    }
+    
+    h2 {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        padding: 16px;
+    }
+    
+    body {
+        flex-direction: column;
+    }
+    
+    #botoes_risco {
+        flex-direction: column;
+    }
+    
+    #botoes_risco .btn {
+        width: 100%;
+    }
+}
+
+/* ========== BOAS-VINDAS RECEPCIONISTA ========== */
+.welcome-banner-rec {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, var(--cinza-claro) 0%, var(--cinza-light) 100%);
+    border-radius: 16px;
+    padding: 24px 32px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+    border: 1px solid var(--cinza-claro);
+    animation: fadeIn 0.8s ease-out;
+}
+
+.banner-left-rec {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.banner-logo-rec {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.banner-center-rec {
+    flex-grow: 1;
+    padding: 0 32px;
+    text-align: center;
+}
+
+.banner-center-rec h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--cinza-escuro);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+
+.banner-center-rec .name-rec {
+    color: var(--cinza-medio);
+}
+
+.banner-center-rec p {
+    color: var(--cinza-medio);
+    margin: 0;
+    font-size: 15px;
+}
+
+.banner-right-rec {
+    font-size: 48px;
+    color: var(--cinza-escuro);
+    flex-shrink: 0;
+    opacity: 0.8;
+}
+
+
+@media (max-width: 768px) {
+    .welcome-banner-rec {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .banner-center-rec {
+        padding: 16px 0;
+    }
+
+    .banner-right-rec {
+        display: none; /* Esconde o ícone grande em telas pequenas */
+    }
+
+    .banner-center-rec h2 {
+        font-size: 20px;
+    }
 }
