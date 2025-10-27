@@ -1,4 +1,4 @@
-@extends('layouts.recepcionista')
+@extends('recepcionista.templates.recTemplate')
 
 @section('content')
 
