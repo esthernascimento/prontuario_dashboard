@@ -140,4 +140,44 @@ class PacienteController extends Controller
         return redirect()->route('admin.pacientes.index')
             ->with('success', $mensagem);
     }
+
+    // ===================================================================
+    // --- MÉTODO ADICIONADO PARA O ACOLHIMENTO DO RECEPCIONISTA ---
+    // ===================================================================
+
+    /**
+     * Busca pacientes dinamicamente para o formulário de acolhimento.
+     * Responde via AJAX (JSON) para a view do recepcionista.
+     */
+    public function buscar(Request $request)
+    {
+        // 1. Valida se o termo de busca veio
+        if (!$request->has('term')) {
+            return response()->json(['erro' => 'Nenhum termo de busca fornecido'], 400);
+        }
+
+        $termo = $request->input('term');
+
+        try {
+            // 2. Executa a busca no banco de dados
+            // Usa os nomes de coluna do seu controller (nomePaciente, cpfPaciente, etc.)
+            $pacientes = Paciente::where('statusPaciente', true) // <<--- SÓ BUSCA PACIENTES ATIVOS
+                                ->where(function($query) use ($termo) {
+                                    $query->where('nomePaciente', 'LIKE', '%' . $termo . '%')
+                                          ->orWhere('cpfPaciente', 'LIKE', '%' . $termo . '%')
+                                          ->orWhere('cartaoSusPaciente', 'LIKE', '%' . $termo . '%');
+                                })
+                                ->select('idPaciente', 'nomePaciente', 'dataNascPaciente', 'cpfPaciente') // <<--- USA 'idPaciente'
+                                ->take(10) // Limita a 10 resultados
+                                ->get();
+            
+            // 3. Retorna os resultados como JSON
+            return response()->json($pacientes);
+
+        } catch (\Exception $e) {
+            // 4. Em caso de erro, loga e retorna um erro 500
+            Log::error('Erro ao buscar paciente para acolhimento: ' . $e->getMessage());
+            return response()->json(['erro' => 'Erro interno ao processar a busca'], 500);
+        }
+    }
 }
