@@ -11,7 +11,6 @@
             <h1>Perfil do Enfermeiro</h1>
         </div>
 
-        {{-- Mensagens de alerta --}}
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif

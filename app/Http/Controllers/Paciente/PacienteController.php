@@ -140,15 +140,6 @@ class PacienteController extends Controller
         return redirect()->route('admin.pacientes.index')
             ->with('success', $mensagem);
     }
-
-    // ===================================================================
-    // --- MÉTODO ADICIONADO PARA O ACOLHIMENTO DO RECEPCIONISTA ---
-    // ===================================================================
-
-    /**
-     * Busca pacientes dinamicamente para o formulário de acolhimento.
-     * Responde via AJAX (JSON) para a view do recepcionista.
-     */
     public function buscar(Request $request)
     {
         // 1. Valida se o termo de busca veio

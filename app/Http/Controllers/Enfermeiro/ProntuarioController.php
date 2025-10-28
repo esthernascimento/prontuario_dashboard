@@ -14,10 +14,15 @@ class ProntuarioController extends Controller
 {
     public function index()
     {
-        $pacientes = Paciente::orderBy('nomePaciente')->get();
+ 
+        $pacientes = Paciente::whereHas('consultas', function ($query) {
+            $query->where('status_atendimento', 'AGUARDANDO_TRIAGEM');
+        })
+        ->orderBy('nomePaciente', 'asc')
+        ->get();
+
         return view('enfermeiro.prontuarioEnfermeiro', compact('pacientes'));
     }
-
     public function create($pacienteId)
     {
         $paciente = Paciente::findOrFail($pacienteId);
@@ -43,7 +48,6 @@ class ProntuarioController extends Controller
             'medicacoes_ministradas' => 'nullable|string',
         ]);
 
-        // Pega o enfermeiro logado baseado no usuário
         $enfermeiro = Enfermeiro::where('id_usuario', Auth::id())->firstOrFail();
 
         $anotacao = new AnotacaoEnfermagem();
@@ -72,7 +76,6 @@ class ProntuarioController extends Controller
     {
         $paciente = Paciente::findOrFail($pacienteId);
 
-        // Pega todas as anotações do paciente
         $anotacoes = AnotacaoEnfermagem::where('idPacienteFK', $pacienteId)
             ->orderBy('data_hora', 'desc')
             ->get();

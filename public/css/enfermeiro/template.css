@@ -1,7 +1,3 @@
-/* ========== TEMPLATE ENFERMEIRO - CSS ========== */
-/* Este CSS afeta APENAS o template (sidebar e header) */
-
-/* Sidebar começa do topo absoluto sem gaps */
 .sidebar-enfermeiro {
   position: fixed;
   top: 0;

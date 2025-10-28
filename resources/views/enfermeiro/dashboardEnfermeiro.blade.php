@@ -35,15 +35,23 @@
         </div>
 
         <div class="metrics">
-            <div class="metric-card">
-                <i class="bi bi-person-fill"></i> Pacientes no sistema
-                <strong>{{ $patientsCount ?? 0 }}</strong>
-            </div>
-            <div class="metric-card">
-                <i class="bi bi-file-earmark-text-fill"></i> Prontuários disponíveis
-                <strong>{{ $prontuariosCount ?? 0 }}</strong>
-            </div>
+    <div class="metric-card">
+        <div class="container-img">
+            {{-- Substitua a tag <img> pela tag <i> do Bootstrap Icons --}}
+            <i class="bi bi-person-fill"></i> 
+            <span>Pacientes no sistema</span>
         </div>
+        <strong>{{ $patientsCount ?? 0 }}</strong>
+    </div>
+    
+    <div class="metric-card">
+        <div class="container-img">
+            <i class="bi bi-file-earmark-text-fill"></i>
+            <span>Prontuários disponíveis</span>
+        </div>
+        <strong>{{ $prontuariosCount ?? 0 }}</strong>
+    </div>
+</div>
 
         <div class="content-wrapper">
             <div class="charts-left chart-container">
