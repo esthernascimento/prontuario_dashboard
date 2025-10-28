@@ -1,6 +1,6 @@
 @extends('enfermeiro.templates.enfermeiroTemplate')
 
-@section('title', 'Registrar Anotação')
+@section('title', 'Registrar Triagem')
 
 @section('content')
 
@@ -13,7 +13,8 @@
     <div class="cadastrar-container">
         <div class="cadastrar-header">
             <i class="bi bi-journal-plus icon"></i>
-            <h1>Registrar Nova Anotação de Enfermagem</h1>
+            {{-- Título atualizado para refletir a ação --}}
+            <h1>Realizar Triagem e Anotação</h1>
         </div>
 
         <div class="paciente-info">
@@ -34,9 +35,8 @@
                     <span>{{ \Carbon\Carbon::parse($paciente->dataNascPaciente)->format('d/m/Y') }}</span>
                 </div>
 
-                <br>
-                
                 {{-- Variável $enfermeiro (Passada pelo Controller) --}}
+                {{-- [NOTA: O Controller precisa passar a variável $enfermeiro no método 'create'] --}}
                 <div class="info-item">
                     <strong>Enfermeiro(a) Responsável:</strong>
                     <span>{{ $enfermeiro->nomeEnfermeiro ?? (Auth::user()->name ?? 'N/A') }}</span>
@@ -49,6 +49,16 @@
                     <strong>Função:</strong>
                     <span>Enfermeiro(a)</span>
                 </div>
+
+                <!-- ================================================================ -->
+                <!-- --- ADICIONADO: QUEIXA PRINCIPAL DO RECEPCIONISTA --- -->
+                <!-- ================================================================ -->
+                {{-- A variável $consulta vem do ProntuarioController@create --}}
+                <div class="info-item queixa-principal">
+                    <strong>Queixa Principal (Registrada na Recepção):</strong>
+                    <span>"{{ $consulta->queixa_principal }}"</span>
+                </div>
+
             </div>
         </div>
 
@@ -56,8 +66,37 @@
         <form action="{{ route('enfermeiro.anotacao.store', $paciente->idPaciente) }}" method="POST">
             @csrf
 
+            <!-- ================================================================ -->
+            <!-- --- ADICIONADO: ID DA CONSULTA (OBRIGATÓRIO) --- -->
+            <!-- ================================================================ -->
+            {{-- Campo oculto para enviar o ID da consulta que está sendo atualizada --}}
+            <input type="hidden" name="idConsulta" value="{{ $consulta->idConsultaPK }}">
+
             {{-- CORREÇÃO DE ERRO: Campo tipo_registro é REQUIRED no Controller mas não existia no form --}}
-            <input type="hidden" name="tipo_registro" value="Anotação de Rotina"> 
+            <input type="hidden" name="tipo_registro" value="Anotação de Triagem"> 
+
+            <!-- ================================================================ -->
+            <!-- --- ADICIONADO: CLASSIFICAÇÃO DE RISCO --- -->
+            <!-- ================================================================ -->
+            <div class="form-section-title">Classificação de Risco (Obrigatório)</div>
+            <div class="input-group">
+                <div id="botoes_risco">
+                    <input type="radio" name="classificacao_risco" id="risco_vermelho" value="vermelho" class="btn-check" required>
+                    <label class="btn btn-vermelho" for="risco_vermelho">VERMELHO (Emergência)</label>
+                    
+                    <input type="radio" name="classificacao_risco" id="risco_laranja" value="laranja" class="btn-check">
+                    <label class="btn btn-laranja" for="risco_laranja">LARANJA (Muito Urgente)</label>
+                    
+                    <input type="radio" name="classificacao_risco" id="risco_amarelo" value="amarelo" class="btn-check">
+                    <label class="btn btn-amarelo" for="risco_amarelo">AMARELO (Urgente)</label>
+                    
+                    <input type="radio" name="classificacao_risco" id="risco_verde" value="verde" class="btn-check">
+                    <label class="btn btn-verde" for="risco_verde">VERDE (Pouco Urgente)</label>
+                    
+                    <input type="radio" name="classificacao_risco" id="risco_azul" value="azul" class="btn-check">
+                    <label class="btn btn-azul" for="risco_azul">AZUL (Não Urgente)</label>
+                </div>
+            </div>
 
             <div class="form-section-title">Dados da Anotação</div>
 
@@ -201,7 +240,7 @@
                     <i class="bi bi-x-circle"></i> Cancelar
                 </a>
                 <button type="submit" class="save-button">
-                    <i class="bi bi-check-circle"></i> Registrar Anotação
+                    <i class="bi bi-check-circle"></i> Salvar Triagem e Encaminhar
                 </button>
             </div>
         </form>

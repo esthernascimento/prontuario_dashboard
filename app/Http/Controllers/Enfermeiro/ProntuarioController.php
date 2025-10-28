@@ -8,13 +8,14 @@ use App\Models\Paciente;
 use App\Models\Unidade;
 use App\Models\AnotacaoEnfermagem;
 use App\Models\Enfermeiro;
+use App\Models\Consulta; // --- ADICIONADO --- Precisamos do modelo Consulta
 use Illuminate\Support\Facades\Auth;
 
 class ProntuarioController extends Controller
 {
     public function index()
     {
- 
+        // Esta lógica está perfeita. Busca os pacientes que têm uma consulta aguardando triagem.
         $pacientes = Paciente::whereHas('consultas', function ($query) {
             $query->where('status_atendimento', 'AGUARDANDO_TRIAGEM');
         })
@@ -23,17 +24,40 @@ class ProntuarioController extends Controller
 
         return view('enfermeiro.prontuarioEnfermeiro', compact('pacientes'));
     }
+
+    /**
+     * Mostra o formulário de triagem (anotação)
+     */
     public function create($pacienteId)
     {
         $paciente = Paciente::findOrFail($pacienteId);
         $unidades = Unidade::orderBy('nomeUnidade')->get();
 
-        return view('enfermeiro.cadastrarProntuarioEnfermeiro', compact('paciente', 'unidades'));
+        // ================================================================
+        // --- ADICIONADO ---
+        // Precisamos encontrar a consulta que o recepcionista abriu.
+        // Se houver várias, pega a mais recente que ainda está aguardando.
+        $consulta = Consulta::where('idPacienteFK', $pacienteId)
+                            ->where('status_atendimento', 'AGUARDANDO_TRIAGEM')
+                            ->orderBy('dataConsulta', 'desc')
+                            ->firstOrFail(); // Falha se não encontrar a consulta (o que é bom)
+        // ================================================================
+
+        // Passa a $consulta para a view
+        return view('enfermeiro.cadastrarProntuarioEnfermeiro', compact('paciente', 'unidades', 'consulta'));
     }
 
+    /**
+     * Salva a triagem (Anotação de Enfermagem) E atualiza a Consulta.
+     */
     public function store(Request $request, $pacienteId)
     {
         $request->validate([
+            // --- ADICIONADO ---
+            'idConsulta' => 'required|exists:tbConsulta,idConsultaPK',
+            'classificacao_risco' => 'required|string',
+            // ------------------
+
             'tipo_registro' => 'required|string',
             'data_hora' => 'required|date',
             'descricao' => 'required|string',
@@ -50,6 +74,7 @@ class ProntuarioController extends Controller
 
         $enfermeiro = Enfermeiro::where('id_usuario', Auth::id())->firstOrFail();
 
+        // 1. Salva a Anotação de Enfermagem (seu código original)
         $anotacao = new AnotacaoEnfermagem();
         $anotacao->idPacienteFK = $pacienteId;
         $anotacao->idEnfermeiroFK = $enfermeiro->idEnfermeiroPK; // pega o id correto
@@ -65,11 +90,19 @@ class ProntuarioController extends Controller
         $anotacao->dor = $request->dor;
         $anotacao->alergias = $request->alergias;
         $anotacao->medicacoes_ministradas = $request->medicacoes_ministradas;
-
         $anotacao->save();
 
+     
+      
+        $consulta = Consulta::findOrFail($request->idConsulta);
+        $consulta->status_atendimento = 'AGUARDANDO_CONSULTA'; 
+        $consulta->classificacao_risco = $request->classificacao_risco; 
+        $consulta->idEnfermeiroFK = $enfermeiro->idEnfermeiroPK;
+        $consulta->save();
+     
+
         return redirect()->route('enfermeiro.prontuario')
-            ->with('success', 'Anotação registrada com sucesso!');
+            ->with('success', 'Triagem realizada! Paciente encaminhado para consulta.');
     }
 
     public function show($pacienteId)
