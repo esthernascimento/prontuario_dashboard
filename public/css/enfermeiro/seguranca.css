@@ -1,8 +1,4 @@
-/* ============================================
-   SEGURANÇA - CSS PROFISSIONAL (TEMA VERDE)
-   ============================================ */
-
-   :root {
+:root {
     --primary-green: #0a400c;
     --primary-green-dark: #062806;
     --primary-green-light: #0d5810;
@@ -38,9 +34,6 @@ body {
     min-height: 100vh;
 }
 
-/* ============================================
-   CONTAINER PRINCIPAL DA PÁGINA DE SEGURANÇA
-   ============================================ */
 .security-container {
     background: var(--bg-white);
     max-width: 580px;
@@ -63,9 +56,6 @@ body {
     }
 }
 
-/* ============================================
-   CABEÇALHO (h1 e p diretos)
-   ============================================ */
 .security-container > h1 {
     background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
     padding: 32px 36px;
@@ -121,9 +111,6 @@ body {
     line-height: 1.6;
 }
 
-/* ============================================
-   SEÇÃO DE ALTERAR SENHA
-   ============================================ */
 .security-section {
     background: var(--bg-white);
     padding: 32px 36px;
@@ -153,9 +140,6 @@ body {
     border-radius: 3px;
 }
 
-/* ============================================
-   FORMULÁRIO DE SEGURANÇA
-   ============================================ */
 .security-form {
     max-width: 100%;
     margin: 0 auto;
@@ -188,9 +172,6 @@ body {
     transition: color 0.3s ease;
 }
 
-/* ============================================
-   WRAPPER DO INPUT COM OLHINHO
-   ============================================ */
 .password-wrapper {
     position: relative;
     display: flex;
@@ -233,9 +214,6 @@ body {
     border-color: var(--success-green);
 }
 
-/* ============================================
-   ÍCONE DO OLHINHO
-   ============================================ */
 .toggle-password {
     position: absolute;
     right: 14px;
@@ -273,9 +251,6 @@ body {
     display: block;
 }
 
-/* ============================================
-   BOTÃO PRIMÁRIO (ALTERAR SENHA)
-   ============================================ */
 .btn-primary {
     display: block;
     background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
@@ -318,9 +293,6 @@ body {
     transform: translateY(-1px);
 }
 
-/* ============================================
-   MENSAGENS DE ALERTA (SUCESSO/ERRO)
-   ============================================ */
 .alert {
     padding: 15px 20px;
     margin: 25px 36px;
@@ -349,9 +321,6 @@ body {
     list-style-type: disc;
 }
 
-/* ============================================
-   MODAIS
-   ============================================ */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -447,9 +416,6 @@ body {
     line-height: 1.6;
 }
 
-/* ============================================
-   BOTÕES DO MODAL
-   ============================================ */
 .modal-buttons {
     display: flex;
     gap: 12px;
@@ -513,9 +479,6 @@ body {
     transform: translateY(0);
 }
 
-/* ============================================
-   RESPONSIVIDADE
-   ============================================ */
 @media (max-width: 768px) {
     body {
         padding: 10px;

@@ -1,8 +1,4 @@
-/* ============================================
-   EDITAR PERFIL - CSS PROFISSIONAL
-   ============================================ */
-
-   :root {
+:root {
     --primary-blue: #0618b9;
     --primary-blue-dark: #04108a;
     --primary-blue-light: #0820e0;
@@ -33,9 +29,6 @@ body {
     min-height: 100vh;
 }
 
-/* ============================================
-   CONTAINER PRINCIPAL DO FORMULÁRIO
-   ============================================ */
 
 .cadastrar-container {
     background: var(--bg-white);
@@ -60,9 +53,6 @@ body {
     }
 }
 
-/* ============================================
-   CABEÇALHO "PERFIL DO ADMINISTRADOR"
-   ============================================ */
 
 .cadastrar-header {
     background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
@@ -115,25 +105,9 @@ body {
     letter-spacing: -0.5px;
 }
 
-/* ============================================
-   FORMULÁRIO
-   ============================================ */
-
 .cadastrar-container form {
     padding: 32px 36px;
 }
-
-/* ============================================
-   TÍTULOS DAS SEÇÕES (Removido, não usado no Blade)
-   ============================================ */
-
-/* ============================================
-   SEPARADOR HORIZONTAL (Removido, não usado no Blade)
-   ============================================ */
-
-/* ============================================
-   GRUPOS DE INPUT
-   ============================================ */
 
 .input-group {
     margin-bottom: 18px;
@@ -158,13 +132,6 @@ body {
     }
 }
 
-/* ============================================
-   LABELS (Removido, não usado no Blade)
-   ============================================ */
-
-/* ============================================
-   INPUTS E SELECTS
-   ============================================ */
 
 .cadastrar-container form input:not([type="submit"]):not([type="button"]),
 .custom-select {
@@ -205,18 +172,6 @@ body {
     background: white;
     border-color: var(--success-green);
 }
-
-/* ============================================
-   LAYOUT DE DUAS COLUNAS (SPLIT GROUP) (Removido, não usado no Blade)
-   ============================================ */
-
-/* ============================================
-   CUSTOMIZAÇÃO DO SELECT (Removido, não usado no Blade)
-   ============================================ */
-
-/* ============================================
-   FOTO DE PERFIL E OVERLAY
-   ============================================ */
 
 .foto-upload-container {
     background-color: var(--primary-blue); 
@@ -265,11 +220,11 @@ body {
     z-index: 20;
     opacity: 0;
     transition: opacity 0.3s;
-    background-color: rgba(0, 0, 0, 0.4); /* Escurece um pouco o fundo */
+    background-color: rgba(0, 0, 0, 0.4); 
     border-radius: 50%;
     width: 130px;
     height: 130px;
-    pointer-events: none; /* Permite clicar no label por baixo */
+    pointer-events: none; 
 }
 
 .foto-upload-label:hover .overlay {
@@ -281,9 +236,6 @@ body {
     margin-bottom: 5px;
 }
 
-/* ============================================
-   BOTÕES DE AÇÃO
-   ============================================ */
 
 .button-group {
     display: flex;
@@ -361,10 +313,6 @@ body {
 .btn-trocar-senha:active {
     transform: translateY(0);
 }
-
-/* ============================================
-   MODAL (mantido do CSS original, se aplicável)
-   ============================================ */
 
 .modal-overlay {
     position: fixed;
@@ -449,9 +397,6 @@ body {
     line-height: 1.6;
 }
 
-/* ============================================
-   BOTÕES DO MODAL
-   ============================================ */
 
 .modal-buttons {
     display: flex;

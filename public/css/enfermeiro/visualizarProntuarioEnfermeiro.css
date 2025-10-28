@@ -1,15 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
-/* ============================================
-    VISUALIZAR PRONTUÁRIO - TEMA ENFERMAGEM
-    ============================================ */
-
 :root {
     --primary-green: #0a400c;
     --primary-green-dark: #1e7e34;
-    --primary-green-light: #4caf50; /* Verde mais claro para bordas e linhas */
+    --primary-green-light: #4caf50;
     --accent-blue: #0EA5E9;
-    --accent-red: #DC2626; /* Cor para alertas */
+    --accent-red: #DC2626; 
     --bg-white: #FFFFFF;
     --bg-gray-50: #F9FAFB;
     --bg-gray-100: #F3F4F6;
@@ -55,10 +51,6 @@ body {
         transform: translateY(0);
     }
 }
-
-/* ============================================
-    HEADER DA PÁGINA
-    ============================================ */
 
 .page-header {
     background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
@@ -146,10 +138,6 @@ body {
 .btn-add-anotacao i {
     font-size: 1.3rem;
 }
-
-/* ============================================
-    CARD DO PACIENTE
-    ============================================ */
 
 .patient-card {
     background: white;
@@ -263,10 +251,6 @@ body {
     font-size: 1.4rem;
 }
 
-/* ============================================
-    SEÇÃO DE HISTÓRICO
-    ============================================ */
-
 .history-section {
     animation: fadeIn 0.6s ease-out 0.3s backwards;
 }
@@ -302,10 +286,6 @@ body {
     font-weight: 700;
     font-size: 0.95rem;
 }
-
-/* ============================================
-    ESTADO VAZIO
-    ============================================ */
 
 .empty-state {
     background: white;
@@ -354,10 +334,6 @@ body {
     box-shadow: 0 16px 36px rgba(10, 64, 12, 0.4);
 }
 
-/* ============================================
-    TIMELINE DE ANOTAÇÕES
-    ============================================ */
-
 .consultas-list {
     position: relative;
     padding-left: 40px;
@@ -380,7 +356,6 @@ body {
     border-color: var(--primary-green-light);
 }
 
-/* Marcador da Timeline (Dot e Line) */
 .timeline-marker {
     position: absolute;
     left: -24px;
@@ -555,7 +530,6 @@ body {
     color: var(--accent-blue);
 }
 
-/* Estilos para Detalhes da Anotação (Alergias, Medicações, Descrição) */
 .consulta-details {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -635,7 +609,6 @@ body {
     color: var(--primary-green);
 }
 
-/* Footer */
 .consulta-footer {
     margin-top: 20px;
     padding-top: 15px;
@@ -678,10 +651,6 @@ body {
 .btn-voltar i {
     font-size: 1.4rem;
 }
-
-/* ============================================
-    RESPONSIVIDADE
-    ============================================ */
 
 @media (max-width: 768px) {
     .main-dashboard {

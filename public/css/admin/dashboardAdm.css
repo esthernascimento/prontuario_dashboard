@@ -1,8 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
-/* ============================================
-    DASHBOARD ADMIN - CSS PROFISSIONAL
-    ============================================ */
 
 :root {
     --primary-blue: #0618b9;
@@ -34,9 +31,6 @@ body {
     padding: 0;
 }
 
-/* ============================================
-    TÍTULO PRINCIPAL
-    ============================================ */
 
 .dashboard-title {
     color: var(--primary-blue);
@@ -46,9 +40,6 @@ body {
     padding: 0;
 }
 
-/* ============================================
-    BANNER DE BOAS-VINDAS
-    ============================================ */
 
 .overview-container {
     max-width: 1750px;
@@ -132,10 +123,6 @@ body {
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
 }
 
-/* ============================================
-    CARDS DE MÉTRICAS
-    ============================================ */
-
 .metrics {
     display: flex;
     justify-content: space-between;
@@ -207,9 +194,6 @@ body {
     letter-spacing: -1px;
 }
 
-/* ============================================
-    GRÁFICOS
-    ============================================ */
 
 .content-wrapper {
     display: flex;

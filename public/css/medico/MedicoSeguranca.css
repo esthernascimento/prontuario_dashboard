@@ -1,9 +1,6 @@
-/* Importação da fonte Montserrat */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
-/* ============================================
-    VARIÁVEIS DE TEMA (VERMELHO/VINHO)
-    ============================================ */
+
 :root {
     --primary-red: #8c1007;
     --primary-red-dark: #7b0e06;
@@ -36,9 +33,6 @@ body {
     box-sizing: border-box;
 }
 
-/* ============================================
-    CONTAINER PRINCIPAL E CABEÇALHO
-    ============================================ */
 .security-container {
     background: var(--bg-white);
     max-width: 580px;
@@ -86,9 +80,6 @@ body {
     line-height: 1.6;
 }
 
-/* ============================================
-    SEÇÃO DE ALTERAR SENHA
-    ============================================ */
 .security-section {
     background: var(--bg-white);
     padding: 32px 36px;
@@ -119,9 +110,7 @@ body {
     margin-right: -5px;
 }
 
-/* ============================================
-    FORMULÁRIO DE SEGURANÇA
-    ============================================ */
+
 .security-form {
     max-width: 100%;
     margin: 0 auto;
@@ -154,9 +143,6 @@ body {
     transition: color 0.3s ease;
 }
 
-/* ============================================
-   WRAPPER DO INPUT COM OLHINHO
-   ============================================ */
 .password-wrapper {
     position: relative;
     display: flex;
@@ -198,9 +184,6 @@ body {
     background: white;
 }
 
-/* ============================================
-   ÍCONE DO OLHINHO
-   ============================================ */
 .toggle-password {
     position: absolute;
     right: 14px;
@@ -238,9 +221,6 @@ body {
     display: block;
 }
 
-/* ============================================
-   BOTÃO PRIMÁRIO
-   ============================================ */
 .btn-primary {
     display: block;
     background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
@@ -283,9 +263,6 @@ body {
     transform: translateY(-1px);
 }
 
-/* ============================================
-   ALERTAS
-   ============================================ */
 .alert {
     padding: 15px 20px;
     margin: 25px 36px;
@@ -319,9 +296,6 @@ body {
     list-style-type: disc;
 }
 
-/* ============================================
-   MODAIS
-   ============================================ */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -417,9 +391,6 @@ body {
     line-height: 1.6;
 }
 
-/* ============================================
-   BOTÕES DO MODAL
-   ============================================ */
 .modal-buttons {
     display: flex;
     gap: 12px;

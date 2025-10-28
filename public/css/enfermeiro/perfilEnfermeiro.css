@@ -1,8 +1,4 @@
-/* ============================================
-   EDITAR PERFIL - CSS PROFISSIONAL (TEMA VERDE)
-   ============================================ */
-
-   :root {
+ :root {
     --primary-green: #0a400c;
     --primary-green-dark: #062806;
     --primary-green-light: #0d5810;
@@ -33,10 +29,6 @@ body {
     min-height: 100vh;
 }
 
-/* ============================================
-   CONTAINER PRINCIPAL DO FORMULÁRIO
-   ============================================ */
-
 .cadastrar-container {
     background: var(--bg-white);
     max-width: 580px;
@@ -59,10 +51,6 @@ body {
         transform: translateY(0);
     }
 }
-
-/* ============================================
-   CABEÇALHO "PERFIL DO ADMINISTRADOR"
-   ============================================ */
 
 .cadastrar-header {
     background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
@@ -115,17 +103,11 @@ body {
     letter-spacing: -0.5px;
 }
 
-/* ============================================
-   FORMULÁRIO
-   ============================================ */
 
 .cadastrar-container form {
     padding: 32px 36px;
 }
 
-/* ============================================
-   GRUPOS DE INPUT
-   ============================================ */
 
 .input-group {
     margin-bottom: 18px;
@@ -150,9 +132,6 @@ body {
     }
 }
 
-/* ============================================
-   INPUTS E SELECTS
-   ============================================ */
 
 .cadastrar-container form input:not([type="submit"]):not([type="button"]),
 .custom-select {
@@ -193,9 +172,6 @@ body {
     border-color: var(--success-green);
 }
 
-/* ============================================
-   FOTO DE PERFIL E OVERLAY
-   ============================================ */
 
 .foto-upload-container {
     background-color: var(--primary-green); 
@@ -259,10 +235,6 @@ body {
     font-size: 28px;
     margin-bottom: 5px;
 }
-
-/* ============================================
-   BOTÕES DE AÇÃO
-   ============================================ */
 
 .button-group {
     display: flex;
@@ -341,9 +313,6 @@ body {
     transform: translateY(0);
 }
 
-/* ============================================
-   MODAL
-   ============================================ */
 
 .modal-overlay {
     position: fixed;
@@ -440,10 +409,6 @@ body {
     line-height: 1.6;
 }
 
-/* ============================================
-   BOTÕES DO MODAL
-   ============================================ */
-
 .modal-buttons {
     display: flex;
     gap: 12px;
@@ -506,10 +471,6 @@ body {
 .modal-btn:active {
     transform: translateY(0);
 }
-
-/* ============================================
-   RESPONSIVIDADE
-   ============================================ */
 
 @media (max-width: 768px) {
     .cadastrar-container {

@@ -16,9 +16,6 @@
     --radius-lg: 16px;
 }
 
-/* ============================================
-   CONTAINER PRINCIPAL
-   ============================================ */
 .cadastrar-container {
     background: var(--bg-white);
     max-width: 680px;
@@ -41,9 +38,6 @@
     }
 }
 
-/* ============================================
-   HEADER
-   ============================================ */
 .cadastrar-header {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-dark) 100%);
     padding: 32px 36px;
@@ -94,9 +88,6 @@
     letter-spacing: -0.5px;
 }
 
-/* ============================================
-   FORMULÁRIO
-   ============================================ */
 .cadastrar-container form {
     padding: 40px 48px;
 }
@@ -167,9 +158,6 @@
     background: white;
 }
 
-/* ============================================
-   ALERTAS
-   ============================================ */
 .alert {
     padding: 14px 18px;
     border-radius: var(--radius-md);
@@ -190,9 +178,6 @@
     border: 1px solid #FCA5A5;
 }
 
-/* ============================================
-   BOTÕES
-   ============================================ */
 .button-group {
     display: flex;
     justify-content: space-between;
@@ -270,9 +255,6 @@
     transform: translateY(0);
 }
 
-/* ============================================
-   MODAL
-   ============================================ */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -432,9 +414,6 @@
     transform: translateY(0);
 }
 
-/* ============================================
-   RESPONSIVIDADE
-   ============================================ */
 @media (max-width: 768px) {
     .cadastrar-container {
         margin: 20px;

@@ -1,9 +1,4 @@
-/* ============================================
-   PRONTUÁRIO MÉDICO - CSS PROFISSIONAL
-   TEMA: VERMELHO MÉDICO
-   ============================================ */
-
-   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
    :root {
        --primary-red: #DC2626;
@@ -52,10 +47,6 @@
        max-width: 1200px;
        margin: 0 auto;
    }
-   
-   /* ============================================
-      HEADER
-      ============================================ */
    
    .enfermeiro-header {
        display: flex;
@@ -112,10 +103,6 @@
        transform: translateY(-2px);
        box-shadow: 0 12px 24px -6px rgba(220, 38, 38, 0.4);
    }
-   
-   /* ============================================
-      BARRA DE PESQUISA E FILTROS
-      ============================================ */
    
    .search-filters {
        display: flex;
@@ -178,10 +165,7 @@
        color: var(--text-muted);
    }
    
-   /* ============================================
-      FILTROS PERSONALIZADOS
-      ============================================ */
-   
+
    .custom-select {
        position: relative;
        width: 150px;
@@ -251,11 +235,7 @@
    .custom-select .options div:last-child {
        border-bottom: none;
    }
-   
-   /* ============================================
-      TABELA
-      ============================================ */
-   
+
    .box-table {
        background: white;
        border-radius: var(--radius-md);
@@ -308,11 +288,7 @@
        color: var(--text-primary);
        font-size: 14px;
    }
-   
-   /* ============================================
-      STATUS BADGE
-      ============================================ */
-   
+
    .status-badge {
        display: inline-block;
        padding: 6px 12px;
@@ -335,12 +311,9 @@
        background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
        color: var(--primary-red-dark);
        border: 1px solid #FCA5A5;
-   }
-   
-   /* ============================================
-      AÇÕES
-      ============================================ */
-   
+}
+
+
    .actions {
        display: flex;
        gap: 8px;
@@ -368,7 +341,6 @@
        display: inline;
    }
    
-   /* Cores dos Ícones de Ação */
    .btn-view {
        color: #6c757d;
    }
@@ -410,8 +382,7 @@
    .delete-form button.btn-action {
        padding: 0;
    }
-   
-   /* Tooltip */
+
    .btn-action::after {
        content: attr(title);
        position: absolute;
@@ -451,10 +422,6 @@
        transform: translateX(-50%) translateY(0);
    }
    
-   /* ============================================
-      MENSAGEM VAZIA
-      ============================================ */
-   
    .no-enfermeiros {
        text-align: center;
        padding: 60px 20px;
@@ -464,9 +431,6 @@
        font-size: 1rem;
    }
    
-   /* ============================================
-      PAGINAÇÃO
-      ============================================ */
    
    .pagination-container {
        display: flex;
@@ -474,9 +438,6 @@
        margin-top: 20px;
    }
    
-   /* ============================================
-      RESPONSIVIDADE
-      ============================================ */
    
    @media (max-width: 768px) {
        .enfermeiro-header {
@@ -512,8 +473,7 @@
            height: 32px;
            font-size: 14px;
        }
-   
-       /* Desabilita tooltip em mobile */
+
        .btn-action::after,
        .btn-action::before {
            display: none;
@@ -537,11 +497,6 @@
        }
    }
    
-   /* ============================================
-      ANIMAÇÕES ESPECIAIS
-      ============================================ */
-   
-   /* Animação de surgimento das linhas da tabela */
    tbody tr {
        animation: slideInRow 0.4s ease-out backwards;
    }
@@ -562,8 +517,7 @@
            transform: translateX(0);
        }
    }
-   
-   /* Efeito de pulse no ícone de adicionar consulta */
+
    .btn-add-consulta i {
        animation: pulsePlus 2s ease-in-out infinite;
    }
@@ -577,7 +531,6 @@
        }
    }
    
-   /* Efeito de brilho na tabela */
    .box-table::before {
        content: '';
        position: absolute;

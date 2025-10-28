@@ -1,15 +1,7 @@
-/* ============================================
-    EDITAR PERFIL - CSS MÉDICO
-    (Baseado no design do Administrador, adaptado para a paleta do Médico)
-    ============================================ */
-
 :root {
-    /* Cores do Médico (Vermelho/Vinho) */
-    --primary-red: #8c1007; /* Vermelho Principal (Forte) */
-    --primary-red-dark: #7b0e06; /* Vermelho Escuro para Destaque/Gradiente */
-    --primary-red-light: #a33e38; /* Vermelho Mais Claro/Rose */
-
-    /* Cores de Base (Mantidas do Admin para consistência) */
+    --primary-red: #8c1007; 
+    --primary-red-dark: #7b0e06; 
+    --primary-red-light: #a33e38; 
     --bg-white: #FFFFFF;
     --bg-gray-50: #F9FAFB;
     --bg-gray-100: #F3F4F6;
@@ -17,11 +9,9 @@
     --text-secondary: #6B7280;
     --text-muted: #9CA3AF;
     --border-color: #E5E7EB;
-    --border-focus: var(--primary-red); /* Foco na cor principal do médico */
+    --border-focus: var(--primary-red);
     --success-green: #10B981;
     --error-red: #EF4444;
-
-    /* Sombras e Bordas */
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
@@ -35,14 +25,9 @@ body {
     margin: 0;
     padding: 20px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    /* Adaptação de cor de fundo, mantendo o gradiente suave */
     background: linear-gradient(135deg, #FFF0F0 0%, #F9FAFB 100%); 
     min-height: 100vh;
 }
-
-/* ============================================
-    CONTAINER PRINCIPAL DO FORMULÁRIO
-    ============================================ */
 
 .cadastrar-container {
     background: var(--bg-white);
@@ -67,12 +52,7 @@ body {
     }
 }
 
-/* ============================================
-    CABEÇALHO "PERFIL DO MÉDICO"
-    ============================================ */
-
 .cadastrar-header {
-    /* Cor do Médico */
     background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%); 
     padding: 32px 36px;
     display: flex;
@@ -123,17 +103,10 @@ body {
     letter-spacing: -0.5px;
 }
 
-/* ============================================
-    FORMULÁRIO
-    ============================================ */
 
 .cadastrar-container form {
     padding: 32px 36px;
 }
-
-/* ============================================
-    GRUPOS DE INPUT
-    ============================================ */
 
 .input-group {
     margin-bottom: 18px;
@@ -156,10 +129,6 @@ body {
         transform: translateY(0);
     }
 }
-
-/* ============================================
-    INPUTS E SELECTS
-    ============================================ */
 
 .cadastrar-container form input:not([type="submit"]):not([type="button"]),
 .custom-select {
@@ -206,9 +175,6 @@ body {
     cursor: not-allowed;
 }
 
-/* ============================================
-    FOTO DE PERFIL E OVERLAY
-    ============================================ */
 
 .foto-upload-container {
     background-color: var(--primary-red);
@@ -272,10 +238,6 @@ body {
     font-size: 28px;
     margin-bottom: 5px;
 }
-
-/* ============================================
-    BOTÕES DE AÇÃO
-    ============================================ */
 
 .button-group {
     display: flex;
@@ -353,9 +315,6 @@ body {
     transform: translateY(0);
 }
 
-/* ============================================
-   ALERTAS
-   ============================================ */
 .alert {
     padding: 15px 20px;
     margin: 25px 36px;
@@ -384,9 +343,6 @@ body {
     list-style-type: disc;
 }
 
-/* ============================================
-   MODAL
-   ============================================ */
 
 .modal-overlay {
     position: fixed;
@@ -483,10 +439,6 @@ body {
     line-height: 1.6;
 }
 
-/* ============================================
-   BOTÕES DO MODAL
-   ============================================ */
-
 .modal-buttons {
     display: flex;
     gap: 12px;
@@ -549,10 +501,6 @@ body {
 .modal-btn:active {
     transform: translateY(0);
 }
-
-/* ============================================
-    RESPONSIVIDADE
-    ============================================ */
 
 @media (max-width: 768px) {
     .cadastrar-container {

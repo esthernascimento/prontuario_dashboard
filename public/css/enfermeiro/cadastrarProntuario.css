@@ -1,20 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
-/* ============================================
-    CADASTRO DE ANOTAÇÃO - CSS TEMA ENFERMEIRO
-    TEMA: VERDE/SAÚDE
-    ============================================ */
 
 :root {
-    /* Cores Primárias: Verde/Saúde */
     --primary-green: #0a400c;
     --primary-green-dark: #047857;
     --primary-green-light: #34d399;
-    
-    /* Cor de Destaque: Verde Lima/Claro */
     --accent-lime: #4ade80;
-    
-    /* Cores Neutras */
     --bg-white: #FFFFFF;
     --bg-gray-50: #F9FAFB;
     --bg-gray-100: #F3F4F6;
@@ -31,8 +22,6 @@
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
-    
-    /* Cores Adaptadas */
     --border-focus: var(--primary-green);
 }
 
@@ -46,7 +35,6 @@ body {
 
 .main-dashboard {
     padding: 40px;
-    /* CORRIGIDO: Fundo neutro */
     background: linear-gradient(135deg, #F9FAFB 0%, #FFFFFF 100%); 
     min-height: 100vh;
 }
@@ -72,12 +60,7 @@ body {
     }
 }
 
-/* ============================================
-    HEADER DO FORMULÁRIO (TEMA VERDE)
-    ============================================ */
-
 .cadastrar-header {
-    /* CORRIGIDO: Gradiente Verde/Saúde */
     background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
     padding: 32px 36px;
     display: flex;
@@ -127,14 +110,9 @@ body {
     z-index: 1;
 }
 
-/* ============================================
-    CARD DE INFORMAÇÕES
-    ============================================ */
-
 .paciente-info {
     margin: 32px 36px;
     padding: 28px;
-    /* CORRIGIDO: Fundo verde claro */
     background: linear-gradient(135deg, #F0FFF4 0%, #D1FAE5 100%); 
     border: 2px solid #D1FAE5; 
     border-left: 6px solid var(--primary-green);
@@ -195,10 +173,6 @@ body {
     font-weight: 500;
 }
 
-/* ============================================
-    FORMULÁRIO
-    ============================================ */
-
 form {
     padding: 0 36px 36px 36px;
 }
@@ -209,7 +183,6 @@ form {
     color: var(--text-primary);
     margin-bottom: 28px;
     padding-bottom: 12px;
-    /* Borda em verde */
     border-bottom: 3px solid var(--primary-green); 
     display: flex;
     align-items: center;
@@ -222,14 +195,9 @@ form {
     content: '';
     width: 6px;
     height: 26px;
-    /* Gradiente em verde */
     background: linear-gradient(180deg, var(--primary-green) 0%, var(--accent-lime) 100%); 
     border-radius: 3px;
 }
-
-/* ============================================
-    INPUTS, TEXTAREAS E SELECTS
-    ============================================ */
 
 .input-group {
     margin-bottom: 26px;
@@ -252,11 +220,10 @@ form {
     font-size: 1.1rem;
 }
 
-/* Estilo padrão para todos os inputs, textareas e SELECTS (largura total, sem centralização) */
 .input-group input,
 .input-group textarea,
 .input-select {
-    width: 100%; /* Largura total */
+    width: 100%;
     padding: 14px 16px;
     font-size: 0.95rem;
     color: var(--text-primary);
@@ -269,17 +236,15 @@ form {
     font-weight: 500;
 }
 
-/* Ajustes específicos para o SELECT para parecer um campo de input */
 .input-select {
-    appearance: none; /* Remove a seta padrão do navegador */
+    appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236B7280'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 1rem center;
     background-size: 1.2em;
-    padding-right: 2.5rem; /* Espaço para a seta */
+    padding-right: 2.5rem; 
 }
 
-/* Efeito hover e focus (Verde) */
 .input-group input:hover,
 .input-group textarea:hover,
 .input-select:hover {
@@ -302,14 +267,12 @@ form {
     font-weight: 400;
 }
 
-/* Textareas */
 .input-group textarea {
     resize: vertical;
     line-height: 1.6;
     min-height: 100px;
 }
 
-/* Mensagem de erro */
 .input-group .error {
     display: block;
     color: var(--error-red);
@@ -325,18 +288,12 @@ form {
     75% { transform: translateX(8px); }
 }
 
-/* Estilo de grid para Sinais Vitais */
 .input-group-row-3 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 40px; 
     margin-bottom: 30px; 
 }
-
-
-/* ============================================
-    BOTÕES
-    ============================================ */
 
 .button-group {
     display: flex;
@@ -380,7 +337,6 @@ form {
 
 .save-button {
     color: white;
-    /* Botão Verde/Saúde */
     background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%); 
     box-shadow: var(--shadow-lg);
 }
@@ -406,9 +362,6 @@ form {
     box-shadow: 0 20px 35px -5px rgba(5, 150, 105, 0.4); 
 }
 
-/* ============================================
-    RESPONSIVO
-    ============================================ */
 
 @media (max-width: 768px) {
     .main-dashboard { padding: 20px; }

@@ -1,8 +1,3 @@
-/* ============================================
-    CENTRAL DE AJUDA - TEMA: VERMELHO MÉDICO
-    ============================================ */
-
-/* Variáveis de cores do seu CSS de Prontuário */
 :root {
   --primary-red: #DC2626;
   --primary-red-dark: #991B1B;
@@ -21,7 +16,6 @@
   --radius-md: 12px;
 }
 
-/* Base e Layout */
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
@@ -41,7 +35,6 @@ body {
   flex-direction: column;
 }
 
-/* Título e Busca */
 .title-bar {
   display: flex;
   align-items: center;
@@ -70,7 +63,6 @@ h1 i {
   font-weight: 600;
 }
 
-/* Estilos da busca */
 .search-box {
   position: relative;
   flex: 1;
@@ -102,7 +94,6 @@ h1 i {
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
 }
 
-/* Estilos do FAQ */
 details {
   background-color: var(--bg-white);
   border: 1px solid var(--border-color);
@@ -141,7 +132,6 @@ details p {
   color: var(--text-secondary);
 }
 
-/* Formulário de Contato */
 .contact-form {
   padding: 30px;
   display: flex;
@@ -182,7 +172,6 @@ details p {
   transform: translateY(-2px);
 }
 
-/* -------------------- ANIMAÇÕES -------------------- */
 .fade-in {
   opacity: 0;
   animation: fadeIn 0.8s ease-in-out forwards;
@@ -214,7 +203,6 @@ details p {
   }
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
   .main-dashboardAjuda {
       padding: 20px;

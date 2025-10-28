@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 
 :root {
-  --verde: #0a400c;
-  --verde-claro: #53b15f;
+  --azul: #0618b9;
+  --azul-claro: #304bff;
   --cinza: #dcdcdc;
   --branco: #fff;
-  --sombra: 0 8px 20px rgba(10, 64, 12, 0.15);
+  --sombra: 0 8px 20px rgba(6, 24, 185, 0.15);
 }
 
 * {
@@ -33,7 +33,7 @@ body {
 /* --- Lado Esquerdo --- */
 .left-side {
   width: 50%;
-  background: linear-gradient(135deg, var(--verde) 0%, var(--verde-claro) 100%);
+  background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,7 +82,7 @@ body {
 }
 
 h2 {
-  color: var(--verde);
+  color: var(--azul);
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 25px;
@@ -97,7 +97,7 @@ h2 {
 
 .input-group label {
   font-weight: 600;
-  color: var(--verde);
+  color: var(--azul);
   display: block;
   margin-bottom: 8px;
   font-size: 14px;
@@ -111,12 +111,12 @@ h2 {
   border-radius: 8px;
   padding: 10px 12px;
   transition: all 0.3s ease;
-  background-color: #f3fef4;
+  background-color: #f0f4ff;
 }
 
 .input-wrapper.focused {
-  border-color: var(--verde);
-  box-shadow: 0 0 0 3px rgba(10, 64, 12, 0.15);
+  border-color: var(--azul);
+  box-shadow: 0 0 0 3px rgba(6, 24, 185, 0.15);
   background-color: #fff;
 }
 
@@ -131,20 +131,20 @@ h2 {
 }
 
 .icon-left {
-  color: var(--verde);
+  color: var(--azul);
   margin-right: 10px;
   font-size: 16px;
 }
 
 .icon-right {
-  color: var(--verde);
+  color: var(--azul);
   margin-left: 8px;
   cursor: pointer;
   transition: 0.3s;
 }
 
 .icon-right:hover {
-  color: var(--verde-claro);
+  color: var(--azul-claro);
 }
 
 /* --- Select sem wrapper --- */
@@ -154,8 +154,8 @@ select {
   margin-top: 5px;
   border-radius: 8px;
   border: 1.5px solid var(--cinza);
-  background-color: #f3fef4;
-  color: var(--verde);
+  background-color: #f0f4ff;
+  color: var(--azul);
   font-family: 'Montserrat', sans-serif;
   font-size: 14px;
   appearance: none;
@@ -164,8 +164,8 @@ select {
 
 select:focus {
   outline: none;
-  border-color: var(--verde);
-  box-shadow: 0 0 0 3px rgba(10, 64, 12, 0.15);
+  border-color: var(--azul);
+  box-shadow: 0 0 0 3px rgba(6, 24, 185, 0.15);
   background-color: #fff;
 }
 
@@ -173,7 +173,7 @@ select:focus {
 .btn-login,
 button {
   width: 100%;
-  background: linear-gradient(135deg, var(--verde) 0%, var(--verde-claro) 100%);
+  background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%);
   color: var(--branco);
   border: none;
   border-radius: 50px;
@@ -187,14 +187,14 @@ button {
 }
 
 button:hover {
-  background: linear-gradient(135deg, var(--verde-claro) 0%, var(--verde) 100%);
+  background: linear-gradient(135deg, var(--azul-claro) 0%, var(--azul) 100%);
   transform: translateY(-2px);
 }
 
 /* --- Alerta --- */
 .success {
-  background-color: #d8ffdd;
-  color: #065e0b;
+  background-color: #e0e7ff;
+  color: #0618b9;
   padding: 10px;
   border-radius: 8px;
   font-size: 13px;
@@ -213,47 +213,6 @@ button:hover {
   margin-top: 15px;
   animation: shake 0.4s;
 }
-
-.input-group {
-  text-align: left;
-  margin-bottom: 22px;
-}
-
-.input-group label {
-  font-weight: 600;
-  color: #0a400c;
-  display: block;
-  margin-bottom: 8px;
-  font-size: 14px;
-}
-
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  border: 1.5px solid #ccc;
-  border-radius: 8px;
-  padding: 10px 12px;
-  transition: all 0.3s ease;
-  background-color: #f0f9f0;
-}
-
-.input-wrapper input,
-.input-wrapper select {
-  flex: 1;
-  border: none;
-  outline: none;
-  font-size: 15px;
-  background: transparent;
-  color: #333;
-}
-
-.icon-left {
-  color: #0a400c;
-  margin-right: 10px;
-  font-size: 16px;
-}
-
 
 /* --- Animações --- */
 @keyframes fade-in {

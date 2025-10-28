@@ -1,10 +1,4 @@
-/* ============================================
-    GERENCIAMENTO DE UNIDADES - CSS PROFISSIONAL
-    (Baseado em manutencaoEnfermeiros.css para consistência)
-    ============================================ */
-
     :root {
-        /* Cores (Mantidas iguais para consistência) */
         --primary-blue: #0618b9;
         --primary-blue-dark: #04108a;
         --primary-blue-light: #0820e0;
@@ -19,8 +13,6 @@
         --border-color: #E5E7EB;
         --success-green: #10B981;
         --error-red: #DC2626;
-    
-        /* Sombras e Bordas */
         --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
         --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
@@ -29,7 +21,6 @@
         --radius-lg: 16px;
     }
     
-    /* Base e Layout (Mantidos iguais) */
     * {
         margin: 0;
         padding: 0;
@@ -47,10 +38,7 @@
         padding: 40px;
         min-height: 100vh;
     }
-    
-    /* Ajuste o container se for uma classe de layout.
-        Se a classe 'medico-container' no HTML for genérica, use-a. 
-        Aqui, vou assumir um container de layout genérico. */
+
     .medico-container { 
         max-width: 1400px;
         margin: 0 auto;
@@ -61,10 +49,6 @@
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
     }
-    
-    /* --------------------------------------------
-        HEADER (Ajustado para o novo ícone e botão)
-        -------------------------------------------- */
     
     .medico-header {
         display: flex;
@@ -90,13 +74,11 @@
         letter-spacing: -0.5px;
     }
     
-    .medico-header h1 i { /* Ícone da Unidade */
+    .medico-header h1 i { 
         font-size: 2.2rem;
         filter: drop-shadow(0 2px 4px rgba(6, 24, 185, 0.2));
     }
     
-    /* Renomeei o botão de 'btn-add-medico' para 'btn-add-unidade' apenas 
-        para melhor semântica, mas mantive o estilo do seu código anterior. */
     .btn-add-medico, .btn-add-unidade { 
         background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
         color: white;
@@ -118,10 +100,6 @@
         transform: translateY(-2px);
         box-shadow: 0 8px 15px -4px rgba(6, 24, 185, 0.5);
     }
-    
-    /* --------------------------------------------
-        BARRA DE PESQUISA E FILTROS (Mantidos iguais)
-        -------------------------------------------- */
     
     .search-filters {
         display: flex;
@@ -231,9 +209,6 @@
         color: var(--primary-blue);
     }
     
-    /* --------------------------------------------
-        TABELA (Mantida igual, apenas o colspan muda)
-        -------------------------------------------- */
     
     .box-table {
         background: white;
@@ -292,8 +267,7 @@
     .box-table tbody tr:last-child td {
         border-bottom: none;
     }
-    
-    /* Adaptei o seletor para a mensagem de lista vazia */
+
     .no-doctors, .no-unidades { 
         text-align: center;
         padding: 40px 20px !important;
@@ -301,8 +275,7 @@
         font-style: italic;
         background: var(--bg-gray-50) !important;
     }
-    
-    /* Status Badge e Ações (Mantidos iguais) */
+
     .status-badge {
         display: inline-block;
         padding: 4px 10px;
@@ -324,9 +297,6 @@
         color: var(--error-red);
     } 
     
-      /* ============================================
-        AÇÕES - ÍCONES LADO A LADO (CORRIGIDO)
-        ============================================ */
     
     .action-buttons {
         display: flex !important;
@@ -377,7 +347,6 @@
         border-color: var(--error-red);
     }
     
-    /* Ícone de Status Toggle */
     .btn-action i.text-danger {
         color: var(--error-red) !important;
     }
@@ -394,11 +363,6 @@
         color: var(--success-green) !important; 
     }
     
-    
-    
-    /* --------------------------------------------
-        MODAIS (Mantidos iguais)
-        -------------------------------------------- */
     
     .modal-overlay {
         position: fixed;
@@ -432,8 +396,7 @@
     
     .modal-header { margin-bottom: 20px; }
     .modal-header h2 { font-size: 1.5rem; color: var(--text-primary); font-weight: 700; margin-top: 10px; }
-    
-    /* Estilo dos Ícones nos Modais */
+
     #deleteModal .modal-header i { font-size: 3rem; color: var(--error-red); }
     #statusModal .modal-header i { font-size: 3rem; color: var(--primary-blue); }
     #successModal .modal-header i { font-size: 3rem; color: var(--success-green); }
@@ -459,18 +422,14 @@
     
     .btn-excluir { background: var(--error-red); color: var(--bg-white); }
     .btn-excluir:hover { background: #C22020; transform: translateY(-1px); }
-    
-    /* Botão de Confirmação para Status/Sucesso (Azul Primário) */
+
     #statusModal .btn-excluir,
     #successModal .btn-excluir { background: var(--primary-blue); }
     
     #statusModal .btn-excluir:hover,
     #successModal .btn-excluir:hover { background: var(--primary-blue-dark); }
     
-    
-    /* --------------------------------------------
-        MEDIA QUERIES (Responsividade)
-        -------------------------------------------- */
+   
     @media (max-width: 768px) {
         .main-dashboard { padding: 20px; }
         .medico-header { flex-direction: column; align-items: flex-start; gap: 15px; }

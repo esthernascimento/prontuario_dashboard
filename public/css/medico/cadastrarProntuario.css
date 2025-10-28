@@ -1,10 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
-/* ============================================
-   CADASTRO DE PRONTUÁRIO - CSS ATUALIZADO
-   TEMA: VERMELHO MÉDICO
-   ============================================ */
-
 :root {
     --primary-red: #DC2626;
     --primary-red-dark: #991B1B;
@@ -64,10 +59,6 @@ body {
     }
 }
 
-/* ============================================
-   HEADER DO FORMULÁRIO
-   ============================================ */
-
 .cadastrar-header {
     background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
     padding: 32px 36px;
@@ -117,10 +108,6 @@ body {
     letter-spacing: -0.5px;
     z-index: 1;
 }
-
-/* ============================================
-   CARD DE INFORMAÇÕES DO PACIENTE E MÉDICO
-   ============================================ */
 
 .paciente-info {
     margin: 32px 36px;
@@ -185,10 +172,6 @@ body {
     font-weight: 500;
 }
 
-/* ============================================
-   FORMULÁRIO
-   ============================================ */
-
 form {
     padding: 0 36px 36px 36px;
 }
@@ -214,10 +197,6 @@ form {
     background: linear-gradient(180deg, var(--primary-red) 0%, var(--accent-pink) 100%);
     border-radius: 3px;
 }
-
-/* ============================================
-   GRUPOS DE INPUT
-   ============================================ */
 
 .input-group {
     margin-bottom: 26px;
@@ -246,7 +225,6 @@ form {
     font-size: 1.1rem;
 }
 
-/* Inputs de Texto e Data */
 .input-group input.input-date,
 .input-group input.input-text {
     width: 100%;
@@ -283,7 +261,6 @@ form {
     transform: translateY(-2px);
 }
 
-/* Textareas */
 .input-group textarea {
     width: 100%;
     padding: 14px 16px;
@@ -317,14 +294,12 @@ form {
     transform: translateY(-2px);
 }
 
-/* Efeito de preenchimento */
 .input-group input:not(:placeholder-shown):valid,
 .input-group textarea:not(:placeholder-shown):valid {
     background: white;
     border-color: var(--success-green);
 }
 
-/* Mensagem de erro */
 .input-group .error {
     display: block;
     color: var(--error-red);
@@ -340,9 +315,6 @@ form {
     75% { transform: translateX(8px); }
 }
 
-/* ============================================
-   BOTÕES DE AÇÃO
-   ============================================ */
 
 .button-group {
     display: flex;
@@ -416,10 +388,6 @@ form {
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
 }
-
-/* ============================================
-   RESPONSIVIDADE
-   ============================================ */
 
 @media (max-width: 768px) {
     .main-dashboard {
@@ -515,10 +483,6 @@ form {
         font-size: 0.95rem;
     }
 }
-
-/* ============================================
-   MICRO INTERAÇÕES
-   ============================================ */
 
 textarea:focus,
 input:focus {
