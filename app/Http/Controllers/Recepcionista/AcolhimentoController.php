@@ -5,21 +5,16 @@ namespace App\Http\Controllers\Recepcionista;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Consulta;
-use App\Models\Recepcionista; 
+use App\Models\Consulta; // Seu model tbConsulta
 
 class AcolhimentoController extends Controller
 {
-    
+    /**
+     * Mostra o formulário de acolhimento (a tela principal).
+     */
     public function create()
     {
-        $recepcionista = Auth::guard('recepcionista')->user();
-        
-        if (!$recepcionista) {
-            return redirect()->route('recepcionista.login');
-        }
-
-        return view('recepcionista.acolhimento.create', compact('recepcionista'));
+        return view('recepcionista.acolhimento.create');
     }
 
     /**
@@ -29,19 +24,22 @@ class AcolhimentoController extends Controller
     {
         // Validação
         $dadosValidados = $request->validate([
+            
             'paciente_id' => 'required|exists:tbPaciente,idPaciente',
+            
+            // REMOVIDO: 'classificacao_risco'
             'queixa_principal' => 'required|string|min:10', 
-            'classificacao_risco' => 'required|string',
         ]);
 
+        // Cria a consulta
         $consulta = new Consulta(); 
         
         $consulta->idPacienteFK = $dadosValidados['paciente_id'];
         $consulta->queixa_principal = $dadosValidados['queixa_principal'];
-        $consulta->classificacao_risco = $dadosValidados['classificacao_risco'];
         
-        $consulta->idRecepcionistaFK = Auth::guard('recepcionista')->id(); 
+        // REMOVIDO: $consulta->classificacao_risco
         
+        $consulta->idRecepcionistaFK = Auth::id(); 
         $consulta->dataConsulta = now();
         $consulta->status_atendimento = 'AGUARDANDO_TRIAGEM';
         
@@ -51,3 +49,4 @@ class AcolhimentoController extends Controller
                          ->with('success', 'Paciente encaminhado para triagem!');
     }
 }
+

@@ -6,6 +6,7 @@
     --primary-green-dark: #047857;
     --primary-green-light: #34d399;
     --accent-lime: #4ade80;
+    --accent-lime: #4ade80;
     --bg-white: #FFFFFF;
     --bg-gray-50: #F9FAFB;
     --bg-gray-100: #F3F4F6;
@@ -35,12 +36,13 @@ body {
 
 .main-dashboard {
     padding: 40px;
+    background: linear-gradient(135deg, #F9FAFB 0%, #FFFFFF 100%);
     background: linear-gradient(135deg, #F9FAFB 0%, #FFFFFF 100%); 
     min-height: 100vh;
 }
 
 .cadastrar-container {
-    max-width: 950px; 
+    max-width: 950px;
     margin: 0 auto;
     background: var(--bg-white);
     border-radius: var(--radius-lg);
@@ -54,6 +56,7 @@ body {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -83,8 +86,17 @@ body {
 }
 
 @keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 0.5; }
-    50% { transform: scale(1.1); opacity: 0.8; }
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
 }
 
 .cadastrar-header .icon {
@@ -96,8 +108,15 @@ body {
 }
 
 @keyframes iconBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
 }
 
 .cadastrar-header h1 {
@@ -109,6 +128,12 @@ body {
     letter-spacing: -0.5px;
     z-index: 1;
 }
+
+.paciente-info {
+    margin: 32px 36px;
+    padding: 28px;
+    background: linear-gradient(135deg, #F0FFF4 0%, #D1FAE5 100%);
+    border: 2px solid #D1FAE5;
 
 .paciente-info {
     margin: 32px 36px;
@@ -126,6 +151,7 @@ body {
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -133,7 +159,7 @@ body {
 }
 
 .paciente-info h3 {
-    color: var(--primary-green-dark); 
+    color: var(--primary-green-dark);
     font-size: 1.15rem;
     margin: 0 0 20px 0;
     display: flex;
@@ -183,6 +209,7 @@ form {
     color: var(--text-primary);
     margin-bottom: 28px;
     padding-bottom: 12px;
+    border-bottom: 3px solid var(--primary-green);
     border-bottom: 3px solid var(--primary-green); 
     display: flex;
     align-items: center;
@@ -195,6 +222,10 @@ form {
     content: '';
     width: 6px;
     height: 26px;
+    background: linear-gradient(180deg, var(--primary-green) 0%, var(--accent-lime) 100%);
+    border-radius: 3px;
+}
+
     background: linear-gradient(180deg, var(--primary-green) 0%, var(--accent-lime) 100%); 
     border-radius: 3px;
 }
@@ -216,7 +247,7 @@ form {
 }
 
 .input-group label i {
-    color: var(--primary-green); 
+    color: var(--primary-green);
     font-size: 1.1rem;
 }
 
@@ -242,6 +273,7 @@ form {
     background-repeat: no-repeat;
     background-position: right 1rem center;
     background-size: 1.2em;
+    padding-right: 2.5rem;
     padding-right: 2.5rem; 
 }
 
@@ -257,7 +289,7 @@ form {
 .input-select:focus {
     border-color: var(--border-focus);
     background: white;
-    box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1); 
+    box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1);
     transform: translateY(-2px);
 }
 
@@ -283,16 +315,26 @@ form {
 }
 
 @keyframes shakeError {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-8px); }
-    75% { transform: translateX(8px); }
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-8px);
+    }
+
+    75% {
+        transform: translateX(8px);
+    }
 }
 
 .input-group-row-3 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 40px; 
-    margin-bottom: 30px; 
+    gap: 40px;
+    margin-bottom: 30px;
 }
 
 .button-group {
@@ -337,6 +379,7 @@ form {
 
 .save-button {
     color: white;
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
     background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%); 
     box-shadow: var(--shadow-lg);
 }
@@ -359,26 +402,180 @@ form {
 .save-button:hover {
     transform: translateY(-3px);
     /* Sombra verde */
-    box-shadow: 0 20px 35px -5px rgba(5, 150, 105, 0.4); 
+    box-shadow: 0 20px 35px -5px rgba(5, 150, 105, 0.4);
 }
 
-
 @media (max-width: 768px) {
-    .main-dashboard { padding: 20px; }
-    form { padding: 0 20px 24px 20px; }
+    .main-dashboard {
+        padding: 20px;
+    }
+
+    form {
+        padding: 0 20px 24px 20px;
+    }
+
     /* Ajuste responsivo para input/textarea/select */
-    .input-group input, .input-group textarea, .input-select { width: 100%; }
-    .input-group-row-3 { grid-template-columns: 1fr; gap: 16px; }
-    .button-group { flex-direction: column-reverse; gap: 12px; }
-    .btn-cancelar, .save-button { width: 100%; justify-content: center; }
+    .input-group input,
+    .input-group textarea,
+    .input-select {
+        width: 100%;
+    }
+
+    .input-group-row-3 {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .button-group {
+        flex-direction: column-reverse;
+        gap: 12px;
+    }
+
+    .btn-cancelar,
+    .save-button {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 @media (max-width: 480px) {
-    .cadastrar-header h1 { font-size: 1.3rem; }
-    .paciente-info { padding: 16px; }
-    .paciente-info h3 { font-size: 1rem; }
-    .info-item strong { font-size: 0.8rem; }
-    .info-item span { font-size: 0.9rem; }
-    .input-group input, .input-group textarea, .input-select { padding: 12px 14px; font-size: 0.9rem; }
-    .save-button, .btn-cancelar { padding: 14px 24px; font-size: 0.95rem; }
+    .cadastrar-header h1 {
+        font-size: 1.3rem;
+    }
+
+    .paciente-info {
+        padding: 16px;
+    }
+
+    .paciente-info h3 {
+        font-size: 1rem;
+    }
+
+    .info-item strong {
+        font-size: 0.8rem;
+    }
+
+    .info-item span {
+        font-size: 0.9rem;
+    }
+
+    .input-group input,
+    .input-group textarea,
+    .input-select {
+        padding: 12px 14px;
+        font-size: 0.9rem;
+    }
+
+    .save-button,
+    .btn-cancelar {
+        padding: 14px 24px;
+        font-size: 0.95rem;
+    }
+}
+
+.info-item.queixa-principal {
+    grid-column: 1 / -1;
+    /* Ocupa a largura total */
+    background-color: #fffbe6;
+    /* Amarelo bem claro */
+    border: 1px solid #ffe58f;
+    border-left: 5px solid #faad14;
+    /* Destaque amarelo */
+    padding: 14px 18px;
+    border-radius: var(--radius-sm);
+}
+
+.info-item.queixa-principal strong {
+    color: #d46b08;
+    /* Laranja escuro */
+}
+
+.info-item.queixa-principal span {
+    font-size: 1.05rem;
+    /* Fonte maior para a queixa */
+    font-style: italic;
+    font-weight: 600;
+    color: #595959;
+}
+
+/* ================================================================ */
+/* --- ADICIONADO: ESTILO DOS BOTÕES DE CLASSIFICAÇÃO DE RISCO --- */
+/* ================================================================ */
+
+/* Esconde o input de radio original */
+.btn-check {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    pointer-events: none;
+}
+
+#botoes_risco {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+}
+
+#botoes_risco .btn {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 1rem;
+    min-height: 80px;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 3px solid transparent;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    color: #FFF;
+    /* Cor do texto padrão */
+}
+
+/* Efeito de HOVER para todos os botões */
+#botoes_risco .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+/* --- Cores dos Botões --- */
+
+#botoes_risco .btn-vermelho {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+#botoes_risco .btn-laranja {
+    background-color: #fd7e14;
+    border-color: #fd7e14;
+}
+
+#botoes_risco .btn-amarelo {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+    /* Texto preto para amarelo */
+}
+
+#botoes_risco .btn-verde {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+#botoes_risco .btn-azul {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+/* --- Efeito de SELEÇÃO (Checked) --- */
+/* Esta é a parte mais importante. 
+   Quando o radio é selecionado, o 'label' (botão) muda. */
+
+#botoes_risco .btn-check:checked+.btn {
+    transform: scale(1.05);
+    /* Borda branca e sombra da cor do TEMA (verde) */
+    box-shadow: 0 0 0 4px var(--bg-white), 0 8px 25px -5px var(--primary-green-dark);
+    z-index: 10;
 }
