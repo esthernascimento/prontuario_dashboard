@@ -17,7 +17,7 @@
     
     <!-- Lado Esquerdo com imagem -->
     <div class="left-side">
-      <img src="{{ asset('img/enfermeiro-logo2.png') }}" alt="Imagem enfermeiro(a)">
+      <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo ilustrativa">
     </div>
 
     <!-- Lado Direito com o formulário -->

@@ -5,25 +5,24 @@ body {
     height: 100vh;
 }
 
-/* Container principal (fundo branco claro) */
 .cadastrar-container {
-    background-color: #ffffff; /* Fundo branco ou fafafa para leve contraste */
-    max-width: 400px; /* Mais estreito, como na imagem */
-    height: auto; /* Altura ajustável */
-    margin: 100px auto; /* Centraliza na tela */
+    background-color: #ffffff; 
+    max-width: 400px; 
+    height: auto; 
+    margin: 100px auto; 
     padding: 30px;
     border-radius: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center; /* Centraliza o conteúdo (p, botões) */
+    text-align: center;
 }
 
 /* Título e Ícone */
 .cadastrar-header {
     display: flex;
     align-items: center;
-    justify-content: center; /* Centraliza o cabeçalho */
+    justify-content: center;
     gap: 10px;
-    color: #0618b9; /* Cor principal azul */
+    color: #0618b9;
     margin-bottom: 25px;
 }
 
@@ -33,10 +32,9 @@ body {
     font-weight: 600;
 }
 
-/* Mensagem de confirmação */
 .cadastrar-container p {
     text-align: center;
-    color: #333; /* Cor mais escura para o texto */
+    color: #333; 
     font-size: 16px;
     margin-top: 15px;
     margin-bottom: 30px;
@@ -44,24 +42,19 @@ body {
 }
 
 .cadastrar-container p b {
-    color: #0618b9; /* Nome do médico em azul */
+    color: #0618b9; 
     font-weight: 700;
 }
 
-/* =================================== */
-/* Agrupamento e Estilo dos Botões */
-/* =================================== */
-
 .button-group {
     display: flex;
-    flex-direction: column; /* Coloca os botões um abaixo do outro inicialmente */
+    flex-direction: column;
     align-items: center;
-    gap: 10px; /* Espaço entre os botões */
+    gap: 10px; 
     margin-top: 20px;
 }
 
 .btn-excluir, .btn-cancelar {
-    /* Estilos base para ambos os botões */
     display: block;
     width: 250px; 
     padding: 12px 25px;
@@ -70,12 +63,11 @@ body {
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    text-decoration: none; /* Para o link Cancelar */
+    text-decoration: none; 
     text-align: center;
     transition: background-color 0.3s, opacity 0.3s;
 }
 
-/* Botão Sim, excluir (Primário) */
 .btn-excluir {
     background-color: #0618b9; 
     color: white;
@@ -85,21 +77,19 @@ body {
     background-color: #0056b3; 
 }
 
-/* Botão Cancelar (Secundário) */
 .btn-cancelar {
-    background-color: #0618b9; /* Azul principal */
+    background-color: #0618b9;
     color: white;
-    /* Se você quiser o botão de Cancelar mais suave, mude para: background-color: #f0f0f0; color: #333; */
 }
 
 .btn-cancelar:hover {
     background-color: #0056b3; 
 }
 
-/* Media Query para telas maiores, colocando-os lado a lado */
+
 @media (min-width: 480px) {
     .button-group {
-        flex-direction: row; /* Coloca os botões lado a lado */
+        flex-direction: row; 
         justify-content: center;
         gap: 20px;
     }

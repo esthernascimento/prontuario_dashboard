@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
-/* ========== 1. CONTAINER GERAL ========== */
 
 body{
   font-family: 'Montserrat', sans-serif;
@@ -69,14 +68,12 @@ h1 {
   justify-content: space-between;
   align-items: center;
   background-color: #3a643d;
-  /* Vermelho Principal */
   color: white;
   padding: 25px 40px;
   border-radius: 15px;
   margin-bottom: 30px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
   height: 150px;
-  /* Altura fixa para ser proeminente */
 }
 
 .banner-left {
@@ -257,16 +254,15 @@ h1 {
 }
 
 .donut-card .text-info {
-    text-align: center; /* Centraliza o texto */
-    margin-bottom: 15px; /* Adiciona uma margem abaixo do texto para separar do gráfico */
-    color: #fff; /* Se o fundo for escuro, o texto precisa ser claro */
+    text-align: center; 
+    color: #fff; 
     font-size: 1.1em;
 }
 
 #graficoDonutEnfermeiro {
-    max-width: 200px; /* Define a largura máxima do seu gráfico */
-    max-height: 200px; /* Define a altura máxima do seu gráfico */
-    margin-top: 10px; /* Adicione um pouco de margem acima do gráfico, se necessário */
-    width: 100% !important; /* Garante que ele respeite o max-width */
-    height: 100% !important; /* Garante que ele respeite o max-height */
+    max-width: 200px; 
+    max-height: 200px;
+    margin-top: 10px; 
+    width: 100% !important; 
+    height: 100% !important; 
 }

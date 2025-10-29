@@ -30,7 +30,6 @@ body {
   height: 100vh;
 }
 
-/* --- Lado Esquerdo --- */
 .left-side {
   width: 50%;
   background: linear-gradient(135deg, var(--cinza-escuro) 0%, var(--cinza-medio) 100%);
@@ -49,7 +48,6 @@ body {
   animation: fade-in 1.5s ease 0.5s forwards;
 }
 
-/* --- Lado Direito --- */
 .right-side {
   width: 50%;
   background-color: var(--branco);
@@ -74,7 +72,6 @@ body {
   transform: translateY(-3px);
 }
 
-/* --- Logo --- */
 .logo img {
   width: 180px;
   margin-bottom: 20px;
@@ -88,7 +85,6 @@ h2 {
   margin-bottom: 25px;
 }
 
-/* --- Inputs --- */
 .input-group {
   text-align: left;
   margin-bottom: 22px;
@@ -145,7 +141,6 @@ h2 {
   color: var(--cinza-medio);
 }
 
-/* --- Botão --- */
 .btn-login {
   width: 100%;
   background: linear-gradient(135deg, var(--cinza-escuro) 0%, var(--cinza-medio) 100%);
@@ -165,7 +160,6 @@ h2 {
   transform: translateY(-2px);
 }
 
-/* --- Notificações --- */
 .notification {
   padding: 10px;
   margin-bottom: 15px;
@@ -190,7 +184,6 @@ h2 {
   color: #856404;
 }
 
-/* --- Animações --- */
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
@@ -206,7 +199,6 @@ h2 {
   to { transform: translateX(0); opacity: 1; }
 }
 
-/* --- Responsivo --- */
 @media (max-width: 950px) {
   .main-container {
     flex-direction: column;

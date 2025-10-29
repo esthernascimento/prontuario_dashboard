@@ -1,6 +1,3 @@
-/* ============================================
-   EDITAR MÉDICO - CSS PROFISSIONAL
-   ============================================ */
 
    :root {
     --primary-blue: #0618b9;
@@ -33,9 +30,6 @@ body {
     min-height: 100vh;
 }
 
-/* ============================================
-   CONTAINER PRINCIPAL DO FORMULÁRIO
-   ============================================ */
 
 .cadastrar-container {
     background: var(--bg-white);
@@ -59,9 +53,6 @@ body {
     }
 }
 
-/* ============================================
-   CABEÇALHO "EDITAR MÉDICO"
-   ============================================ */
 
 .cadastrar-header {
     background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
@@ -113,17 +104,9 @@ body {
     letter-spacing: -0.5px;
 }
 
-/* ============================================
-   FORMULÁRIO
-   ============================================ */
-
 .cadastrar-container form {
     padding: 32px 36px;
 }
-
-/* ============================================
-   TÍTULOS DAS SEÇÕES
-   ============================================ */
 
 .form-section-title {
     font-size: 1.15rem;
@@ -147,9 +130,6 @@ body {
     border-radius: 3px;
 }
 
-/* ============================================
-   SEPARADOR HORIZONTAL
-   ============================================ */
 
 .section-separator {
     border: none;
@@ -157,10 +137,6 @@ body {
     background: linear-gradient(90deg, transparent 0%, var(--border-color) 50%, transparent 100%);
     margin: 32px 0;
 }
-
-/* ============================================
-   GRUPOS DE INPUT
-   ============================================ */
 
 .input-group {
     margin-bottom: 18px;
@@ -184,10 +160,6 @@ body {
     }
 }
 
-/* ============================================
-   LABELS
-   ============================================ */
-
 form label {
     display: block;
     font-weight: 600;
@@ -197,9 +169,6 @@ form label {
     transition: color 0.3s ease;
 }
 
-/* ============================================
-   INPUTS E SELECTS
-   ============================================ */
 
 .cadastrar-container form input:not([type="submit"]):not([type="button"]),
 .custom-select {
@@ -240,10 +209,6 @@ form label {
     border-color: var(--success-green);
 }
 
-/* ============================================
-   LAYOUT DE DUAS COLUNAS (SPLIT GROUP)
-   ============================================ */
-
 .split-group {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -254,10 +219,6 @@ form label {
 .split-group .input-group {
     margin-bottom: 0;
 }
-
-/* ============================================
-   CUSTOMIZAÇÃO DO SELECT
-   ============================================ */
 
 .custom-select {
     appearance: none;
@@ -279,10 +240,6 @@ form label {
     background: white;
     padding: 10px;
 }
-
-/* ============================================
-   BOTÃO SALVAR
-   ============================================ */
 
 .save-button {
     display: block;
@@ -337,10 +294,6 @@ form label {
 .save-button:hover::after {
     transform: scale(1.2);
 }
-
-/* ============================================
-   MODAL
-   ============================================ */
 
 .modal-overlay {
     position: fixed;
@@ -425,9 +378,6 @@ form label {
     line-height: 1.6;
 }
 
-/* ============================================
-   BOTÕES DO MODAL
-   ============================================ */
 
 .modal-buttons {
     display: flex;
@@ -573,10 +523,6 @@ form label {
         font-size: 3.5rem;
     }
 }
-
-/* ============================================
-   MICRO INTERAÇÕES
-   ============================================ */
 
 input:focus,
 .custom-select:focus {

@@ -14,7 +14,7 @@
 <body>
     <main class="main-container">
         <div class="left-side">
-            <img src="{{ asset('img/medico-logo2.png') }}" alt="Logo Médico" />
+        <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo ilustrativa">
         </div>
 
         <div class="right-side">
