@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Medico;
 use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Consulta;
+use Carbon\Carbon; // Adicionado para uso consistente
 
 class MedicoPdfController extends Controller
 {   
@@ -18,23 +19,30 @@ class MedicoPdfController extends Controller
                 return redirect()->back()->with('error', 'Consulta não encontrada.');
             }
 
-            // Verifica se existem exames
-            if (empty($consulta->examesSolicitados) || trim($consulta->examesSolicitados) === '') {
+            // 1. CORREÇÃO: Garante que a propriedade existe e trata como string vazia se for nula
+            $exames = $consulta->examesSolicitados ?? '';
+            
+            // Verifica se existem exames (mantendo a lógica de negócio)
+            if (trim($exames) === '') {
+                // Se cair aqui, o PDF não será gerado e o usuário será redirecionado.
+                // O problema é que o botão está visível/clicável no front-end sem dados.
                 return redirect()->back()->with('error', 'Nenhum exame solicitado para esta consulta.');
             }
 
             // Prepara os dados para o PDF
             $data = [
                 'paciente' => $consulta->paciente,
+                // 3. MELHORIA: Mais robusto caso o relacionamento 'medico' seja nulo
                 'medico' => $consulta->medico ?? (object)[
-                    'nomeMedico' => $consulta->nomeMedico,
-                    'crmMedico' => $consulta->crmMedico
+                    'nomeMedico' => $consulta->nomeMedico ?? 'N/A',
+                    'crmMedico' => $consulta->crmMedico ?? 'N/A'
                 ],
                 'consulta' => $consulta,
                 'exames' => $consulta->examesSolicitados,
                 'numProntuario' => $consulta->prontuario ? 
                     str_pad($consulta->prontuario->idProntuarioPK, 6, '0', STR_PAD_LEFT) : 'N/A',
-                'dataEmissao' => now()->format('d/m/Y H:i'),
+                // 2. MELHORIA: Uso de Carbon
+                'dataEmissao' => Carbon::now()->format('d/m/Y H:i'),
             ];
 
             // Gera o PDF
@@ -51,7 +59,7 @@ class MedicoPdfController extends Controller
             // Nome do arquivo
             $nomeArquivo = 'Pedido_Exames_' . 
                 preg_replace('/[^a-zA-Z0-9]/', '_', $consulta->paciente->nomePaciente) . '_' . 
-                \Carbon\Carbon::parse($consulta->dataConsulta)->format('Ymd') . '.pdf';
+                Carbon::parse($consulta->dataConsulta)->format('Ymd') . '.pdf'; // Uso de Carbon
 
             // FORÇA O DOWNLOAD - Método 1 (recomendado)
             return $pdf->download($nomeArquivo);

@@ -18,25 +18,6 @@
             @endif
         </div>
 
-        {{-- DEBUG - VERIFICAR POR QUE O BOTÃO SUMIU --}}
-        <div style="background: #fff3cd; padding: 15px; margin: 20px; border-radius: 8px; border-left: 4px solid #ffc107;">
-            <h4>🔍 DEBUG - Verificando Condições do PDF:</h4>
-            <p><strong>Consulta existe:</strong> {{ isset($consulta) ? 'SIM' : 'NÃO' }}</p>
-            @if(isset($consulta))
-                <p><strong>ID da Consulta:</strong> {{ $consulta->idConsultaPK }}</p>
-                <p><strong>Exames Solicitados existe:</strong> {{ $consulta->examesSolicitados ? 'SIM' : 'NÃO' }}</p>
-                <p><strong>Conteúdo dos Exames:</strong> "{{ $consulta->examesSolicitados }}"</p>
-                <p><strong>Exames está vazio?:</strong> {{ empty($consulta->examesSolicitados) ? 'SIM' : 'NÃO' }}</p>
-                <p><strong>Exames trim está vazio?:</strong> {{ trim($consulta->examesSolicitados ?? '') === '' ? 'SIM' : 'NÃO' }}</p>
-                <p><strong>Condição 1 (isset):</strong> {{ isset($consulta) ? 'PASSOU' : 'NÃO PASSOU' }}</p>
-                <p><strong>Condição 2 (examesSolicitados):</strong> {{ $consulta->examesSolicitados ? 'PASSOU' : 'NÃO PASSOU' }}</p>
-                <p><strong>Condição 3 (trim):</strong> {{ trim($consulta->examesSolicitados ?? '') !== '' ? 'PASSOU' : 'NÃO PASSOU' }}</p>
-                <p><strong>BOTÃO DEVE APARECER?:</strong> 
-                    {{ isset($consulta) && $consulta->examesSolicitados && trim($consulta->examesSolicitados) !== '' ? 'SIM' : 'NÃO' }}
-                </p>
-            @endif
-        </div>
-
         {{-- Informações do Paciente e Médico --}}
         <div class="paciente-info">
             <h3><i class="bi bi-person-fill"></i> Informações do Atendimento</h3>
@@ -76,7 +57,7 @@
             </div>
         </div>
 
-        {{-- BOTÃO PDF - VERSÃO FLEXÍVEL --}}
+        {{-- BOTÃO PDF DO TOPO - Pedido de Exames --}}
         @if(isset($consulta))
         <div class="pdf-section">
             <div class="pdf-container">
@@ -99,11 +80,11 @@
                     @endif
                 </div>
                 
-                {{-- BOTÃO SEMPRE VISÍVEL MAS CONDICIONAL --}}
                 @if($consulta->examesSolicitados && trim($consulta->examesSolicitados) !== '')
                     <a href="{{ route('medico.gerarPdfExames', $consulta->idConsultaPK) }}" 
                        class="btn-pdf-generate"
-                       id="pdf-btn-{{ $consulta->idConsultaPK }}">
+                       id="pdf-btn-{{ $consulta->idConsultaPK }}"
+                       target="_blank">
                         <i class="bi bi-download"></i>
                         Baixar PDF
                     </a>
@@ -117,6 +98,7 @@
         </div>
         @endif
     
+        {{-- Anotações da Enfermagem --}}
         @if (isset($consulta) && $anotacoesEnfermagem && $anotacoesEnfermagem->isNotEmpty())
         <div class="anotacoes-enfermagem-container">
              <h3><i class="bi bi-heart-pulse-fill"></i> Triagem da Enfermagem</h3>
@@ -151,6 +133,7 @@
         </div>
         @endif
 
+        {{-- FORMULÁRIO DE CONSULTA --}}
         <form action="{{ isset($consulta) ? route('medico.prontuario.update', $consulta->idConsultaPK) : route('medico.prontuario.store', $paciente->idPaciente) }}" method="POST" id="prontuarioForm">
             @csrf
             @if (isset($consulta))
@@ -255,16 +238,25 @@
                     name="posologia" 
                     rows="4"
                     placeholder="Ex: Paracetamol 500mg - 1 comprimido de 8/8h por 5 dias&#10;Amoxicilina 500mg - 1 cápsula de 8/8h por 7 dias"
-                >{{ old('posologia') }}</textarea>
+                >{{ old('posologia', $consulta->posologia ?? '') }}</textarea>
                 @error('posologia')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
 
+            {{-- BOTÕES DE AÇÃO --}}
             <div class="button-group">
                 <a href="{{ route('medico.prontuario') }}" class="btn-cancelar">
                     <i class="bi bi-x-circle"></i> {{ isset($consulta) ? 'Voltar para Fila' : 'Cancelar' }}
                 </a>
+                
+                {{-- BOTÃO QUE ABRE O MODAL CUSTOMIZADO --}}
+                @if(isset($consulta))
+                <button type="button" class="btn-pdf-download" onclick="openPdfModal()">
+                    <i class="bi bi-file-earmark-pdf-fill"></i> Baixar PDF
+                </button>
+                @endif
+
                 <button type="submit" class="save-button">
                     <i class="bi bi-check-circle"></i> {{ isset($consulta) ? 'Finalizar Atendimento' : 'Salvar Prontuário' }}
                 </button>
@@ -273,35 +265,222 @@
     </div>
 </main>
 
-<script>
-    document.getElementById('filtroMedicamentos').addEventListener('input', function() {
-        const termo = this.value.toLowerCase();
-        document.querySelectorAll('#listaMedicamentos .checkbox-item').forEach(item => {
-            const texto = item.textContent.toLowerCase();
-            item.style.display = texto.includes(termo) ? '' : 'none';
-        });
-    });
+{{-- ========================================
+     MODAL CUSTOMIZADO DE PDF (Estilo Confirmação)
+     ======================================== --}}
+@if(isset($consulta))
+<div id="pdfOptionsModal" class="modal-overlay-pdf">
+    <div class="modal-content-pdf">
+        {{-- Header do Modal --}}
+        <div class="modal-header-pdf">
+            <i class="bi bi-file-earmark-pdf-fill"></i>
+            <h2>Selecione o Documento para Baixar</h2>
+            <p>Escolha qual PDF você deseja gerar</p>
+        </div>
 
-    document.addEventListener('DOMContentLoaded', function() {
-        // Loading para o botão PDF
-        const pdfBtns = document.querySelectorAll('[id^="pdf-btn-"]');
-        
-        pdfBtns.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                const originalHtml = btn.innerHTML;
-                
-                btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Gerando PDF...';
-                btn.style.opacity = '0.7';
-                btn.style.pointerEvents = 'none';
-                
-                // Restaurar após 5 segundos (fallback)
-                setTimeout(() => {
-                    btn.innerHTML = originalHtml;
-                    btn.style.opacity = '1';
-                    btn.style.pointerEvents = 'auto';
-                }, 5000);
+        {{-- Body do Modal --}}
+        <div class="modal-body-pdf">
+            {{-- OPÇÃO 1: Pedido de Exames --}}
+            @php
+                $examesDisponiveis = $consulta->examesSolicitados && trim($consulta->examesSolicitados) !== '';
+            @endphp
+            
+            @if($examesDisponiveis)
+                <a href="{{ route('medico.gerarPdfExames', $consulta->idConsultaPK) }}" 
+                   class="pdf-modal-option" 
+                   target="_blank"
+                   onclick="handlePdfDownload(event)">
+                    <div class="option-icon">
+                        <i class="bi bi-clipboard2-pulse"></i>
+                    </div>
+                    <div class="pdf-modal-info">
+                        <h3>Pedido de Exames</h3>
+                        <p>Documento com a lista de exames solicitados para o paciente</p>
+                    </div>
+                    <span class="pdf-status-badge disponivel">
+                        <i class="bi bi-check-circle-fill"></i> Disponível
+                    </span>
+                </a>
+            @else
+                <div class="pdf-modal-option disabled">
+                    <div class="option-icon">
+                        <i class="bi bi-clipboard2-pulse"></i>
+                    </div>
+                    <div class="pdf-modal-info">
+                        <h3>Pedido de Exames</h3>
+                        <p>Nenhum exame foi solicitado ainda. Preencha o campo "Exames Solicitados" e salve.</p>
+                    </div>
+                    <span class="pdf-status-badge indisponivel">
+                        <i class="bi bi-x-circle-fill"></i> Indisponível
+                    </span>
+                </div>
+            @endif
+
+            {{-- OPÇÃO 2: Prescrição Médica --}}
+            @php
+                $posologiaDisponivel = isset($consulta->posologia) && trim($consulta->posologia) !== '';
+            @endphp
+            
+            @if($posologiaDisponivel)
+                <a href="{{ route('medico.gerarPdfPrescricao', $consulta->idConsultaPK) }}" 
+                   class="pdf-modal-option" 
+                   target="_blank"
+                   onclick="handlePdfDownload(event)">
+                    <div class="option-icon">
+                        <i class="bi bi-capsule-pill"></i>
+                    </div>
+                    <div class="pdf-modal-info">
+                        <h3>Prescrição Médica</h3>
+                        <p>Documento com a posologia e instruções dos medicamentos prescritos</p>
+                    </div>
+                    <span class="pdf-status-badge disponivel">
+                        <i class="bi bi-check-circle-fill"></i> Disponível
+                    </span>
+                </a>
+            @else
+                <div class="pdf-modal-option disabled">
+                    <div class="option-icon">
+                        <i class="bi bi-capsule-pill"></i>
+                    </div>
+                    <div class="pdf-modal-info">
+                        <h3>Prescrição Médica</h3>
+                        <p>Nenhuma posologia foi cadastrada. Preencha o campo "Posologia" e salve.</p>
+                    </div>
+                    <span class="pdf-status-badge indisponivel">
+                        <i class="bi bi-x-circle-fill"></i> Indisponível
+                    </span>
+                </div>
+            @endif
+        </div>
+
+        {{-- Footer do Modal --}}
+        <div class="modal-footer-pdf">
+            <button type="button" onclick="closePdfModal()" class="btn-fechar">
+                <i class="bi bi-x-circle"></i> Fechar
+            </button>
+        </div>
+    </div>
+</div>
+@endif
+
+{{-- ========================================
+     JAVASCRIPT CUSTOMIZADO (SEM BOOTSTRAP)
+     ======================================== --}}
+<script>
+// ===== FUNÇÕES DO MODAL DE PDF =====
+function openPdfModal() {
+    const modal = document.getElementById('pdfOptionsModal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closePdfModal() {
+    const modal = document.getElementById('pdfOptionsModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+function handlePdfDownload(event) {
+    const link = event.currentTarget;
+    const originalHtml = link.innerHTML;
+    
+    // Mostra loading
+    const optionIcon = link.querySelector('.option-icon');
+    const statusBadge = link.querySelector('.pdf-status-badge');
+    
+    if (optionIcon) {
+        optionIcon.innerHTML = '<i class="bi bi-hourglass-split"></i>';
+    }
+    if (statusBadge) {
+        statusBadge.innerHTML = '<i class="bi bi-hourglass-split"></i> Gerando...';
+        statusBadge.style.background = '#fef3c7';
+        statusBadge.style.color = '#92400e';
+    }
+    
+    // Fecha o modal após 800ms
+    setTimeout(() => {
+        closePdfModal();
+    }, 800);
+    
+    // Restaura após 3 segundos (caso o usuário volte)
+    setTimeout(() => {
+        if (optionIcon) {
+            optionIcon.innerHTML = originalHtml.match(/<div class="option-icon">[\s\S]*?<\/div>/)[0].replace(/<\/?div[^>]*>/g, '');
+        }
+        if (statusBadge) {
+            statusBadge.innerHTML = '<i class="bi bi-check-circle-fill"></i> Disponível';
+            statusBadge.style.background = '#d1fae5';
+            statusBadge.style.color = '#065f46';
+        }
+    }, 3000);
+}
+
+// Fecha modal ao clicar fora
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('pdfOptionsModal');
+    if (modal && event.target === modal) {
+        closePdfModal();
+    }
+});
+
+// Fecha modal com ESC
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closePdfModal();
+    }
+});
+
+// ===== CÓDIGO EXISTENTE =====
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // ===== FILTRO DE MEDICAMENTOS =====
+    const filtroMedicamentos = document.getElementById('filtroMedicamentos');
+    if (filtroMedicamentos) {
+        filtroMedicamentos.addEventListener('input', function() {
+            const termo = this.value.toLowerCase();
+            document.querySelectorAll('#listaMedicamentos .checkbox-item').forEach(item => {
+                const texto = item.textContent.toLowerCase();
+                item.style.display = texto.includes(termo) ? '' : 'none';
             });
         });
-    });
+    }
+
+    // ===== FUNÇÃO DE LOADING PARA BOTÃO DO TOPO =====
+    const setLoading = (element, isLoading) => {
+        if (!element) return;
+        
+        if (isLoading) {
+            const originalHtml = element.innerHTML;
+            element.setAttribute('data-original-html', originalHtml);
+            element.innerHTML = '<i class="bi bi-hourglass-split"></i> Gerando...';
+            element.style.opacity = '0.7';
+            element.style.pointerEvents = 'none';
+        } else {
+            const originalHtml = element.getAttribute('data-original-html');
+            if (originalHtml) {
+                element.innerHTML = originalHtml;
+                element.style.opacity = '1';
+                element.style.pointerEvents = 'auto';
+                element.removeAttribute('data-original-html');
+            }
+        }
+    };
+
+    // ===== LOADING PARA BOTÃO PDF DO TOPO =====
+    const pdfBtnTopo = document.querySelector('.pdf-section .btn-pdf-generate:not([disabled])');
+    if (pdfBtnTopo) {
+        pdfBtnTopo.addEventListener('click', function() {
+            setLoading(this, true);
+            setTimeout(() => setLoading(this, false), 5000);
+        });
+    }
+
+    console.log('✅ Sistema de PDF customizado carregado com sucesso!');
+});
 </script>
+
 @endsection
