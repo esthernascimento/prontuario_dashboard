@@ -5,7 +5,7 @@
 @section('content')
 
 <body>
-{{-- O CSS está sendo referenciado aqui e deve estar na pasta 'public/css/enfermeiro/cadastrarProntuario.css' --}}
+
 <link rel="stylesheet" href="{{ asset('css/enfermeiro/cadastrarProntuario.css') }}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> 
 
@@ -13,7 +13,7 @@
     <div class="cadastrar-container">
         <div class="cadastrar-header">
             <i class="bi bi-journal-plus icon"></i>
-            {{-- Título atualizado para refletir a ação --}}
+
             <h1>Realizar Triagem e Anotação</h1>
         </div>
 
@@ -21,7 +21,7 @@
             <h3><i class="bi bi-person-fill"></i> Informações do Atendimento</h3>
             
             <div class="info-grid">
-                {{-- Variável $paciente (Passada pelo Controller) --}}
+        
                 <div class="info-item">
                     <strong>Paciente:</strong>
                     <span>{{ $paciente->nomePaciente }}</span>
@@ -35,8 +35,6 @@
                     <span>{{ \Carbon\Carbon::parse($paciente->dataNascPaciente)->format('d/m/Y') }}</span>
                 </div>
 
-                {{-- Variável $enfermeiro (Passada pelo Controller) --}}
-                {{-- [NOTA: O Controller precisa passar a variável $enfermeiro no método 'create'] --}}
                 <div class="info-item">
                     <strong>Enfermeiro(a) Responsável:</strong>
                     <span>{{ $enfermeiro->nomeEnfermeiro ?? (Auth::user()->name ?? 'N/A') }}</span>
@@ -50,10 +48,7 @@
                     <span>Enfermeiro(a)</span>
                 </div>
 
-                <!-- ================================================================ -->
-                <!-- --- ADICIONADO: QUEIXA PRINCIPAL DO RECEPCIONISTA --- -->
-                <!-- ================================================================ -->
-                {{-- A variável $consulta vem do ProntuarioController@create --}}
+ 
                 <div class="info-item queixa-principal">
                     <strong>Queixa Principal (Registrada na Recepção):</strong>
                     <span>"{{ $consulta->queixa_principal }}"</span>
@@ -62,22 +57,14 @@
             </div>
         </div>
 
-        {{-- Rota de POST: enfermeiro.anotacao.store (Definida no web.php) --}}
         <form action="{{ route('enfermeiro.anotacao.store', $paciente->idPaciente) }}" method="POST">
             @csrf
 
-            <!-- ================================================================ -->
-            <!-- --- ADICIONADO: ID DA CONSULTA (OBRIGATÓRIO) --- -->
-            <!-- ================================================================ -->
-            {{-- Campo oculto para enviar o ID da consulta que está sendo atualizada --}}
             <input type="hidden" name="idConsulta" value="{{ $consulta->idConsultaPK }}">
 
-            {{-- CORREÇÃO DE ERRO: Campo tipo_registro é REQUIRED no Controller mas não existia no form --}}
+   
             <input type="hidden" name="tipo_registro" value="Anotação de Triagem"> 
 
-            <!-- ================================================================ -->
-            <!-- --- ADICIONADO: CLASSIFICAÇÃO DE RISCO --- -->
-            <!-- ================================================================ -->
             <div class="form-section-title">Classificação de Risco (Obrigatório)</div>
             <div class="input-group">
                 <div id="botoes_risco">
@@ -100,7 +87,6 @@
 
             <div class="form-section-title">Dados da Anotação</div>
 
-            {{-- Campo Data e Hora --}}
             <div class="input-group">
                 <label for="data_hora">
                     <i class="bi bi-calendar-check"></i> Data e Hora do Registro *
@@ -120,7 +106,6 @@
             
             <div class="form-section-title">Sinais Vitais (Opcional)</div>
             
-            {{-- Linha 1 de Sinais Vitais em grid de 3 colunas --}}
             <div class="input-group-row-3">
                 <div class="input-group">
                     <label for="pressao_arterial">
@@ -141,8 +126,7 @@
                     <input type="text" id="frequencia_cardiaca" name="frequencia_cardiaca" value="{{ old('frequencia_cardiaca') }}" placeholder="Ex: 75">
                 </div>
             </div>
-            
-            {{-- Linha 2 de Sinais Vitais em grid de 3 colunas --}}
+
             <div class="input-group-row-3">
                 <div class="input-group">
                     <label for="frequencia_respiratoria">
@@ -166,39 +150,72 @@
 
             <div class="form-section-title">Detalhes da Ocorrência</div>
 
-            {{-- Campo Alergias --}}
             <div class="input-group">
-                <label for="alergias">
-                    <i class="bi bi-exclamation-triangle-fill"></i> Alergias Identificadas (Medicamentos, Alimentos, etc.)
-                </label>
-                <textarea 
-                    id="alergias" 
-                    name="alergias" 
-                    rows="2"
-                    placeholder="Liste todas as alergias do paciente."
-                >{{ old('alergias', '') }}</textarea>
-                @error('alergias')
-                    <span class="error">{{ $message }}</span>
-                @enderror
-            </div>
+   <!-- Alergias -->
+<div class="input-group">
+    <label>
+        <i class="bi bi-exclamation-triangle-fill"></i> Alergias Identificadas
+    </label>
+    <input type="text" id="filtroAlergias" class="input-filtro" placeholder="Pesquisar alergia...">
+
+    <div id="listaAlergias" class="checkbox-list">
+        <!-- Campo hidden para garantir que 'alergias' seja sempre enviado -->
+        <input type="hidden" name="alergias" value="">
+
+        @php
+            $alergias = [
+                'Dipirona', 'Penicilina', 'Amoxicilina', 'Iodo', 'Látex', 'Glúten', 'Lactose', 
+                'Mariscos', 'Amendoim', 'Ovos', 'Soja', 'Frutos do mar', 'Frutas cítricas',
+                'Corantes', 'Conservantes', 'Inseticidas', 'Perfumes', 'Anestésicos', 
+                'Ibuprofeno', 'Aspirina', 'Cloro', 'Frio intenso', 'Poeira', 'Ácaros', 
+                'Pólen', 'Pelagem animal', 'Fungos', 'Produtos de limpeza', 'Antibióticos diversos',
+                'Outros'
+            ];
+        @endphp
+
+        @foreach($alergias as $alergia)
+            <label class="checkbox-item">
+                <input type="checkbox" name="alergias[]" value="{{ $alergia }}"
+                    {{ is_array(old('alergias')) && in_array($alergia, old('alergias')) ? 'checked' : '' }}>
+                {{ $alergia }}
+            </label>
+        @endforeach
+    </div>
+</div>
+
+<!-- Medicações -->
+<div class="input-group">
+    <label>
+        <i class="bi bi-capsule"></i> Medicações / Procedimentos Ministrados
+    </label>
+    <input type="text" id="filtroMedicacoes" class="input-filtro" placeholder="Pesquisar medicação...">
+
+    <div id="listaMedicacoes" class="checkbox-list">
+        <input type="hidden" name="medicacoes_ministradas" value="">
+
+        @php
+            $medicacoes = [
+                'Paracetamol', 'Dipirona', 'Soro fisiológico', 'Glicose 5%', 'Ranitidina', 
+                'Metoclopramida', 'Omeprazol', 'Buscopan', 'Tramal', 'Cetoprofeno',
+                'Hidrocortisona', 'Prednisona', 'Clorexidina', 'Diclofenaco', 
+                'Adrenalina', 'Insulina', 'Amoxicilina', 'Azitromicina', 
+                'Atadura', 'Curativo', 'Inalação', 'Suturas', 'Antisséptico', 'Soroterapia', 
+                'Curativo com gaze', 'Glicemia capilar', 'Administração IM', 'Administração EV',
+                'Administração VO', 'Outros'
+            ];
+        @endphp
+
+        @foreach($medicacoes as $medicacao)
+            <label class="checkbox-item">
+                <input type="checkbox" name="medicacoes_ministradas[]" value="{{ $medicacao }}"
+                    {{ is_array(old('medicacoes_ministradas')) && in_array($medicacao, old('medicacoes_ministradas')) ? 'checked' : '' }}>
+                {{ $medicacao }}
+            </label>
+        @endforeach
+    </div>
+</div>
+
             
-            {{-- Campo Medicações/Procedimentos --}}
-            <div class="input-group">
-                <label for="medicacoes_ministradas">
-                    <i class="bi bi-capsule"></i> Medicações e/ou Procedimentos Ministrados (Ações de Enfermagem)
-                </label>
-                <textarea 
-                    id="medicacoes_ministradas" 
-                    name="medicacoes_ministradas" 
-                    rows="3"
-                    placeholder="Descreva as medicações administradas ou procedimentos realizados."
-                >{{ old('medicacoes_ministradas') }}</textarea>
-                @error('medicacoes_ministradas')
-                    <span class="error">{{ $message }}</span>
-                @enderror
-            </div>
-            
-            {{-- Campo Descrição/Evolução --}}
             <div class="input-group">
                 <label for="descricao">
                     <i class="bi bi-file-text"></i> Descrição da Anotação / Evolução *
@@ -215,7 +232,6 @@
                 @enderror
             </div>
             
-            {{-- CAMPO DE SELEÇÃO DE UNIDADE AJUSTADO --}}
             <div class="input-group">
                 <label for="unidade_atendimento">
                     <i class="bi bi-hospital"></i> Unidade de Atendimento *
@@ -235,7 +251,6 @@
             </div>
 
             <div class="button-group">
-                {{-- Rota de Cancelar: enfermeiro.prontuario.index (Definida no web.php) --}}
                 <a href="{{ route('enfermeiro.prontuario') }}" class="btn-cancelar"> 
                     <i class="bi bi-x-circle"></i> Cancelar
                 </a>
@@ -247,4 +262,25 @@
     </div>
 </main>
 </body>
+
+
+<script>
+    // Filtro de pesquisa para Alergias
+    document.getElementById('filtroAlergias').addEventListener('input', function() {
+        const termo = this.value.toLowerCase();
+        document.querySelectorAll('#listaAlergias .checkbox-item').forEach(item => {
+            const texto = item.textContent.toLowerCase();
+            item.style.display = texto.includes(termo) ? '' : 'none';
+        });
+    });
+
+    // Filtro de pesquisa para Medicações
+    document.getElementById('filtroMedicacoes').addEventListener('input', function() {
+        const termo = this.value.toLowerCase();
+        document.querySelectorAll('#listaMedicacoes .checkbox-item').forEach(item => {
+            const texto = item.textContent.toLowerCase();
+            item.style.display = texto.includes(termo) ? '' : 'none';
+        });
+    });
+</script>
 @endsection
