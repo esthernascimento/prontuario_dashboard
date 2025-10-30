@@ -4,94 +4,9 @@
 @section('title', isset($consulta) ? 'Finalizar Atendimento' : 'Cadastrar Consulta')
 
 @section('content')
-{{-- Usa o mesmo CSS --}}
+
 <link rel="stylesheet" href="{{ asset('css/medico/cadastrarProntuario.css') }}">
-{{-- Estilos adicionais para anotações do enfermeiro e badges (copiados da versão anterior 'editarProntuario') --}}
-<style>
-    .anotacoes-enfermagem-container {
-        margin: 32px 36px;
-        padding: 28px;
-        background-color: #f0f9ff; /* Azul bem claro */
-        border: 1px solid #cce5ff;
-        border-left: 5px solid #0d6efd; /* Destaque azul */
-        border-radius: var(--radius-md);
-        box-shadow: var(--shadow-sm);
-    }
-    .anotacoes-enfermagem-container h3 {
-        color: #0a58ca; /* Azul escuro */
-        font-size: 1.15rem;
-        margin: 0 0 20px 0;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-weight: 700;
-    }
-     .anotacoes-enfermagem-container h3 i {
-        font-size: 1.3rem;
-    }
-    .anotacao-item {
-        margin-bottom: 20px;
-        padding-bottom: 20px;
-        border-bottom: 1px dashed var(--border-color);
-    }
-     .anotacao-item:last-child {
-        margin-bottom: 0;
-        padding-bottom: 0;
-        border-bottom: none;
-    }
-    .anotacao-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-        font-size: 0.9rem;
-        color: var(--text-secondary);
-    }
-     .anotacao-header strong {
-        font-weight: 600;
-        color: var(--text-primary);
-    }
-    .anotacao-body p {
-        margin: 5px 0;
-        line-height: 1.6;
-        color: var(--text-primary);
-    }
-     .anotacao-body strong {
-        font-weight: 600;
-    }
-    .sinais-vitais-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 10px 20px;
-        margin-top: 10px;
-        font-size: 0.9rem;
-    }
-     .sinal-vital-item {
-        background-color: #e6f7ff;
-        padding: 8px 12px;
-        border-radius: var(--radius-sm);
-        border: 1px solid #b3e0ff;
-     }
 
-     .sinal-vital-item strong { color: #0056b3; }
-
-    .status-badge {
-        display: inline-block;
-        padding: 6px 12px;
-        font-size: 0.8rem;
-        font-weight: 700;
-        border-radius: 20px;
-        text-transform: uppercase;
-        color: white;
-        min-width: 100px;
-        text-align: center;
-    }
-    .status-vermelho { background-color: #dc3545; }
-    .status-laranja { background-color: #fd7e14; }
-    .status-amarelo { background-color: #ffc107; color: #000; }
-    .status-verde { background-color: #198754; }
-    .status-azul { background-color: #0d6efd; }
-</style>
 
 <main class="main-dashboard">
     <div class="cadastrar-container">
@@ -242,22 +157,63 @@
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
+<!-- Medicamentos Prescritos -->
+<div class="input-group">
+    <label>
+        <i class="bi bi-capsule-pill"></i> Medicamentos Prescritos
+    </label>
+    
+    <input type="text" id="filtroMedicamentos" class="input-filtro" placeholder="Pesquisar medicamento...">
 
-            <div class="input-group">
-                <label for="medicamentosPrescritos">
-                    <i class="bi bi-capsule"></i> Medicamentos Prescritos
-                </label>
-                <textarea
-                    id="medicamentosPrescritos"
-                    name="medicamentosPrescritos"
-                    rows="4"
-                    placeholder="Liste os medicamentos prescritos com posologia..."
-                     {{-- Preenche com dados da consulta existente, se houver --}}
-                >{{ old('medicamentosPrescritos', $consulta->medicamentosPrescritos ?? '') }}</textarea>
-                @error('medicamentosPrescritos')
-                    <span class="error">{{ $message }}</span>
-                @enderror
-            </div>
+    <div id="listaMedicamentos" class="checkbox-list">
+        <!-- Campo hidden para garantir que 'medicamentos_prescritos' seja sempre enviado -->
+        <input type="hidden" name="medicamentos_prescritos" value="">
+
+        @php
+            $medicamentos = [
+                'Paracetamol 500mg', 'Paracetamol 750mg', 'Dipirona 500mg', 'Dipirona 1g',
+                'Ibuprofeno 400mg', 'Ibuprofeno 600mg', 'Amoxicilina 500mg', 'Amoxicilina 875mg',
+                'Azitromicina 500mg', 'Cefalexina 500mg', 'Ciprofloxacino 500mg',
+                'Omeprazol 20mg', 'Omeprazol 40mg', 'Pantoprazol 40mg', 'Ranitidina 150mg',
+                'Metoclopramida 10mg', 'Bromoprida 10mg', 'Domperidona 10mg',
+                'Diclofenaco 50mg', 'Diclofenaco Gel', 'Nimesulida 100mg',
+                'Prednisona 5mg', 'Prednisona 20mg', 'Dexametasona 4mg',
+                'Loratadina 10mg', 'Desloratadina 5mg', 'Cetirizina 10mg',
+                'Captopril 25mg', 'Losartana 50mg', 'Enalapril 10mg',
+                'Sinvastatina 20mg', 'Atorvastatina 20mg',
+                'Metformina 500mg', 'Metformina 850mg', 'Glibenclamida 5mg',
+                'Levotiroxina 25mcg', 'Levotiroxina 50mcg', 'Levotiroxina 100mcg',
+                'Soro Fisiológico 0,9%', 'Glicose 5%', 'Ringer Lactato',
+                'Vitamina C', 'Complexo B', 'Sulfato Ferroso',
+                'Outros'
+            ];
+        @endphp
+
+        @foreach($medicamentos as $medicamento)
+            <label class="checkbox-item">
+                <input type="checkbox" name="medicamentos_prescritos[]" value="{{ $medicamento }}"
+                    {{ is_array(old('medicamentos_prescritos')) && in_array($medicamento, old('medicamentos_prescritos')) ? 'checked' : '' }}>
+                {{ $medicamento }}
+            </label>
+        @endforeach
+    </div>
+</div>
+
+<!-- Posologia e Observações -->
+<div class="input-group">
+    <label for="posologia">
+        <i class="bi bi-clock-history"></i> Posologia e Instruções de Uso
+    </label>
+    <textarea 
+        id="posologia" 
+        name="posologia" 
+        rows="4"
+        placeholder="Ex: Paracetamol 500mg - 1 comprimido de 8/8h por 5 dias&#10;Amoxicilina 500mg - 1 cápsula de 8/8h por 7 dias"
+    >{{ old('posologia') }}</textarea>
+    @error('posologia')
+        <span class="error">{{ $message }}</span>
+    @enderror
+</div>
 
             <div class="button-group">
                 {{-- O link/texto do botão Cancelar muda --}}
@@ -273,4 +229,14 @@
     </div>
 </main>
 
+<script>
+    // Filtro de pesquisa para Medicamentos
+    document.getElementById('filtroMedicamentos').addEventListener('input', function() {
+        const termo = this.value.toLowerCase();
+        document.querySelectorAll('#listaMedicamentos .checkbox-item').forEach(item => {
+            const texto = item.textContent.toLowerCase();
+            item.style.display = texto.includes(termo) ? '' : 'none';
+        });
+    });
+</script>
 @endsection

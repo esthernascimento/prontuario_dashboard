@@ -14,10 +14,7 @@ use App\Models\AnotacaoEnfermagem; // Importar AnotacaoEnfermagem
 
 class MedicoProntuarioController extends Controller
 {
-    /**
-     * Exibe a FILA DE ATENDIMENTO do médico (tela principal)
-     */
-    public function index()
+       public function index()
     {
         $consultas_na_fila = Consulta::where('status_atendimento', 'AGUARDANDO_CONSULTA')
             ->with('paciente')
@@ -43,9 +40,6 @@ class MedicoProntuarioController extends Controller
         ]);
     }
 
-    /**
-     * Exibe o prontuário completo de um paciente (histórico)
-     */
     public function show($id)
     {
         $paciente = Paciente::findOrFail($id);
@@ -69,49 +63,36 @@ class MedicoProntuarioController extends Controller
         return view('medico.visualizarProntuario', compact('paciente', 'prontuario', 'consultas', 'anotacoesEnfermagem'));
     }
 
-    /**
-     * Exibe o formulário para CRIAR nova consulta (Médico inicia do zero)
-     * --- MÉTODO ALTERADO ---
-     * Passa null para $consulta e $anotacoesEnfermagem
-     */
     public function create($id)
     {
         $paciente = Paciente::findOrFail($id);
 
         if (!$paciente->statusPaciente) {
-            // ... (tratamento de erro paciente inativo)
         }
 
         $medico = Auth::user()->medico;
          if (!$medico) {
-            // ... (tratamento de erro médico inválido)
+            
          }
 
-        // Garante que o prontuário exista (não essencial aqui, mas bom manter)
         Prontuario::firstOrCreate(
             ['idPacienteFK' => $paciente->idPaciente],
             ['dataAbertura' => now()->toDateString()]
         );
 
-        // Passa as variáveis necessárias, com null onde não aplicável
         return view('medico.cadastrarProntuario', [
             'paciente' => $paciente,
             'medico' => $medico,
-            'consulta' => null, // Indica que é um cadastro novo
-            'anotacoesEnfermagem' => null // Não há anotações prévias
+            'consulta' => null, 
+            'anotacoesEnfermagem' => null 
         ]);
     }
 
-    /**
-     * Armazena uma NOVA consulta/prontuário (Médico inicia do zero)
-     * --- NENHUMA ALTERAÇÃO NECESSÁRIA AQUI ---
-     * Este método continua o mesmo
-     */
+  
     public function store(Request $request, $id)
     {
         $validated = $request->validate([
             'dataConsulta' => 'required|date',
-            // 'unidade' => 'nullable|string|max:255', // Removido Unidade
             'observacoes' => 'nullable|string|max:2000',
             'examesSolicitados' => 'nullable|string|max:2000',
             'medicamentosPrescritos' => 'nullable|string|max:2000',
@@ -134,15 +115,11 @@ class MedicoProntuarioController extends Controller
              ['dataAbertura' => now()->toDateString()]
          );
 
-        // $unidade = Unidade::where('nomeUnidade', $validated['unidade'])->first(); // Removido Unidade
-
         $consulta = new Consulta();
         $consulta->idProntuarioFK = $prontuario->idProntuarioPK;
         $consulta->idMedicoFK = $medico->idMedicoPK;
         $consulta->nomeMedico = $medico->nomeMedico;
         $consulta->crmMedico = $medico->crmMedico;
-        // $consulta->idUnidadeFK = $unidade->idUnidadePK ?? null; // Removido Unidade
-        // $consulta->unidade = $validated['unidade'] ?? null; // Removido Unidade
         $consulta->dataConsulta = $validated['dataConsulta'];
         $consulta->observacoes = $validated['observacoes'] ?? null;
         $consulta->examesSolicitados = $validated['examesSolicitados'] ?? null;
@@ -157,11 +134,6 @@ class MedicoProntuarioController extends Controller
             ->with('success', 'Consulta registrada com sucesso!');
     }
 
-    /**
-     * Exibe o formulário para ATENDER/EDITAR uma consulta vinda da fila
-     * --- MÉTODO ALTERADO ---
-     * Agora retorna a view 'cadastrarProntuario' em vez de 'editarProntuario'
-     */
     public function edit($idConsulta)
     {
         $consulta = Consulta::with(['paciente', 'prontuario'])->findOrFail($idConsulta);
@@ -190,11 +162,7 @@ class MedicoProntuarioController extends Controller
         return view('medico.cadastrarProntuario', compact('consulta', 'paciente', 'medico', 'anotacoesEnfermagem'));
     }
 
-    /**
-     * Atualiza e FINALIZA uma consulta vinda da fila
-     * --- NENHUMA ALTERAÇÃO NECESSÁRIA AQUI ---
-     * Este método continua o mesmo, recebendo os dados do form e atualizando a $consulta
-     */
+    
     public function update(Request $request, $idConsulta)
     {
         $consulta = Consulta::findOrFail($idConsulta);
@@ -206,13 +174,10 @@ class MedicoProntuarioController extends Controller
 
         $validated = $request->validate([
             'dataConsulta' => 'required|date',
-            // 'unidade' => 'nullable|string|max:255', // Removido Unidade
             'observacoes' => 'nullable|string|max:2000',
             'examesSolicitados' => 'nullable|string|max:2000',
             'medicamentosPrescritos' => 'nullable|string|max:2000',
         ]);
-
-        // $unidade = Unidade::where('nomeUnidade', $validated['unidade'])->first(); // Removido Unidade
 
         $consulta->idMedicoFK = $medico->idMedicoPK;
         $consulta->nomeMedico = $medico->nomeMedico;
@@ -220,8 +185,6 @@ class MedicoProntuarioController extends Controller
         $consulta->status_atendimento = 'FINALIZADO';
 
         $consulta->dataConsulta = $validated['dataConsulta'];
-        // $consulta->idUnidadeFK = $unidade->idUnidadePK ?? null; // Removido Unidade
-        // $consulta->unidade = $validated['unidade'] ?? null; // Removido Unidade
         $consulta->observacoes = $validated['observacoes'] ?? null;
         $consulta->examesSolicitados = $validated['examesSolicitados'] ?? null;
         $consulta->medicamentosPrescritos = $validated['medicamentosPrescritos'] ?? null;
@@ -241,10 +204,6 @@ class MedicoProntuarioController extends Controller
             ->with('success', 'Atendimento finalizado com sucesso!');
     }
 
-    /**
-     * Remove uma consulta (soft delete)
-     * --- NENHUMA ALTERAÇÃO NECESSÁRIA AQUI ---
-     */
     public function destroy($idConsulta)
     {
         // ... (seu código destroy continua igual) ...
