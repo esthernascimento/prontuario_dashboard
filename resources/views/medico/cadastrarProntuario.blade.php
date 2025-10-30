@@ -1,23 +1,39 @@
 @extends('medico.templates.medicoTemplate')
 
-{{-- O título muda dependendo se estamos criando ou editando --}}
 @section('title', isset($consulta) ? 'Finalizar Atendimento' : 'Cadastrar Consulta')
 
 @section('content')
 
 <link rel="stylesheet" href="{{ asset('css/medico/cadastrarProntuario.css') }}">
 
-
 <main class="main-dashboard">
     <div class="cadastrar-container">
         <div class="cadastrar-header">
-            {{-- Ícone e Título mudam dependendo se é 'create' ou 'edit' --}}
             @if (isset($consulta))
                 <i class="bi bi-journal-check icon"></i>
                 <h1>Finalizar Atendimento</h1>
             @else
                 <i class="bi bi-journal-medical icon"></i>
                 <h1>Cadastrar Consulta ao Prontuário</h1>
+            @endif
+        </div>
+
+        {{-- DEBUG - VERIFICAR POR QUE O BOTÃO SUMIU --}}
+        <div style="background: #fff3cd; padding: 15px; margin: 20px; border-radius: 8px; border-left: 4px solid #ffc107;">
+            <h4>🔍 DEBUG - Verificando Condições do PDF:</h4>
+            <p><strong>Consulta existe:</strong> {{ isset($consulta) ? 'SIM' : 'NÃO' }}</p>
+            @if(isset($consulta))
+                <p><strong>ID da Consulta:</strong> {{ $consulta->idConsultaPK }}</p>
+                <p><strong>Exames Solicitados existe:</strong> {{ $consulta->examesSolicitados ? 'SIM' : 'NÃO' }}</p>
+                <p><strong>Conteúdo dos Exames:</strong> "{{ $consulta->examesSolicitados }}"</p>
+                <p><strong>Exames está vazio?:</strong> {{ empty($consulta->examesSolicitados) ? 'SIM' : 'NÃO' }}</p>
+                <p><strong>Exames trim está vazio?:</strong> {{ trim($consulta->examesSolicitados ?? '') === '' ? 'SIM' : 'NÃO' }}</p>
+                <p><strong>Condição 1 (isset):</strong> {{ isset($consulta) ? 'PASSOU' : 'NÃO PASSOU' }}</p>
+                <p><strong>Condição 2 (examesSolicitados):</strong> {{ $consulta->examesSolicitados ? 'PASSOU' : 'NÃO PASSOU' }}</p>
+                <p><strong>Condição 3 (trim):</strong> {{ trim($consulta->examesSolicitados ?? '') !== '' ? 'PASSOU' : 'NÃO PASSOU' }}</p>
+                <p><strong>BOTÃO DEVE APARECER?:</strong> 
+                    {{ isset($consulta) && $consulta->examesSolicitados && trim($consulta->examesSolicitados) !== '' ? 'SIM' : 'NÃO' }}
+                </p>
             @endif
         </div>
 
@@ -49,7 +65,6 @@
                     <strong>Especialidade:</strong>
                     <span>{{ $medico->especialidadeMedico }}</span>
                 </div>
-                {{-- Mostra a Classificação de Risco apenas se estiver editando uma consulta existente --}}
                 @if (isset($consulta) && $consulta->classificacao_risco)
                     <div class="info-item">
                         <strong>Classificação de Risco:</strong>
@@ -61,6 +76,46 @@
             </div>
         </div>
 
+        {{-- BOTÃO PDF - VERSÃO FLEXÍVEL --}}
+        @if(isset($consulta))
+        <div class="pdf-section">
+            <div class="pdf-container">
+                <div class="pdf-icon">
+                    <i class="bi bi-file-earmark-pdf"></i>
+                </div>
+                <div class="pdf-info">
+                    <h4>Pedido de Exames</h4>
+                    
+                    @if($consulta->examesSolicitados && trim($consulta->examesSolicitados) !== '')
+                        <p>Gere o PDF com os exames solicitados para esta consulta</p>
+                        <small style="color: var(--success-green); font-weight: 600;">
+                            <i class="bi bi-check-circle-fill"></i> Exames disponíveis para download
+                        </small>
+                    @else
+                        <p>Adicione exames solicitados para gerar o PDF</p>
+                        <small style="color: var(--text-muted);">
+                            <i class="bi bi-exclamation-circle"></i> Nenhum exame cadastrado
+                        </small>
+                    @endif
+                </div>
+                
+                {{-- BOTÃO SEMPRE VISÍVEL MAS CONDICIONAL --}}
+                @if($consulta->examesSolicitados && trim($consulta->examesSolicitados) !== '')
+                    <a href="{{ route('medico.gerarPdfExames', $consulta->idConsultaPK) }}" 
+                       class="btn-pdf-generate"
+                       id="pdf-btn-{{ $consulta->idConsultaPK }}">
+                        <i class="bi bi-download"></i>
+                        Baixar PDF
+                    </a>
+                @else
+                    <button class="btn-pdf-generate" disabled style="opacity: 0.6; cursor: not-allowed;">
+                        <i class="bi bi-download"></i>
+                        Sem Exames
+                    </button>
+                @endif
+            </div>
+        </div>
+        @endif
     
         @if (isset($consulta) && $anotacoesEnfermagem && $anotacoesEnfermagem->isNotEmpty())
         <div class="anotacoes-enfermagem-container">
@@ -96,10 +151,8 @@
         </div>
         @endif
 
-      
         <form action="{{ isset($consulta) ? route('medico.prontuario.update', $consulta->idConsultaPK) : route('medico.prontuario.store', $paciente->idPaciente) }}" method="POST" id="prontuarioForm">
             @csrf
-            {{-- Adiciona o método PUT apenas se estiver editando --}}
             @if (isset($consulta))
                 @method('PUT')
             @endif
@@ -114,7 +167,6 @@
                     type="date"
                     id="dataConsulta"
                     name="dataConsulta"
-                    {{-- Preenche com a data da consulta existente ou data atual --}}
                     value="{{ old('dataConsulta', isset($consulta) && $consulta->dataConsulta ? \Carbon\Carbon::parse($consulta->dataConsulta)->format('Y-m-d') : date('Y-m-d')) }}"
                     required
                     class="input-date"
@@ -123,8 +175,6 @@
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
-
-            {{-- CAMPO UNIDADE FOI REMOVIDO --}}
 
             <div class="input-group">
                 <label for="observacoes">
@@ -135,7 +185,6 @@
                     name="observacoes"
                     rows="4"
                     placeholder="Descreva o diagnóstico, evolução e observações médicas..."
-                    {{-- Preenche com dados da consulta existente, se houver --}}
                 >{{ old('observacoes', $consulta->observacoes ?? '') }}</textarea>
                 @error('observacoes')
                     <span class="error">{{ $message }}</span>
@@ -151,76 +200,71 @@
                     name="examesSolicitados"
                     rows="4"
                     placeholder="Liste os exames solicitados, um por linha..."
-                     {{-- Preenche com dados da consulta existente, se houver --}}
                 >{{ old('examesSolicitados', $consulta->examesSolicitados ?? '') }}</textarea>
                 @error('examesSolicitados')
                     <span class="error">{{ $message }}</span>
                 @enderror
             </div>
-<!-- Medicamentos Prescritos -->
-<div class="input-group">
-    <label>
-        <i class="bi bi-capsule-pill"></i> Medicamentos Prescritos
-    </label>
-    
-    <input type="text" id="filtroMedicamentos" class="input-filtro" placeholder="Pesquisar medicamento...">
 
-    <div id="listaMedicamentos" class="checkbox-list">
-        <!-- Campo hidden para garantir que 'medicamentos_prescritos' seja sempre enviado -->
-        <input type="hidden" name="medicamentos_prescritos" value="">
+            <div class="input-group">
+                <label>
+                    <i class="bi bi-capsule-pill"></i> Medicamentos Prescritos
+                </label>
+                
+                <input type="text" id="filtroMedicamentos" class="input-filtro" placeholder="Pesquisar medicamento...">
 
-        @php
-            $medicamentos = [
-                'Paracetamol 500mg', 'Paracetamol 750mg', 'Dipirona 500mg', 'Dipirona 1g',
-                'Ibuprofeno 400mg', 'Ibuprofeno 600mg', 'Amoxicilina 500mg', 'Amoxicilina 875mg',
-                'Azitromicina 500mg', 'Cefalexina 500mg', 'Ciprofloxacino 500mg',
-                'Omeprazol 20mg', 'Omeprazol 40mg', 'Pantoprazol 40mg', 'Ranitidina 150mg',
-                'Metoclopramida 10mg', 'Bromoprida 10mg', 'Domperidona 10mg',
-                'Diclofenaco 50mg', 'Diclofenaco Gel', 'Nimesulida 100mg',
-                'Prednisona 5mg', 'Prednisona 20mg', 'Dexametasona 4mg',
-                'Loratadina 10mg', 'Desloratadina 5mg', 'Cetirizina 10mg',
-                'Captopril 25mg', 'Losartana 50mg', 'Enalapril 10mg',
-                'Sinvastatina 20mg', 'Atorvastatina 20mg',
-                'Metformina 500mg', 'Metformina 850mg', 'Glibenclamida 5mg',
-                'Levotiroxina 25mcg', 'Levotiroxina 50mcg', 'Levotiroxina 100mcg',
-                'Soro Fisiológico 0,9%', 'Glicose 5%', 'Ringer Lactato',
-                'Vitamina C', 'Complexo B', 'Sulfato Ferroso',
-                'Outros'
-            ];
-        @endphp
+                <div id="listaMedicamentos" class="checkbox-list">
+                    <input type="hidden" name="medicamentos_prescritos" value="">
 
-        @foreach($medicamentos as $medicamento)
-            <label class="checkbox-item">
-                <input type="checkbox" name="medicamentos_prescritos[]" value="{{ $medicamento }}"
-                    {{ is_array(old('medicamentos_prescritos')) && in_array($medicamento, old('medicamentos_prescritos')) ? 'checked' : '' }}>
-                {{ $medicamento }}
-            </label>
-        @endforeach
-    </div>
-</div>
+                    @php
+                        $medicamentos = [
+                            'Paracetamol 500mg', 'Paracetamol 750mg', 'Dipirona 500mg', 'Dipirona 1g',
+                            'Ibuprofeno 400mg', 'Ibuprofeno 600mg', 'Amoxicilina 500mg', 'Amoxicilina 875mg',
+                            'Azitromicina 500mg', 'Cefalexina 500mg', 'Ciprofloxacino 500mg',
+                            'Omeprazol 20mg', 'Omeprazol 40mg', 'Pantoprazol 40mg', 'Ranitidina 150mg',
+                            'Metoclopramida 10mg', 'Bromoprida 10mg', 'Domperidona 10mg',
+                            'Diclofenaco 50mg', 'Diclofenaco Gel', 'Nimesulida 100mg',
+                            'Prednisona 5mg', 'Prednisona 20mg', 'Dexametasona 4mg',
+                            'Loratadina 10mg', 'Desloratadina 5mg', 'Cetirizina 10mg',
+                            'Captopril 25mg', 'Losartana 50mg', 'Enalapril 10mg',
+                            'Sinvastatina 20mg', 'Atorvastatina 20mg',
+                            'Metformina 500mg', 'Metformina 850mg', 'Glibenclamida 5mg',
+                            'Levotiroxina 25mcg', 'Levotiroxina 50mcg', 'Levotiroxina 100mcg',
+                            'Soro Fisiológico 0,9%', 'Glicose 5%', 'Ringer Lactato',
+                            'Vitamina C', 'Complexo B', 'Sulfato Ferroso',
+                            'Outros'
+                        ];
+                    @endphp
 
-<!-- Posologia e Observações -->
-<div class="input-group">
-    <label for="posologia">
-        <i class="bi bi-clock-history"></i> Posologia e Instruções de Uso
-    </label>
-    <textarea 
-        id="posologia" 
-        name="posologia" 
-        rows="4"
-        placeholder="Ex: Paracetamol 500mg - 1 comprimido de 8/8h por 5 dias&#10;Amoxicilina 500mg - 1 cápsula de 8/8h por 7 dias"
-    >{{ old('posologia') }}</textarea>
-    @error('posologia')
-        <span class="error">{{ $message }}</span>
-    @enderror
-</div>
+                    @foreach($medicamentos as $medicamento)
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="medicamentos_prescritos[]" value="{{ $medicamento }}"
+                                {{ is_array(old('medicamentos_prescritos')) && in_array($medicamento, old('medicamentos_prescritos')) ? 'checked' : '' }}>
+                            {{ $medicamento }}
+                        </label>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="posologia">
+                    <i class="bi bi-clock-history"></i> Posologia e Instruções de Uso
+                </label>
+                <textarea 
+                    id="posologia" 
+                    name="posologia" 
+                    rows="4"
+                    placeholder="Ex: Paracetamol 500mg - 1 comprimido de 8/8h por 5 dias&#10;Amoxicilina 500mg - 1 cápsula de 8/8h por 7 dias"
+                >{{ old('posologia') }}</textarea>
+                @error('posologia')
+                    <span class="error">{{ $message }}</span>
+                @enderror
+            </div>
 
             <div class="button-group">
-                {{-- O link/texto do botão Cancelar muda --}}
                 <a href="{{ route('medico.prontuario') }}" class="btn-cancelar">
                     <i class="bi bi-x-circle"></i> {{ isset($consulta) ? 'Voltar para Fila' : 'Cancelar' }}
                 </a>
-                {{-- O texto do botão Salvar muda --}}
                 <button type="submit" class="save-button">
                     <i class="bi bi-check-circle"></i> {{ isset($consulta) ? 'Finalizar Atendimento' : 'Salvar Prontuário' }}
                 </button>
@@ -230,12 +274,33 @@
 </main>
 
 <script>
-    // Filtro de pesquisa para Medicamentos
     document.getElementById('filtroMedicamentos').addEventListener('input', function() {
         const termo = this.value.toLowerCase();
         document.querySelectorAll('#listaMedicamentos .checkbox-item').forEach(item => {
             const texto = item.textContent.toLowerCase();
             item.style.display = texto.includes(termo) ? '' : 'none';
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Loading para o botão PDF
+        const pdfBtns = document.querySelectorAll('[id^="pdf-btn-"]');
+        
+        pdfBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const originalHtml = btn.innerHTML;
+                
+                btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Gerando PDF...';
+                btn.style.opacity = '0.7';
+                btn.style.pointerEvents = 'none';
+                
+                // Restaurar após 5 segundos (fallback)
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                    btn.style.opacity = '1';
+                    btn.style.pointerEvents = 'auto';
+                }, 5000);
+            });
         });
     });
 </script>
