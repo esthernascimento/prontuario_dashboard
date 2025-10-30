@@ -12,59 +12,50 @@
 
     @yield('styles')
 </head>
-
+<body>
 <body>
 
-    <div class="sidebar d-flex flex-column">
-        <div class="sidebar-header">
+    <div class="sidebar-recepcionista d-flex flex-column">
+        <div class="logo-recepcionista-container">
             <img src="{{ asset('img/recepcionista-logo2.png') }}" class="logo-recepcionista"
                 alt="Logo Recepcionista(a)">
         </div>
 
-        <ul class="nav nav-pills flex-column mb-auto">
+        <ul class="nav-recepcionista nav-pills flex-column mb-auto">
             <li class="nav-item">
-                <a href="{{ route('recepcionista.dashboard') }}" class="nav-link active">
-                    <i class="bi bi-person-plus-fill me-2"></i>
-                    Iniciar Atendimento
+                <a href="{{ route('recepcionista.dashboard') }}" class="nav-link-recepcionista active">
+                    <i class="bi bi-person-plus-fill"></i>
+                    <span class="nav-link-text-recepcionista">Iniciar Atendimento</span>
                 </a>
             </li>
-
             <li class="nav-item">
-                <a href="{{ route('recepcionista.perfil') }}" class="nav-link">
-                    <i class="bi bi-folder2-open me-2"></i>
-                    Perfil
-                </a>
-
-            </li>
-
-
-            <!-- (Exemplo) Você pode adicionar outras telas aqui no futuro -->
-            <!--
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="bi bi-people-fill me-2"></i>
-                    Fila de Espera
+                <a href="{{ route('recepcionista.perfil') }}" class="nav-link-recepcionista">
+                    <i class="bi bi-folder2-open"></i>
+                    <span class="nav-link-text-recepcionista">Perfil</span>
                 </a>
             </li>
-            -->
         </ul>
-
-        <hr class="text-white-50">
-        <div>
+        
+        <div class="logout-container-recepcionista">
             <form action="{{ route('recepcionista.logout') }}" method="POST">
                 @csrf
-                <button type="submit" class="btn btn-dark w-100 logout-btn">
-                    <i class="bi bi-box-arrow-left me-2"></i>
-                    Sair
+                <button type="submit" class="btn logout-btn-recepcionista">
+                    <i class="bi bi-box-arrow-left"></i>
+                    <span class="logout-text-recepcionista">Sair</span>
                 </button>
             </form>
         </div>
     </div>
-
+    <header class="navbar-recepcionista">
+        <div class="user-info-recepcionista">
+            <span>{{ Auth::user()->name ?? 'Recepcionista' }}</span>
+            <img src="{{ Auth::user()->foto_perfil_url ?? asset('img/default-avatar.png') }}"
+                alt="Avatar Recepcionista">
+        </div>
+    </header>
     <main class="main-content">
         @yield('content')
     </main>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     @stack('scripts')
