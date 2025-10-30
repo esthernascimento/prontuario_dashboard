@@ -26,6 +26,7 @@ use App\Http\Controllers\Medico\MedicoDashboardController;
 use App\Http\Controllers\Medico\MedicoConfiguracaoController;
 use App\Http\Controllers\Medico\MedicoSegurancaController;
 use App\Http\Controllers\Medico\MedicoProntuarioController;
+use App\Http\Controllers\Medico\MedicoPdfController;
 
 // --------------------- ENFERMEIRO ---------------------
 use App\Http\Controllers\Enfermeiro\LoginController as EnfermeiroLoginController;
@@ -138,27 +139,36 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
 // --- ROTAS PROTEGIDAS DO MÉDICO ---
 // ===================================================================================
 Route::middleware('auth')->prefix('medico')->name('medico.')->group(function () {
+    
+    // Dashboard e Configurações
     Route::get('/dashboard', [MedicoDashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [MedicoLoginController::class, 'logout'])->name('logout');
     
+    // Perfil e Segurança
     Route::get('/perfil', [MedicoConfiguracaoController::class, 'perfil'])->name('perfil');
     Route::put('/perfil/update', [MedicoConfiguracaoController::class, 'atualizarPerfil'])->name('perfil.update');
-    
     Route::get('/seguranca', [MedicoSegurancaController::class, 'showAlterarSenhaForm'])->name('seguranca');
     Route::post('/alterar-senha', [MedicoSegurancaController::class, 'alterarSenha'])->name('alterarSenha');
+    
+    // Ajuda
     Route::get('/ajuda', fn() => view('medico.ajudaMedico'))->name('ajuda');
 
-    // Prontuário
-    Route::get('/prontuario', [MedicoProntuarioController::class, 'index'])->name('prontuario');
-    Route::get('/cadastrar-prontuario/{id}', [MedicoProntuarioController::class, 'create'])->name('cadastrarProntuario');
-    Route::post('/cadastrar-prontuario/{id}', [MedicoProntuarioController::class, 'store'])->name('prontuario.store');
-    Route::get('/prontuario/editar/{id}', [MedicoProntuarioController::class, 'edit'])->name('prontuario.edit');
-    Route::put('/prontuario/atualizar/{id}', [MedicoProntuarioController::class, 'update'])->name('prontuario.update');
-    Route::delete('/prontuario/deletar/{id}', [MedicoProntuarioController::class, 'destroy'])->name('prontuario.destroy');
-    Route::get('/visualizar-prontuario/{id}', [MedicoProntuarioController::class, 'show'])->name('visualizarProntuario');
-    Route::get('/prontuario/{id}', [MedicoProntuarioController::class, 'show'])->name('paciente.prontuario');
-});
+    // Prontuário - CRUD
+    Route::prefix('prontuario')->group(function () {
+        Route::get('/', [MedicoProntuarioController::class, 'index'])->name('prontuario');
+        Route::get('/cadastrar-prontuario/{id}', [MedicoProntuarioController::class, 'create'])->name('cadastrarProntuario');
+        Route::post('/cadastrar-prontuario/{id}', [MedicoProntuarioController::class, 'store'])->name('prontuario.store');
+        Route::get('/editar/{id}', [MedicoProntuarioController::class, 'edit'])->name('prontuario.edit');
+        Route::put('/atualizar/{id}', [MedicoProntuarioController::class, 'update'])->name('prontuario.update');
+        Route::delete('/deletar/{id}', [MedicoProntuarioController::class, 'destroy'])->name('prontuario.destroy');
+        Route::get('/visualizar-prontuario/{id}', [MedicoProntuarioController::class, 'show'])->name('visualizarProntuario');
+        Route::get('/{id}', [MedicoProntuarioController::class, 'show'])->name('paciente.prontuario');
+        
+        // PDF - DENTRO DO GRUPO PRONTUÁRIO
+        Route::get('/pdf-exames/{idConsulta}', [MedicoPdfController::class, 'gerarPdfExames'])->name('gerarPdfExames');
+    });
 
+});
 // ===================================================================================
 // --- ROTAS PROTEGIDAS DO ENFERMEIRO ---
 // ===================================================================================
