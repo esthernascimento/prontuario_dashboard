@@ -9,11 +9,10 @@ use App\Models\Prontuario;
 use App\Models\Consulta;
 use App\Models\Medico;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Unidade;
 use App\Models\Medicamento;
 use App\Models\Exame;
 use App\Models\AnotacaoEnfermagem;
-use Illuminate\Support\Facades\DB; // Importar DB para a transaction
+use Illuminate\Support\Facades\DB;
 
 class MedicoProntuarioController extends Controller
 {
@@ -53,14 +52,14 @@ class MedicoProntuarioController extends Controller
                 ->with('error', 'Este paciente ainda não possui prontuário.');
         }
 
-         $consultas = Consulta::where('idProntuarioFK', $prontuario->idProntuarioPK)
-            ->whereNotNull('idMedicoFK') 
+        $consultas = Consulta::where('idProntuarioFK', $prontuario->idProntuarioPK)
+            ->whereNotNull('idMedicoFK')
             ->orderBy('dataConsulta', 'desc')
             ->get();
 
         $anotacoesEnfermagem = AnotacaoEnfermagem::where('idPacienteFK', $paciente->idPaciente)
-             ->orderBy('data_hora', 'desc')
-             ->get();
+            ->orderBy('data_hora', 'desc')
+            ->get();
 
         return view('medico.visualizarProntuario', compact('paciente', 'prontuario', 'consultas', 'anotacoesEnfermagem'));
     }
@@ -70,13 +69,13 @@ class MedicoProntuarioController extends Controller
         $paciente = Paciente::findOrFail($id);
 
         if (!$paciente->statusPaciente) {
-            // (Tratamento de erro)
+            return redirect()->route('medico.prontuario')->with('error', 'Paciente inativo.');
         }
 
         $medico = Auth::user()->medico;
-         if (!$medico) {
-            // (Tratamento de erro)
-         }
+        if (!$medico) {
+            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.');
+        }
 
         Prontuario::firstOrCreate(
             ['idPacienteFK' => $paciente->idPaciente],
@@ -91,32 +90,25 @@ class MedicoProntuarioController extends Controller
         ]);
     }
 
-
     public function store(Request $request, $id)
     {
         $validated = $request->validate([
             'dataConsulta' => 'required|date',
             'observacoes' => 'nullable|string|max:2000',
-            'examesSolicitados' => 'nullable|string|max:2000',
             'medicamentosPrescritos' => 'nullable|string|max:2000',
         ]);
 
         $paciente = Paciente::findOrFail($id);
+        $medico = Auth::user()->medico;
 
-        if (!$paciente->statusPaciente) {
-            // ... (tratamento de erro)
+        if (!$medico) {
+            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.');
         }
 
-        $medico = Auth::user()->medico;
-         if (!$medico) {
-            // ... (tratamento de erro)
-         }
-
-
         $prontuario = Prontuario::firstOrCreate(
-             ['idPacienteFK' => $paciente->idPaciente],
-             ['dataAbertura' => now()->toDateString()]
-         );
+            ['idPacienteFK' => $paciente->idPaciente],
+            ['dataAbertura' => now()->toDateString()]
+        );
 
         $consulta = new Consulta();
         $consulta->idProntuarioFK = $prontuario->idProntuarioPK;
@@ -125,68 +117,39 @@ class MedicoProntuarioController extends Controller
         $consulta->crmMedico = $medico->crmMedico;
         $consulta->dataConsulta = $validated['dataConsulta'];
         $consulta->observacoes = $validated['observacoes'] ?? null;
-        $consulta->examesSolicitados = $validated['examesSolicitados'] ?? null;
+
+        // ✅ EXAMES DOS CHECKBOXES
+        $examesCheckboxes = $request->input('exames_solicitados', []);
+        $consulta->examesSolicitados = implode("\n", $examesCheckboxes);
+
         $consulta->medicamentosPrescritos = $validated['medicamentosPrescritos'] ?? null;
         $consulta->status_atendimento = 'FINALIZADO';
         $consulta->idPacienteFK = $paciente->idPaciente;
 
         DB::transaction(function () use ($consulta, $paciente, $validated, $prontuario) {
-            $consulta->save(); // Salva a consulta para obter o idConsultaPK
+            $consulta->save();
 
-            // Inserção de medicamentos
+            // Medicamentos
             if (!empty($validated['medicamentosPrescritos'])) {
                 $linhas = collect(preg_split('/\r?\n/', $validated['medicamentosPrescritos']))
                     ->map(fn($l) => trim($l))
                     ->filter()
-                    ->filter(fn($l) => preg_match('/[a-zA-ZÀ-ÿ]/', $l) && strlen($l) > 2 && strlen($l) < 255); // Filtro simplificado
-                    
+                    ->filter(fn($l) => preg_match('/[a-zA-ZÀ-ÿ]/', $l) && strlen($l) > 2 && strlen($l) < 255);
+
                 foreach ($linhas as $linha) {
                     Medicamento::create([
                         'idConsultaFK' => $consulta->idConsultaPK,
                         'idProntuarioFK' => $prontuario->idProntuarioPK,
-                        'idPacienteFK' => $paciente->idPaciente, // Correto
+                        'idPacienteFK' => $paciente->idPaciente,
                         'descMedicamento' => $linha,
                         'nomeMedicamento' => $linha,
-                    ]);
-                }
-            }
-
-            // Inserção de exames
-            if (!empty($validated['examesSolicitados'])) {
-                $linhas = collect(preg_split('/\r?\n/', $validated['examesSolicitados']))
-                    ->map(fn($l) => trim($l))
-                    ->filter()
-                    ->filter(fn($l) => preg_match('/[a-zA-ZÀ-ÿ]/', $l) && strlen($l) > 2 && strlen($l) < 255); // Filtro simplificado
-                    
-                foreach ($linhas as $linha) {
-                    // (Lógica de parsing de nome/descrição)
-                    $nomeExame = $linha;
-                    $descExame = $linha;
-                    if (strpos($linha, ':') !== false) {
-                         $partes = explode(':', $linha, 2); $nomeExame = trim($partes[0]); $descExame = trim($partes[1]) ?: $nomeExame;
-                    } elseif (strpos($linha, ' - ') !== false) {
-                         $partes = explode(' - ', $linha, 2); $nomeExame = trim($partes[0]); $descExame = trim($partes[1]) ?: $nomeExame;
-                    } elseif (strlen($linha) > 50) {
-                         $palavras = explode(' ', $linha); $nomeExame = implode(' ', array_slice($palavras, 0, 3));
-                    }
-                    
-                    Exame::create([
-                        'idConsultaFK' => $consulta->idConsultaPK,
-                        'nomeExame' => $nomeExame,
-                        'descExame' => $descExame,
-                        'dataExame' => $consulta->dataConsulta?->toDateString() ?? now()->toDateString(),
-
-                        // --- CORREÇÃO ADICIONADA ---
-                        'idPacienteFK' => $paciente->idPaciente,
-                        'idProntuarioFK' => $prontuario->idProntuarioPK,
-                        // --- FIM DA CORREÇÃO ---
                     ]);
                 }
             }
         });
 
         return redirect()
-            ->route('medico.visualizarProntuario', $id) // Leva para o histórico após salvar
+            ->route('medico.visualizarProntuario', $id)
             ->with('success', 'Consulta registrada com sucesso!');
     }
 
@@ -196,42 +159,39 @@ class MedicoProntuarioController extends Controller
         $paciente = $consulta->paciente;
         $prontuario = $consulta->prontuario;
         $medico = Auth::user()->medico;
-         if (!$medico) {
-             // ... (tratamento de erro)
-         }
 
+        if (!$medico) {
+            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.');
+        }
 
         $anotacoesEnfermagem = AnotacaoEnfermagem::where('idPacienteFK', $paciente->idPaciente)
-                                     ->orderBy('data_hora', 'desc')
-                                     ->get();
+            ->orderBy('data_hora', 'desc')
+            ->get();
 
-         if (!$prontuario && $paciente) {
+        if (!$prontuario && $paciente) {
             $prontuario = Prontuario::firstOrCreate(
                 ['idPacienteFK' => $paciente->idPaciente],
                 ['dataAbertura' => now()->toDateString()]
             );
             $consulta->idProntuarioFK = $prontuario->idProntuarioPK;
-            $consulta->save(); // Salva a consulta com o novo idProntuarioFK
-         }
+            $consulta->save();
+        }
 
-        // Retorna a MESMA view, passando a $consulta existente
         return view('medico.cadastrarProntuario', compact('consulta', 'paciente', 'medico', 'anotacoesEnfermagem'));
     }
 
-    
     public function update(Request $request, $idConsulta)
     {
         $consulta = Consulta::findOrFail($idConsulta);
         $medico = Auth::user()->medico;
-         if (!$medico) {
-             // ... (tratamento de erro)
-         }
 
+        if (!$medico) {
+            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.');
+        }
 
         $validated = $request->validate([
             'dataConsulta' => 'required|date',
             'observacoes' => 'nullable|string|max:2000',
-            'examesSolicitados' => 'nullable|string|max:2000',
             'medicamentosPrescritos' => 'nullable|string|max:2000',
         ]);
 
@@ -239,80 +199,41 @@ class MedicoProntuarioController extends Controller
         $consulta->nomeMedico = $medico->nomeMedico;
         $consulta->crmMedico = $medico->crmMedico;
         $consulta->status_atendimento = 'FINALIZADO';
-
         $consulta->dataConsulta = $validated['dataConsulta'];
         $consulta->observacoes = $validated['observacoes'] ?? null;
-        $consulta->examesSolicitados = $validated['examesSolicitados'] ?? null; // Texto completo
-        $consulta->medicamentosPrescritos = $validated['medicamentosPrescritos'] ?? null; // Texto completo
+
+        // ✅ EXAMES DOS CHECKBOXES (CORRIGIDO)
+        $examesCheckboxes = $request->input('exames_solicitados', []);
+        $consulta->examesSolicitados = implode("\n", $examesCheckboxes);
+
+        $consulta->medicamentosPrescritos = $validated['medicamentosPrescritos'] ?? null;
 
         if (!$consulta->idProntuarioFK && $consulta->paciente) {
-             $prontuario = Prontuario::firstOrCreate(
+            $prontuario = Prontuario::firstOrCreate(
                 ['idPacienteFK' => $consulta->paciente->idPaciente],
                 ['dataAbertura' => now()->toDateString()]
-             );
-             $consulta->idProntuarioFK = $prontuario->idProntuarioPK;
+            );
+            $consulta->idProntuarioFK = $prontuario->idProntuarioPK;
         }
 
         DB::transaction(function () use ($consulta, $validated) {
-            $consulta->save(); // Salva as atualizações na consulta (observacoes, etc.)
+            $consulta->save();
 
-            // (Opcional: Limpar exames/medicamentos antigos antes de inserir novos)
-            // Medicamento::where('idConsultaFK', $consulta->idConsultaPK)->delete();
-            // Exame::where('idConsultaFK', $consulta->idConsultaPK)->delete();
-
-            // Atualiza/inserções automáticas de Medicamentos
+            // Medicamentos
             if (!empty($validated['medicamentosPrescritos'])) {
                 $linhas = collect(preg_split('/\r?\n/', $validated['medicamentosPrescritos']))
                     ->map(fn($l) => trim($l))
                     ->filter()
-                    ->filter(fn($l) => preg_match('/[a-zA-ZÀ-ÿ]/', $l) && strlen($l) > 2 && strlen($l) < 255); // Filtro
-                    
+                    ->filter(fn($l) => preg_match('/[a-zA-ZÀ-ÿ]/', $l) && strlen($l) > 2 && strlen($l) < 255);
+
                 foreach ($linhas as $linha) {
                     Medicamento::firstOrCreate([
-                        // Chaves para buscar
                         'idConsultaFK' => $consulta->idConsultaPK,
                         'descMedicamento' => $linha,
                     ], [
-                        // Valores para criar (se não encontrar)
                         'idPacienteFK' => $consulta->idPacienteFK,
                         'idProntuarioFK' => $consulta->idProntuarioFK,
                         'nomeMedicamento' => $linha,
-                    ]);
-                }
-            }
-
-            // Atualiza/inserções automáticas de Exames
-            if (!empty($validated['examesSolicitados'])) {
-                $linhas = collect(preg_split('/\r?\n/', $validated['examesSolicitados']))
-                    ->map(fn($l) => trim($l))
-                    ->filter()
-                    ->filter(fn($l) => preg_match('/[a-zA-ZÀ-ÿ]/', $l) && strlen($l) > 2 && strlen($l) < 255); // Filtro
-                    
-                foreach ($linhas as $linha) {
-                    // (Lógica de parsing)
-                    $nomeExame = $linha;
-                    $descExame = $linha;
-                     if (strpos($linha, ':') !== false) {
-                         $partes = explode(':', $linha, 2); $nomeExame = trim($partes[0]); $descExame = trim($partes[1]) ?: $nomeExame;
-                    } elseif (strpos($linha, ' - ') !== false) {
-                         $partes = explode(' - ', $linha, 2); $nomeExame = trim($partes[0]); $descExame = trim($partes[1]) ?: $nomeExame;
-                    } elseif (strlen($linha) > 50) {
-                         $palavras = explode(' ', $linha); $nomeExame = implode(' ', array_slice($palavras, 0, 3));
-                    }
-
-                    Exame::firstOrCreate([
-                        // Chaves para buscar
-                        'idConsultaFK' => $consulta->idConsultaPK,
-                        'descExame' => $descExame,
-                        'dataExame' => $consulta->dataConsulta?->toDateString() ?? now()->toDateString(),
-                    ], [
-                        // Valores para criar (se não encontrar)
-                        'nomeExame' => $nomeExame,
-                        
-                        // --- CORREÇÃO ADICIONADA ---
-                        'idPacienteFK' => $consulta->idPacienteFK,
-                        'idProntuarioFK' => $consulta->idProntuarioFK,
-                        // --- FIM DA CORREÇÃO ---
                     ]);
                 }
             }
@@ -323,9 +244,7 @@ class MedicoProntuarioController extends Controller
             ->with('success', 'Atendimento finalizado com sucesso!');
     }
 
-    public function destroy($idConsulta)
-    {
-        
-    }
-}
-
+//     public function destroy($idConsulta) {}
+// }
+}   
+    

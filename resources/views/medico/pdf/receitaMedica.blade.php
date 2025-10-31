@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
-    <title>SOLICITAÇÃO DE EXAMES</title>
+    <title>Receita Médica</title>
     <style>
         @page {
             size: A4;
@@ -96,6 +97,7 @@
             font-size: 16px;
         }
 
+        /* SEÇÃO PRINCIPAL DA RECEITA */
         .exames-section {
             border: 2px solid #DC2626;
             padding: 15px;
@@ -120,6 +122,7 @@
             color: #333;
         }
 
+        /* Caso os medicamentos sejam uma lista, use estes estilos */
         .exames-list {
             list-style-type: none;
             padding-left: 0;
@@ -175,89 +178,57 @@
             color: #666;
         }
 
+        /* Evitar quebras de página indesejadas */
         .no-break {
             page-break-inside: avoid;
         }
     </style>
 </head>
+
 <body>
+
     <div class="container">
-        <div class="header no-break">
-            <h1>SOLICITAÇÃO DE EXAMES</h1>
-            <p>Data: {{ $dataEmissao }}</p>
+        <div class="header">
+            <h1>RECEITA MÉDICA</h1>
+            <p>{{ $consulta->unidade ?? 'Unidade de Saúde' }}</p>
         </div>
 
-        <div class="info-block no-break">
+        <div class="info-block">
             <h2>Dados do Paciente</h2>
-            <div class="patient-info">
-                <div>
-                    <span class="info-label">Nome:</span>
-                    {{ $paciente->nomePaciente }}
-                </div>
-                <div>
-                    <span class="info-label">CPF:</span>
-                    {{ $paciente->cpfPaciente }}
-                </div>
-                <div>
-                    <span class="info-label">Data de Nascimento:</span>
-                    {{ \Carbon\Carbon::parse($paciente->dataNascPaciente)->format('d/m/Y') }}
-                </div>
-            </div>
         </div>
 
-        <div class="info-block no-break">
-            <h2>Dados do Médico Solicitante</h2>
-            <div class="patient-info">
-                <div>
-                    <span class="info-label">Nome:</span>
-                    Dr(a). {{ $medico->nomeMedico }}
-                </div>
-                <div>
-                    <span class="info-label">CRM:</span>
-                    {{ $medico->crmMedico }}
-                </div>
-            </div>
+        @if($consulta->queixa_principal)
+        <div class="clinical-reason">
+            <h3>Queixa Principal / Motivo da Consulta</h3>
+            <p>{{ $consulta->queixa_principal }}</p>
         </div>
+        @endif
 
-        <div class="clinical-reason no-break">
-            <h3>Indicação Clínica</h3>
-            <p>{{ $consulta->observacoes ?? 'Avaliação médica geral' }}</p>
-        </div>
-
-        <div class="exames-section no-break">
-            <h2>EXAMES SOLICITADOS</h2>
+        <div class="exames-section">
+            <h2>PRESCRIÇÃO MÉDICA</h2>
             <div class="exames-content">
-                @if(!empty($exames) && trim($exames) !== '')
-                    @php
-                        $examesArray = array_filter(explode("\n", $exames), fn($e) => trim($e) !== '');
-                    @endphp
-                    <ul class="exames-list">
-                        @foreach($examesArray as $exame)
-                            <li>{{ trim($exame) }}</li>
-                        @endforeach
-                    </ul>
-                @else
-                    <p>Nenhum exame solicitado.</p>
-                @endif
+
+                <p>{!! nl2br(e($medicamentos)) !!}</p>
             </div>
         </div>
 
-        <div class="date-section no-break">
-            Data: {{ \Carbon\Carbon::parse($consulta->dataConsulta)->format('d/m/Y') }}
+        <div class="date-section">
+            {{ $dataEmissao }}
         </div>
 
-        <div class="signature no-break">
+        <div class="signature">
             <div class="signature-line"></div>
             <div class="medico-info">
-                Dr(a). {{ $medico->nomeMedico }}<br>
-                CRM: {{ $medico->crmMedico }}
+                <p>{{ $medico->nomeMedico }}</p>
+                <p>CRM: {{ $medico->crmMedico }}</p>
             </div>
         </div>
 
         <div class="footer">
-            Documento gerado eletronicamente pelo Sistema Médico.<br>
-            Válido sem assinatura física de acordo com a legislação vigente.
+            <p>Documento válido apenas com assinatura e carimbo do médico.</p>
         </div>
     </div>
+
 </body>
+
 </html>
