@@ -87,14 +87,35 @@ class ProntuarioController extends Controller
         $anotacao->alergias = $alergias_str;
         $anotacao->medicacoes_ministradas = $medicacoes_str;
         
-        $anotacao->save();
+        // Persistência atômica da anotação, atualização da consulta e inserção de alergias
+        \DB::transaction(function () use ($anotacao, $request, $enfermeiro) {
+            $anotacao->save();
 
+            $consulta = Consulta::findOrFail($request->idConsulta);
+            $consulta->status_atendimento = 'AGUARDANDO_CONSULTA'; 
+            $consulta->classificacao_risco = $request->classificacao_risco; 
+            $consulta->idEnfermeiroFK = $enfermeiro->idEnfermeiroPK;
+            // Captura e persiste a unidade escolhida, caso ainda não tenha sido definida
+            if (!$consulta->idUnidadeFK && $request->filled('unidade_atendimento')) {
+                $consulta->idUnidadeFK = $request->unidade_atendimento;
+            }
+            $consulta->save();
 
-        $consulta = Consulta::findOrFail($request->idConsulta);
-        $consulta->status_atendimento = 'AGUARDANDO_CONSULTA'; 
-        $consulta->classificacao_risco = $request->classificacao_risco; 
-        $consulta->idEnfermeiroFK = $enfermeiro->idEnfermeiroPK;
-        $consulta->save();
+            // Inserir alergias do paciente com base nas anotações, se informado
+            if (!empty($anotacao->alergias)) {
+                $nomes = collect(explode(',', $anotacao->alergias))
+                    ->map(fn($v) => trim($v))
+                    ->filter();
+                foreach ($nomes as $nome) {
+                    \App\Models\Alergia::firstOrCreate([
+                        'idPacienteFK' => $anotacao->idPacienteFK,
+                        'descAlergia' => $nome,
+                    ], [
+                        'nomeAlergia' => $nome,
+                    ]);
+                }
+            }
+        });
    
         return redirect()->route('enfermeiro.prontuario')
             ->with('success', 'Triagem realizada! Paciente encaminhado para consulta.');

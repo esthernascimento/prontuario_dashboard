@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Consulta; // Seu model tbConsulta
+use App\Models\Unidade;
 
 class AcolhimentoController extends Controller
 {
@@ -14,7 +15,8 @@ class AcolhimentoController extends Controller
      */
     public function create()
     {
-        return view('recepcionista.acolhimento.create');
+        $unidades = Unidade::orderBy('nomeUnidade')->get();
+        return view('recepcionista.acolhimento.create', compact('unidades'));
     }
 
     /**
@@ -24,9 +26,8 @@ class AcolhimentoController extends Controller
     {
         // Validação
         $dadosValidados = $request->validate([
-            
             'paciente_id' => 'required|exists:tbPaciente,idPaciente',
-            
+            'unidade_id' => 'required|exists:tbUnidade,idUnidadePK',
             // REMOVIDO: 'classificacao_risco'
             'queixa_principal' => 'required|string|min:10', 
         ]);
@@ -36,6 +37,10 @@ class AcolhimentoController extends Controller
         
         $consulta->idPacienteFK = $dadosValidados['paciente_id'];
         $consulta->queixa_principal = $dadosValidados['queixa_principal'];
+        $consulta->idUnidadeFK = $dadosValidados['unidade_id'];
+        // Armazena também o nome para compatibilidade com telas existentes (se usado)
+        $unidade = Unidade::find($dadosValidados['unidade_id']);
+        $consulta->unidade = $unidade?->nomeUnidade;
         
         // REMOVIDO: $consulta->classificacao_risco
         

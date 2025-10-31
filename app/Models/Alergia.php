@@ -6,5 +6,11 @@ class Alergia extends Model
 {
     protected $table = 'tbAlergia';
     protected $primaryKey = 'idAlergiaPK';
-    protected $fillable = ['idPacienteFK', 'descAlergia'];
+    protected $fillable = [
+        'idPacienteFK',
+        'nomeAlergia',
+        'tipoAlergia',
+        'severidadeAlergia',
+        'descAlergia',
+    ];
 }

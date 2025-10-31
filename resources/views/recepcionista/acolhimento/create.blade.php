@@ -68,7 +68,15 @@
                             {{-- ====================================== --}}
                             {{-- BLOCO DE CLASSIFICAÇÃO FOI REMOVIDO --}}
                             {{-- ====================================== --}}
-                            
+                            <div class="form-group mb-4">
+                                <label for="unidade_id" class="form-label fs-5">Unidade de Atendimento:</label>
+                                <select name="unidade_id" id="unidade_id" class="form-select" required>
+                                    <option value="" disabled selected>Selecione a unidade</option>
+                                    @foreach(($unidades ?? []) as $unidade)
+                                        <option value="{{ $unidade->idUnidadePK }}">{{ $unidade->nomeUnidade }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
 

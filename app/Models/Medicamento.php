@@ -6,5 +6,15 @@ class Medicamento extends Model
 {
     protected $table = 'tbMedicamento';
     protected $primaryKey = 'idMedicamentoPK';
-    protected $fillable = ['idConsultaFK', 'descMedicamento'];
+    protected $fillable = [
+        'idConsultaFK',
+        'idPacienteFK',
+        'idProntuarioFK',
+        'descMedicamento',
+        'tipoMedicamento',
+        'nomeMedicamento',
+        'dosagemMedicamento',
+        'frequenciaMedicamento',
+        'periodoMedicamento',
+    ];
 }
