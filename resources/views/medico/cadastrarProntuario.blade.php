@@ -182,7 +182,7 @@
                     id="examesSolicitados"
                     name="examesSolicitados"
                     rows="4"
-                    placeholder="Liste os exames solicitados, um por linha..."
+                    placeholder="Liste os exames solicitados, um por linha...&#10;Exemplos:&#10;Hemograma completo&#10;Raio-X de tórax: PA e perfil&#10;Ultrassom abdominal - avaliar fígado e vesícula"
                 >{{ old('examesSolicitados', $consulta->examesSolicitados ?? '') }}</textarea>
                 @error('examesSolicitados')
                     <span class="error">{{ $message }}</span>
@@ -197,7 +197,7 @@
                 <input type="text" id="filtroMedicamentos" class="input-filtro" placeholder="Pesquisar medicamento...">
 
                 <div id="listaMedicamentos" class="checkbox-list">
-                    <input type="hidden" name="medicamentos_prescritos" value="">
+                    <input type="hidden" id="medicamentosPrescritos" name="medicamentosPrescritos" value="">
 
                     @php
                         $medicamentos = [
@@ -229,20 +229,7 @@
                 </div>
             </div>
 
-            <div class="input-group">
-                <label for="posologia">
-                    <i class="bi bi-clock-history"></i> Posologia e Instruções de Uso
-                </label>
-                <textarea 
-                    id="posologia" 
-                    name="posologia" 
-                    rows="4"
-                    placeholder="Ex: Paracetamol 500mg - 1 comprimido de 8/8h por 5 dias&#10;Amoxicilina 500mg - 1 cápsula de 8/8h por 7 dias"
-                >{{ old('posologia', $consulta->posologia ?? '') }}</textarea>
-                @error('posologia')
-                    <span class="error">{{ $message }}</span>
-                @enderror
-            </div>
+            {{-- Bloco de posologia removido conforme decisão de descontinuar esse campo --}}
 
             {{-- BOTÕES DE AÇÃO --}}
             <div class="button-group">
@@ -317,40 +304,7 @@
             @endif
 
             {{-- OPÇÃO 2: Prescrição Médica --}}
-            @php
-                $posologiaDisponivel = isset($consulta->posologia) && trim($consulta->posologia) !== '';
-            @endphp
-            
-            @if($posologiaDisponivel)
-                <a href="{{ route('medico.gerarPdfPrescricao', $consulta->idConsultaPK) }}" 
-                   class="pdf-modal-option" 
-                   target="_blank"
-                   onclick="handlePdfDownload(event)">
-                    <div class="option-icon">
-                        <i class="bi bi-capsule-pill"></i>
-                    </div>
-                    <div class="pdf-modal-info">
-                        <h3>Prescrição Médica</h3>
-                        <p>Documento com a posologia e instruções dos medicamentos prescritos</p>
-                    </div>
-                    <span class="pdf-status-badge disponivel">
-                        <i class="bi bi-check-circle-fill"></i> Disponível
-                    </span>
-                </a>
-            @else
-                <div class="pdf-modal-option disabled">
-                    <div class="option-icon">
-                        <i class="bi bi-capsule-pill"></i>
-                    </div>
-                    <div class="pdf-modal-info">
-                        <h3>Prescrição Médica</h3>
-                        <p>Nenhuma posologia foi cadastrada. Preencha o campo "Posologia" e salve.</p>
-                    </div>
-                    <span class="pdf-status-badge indisponivel">
-                        <i class="bi bi-x-circle-fill"></i> Indisponível
-                    </span>
-                </div>
-            @endif
+            {{-- OPÇÃO 2: Prescrição Médica removida (posologia descontinuada) --}}
         </div>
 
         {{-- Footer do Modal --}}
@@ -479,7 +433,52 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    console.log('✅ Sistema de PDF customizado carregado com sucesso!');
+    // Função para validar entradas de texto
+    function validarEntrada(texto) {
+        if (texto.length < 3) return false; // Muito curto
+        if (texto.length > 255) return false; // Muito longo
+        
+        // Verifica se não é apenas caracteres repetidos
+        const uniqueChars = new Set(texto.toLowerCase().split('')).size;
+        if (uniqueChars <= 2 && texto.length > 10) return false;
+        
+        // Verifica se contém pelo menos uma letra
+        if (!/[a-zA-ZÀ-ÿ]/.test(texto)) return false;
+        
+        return true;
+    }
+
+    // Compila medicamentos selecionados para campo hidden 'medicamentosPrescritos'
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            // Validar exames solicitados
+            const examesTextarea = document.getElementById('examesSolicitados');
+            if (examesTextarea && examesTextarea.value.trim()) {
+                const linhasExames = examesTextarea.value.split('\n')
+                    .map(l => l.trim())
+                    .filter(Boolean);
+                
+                const examesInvalidos = linhasExames.filter(linha => !validarEntrada(linha));
+                if (examesInvalidos.length > 0) {
+                    e.preventDefault();
+                    alert('Alguns exames contêm dados inválidos. Verifique se:\n- Têm pelo menos 3 caracteres\n- Não são apenas caracteres repetidos\n- Contêm pelo menos uma letra');
+                    examesTextarea.focus();
+                    return false;
+                }
+            }
+
+            const selecionados = Array.from(document.querySelectorAll('input[name="medicamentos_prescritos[]"]:checked'))
+                .map(el => el.value.trim())
+                .filter(Boolean);
+            const hidden = document.getElementById('medicamentosPrescritos');
+            if (hidden) {
+                hidden.value = selecionados.join('\n');
+            }
+        });
+    }
+
+    console.log('✅ Sistema de PDF customizado e captura de medicamentos carregados com sucesso!');
 });
 </script>
 
