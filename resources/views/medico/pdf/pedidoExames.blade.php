@@ -3,219 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <title>SOLICITAÇÃO DE EXAMES</title>
-    <style>
-        @page {
-            size: A4;
-            margin: 1cm;
-        }
+<style>
+    @page {
+        size: A4;
+        margin: 0;
+    }
 
+    .container {
+        max-width: 900px;
+        min-height: 100vh;
+        margin: 0 auto;
+        font-family: 'DejaVu Sans', Arial, sans-serif;
+        color: #111827;
+        padding: 40px 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-sizing: border-box;
+        box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        border-radius: 8px;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+        text-align: center;
+        border-bottom: 3px solid #e11d48;
+        padding-bottom: 15px;
+        margin-bottom: 25px;
+    }
+
+    .header h1 {
+        color: #b91c1c;
+        font-size: 30px;
+        letter-spacing: 1px;
+        margin: 0;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+
+    .header p {
+        font-weight: 600;
+        font-size: 18px;
+        color: #374151;
+        margin: 6px 0 0 0;
+    }
+
+    /* ===== BLOCO PADRÃO ===== */
+    .info-block,
+    .clinical-reason,
+    .exames-section {
+        background: #fff;
+        border: 1.5px solid #e5e7eb;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+        border-radius: 10px;
+        padding: 22px 24px;
+        margin-top: 50px;
+        transition: all 0.25s ease;
+    }
+
+    .info-block:hover,
+    .clinical-reason:hover,
+    .exames-section:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+        background: #fff;
+        border-color: #f87171;
+    }
+
+    /* ===== TÍTULOS DOS BLOCOS ===== */
+    .info-block h2,
+    .clinical-reason h3,
+    .exames-section h2 {
+        font-size: 26px;
+        font-weight: 700;
+        color: #1f2937;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 6px;
+        margin-top: 0;
+        margin-bottom: 14px;
+    }
+
+    /* ===== PACIENTE / MÉDICO ===== */
+    .patient-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 10px;
+        line-height: 1.6;
+    }
+
+    .info-label {
+        font-size: 20px;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    /* ===== INDICAÇÃO CLÍNICA ===== */
+    .clinical-reason {
+        background: #fff;
+    }
+
+    .clinical-reason h3 {
+        color: #1f2937;
+    }
+
+    /* ===== EXAMES ===== */
+    .exames-section {
+        border: 2px solid #ef4444;
+        background: #fff5f5;
+        box-shadow: inset 0 0 6px rgba(239, 68, 68, 0.15);
+    }
+
+    .exames-section h2 {
+        color: #b91c1c;
+        text-align: center;
+        font-size: 20px;
+        font-weight: 800;
+        margin-bottom: 15px;
+        letter-spacing: 0.5px;
+    }
+
+    .exames-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .exames-list li {
+        position: relative;
+        margin-bottom: 10px;
+        padding-left: 22px;
+        font-size: 15px;
+        color: #111827;
+    }
+
+    .exames-list li::before {
+        content: "•";
+        color: #dc2626;
+        font-size: 22px;
+        position: absolute;
+        left: 0;
+        top: -2px;
+    }
+
+    /* ===== DATA ===== */
+    .date-section {
+        text-align: right;
+        margin-top: 35px;
+        font-weight: 600;
+        font-size: 18px;
+        color: #374151;
+    }
+
+    /* ===== ASSINATURA ===== */
+    .signature {
+        margin-top: 55px;
+        text-align: center;
+    }
+
+    .signature-line {
+        height: 1px;
+        background-color: #333;
+        width: 60%;
+        margin: 0 auto 8px;
+    }
+
+    .medico-info {
+        font-size: 18px;
+        font-weight: 600;
+        color: #111827;
+        line-height: 1.4;
+    }
+
+    /* ===== RODAPÉ ===== */
+    .footer {
+        text-align: center;
+        font-size: 18px;
+        color: #6b7280;
+        border-top: 1px dashed #d1d5db;
+        margin-top: 30px;
+        padding-top: 35px;
+        font-style: italic;
+    }
+
+    /* ===== AJUSTES PDF ===== */
+    @media print {
         body {
-            font-family: 'DejaVu Sans', Arial, sans-serif;
-            font-size: 12px;
-            margin: 0;
-            padding: 0;
-            line-height: 1.4;
-            color: #333;
+            background: none;
         }
-
         .container {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 10px;
-            box-sizing: border-box;
+            box-shadow: none;
+            border-radius: 0;
+            padding: 30px 50px;
         }
+        .info-block:hover,
+        .clinical-reason:hover,
+        .exames-section:hover {
+            transform: none;
+            box-shadow: none;
+        }
+    }
+</style>
 
-        .header {
-            text-align: center;
-            border-bottom: 3px solid #DC2626;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-        }
 
-        .header h1 {
-            color: #DC2626;
-            font-size: 24px;
-            margin: 0;
-            padding: 0;
-            font-weight: bold;
-        }
-
-        .header p {
-            margin: 5px 0;
-            color: #666;
-        }
-
-        .info-block {
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            padding: 15px;
-            border-radius: 5px;
-            background: #f9f9f9;
-            page-break-inside: avoid;
-        }
-
-        .info-block h2 {
-            font-size: 16px;
-            color: #111827;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 8px;
-            margin-top: 0;
-            font-weight: bold;
-        }
-
-        .info-data p {
-            margin: 8px 0;
-            line-height: 1.4;
-        }
-
-        .patient-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .info-label {
-            font-weight: bold;
-            color: #333;
-        }
-
-        .clinical-reason {
-            margin: 15px 0;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f5f5f5;
-            page-break-inside: avoid;
-        }
-
-        .clinical-reason h3 {
-            margin-top: 0;
-            color: #333;
-            font-size: 16px;
-        }
-
-        .exames-section {
-            border: 2px solid #DC2626;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            background-color: #fef2f2;
-            page-break-inside: avoid;
-        }
-
-        .exames-section h2 {
-            text-align: center;
-            color: #DC2626;
-            font-size: 20px;
-            margin-top: 0;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-
-        .exames-content {
-            font-size: 14px;
-            line-height: 1.6;
-            color: #333;
-        }
-
-        .exames-list {
-            list-style-type: none;
-            padding-left: 0;
-            margin: 0;
-        }
-
-        .exames-list li {
-            margin-bottom: 8px;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .exames-list li:before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #DC2626;
-            font-weight: bold;
-        }
-
-        .date-section {
-            text-align: right;
-            margin: 15px 0;
-            font-weight: bold;
-        }
-
-        .signature {
-            margin-top: 40px;
-            text-align: center;
-            page-break-inside: avoid;
-        }
-
-        .signature-line {
-            height: 1px;
-            background-color: #333;
-            width: 60%;
-            margin: 0 auto 10px auto;
-        }
-
-        .medico-info {
-            text-align: center;
-            font-size: 12px;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-
-        .footer {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 10px;
-            border-top: 1px dashed #ccc;
-            padding-top: 10px;
-            color: #666;
-        }
-
-        .no-break {
-            page-break-inside: avoid;
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
+     <div class="container">
         <div class="header no-break">
             <h1>SOLICITAÇÃO DE EXAMES</h1>
-            <p>Data: {{ $dataEmissao }}</p>
+            <p>Data: {{ $dataEmissao ?? 'N/A' }}</p>
         </div>
 
         <div class="info-block no-break">
             <h2>Dados do Paciente</h2>
             <div class="patient-info">
-                <div>
-                    <span class="info-label">Nome:</span>
-                    {{ $paciente->nomePaciente }}
-                </div>
-                <div>
-                    <span class="info-label">CPF:</span>
-                    {{ $paciente->cpfPaciente }}
-                </div>
-                <div>
-                    <span class="info-label">Data de Nascimento:</span>
-                    {{ \Carbon\Carbon::parse($paciente->dataNascPaciente)->format('d/m/Y') }}
-                </div>
+                <div><span class="info-label">Nome: {{ $paciente->nomePaciente ?? 'N/A' }}</span></div>
+                <div><span class="info-label">CPF: {{ $paciente->cpfPaciente ?? 'N/A' }}</span></div>
+                <div><span class="info-label">Data de Nascimento: {{ isset($paciente->dataNascPaciente) ? \Carbon\Carbon::parse($paciente->dataNascPaciente)->format('d/m/Y') : 'N/A' }}</span></div>
             </div>
         </div>
 
         <div class="info-block no-break">
             <h2>Dados do Médico Solicitante</h2>
             <div class="patient-info">
-                <div>
-                    <span class="info-label">Nome:</span>
-                    Dr(a). {{ $medico->nomeMedico }}
-                </div>
-                <div>
-                    <span class="info-label">CRM:</span>
-                    {{ $medico->crmMedico }}
-                </div>
+                <div><span class="info-label">Nome: Dr(a). {{ $medico->nomeMedico ?? 'N/A' }}</span></div>
+                <div><span class="info-label">CRM: {{ $medico->crmMedico ?? 'N/A' }}</span></div>
             </div>
         </div>
 
@@ -227,10 +238,12 @@
         <div class="exames-section no-break">
             <h2>EXAMES SOLICITADOS</h2>
             <div class="exames-content">
-                @if(!empty($exames) && trim($exames) !== '')
-                    @php
-                        $examesArray = array_filter(explode("\n", $exames), fn($e) => trim($e) !== '');
-                    @endphp
+                @php
+                    $examesArray = !empty($exames) && $exames !== 'Nenhum exame solicitado.' 
+                        ? array_filter(explode("\n", $exames), fn($e) => trim($e) !== '')
+                        : [];
+                @endphp
+                @if(count($examesArray) > 0)
                     <ul class="exames-list">
                         @foreach($examesArray as $exame)
                             <li>{{ trim($exame) }}</li>
@@ -243,14 +256,14 @@
         </div>
 
         <div class="date-section no-break">
-            Data: {{ \Carbon\Carbon::parse($consulta->dataConsulta)->format('d/m/Y') }}
+            Data: {{ isset($consulta->dataConsulta) ? \Carbon\Carbon::parse($consulta->dataConsulta)->format('d/m/Y') : 'N/A' }}
         </div>
 
         <div class="signature no-break">
             <div class="signature-line"></div>
             <div class="medico-info">
-                Dr(a). {{ $medico->nomeMedico }}<br>
-                CRM: {{ $medico->crmMedico }}
+                Dr(a). {{ $medico->nomeMedico ?? 'N/A' }}<br>
+                CRM: {{ $medico->crmMedico ?? 'N/A' }}
             </div>
         </div>
 
