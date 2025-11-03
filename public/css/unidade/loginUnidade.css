@@ -1,0 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+:root {
+  --roxo: #3C0061;
+  --roxo-claro: #3c00617c;
+  --cinza: #dcdcdc;
+  --branco: #ffffff;
+  --sombra: 0 8px 20px  rgba(60, 0, 97, 0.2);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--branco);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.main-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
+.left-side {
+  width: 50%;
+  background: linear-gradient(135deg, #3C0061 0%, #3C0061 50%, #3C0061 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 100px 100px 0;
+  box-shadow: inset 0 0 50px rgba(255,255,255,0.1);
+  animation: slide-in-left 0.8s ease forwards;
+}
+.left-side img {
+  width: 80%;
+  max-width: 520px;
+  opacity: 0;
+  animation: fade-in 1.5s ease 0.5s forwards;
+}
+
+.right-side {
+  width: 50%;
+  background-color: var(--branco);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: slide-in-right 0.8s ease forwards;
+}
+
+.login-content {
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  background-color: lab(100% 0.01 -0.01);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: var(--sombra);
+  transition: transform 0.3s ease;
+}
+
+.login-content:hover {
+  transform: translateY(-3px);
+}
+
+.logo img {
+  width: 180px;
+  margin-bottom: 20px;
+  animation: fade-in 1.2s ease;
+}
+
+h2 {
+  color: var(--roxo);
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.input-group {
+  text-align: left;
+  margin-bottom: 22px;
+}
+
+.input-group label {
+  font-weight: 600;
+  color: var(--roxo);
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--cinza);
+  border-radius: 8px;
+  padding: 10px 12px;
+  transition: all 0.3s ease;
+  background-color: #f4fff4;
+}
+
+.input-wrapper.focused {
+  border-color: var(--roxo);
+  box-shadow: 0 0 0 3px  rgba(60, 0, 97, 0.2);
+  background-color: #fff;
+}
+
+.input-wrapper input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  color: #3c00617c;
+  background: transparent;
+}
+
+.icon-left {
+  color: var(--roxo);
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.icon-right {
+  color: var(--roxo);
+  margin-left: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.icon-right:hover {
+  color: var(--roxo-claro);
+}
+
+.btn-login {
+  width: 100%;
+  background: linear-gradient(135deg, var(--roxo) 0%, var(--roxo-claro) 100%);
+  color: var(--branco);
+  border: none;
+  border-radius: 50px;
+  padding: 14px 0;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--sombra);
+}
+
+.btn-login:hover {
+  background: linear-gradient(135deg, var(--roxo-claro) 0%, var(--roxo) 100%);
+  transform: translateY(-2px);
+}
+
+.notification {
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  display: block;
+}
+
+.notification.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-left {
+  from { transform: translateX(-60px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(60px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+@media (max-width: 950px) {
+  .main-container {
+    flex-direction: column;
+  }
+
+  .left-side {
+    width: 100%;
+    border-radius: 0;
+    height: 250px;
+  }
+
+  .right-side {
+    width: 100%;
+  }
+
+  .login-content {
+    max-width: 320px;
+    margin-top: -40px;
+  }
+}
