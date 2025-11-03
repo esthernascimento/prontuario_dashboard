@@ -5,7 +5,7 @@
 @section('content')
 
 <body>
-
+{{-- O CSS está sendo referenciado aqui e deve estar na pasta 'public/css/enfermeiro/cadastrarProntuario.css' --}}
 <link rel="stylesheet" href="{{ asset('css/enfermeiro/cadastrarProntuario.css') }}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> 
 
@@ -13,7 +13,6 @@
     <div class="cadastrar-container">
         <div class="cadastrar-header">
             <i class="bi bi-journal-plus icon"></i>
-
             <h1>Realizar Triagem e Anotação</h1>
         </div>
 
@@ -21,7 +20,7 @@
             <h3><i class="bi bi-person-fill"></i> Informações do Atendimento</h3>
             
             <div class="info-grid">
-        
+                {{-- Variável $paciente (Passada pelo Controller) --}}
                 <div class="info-item">
                     <strong>Paciente:</strong>
                     <span>{{ $paciente->nomePaciente }}</span>
@@ -35,6 +34,7 @@
                     <span>{{ \Carbon\Carbon::parse($paciente->dataNascPaciente)->format('d/m/Y') }}</span>
                 </div>
 
+                {{-- Variável $enfermeiro (Passada pelo Controller) --}}
                 <div class="info-item">
                     <strong>Enfermeiro(a) Responsável:</strong>
                     <span>{{ $enfermeiro->nomeEnfermeiro ?? (Auth::user()->name ?? 'N/A') }}</span>
@@ -48,7 +48,7 @@
                     <span>Enfermeiro(a)</span>
                 </div>
 
- 
+                {{-- Variável $consulta (Passada pelo Controller) --}}
                 <div class="info-item queixa-principal">
                     <strong>Queixa Principal (Registrada na Recepção):</strong>
                     <span>"{{ $consulta->queixa_principal }}"</span>
@@ -57,12 +57,29 @@
             </div>
         </div>
 
+        {{-- ============================================= --}}
+        {{-- --- ADICIONADO: Bloco de Erros de Validação --- --}}
+        {{-- ============================================= --}}
+        @if ($errors->any())
+            <div class="alert alert-danger" style="margin: 20px 36px; padding: 15px; background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; border-radius: var(--radius-md);">
+                <strong><i class="bi bi-exclamation-triangle-fill"></i> Ops! Algo deu errado:</strong>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        {{-- ============================================= --}}
+
+        {{-- Rota de POST: enfermeiro.anotacao.store (Definida no web.php) --}}
         <form action="{{ route('enfermeiro.anotacao.store', $paciente->idPaciente) }}" method="POST">
             @csrf
 
+            {{-- ID da Consulta (obrigatório para o controller) --}}
             <input type="hidden" name="idConsulta" value="{{ $consulta->idConsultaPK }}">
 
-   
+            {{-- Tipo de Registro (obrigatório para o controller) --}}
             <input type="hidden" name="tipo_registro" value="Anotação de Triagem"> 
 
             <div class="form-section-title">Classificação de Risco (Obrigatório)</div>
@@ -87,6 +104,7 @@
 
             <div class="form-section-title">Dados da Anotação</div>
 
+            {{-- Campo Data e Hora --}}
             <div class="input-group">
                 <label for="data_hora">
                     <i class="bi bi-calendar-check"></i> Data e Hora do Registro *
@@ -106,6 +124,7 @@
             
             <div class="form-section-title">Sinais Vitais (Opcional)</div>
             
+            {{-- Linha 1 de Sinais Vitais em grid de 3 colunas --}}
             <div class="input-group-row-3">
                 <div class="input-group">
                     <label for="pressao_arterial">
@@ -126,7 +145,8 @@
                     <input type="text" id="frequencia_cardiaca" name="frequencia_cardiaca" value="{{ old('frequencia_cardiaca') }}" placeholder="Ex: 75">
                 </div>
             </div>
-
+            
+            {{-- Linha 2 de Sinais Vitais em grid de 3 colunas --}}
             <div class="input-group-row-3">
                 <div class="input-group">
                     <label for="frequencia_respiratoria">
@@ -150,72 +170,78 @@
 
             <div class="form-section-title">Detalhes da Ocorrência</div>
 
+            {{-- Alergias --}}
             <div class="input-group">
-   <!-- Alergias -->
-<div class="input-group">
-    <label>
-        <i class="bi bi-exclamation-triangle-fill"></i> Alergias Identificadas
-    </label>
-    <input type="text" id="filtroAlergias" class="input-filtro" placeholder="Pesquisar alergia...">
+                <label>
+                    <i class="bi bi-exclamation-triangle-fill"></i> Alergias Identificadas
+                </label>
+                <input type="text" id="filtroAlergias" class="input-filtro" placeholder="Pesquisar alergia...">
 
-    <div id="listaAlergias" class="checkbox-list">
-        <!-- Campo hidden para garantir que 'alergias' seja sempre enviado -->
-        <input type="hidden" name="alergias" value="">
+                <div id="listaAlergias" class="checkbox-list">
+                    {{-- Campo hidden removido, pois a validação de array cuida disso --}}
+                    {{-- <input type="hidden" name="alergias" value=""> --}}
 
-        @php
-            $alergias = [
-                'Dipirona', 'Penicilina', 'Amoxicilina', 'Iodo', 'Látex', 'Glúten', 'Lactose', 
-                'Mariscos', 'Amendoim', 'Ovos', 'Soja', 'Frutos do mar', 'Frutas cítricas',
-                'Corantes', 'Conservantes', 'Inseticidas', 'Perfumes', 'Anestésicos', 
-                'Ibuprofeno', 'Aspirina', 'Cloro', 'Frio intenso', 'Poeira', 'Ácaros', 
-                'Pólen', 'Pelagem animal', 'Fungos', 'Produtos de limpeza', 'Antibióticos diversos',
-                'Outros'
-            ];
-        @endphp
+                    @php
+                        $alergias = [
+                            'Dipirona', 'Penicilina', 'Amoxicilina', 'Iodo', 'Látex', 'Glúten', 'Lactose', 
+                            'Mariscos', 'Amendoim', 'Ovos', 'Soja', 'Frutos do mar', 'Frutas cítricas',
+                            'Corantes', 'Conservantes', 'Inseticidas', 'Perfumes', 'Anestésicos', 
+                            'Ibuprofeno', 'Aspirina', 'Cloro', 'Frio intenso', 'Poeira', 'Ácaros', 
+                            'Pólen', 'Pelagem animal', 'Fungos', 'Produtos de limpeza', 'Antibióticos diversos',
+                            'Outros'
+                        ];
+                    @endphp
 
-        @foreach($alergias as $alergia)
-            <label class="checkbox-item">
-                <input type="checkbox" name="alergias[]" value="{{ $alergia }}"
-                    {{ is_array(old('alergias')) && in_array($alergia, old('alergias')) ? 'checked' : '' }}>
-                {{ $alergia }}
-            </label>
-        @endforeach
-    </div>
-</div>
+                    @foreach($alergias as $alergia)
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="alergias[]" value="{{ $alergia }}"
+                                {{ is_array(old('alergias')) && in_array($alergia, old('alergias')) ? 'checked' : '' }}>
+                            {{ $alergia }}
+                        </label>
+                    @endforeach
+                </div>
+                @error('alergias')
+                    <span class="error" style="color: var(--error-red); font-size: 0.85rem; font-weight: 600; margin-top: 6px;">{{ $message }}</span>
+                @enderror
+            </div>
 
-<!-- Medicações -->
-<div class="input-group">
-    <label>
-        <i class="bi bi-capsule"></i> Medicações / Procedimentos Ministrados
-    </label>
-    <input type="text" id="filtroMedicacoes" class="input-filtro" placeholder="Pesquisar medicação...">
+            <!-- Medicações -->
+            <div class="input-group">
+                <label>
+                    <i class="bi bi-capsule"></i> Medicações / Procedimentos Ministrados
+                </label>
+                <input type="text" id="filtroMedicacoes" class="input-filtro" placeholder="Pesquisar medicação...">
 
-    <div id="listaMedicacoes" class="checkbox-list">
-        <input type="hidden" name="medicacoes_ministradas" value="">
+                <div id="listaMedicacoes" class="checkbox-list">
+                    {{-- Campo hidden removido --}}
+                    {{-- <input type="hidden" name="medicacoes_ministradas" value=""> --}}
 
-        @php
-            $medicacoes = [
-                'Paracetamol', 'Dipirona', 'Soro fisiológico', 'Glicose 5%', 'Ranitidina', 
-                'Metoclopramida', 'Omeprazol', 'Buscopan', 'Tramal', 'Cetoprofeno',
-                'Hidrocortisona', 'Prednisona', 'Clorexidina', 'Diclofenaco', 
-                'Adrenalina', 'Insulina', 'Amoxicilina', 'Azitromicina', 
-                'Atadura', 'Curativo', 'Inalação', 'Suturas', 'Antisséptico', 'Soroterapia', 
-                'Curativo com gaze', 'Glicemia capilar', 'Administração IM', 'Administração EV',
-                'Administração VO', 'Outros'
-            ];
-        @endphp
+                    @php
+                        $medicacoes = [
+                            'Paracetamol', 'Dipirona', 'Soro fisiológico', 'Glicose 5%', 'Ranitidina', 
+                            'Metoclopramida', 'Omeprazol', 'Buscopan', 'Tramal', 'Cetoprofeno',
+                            'Hidrocortisona', 'Prednisona', 'Clorexidina', 'Diclofenaco', 
+                            'Adrenalina', 'Insulina', 'Amoxicilina', 'Azitromicina', 
+                            'Atadura', 'Curativo', 'Inalação', 'Suturas', 'Antisséptico', 'Soroterapia', 
+                            'Curativo com gaze', 'Glicemia capilar', 'Administração IM', 'Administração EV',
+                            'Administração VO', 'Outros'
+                        ];
+                    @endphp
 
-        @foreach($medicacoes as $medicacao)
-            <label class="checkbox-item">
-                <input type="checkbox" name="medicacoes_ministradas[]" value="{{ $medicacao }}"
-                    {{ is_array(old('medicacoes_ministradas')) && in_array($medicacao, old('medicacoes_ministradas')) ? 'checked' : '' }}>
-                {{ $medicacao }}
-            </label>
-        @endforeach
-    </div>
-</div>
-
+                    @foreach($medicacoes as $medicacao)
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="medicacoes_ministradas[]" value="{{ $medicacao }}"
+                                {{ is_array(old('medicacoes_ministradas')) && in_array($medicacao, old('medicacoes_ministradas')) ? 'checked' : '' }}>
+                            {{ $medicacao }}
+                        </label>
+                    @endforeach
+                </div>
+                 @error('medicacoes_ministradas')
+                    <span class="error" style="color: var(--error-red); font-size: 0.85rem; font-weight: 600; margin-top: 6px;">{{ $message }}</span>
+                @enderror
+            </div>
             
+            {{-- Campo Descrição/Evolução --}}
             <div class="input-group">
                 <label for="descricao">
                     <i class="bi bi-file-text"></i> Descrição da Anotação / Evolução *
@@ -232,6 +258,7 @@
                 @enderror
             </div>
             
+            {{-- CAMPO DE SELEÇÃO DE UNIDADE AJUSTADO --}}
             <div class="input-group">
                 <label for="unidade_atendimento">
                     <i class="bi bi-hospital"></i> Unidade de Atendimento *
@@ -251,6 +278,7 @@
             </div>
 
             <div class="button-group">
+                {{-- Rota de Cancelar: enfermeiro.prontuario.index (Definida no web.php) --}}
                 <a href="{{ route('enfermeiro.prontuario') }}" class="btn-cancelar"> 
                     <i class="bi bi-x-circle"></i> Cancelar
                 </a>
@@ -274,7 +302,7 @@
         });
     });
 
-    // Filtro de pesquisa para Medicações
+
     document.getElementById('filtroMedicacoes').addEventListener('input', function() {
         const termo = this.value.toLowerCase();
         document.querySelectorAll('#listaMedicacoes .checkbox-item').forEach(item => {
@@ -284,3 +312,4 @@
     });
 </script>
 @endsection
+

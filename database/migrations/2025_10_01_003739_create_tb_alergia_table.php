@@ -6,32 +6,53 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up(): void
     {
         Schema::create('tbAlergia', function (Blueprint $table) {
             $table->id('idAlergiaPK');
 
-            // FK -> tbPaciente.idPaciente (sem unique para permitir N alergias por paciente)
+            // FK -> tbPaciente.idPaciente
             $table->foreignId('idPacienteFK')
-                  ->constrained('tbPaciente', 'idPaciente')
+                  ->constrained('tbPaciente', 'idPaciente') // Confirma que a PK de tbPaciente é 'idPaciente'
                   ->cascadeOnUpdate()
                   ->cascadeOnDelete();
 
+            // --- CAMPOS UNIFICADOS ---
+
+            // Campo Principal (Nome/Descrição da Alergia)
+            // (O controller já está configurado para usar este campo)
             $table->string('descAlergia'); // ex.: "Dipirona", "Amendoim" etc.
-            // (Opcional) niveis adicionais:
-             $table->string('gravidade')->nullable();  // leve | moderada | severa
-             $table->string('reacao')->nullable();     // ex.: urticária, anafilaxia, etc.
+
+            // Campos extras da sua segunda migration
+            $table->string('tipoAlergia')->nullable();      // ex.: Medicamentosa, Alimentar
+            $table->string('severidadeAlergia')->nullable(); // ex.: Leve, Moderada, Severa
+            
+            // --- FIM DOS CAMPOS UNIFICADOS ---
 
             $table->timestamps();
             $table->softDeletes();
 
-            // (Opcional) Evitar duplicar a MESMA alergia para o MESMO paciente:
-             $table->unique(['idPacienteFK', 'descAlergia']);
+            // Evitar duplicar a MESMA alergia para o MESMO paciente
+            $table->unique(['idPacienteFK', 'descAlergia']);
         });
     }
 
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     public function down(): void
     {
+        // Método robusto para apagar a tabela
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('tbAlergia');
+        Schema::enableForeignKeyConstraints();
     }
 };
+
