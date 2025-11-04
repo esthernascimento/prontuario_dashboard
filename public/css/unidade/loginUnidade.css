@@ -2,8 +2,8 @@
 
 :root {
   --roxo: #3C0061;
-  --roxo-claro: #3c00617c;
-  --cinza: #dcdcdc;
+  --roxo-claro: #AF54F7;
+  --cinza: rgb(222, 187, 247);
   --branco: #ffffff;
   --sombra: 0 8px 20px  rgba(60, 0, 97, 0.2);
 }
@@ -32,7 +32,7 @@ body {
 
 .left-side {
   width: 50%;
-  background: linear-gradient(135deg, #3C0061 0%, #3C0061 50%, #3C0061 100%);
+  background: linear-gradient(135deg, #3C0061 0%, #4a0077 50%, #8200d2 100%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -105,7 +105,7 @@ h2 {
   border-radius: 8px;
   padding: 10px 12px;
   transition: all 0.3s ease;
-  background-color: #f4fff4;
+  background-color: #f8f4ff;
 }
 
 .input-wrapper.focused {

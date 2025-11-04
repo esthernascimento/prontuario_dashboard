@@ -12,7 +12,7 @@ $unidade = auth()->guard('unidade')->user();
 @endphp
 
 <div class="overview-container">
-    <h1 class="dashboard-title fade-in" style="animation-delay: 0.2s;">Dashboard Recepcionista/h1>
+    <h1 class="dashboard-title fade-in" style="animation-delay: 0.2s;">Dashboard Unidade/h1>
 
     <div class="welcome-banner zoom-in-banner" style="animation-delay: 0.4s;">
         <div class="banner-left">
