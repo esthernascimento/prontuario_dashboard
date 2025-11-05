@@ -10,18 +10,20 @@ class LoginController extends Controller
 {
     public function showLoginForm()
     {
-        return view('unidade.login'); 
+        return view('unidade.login');
     }
 
     public function login(Request $request)
     {
+        // Valida o CNPJ e a senha
         $credentials = $request->validate([
-            'emailUnidade' => 'required|email',
-            'senhaUnidade' => 'required',
+            'cnpjUnidade' => 'required|string',
+            'senhaUnidade' => 'required|string',
         ]);
 
+        // Tenta autenticar usando o CNPJ
         if (Auth::guard('unidade')->attempt([
-            'emailUnidade' => $credentials['emailUnidade'],
+            'cnpjUnidade' => $credentials['cnpjUnidade'],
             'password' => $credentials['senhaUnidade'],
         ])) {
             $request->session()->regenerate();
@@ -29,7 +31,7 @@ class LoginController extends Controller
         }
 
         return back()->withErrors([
-            'emailUnidade' => 'Credenciais inválidas.',
+            'cnpjUnidade' => 'CNPJ ou senha inválidos.',
         ]);
     }
 
@@ -38,7 +40,7 @@ class LoginController extends Controller
         Auth::guard('unidade')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         return redirect('/');
     }
 }

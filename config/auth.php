@@ -25,14 +25,20 @@ return [
 
         'enfermeiro' => [
             'driver' => 'session',
-            'provider' => 'enfermeiros', // usa Usuario para autenticação
+            'provider' => 'enfermeiros',
         ],
+
         'recepcionista' => [
             'driver' => 'session',
             'provider' => 'recepcionistas',
         ],
-    ],
 
+        // 🔹 NOVO GUARD PARA UNIDADE
+        'unidade' => [
+            'driver' => 'session',
+            'provider' => 'unidades',
+        ],
+    ],
 
     'providers' => [
 
@@ -53,16 +59,27 @@ return [
 
         'enfermeiros' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Usuario::class, // 🔹 MUDANÇA AQUI
+            'model' => App\Models\Usuario::class,
         ],
         'recepcionistas' => [
             'driver' => 'eloquent',
             'model' => App\Models\Recepcionista::class,
         ],
+
+        // 🔹 NOVO PROVIDER PARA UNIDADE
+        'unidades' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Unidade::class,
+        ],
     ],
 
     'passwords' => [
-
+        'unidades' => [
+            'provider' => 'unidades',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
         'users' => [
             'provider' => 'users',
             'table' => 'password_reset_tokens',
