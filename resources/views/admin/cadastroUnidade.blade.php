@@ -43,15 +43,17 @@
                             placeholder="Ex: Hospital Geral, UBS">
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="input-group">
                         <label for="cnpjUnidade" class="form-label">CNPJ</label>
-                        <input type="text" name="cnpjUnidade" id="cnpjUnidade" value="{{ old('cnpjUnidade') }}">
+                        <input type="text" name="cnpjUnidade" id="cnpjUnidade" value="{{ old('cnpjUnidade') }}"
+                            placeholder="Ex: XX.XXX.XXX/0001-XX">
                     </div>
 
                     <!-- E-mail -->
-                    <div class="col-md-6">
+                    <div class="input-group">
                         <label for="emailUnidade" class="form-label">E-mail da Unidade</label>
-                        <input type="email" name="emailUnidade" id="emailUnidade" value="{{ old('emailUnidade') }}">
+                        <input type="email" name="emailUnidade" id="emailUnidade" value="{{ old('emailUnidade') }}"
+                         placeholder="Ex: hospital@gmail.com">
                     </div>
 
                     <div class="input-group">
