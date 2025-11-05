@@ -18,9 +18,10 @@ return [
             'provider' => 'admins',
         ],
 
+        // 🔥 CORREÇÃO APLICADA AQUI:
         'medico' => [
             'driver' => 'session',
-            'provider' => 'medicos',
+            'provider' => 'users', // Alterado de 'medicos' para 'users'
         ],
 
         'enfermeiro' => [
@@ -33,7 +34,6 @@ return [
             'provider' => 'recepcionistas',
         ],
 
-        // 🔹 NOVO GUARD PARA UNIDADE
         'unidade' => [
             'driver' => 'session',
             'provider' => 'unidades',
@@ -41,7 +41,6 @@ return [
     ],
 
     'providers' => [
-
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\Usuario::class,
@@ -52,10 +51,11 @@ return [
             'model' => App\Models\Admin::class,
         ],
 
-        'medicos' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Medico::class,
-        ],
+        // 🔥 O PROVIDER 'medicos' NÃO É MAIS NECESSÁRIO E PODE SER REMOVIDO.
+        // 'medicos' => [
+        //     'driver' => 'eloquent',
+        //     'model' => App\Models\Medico::class,
+        // ],
 
         'enfermeiros' => [
             'driver' => 'eloquent',
@@ -66,7 +66,6 @@ return [
             'model' => App\Models\Recepcionista::class,
         ],
 
-        // 🔹 NOVO PROVIDER PARA UNIDADE
         'unidades' => [
             'driver' => 'eloquent',
             'model' => App\Models\Unidade::class,
@@ -86,7 +85,6 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
-
     ],
 
     'password_timeout' => 10800,

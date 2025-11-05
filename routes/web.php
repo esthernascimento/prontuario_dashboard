@@ -193,7 +193,7 @@ Route::middleware('auth:medico')->prefix('medico')->name('medico.')->group(funct
         Route::get('/visualizar-prontuario/{id}', [MedicoProntuarioController::class, 'show'])->name('visualizarProntuario');
         Route::get('/{id}', [MedicoProntuarioController::class, 'show'])->name('paciente.prontuario');
         
-              // PDF - DENTRO DO GRUPO PRONTUÁRIO
+        // PDF - DENTRO DO GRUPO PRONTUÁRIO
         Route::get('/pdf-exames/{idConsulta}', [MedicoPdfController::class, 'gerarPdfExames'])->name('gerarPdfExames');
         Route::get('/consulta/{idConsulta}/receita/pdf', [MedicoPdfController::class, 'gerarPdfReceita'])->name('consulta.receita.pdf');
     });
