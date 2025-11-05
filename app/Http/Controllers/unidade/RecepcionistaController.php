@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\unidade;
+namespace App\Http\Controllers\Unidade;
 
 use App\Http\Controllers\Controller;
 use App\Models\Recepcionista;

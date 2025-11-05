@@ -19,7 +19,7 @@
     <div class="welcome-banner zoom-in-banner" style="animation-delay: 0.4s;">
         <div class="banner-left">
             <div class="banner-logo-container">
-                <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo Prontuário+" class="banner-logo">
+                <img src="{{ asset('img/unidade-logo2.png') }}" alt="Logo Prontuário+" class="banner-logo">
             </div>
         </div>
         <div class="banner-center">
