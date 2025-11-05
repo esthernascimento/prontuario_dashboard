@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -36,28 +37,29 @@
           </div>
         @endif
 
-        <form action="{{ route('enfermeiro.login.submit') }}" method="POST">
+        <form action="{{ route('unidade.login.submit') }}" method="POST">
           @csrf
 
           <div class="input-group">
-            <label for="CNPJ">CNPJ</label>
+            <label for="cnpjUnidade">CNPJ</label>
             <div class="input-wrapper">
               <i class="fa-solid fa-user icon-left"></i>
-              <input type="text" id="cnpj" name="cnpj" value="{{ old('cnpj') }}" required />
+              <input type="text" id="cnpjUnidade" name="cnpjUnidade" value="{{ old('cnpjUnidade') }}" required />
             </div>
           </div>
 
           <div class="input-group">
-            <label for="senha">Senha</label>
+            <label for="senhaUnidade">Senha</label>
             <div class="input-wrapper">
               <i class="fa-solid fa-lock icon-left"></i>
-              <input type="password" id="senha" name="senha" required />
+              <input type="password" id="senhaUnidade" name="senhaUnidade" required />
               <i id="togglePassword" class="fa-solid fa-eye-slash icon-right"></i>
             </div>
           </div>
 
           <button class="btn-login" type="submit">ENTRAR</button>
         </form>
+
       </div>
     </div>
   </main>
@@ -65,14 +67,19 @@
   <script>
     // Alternar visibilidade da senha
     const togglePassword = document.getElementById("togglePassword");
-    const passwordInput = document.getElementById("senha");
+    // CORREÇÃO AQUI: O ID correto para o input de senha é 'senhaUnidade', não 'senha'.
+    const passwordInput = document.getElementById("senhaUnidade"); 
 
-    togglePassword.addEventListener("click", () => {
-      const isPassword = passwordInput.type === "password";
-      passwordInput.type = isPassword ? "text" : "password";
-      togglePassword.classList.toggle("fa-eye");
-      togglePassword.classList.toggle("fa-eye-slash");
-    });
+    // Verifica se os elementos existem antes de adicionar o listener
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener("click", () => {
+            const isPassword = passwordInput.type === "password";
+            passwordInput.type = isPassword ? "text" : "password";
+            togglePassword.classList.toggle("fa-eye");
+            togglePassword.classList.toggle("fa-eye-slash");
+        });
+    }
+
 
     // Estilizar foco nos inputs
     const inputs = document.querySelectorAll(".input-wrapper input");
@@ -81,11 +88,17 @@
         input.parentElement.classList.add("focused");
       });
       input.addEventListener("blur", () => {
-        if (input.value === "") {
+        // CORREÇÃO AQUI: Remove a classe 'focused' apenas se o campo estiver VAZIO.
+        if (input.value === "") { 
           input.parentElement.classList.remove("focused");
         }
       });
+      // Adiciona 'focused' ao carregar se já houver valor (útil para old())
+      if (input.value !== "") {
+          input.parentElement.classList.add("focused");
+      }
     });
   </script>
 </body>
+
 </html>

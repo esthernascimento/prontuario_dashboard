@@ -4,13 +4,17 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
         Schema::create('tbUnidade', function (Blueprint $table) {
             $table->id('idUnidadePK');
             $table->string('nomeUnidade');
+            $table->string('cnpjUnidade', 18)->unique();
+            $table->string('emailUnidade')->unique();
+            $table->string('senhaUnidade');
+            $table->boolean('statusSenhaUnidade')->default(true);
+            $table->boolean('statusAtivoUnidade')->default(true);
             $table->string('tipoUnidade', 100)->nullable();
             $table->string('enderecoUnidade')->nullable();
             $table->timestamps();

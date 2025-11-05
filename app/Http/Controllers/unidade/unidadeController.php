@@ -5,7 +5,7 @@ namespace App\Http\Controllers\unidade;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class AdminController extends Controller
+class UnidadeController extends Controller
 {
     /**
      * Exibe o dashboard da unidade (dashboardUnidade.blade.php).

@@ -132,6 +132,8 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::put('/unidades/{unidade}', [UnidadeController::class, 'update'])->name('unidades.update');
     Route::delete('/unidades/{unidade}', [UnidadeController::class, 'destroy'])->name('unidades.destroy');
     Route::post('/unidades/{id}/toggle-status', [UnidadeController::class, 'toggleStatus'])->name('unidades.toggleStatus');
+    Route::get('/unidades', [UnidadeController::class, 'index'])->name('unidades.index');
+    Route::post('/unidades', [UnidadeController::class, 'store'])->name('unidades.store');
 
     // CRUD RECEPCIONISTAS (USANDO CONTROLLER DE UNIDADE)
     Route::get('/recepcionistas', [RecepcionistaController::class, 'index'])->name('recepcionistas.index');
@@ -146,19 +148,20 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
 // ===================================================================================
 // --- ROTAS PROTEGIDAS DA UNIDADE ---
 // ===================================================================================
-
+Route::prefix('unidade')->name('unidade.')->group(function () {
+    // Formulário de Login da Unidade
+    Route::get('/login', [UnidadeLoginController::class, 'showLoginForm'])->name('login');
+    
+    // Processamento do Login
+    Route::post('/login', [UnidadeLoginController::class, 'login'])->name('login.submit');
+});
 // Rota protegida pelo guard 'unidade' (guard que o seu LoginController usa)
 Route::middleware('auth:unidade')->prefix('unidade')->name('unidade.')->group(function () {
     
     // Dashboard e Logout
     Route::get('/dashboard', [UnidadeDashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [UnidadeLoginController::class, 'logout'])->name('logout');
-
-    // Aqui você pode adicionar as rotas de perfil e segurança específicas da Unidade,
-    // usando o seu 'unidade\unidadeController' que você renomeou para 'AdminController' na pasta unidade:
     
-    // Se quiser rotas de gestão de Médicos/Enfermeiros para a Unidade, elas iriam aqui, 
-    // mas usando Controllers de CRUD específicos para a Unidade (que talvez você ainda vá criar).
 });
 
 // ===================================================================================
