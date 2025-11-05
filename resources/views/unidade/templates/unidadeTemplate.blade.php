@@ -25,18 +25,33 @@
                 <i class="bi bi-house-door-fill"></i>
                 <span class="nav-text">Dashboard</span>
             </a>
-            
-            <a href="{{ route('admin.ajuda') }}" class="nav-item">
+            <a href="{{ route('unidade.pacientes.index') }}" class="nav-item">
+                <i class="bi bi-people-fill"></i>
+                <span class="nav-text">Pacientes</span>
+            </a>
+            <a href="{{ route('unidade.manutencaoMedicos') }}" class="nav-item">
+                <i class="bi bi-plus-circle-fill"></i>
+                <span class="nav-text">Médicos</span>
+            </a>
+            <a href="{{ route('unidade.manutencaoEnfermeiro') }}" class="nav-item">
+                <i class="bi bi-person-fill-add"></i>
+                <span class="nav-text">Enfermeiros</span>
+            </a>
+            <a href="{{ route('unidade.unidades.index') }}" class="nav-item">
+                <i class="bi bi-hospital-fill"></i>
+                <span class="nav-text">Unidade</span>
+            </a>
+            <a href="{{ route('unidade.ajuda') }}" class="nav-item">
                 <i class="bi bi-question-circle-fill"></i>
                 <span class="nav-text">Ajuda</span>
             </a>
-            <a href="{{ route('admin.perfil') }}" class="nav-item">
+            <a href="{{ route('unidade.perfil') }}" class="nav-item">
                 <i class="bi bi-shield-lock-fill"></i>
                 <span class="nav-text">Perfil</span>
             </a>
 
             {{-- Logout --}}
-            <a href="{{ route('admin.logout') }}"
+            <a href="{{ route('unidade.logout') }}"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="nav-item">
                 <i class="bi bi-power"></i>
                 <span class="nav-text">Sair</span>
