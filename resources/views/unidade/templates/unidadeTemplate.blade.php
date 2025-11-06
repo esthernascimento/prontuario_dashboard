@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Painel Administrativo')</title>
+    <title>@yield('title', 'Painel da Unidade')</title>
 
     {{-- CSS principal --}}
     <link rel="stylesheet" href="{{ asset('css/unidade/template.css') }}">
@@ -16,8 +16,9 @@
 <body>
     {{-- Sidebar --}}
     <div class="sidebar">
-        <a href="{{ route('admin.dashboard') }}" class="logo-link">
-            <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo Prontuário+" class="logo">
+        {{-- 🔥 CORREÇÃO: O link do logo deve ir para o dashboard da unidade --}}
+        <a href="{{ route('unidade.dashboard') }}" class="logo-link">
+            <img src="{{ asset('img/unidade-logo2.png') }}" alt="Logo Prontuário+" class="logo">
         </a>
 
         <nav>
@@ -25,22 +26,17 @@
                 <i class="bi bi-house-door-fill"></i>
                 <span class="nav-text">Dashboard</span>
             </a>
-            <a href="{{ route('unidade.pacientes.index') }}" class="nav-item">
-                <i class="bi bi-people-fill"></i>
-                <span class="nav-text">Pacientes</span>
-            </a>
+          
             <a href="{{ route('unidade.manutencaoMedicos') }}" class="nav-item">
                 <i class="bi bi-plus-circle-fill"></i>
                 <span class="nav-text">Médicos</span>
             </a>
+
             <a href="{{ route('unidade.manutencaoEnfermeiro') }}" class="nav-item">
                 <i class="bi bi-person-fill-add"></i>
                 <span class="nav-text">Enfermeiros</span>
             </a>
-            <a href="{{ route('unidade.unidades.index') }}" class="nav-item">
-                <i class="bi bi-hospital-fill"></i>
-                <span class="nav-text">Unidade</span>
-            </a>
+
             <a href="{{ route('unidade.ajuda') }}" class="nav-item">
                 <i class="bi bi-question-circle-fill"></i>
                 <span class="nav-text">Ajuda</span>
@@ -56,7 +52,7 @@
                 <i class="bi bi-power"></i>
                 <span class="nav-text">Sair</span>
             </a>
-            <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+            <form id="logout-form" action="{{ route('unidade.logout') }}" method="POST" style="display: none;">
                 @csrf
             </form>
         </nav>
@@ -64,13 +60,15 @@
 
     {{-- Header --}}
     <header class="header">
-        <a href="{{ route('admin.perfil') }}" class="user-info" style="text-decoration: none; color: inherit;">
-            @if(isset($admin) && $admin->foto)
-                <img src="{{ asset('storage/fotos/' . $admin->foto) }}" alt="Foto do Admin">
+        {{-- 🔥 CORREÇÃO: Usar a variável $unidade e a rota unidade.perfil --}}
+        <a href="{{ route('unidade.perfil') }}" class="user-info" style="text-decoration: none; color: inherit;">
+            @if(isset($unidade) && $unidade->foto)
+                <img src="{{ asset('storage/fotos/' . $unidade->foto) }}" alt="Foto da Unidade">
             @else
                 <img src="{{ asset('img/usuario-de-perfil.png') }}" alt="Foto padrão">
             @endif
-            <span>{{ $admin->nomeAdmin ?? 'Administrador' }}</span>
+            {{-- 🔥 CORREÇÃO: Ajustar o nome da variável --}}
+            <span>{{ $unidade->nomeUnidade ?? 'Unidade' }}</span>
         </a>
     </header>
 

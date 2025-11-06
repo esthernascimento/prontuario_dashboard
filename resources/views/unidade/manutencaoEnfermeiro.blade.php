@@ -5,13 +5,13 @@
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/unidade/manutencaoEnfermeiros.css') }}">
 
-@php $admin = auth()->guard('admin')->user(); @endphp
+@php $unidade = auth()->guard('unidade')->user(); @endphp
 
 <main class="main-dashboard">
     <div class="enfermeiro-container">
         <div class="enfermeiro-header">
             <h1><i class="bi bi-person-vcard"></i> Gerenciamento de Enfermeiros</h1>
-            <a href="{{ route('admin.enfermeiro.create') }}" class="btn-add-enfermeiro">
+            <a href="{{ route('unidade.enfermeiro.create') }}" class="btn-add-enfermeiro">
                 <i class="bi bi-plus-circle"></i> Cadastrar Enfermeiro
             </a>
         </div>
@@ -58,7 +58,8 @@
                             @endif
                         </td>
                         <td class="actions">
-                            <a href="{{ route('admin.enfermeiro.editar', $enfermeiro->idEnfermeiroPK) }}" class="btn-action btn-edit" title="Editar">
+                            {{-- 🔥 CORREÇÃO: A rota agora é 'unidade.enfermeiro.edit' --}}
+                            <a href="{{ route('unidade.enfermeiro.edit', $enfermeiro->idEnfermeiroPK) }}" class="btn-action btn-edit" title="Editar">
                                 <i class="bi bi-pencil"></i>
                             </a>
 
@@ -71,7 +72,6 @@
                                     @endif
                                 </a>
                             @endif
-                            {{-- REMOVEMOS O BOTÃO DE EXCLUSÃO DEFINITIVAMENTE --}}
                         </td>
                     </tr>
                     @endforeach
@@ -93,9 +93,7 @@
     </div>
 </main>
 
-{{-- MODAL DE EXCLUSÃO FOI REMOVIDO --}}
-
-{{-- MODAL DE ALTERAÇÃO DE STATUS (EXISTENTE) --}}
+{{-- MODAL DE ALTERAÇÃO DE STATUS --}}
 <div id="statusEnfermeiroModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -105,7 +103,8 @@
         
         <p>Tem certeza que deseja <span id="statusAction"></span> o(a) enfermeiro(a) <span id="statusEnfermeiroNome"></span>?</p>
 
-        <form id="statusEnfermeiroForm" method="POST">
+        {{-- 🔥 CORREÇÃO APLICADA AQUI: Action com placeholder ':id:' para evitar erro de rota --}}
+        <form id="statusEnfermeiroForm" method="POST" action="{{ route('unidade.enfermeiro.toggleStatus', ':id:') }}">
             @csrf
             <div class="modal-buttons">
                 <button type="button" onclick="closeStatusModal()" class="btn-cancelar">Cancelar</button>
@@ -115,7 +114,7 @@
     </div>
 </div>
 
-{{-- MODAL DE SUCESSO UNIFICADO (EXISTENTE) --}}
+{{-- MODAL DE SUCESSO --}}
 <div id="statusSuccessModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -132,10 +131,7 @@
 </div>
 
 <script>
-    // ------------------------------------------
-    // LÓGICA DO MODAL DE SUCESSO UNIFICADO
-    // ------------------------------------------
-
+    // ... (O JavaScript permanece o mesmo, pois as funções são genéricas) ...
     function openSuccessModal(message) {
         document.getElementById('successMessage').textContent = message;
         document.getElementById('statusSuccessModal').style.display = 'flex';
@@ -158,13 +154,7 @@
             openSuccessModal(message);
         });
     @endif
-
-    // ------------------------------------------
-    // LÓGICA DOS MODAIS DE ENFERMEIRO
-    // ------------------------------------------
     
-    // As funções openDeleteEnfermeiroModal e closeDeleteEnfermeiroModal foram removidas.
-
     function openStatusModal(enfermeiroId, enfermeiroNome, currentStatus) {
         const modal = document.getElementById('statusEnfermeiroModal');
         const nomeSpan = document.getElementById('statusEnfermeiroNome');
@@ -179,8 +169,8 @@
         actionSpan.textContent = action;
         confirmText.textContent = confirmAction;
 
-        const statusRoute = "{{ route('admin.enfermeiro.toggleStatus', ['id' => 'PLACEHOLDER_ID']) }}";
-        form.action = statusRoute.replace('PLACEHOLDER_ID', enfermeiroId);
+        // 🔥 CORREÇÃO APLICADA AQUI: Substituir o placeholder ':id:' pelo ID real
+        form.action = form.action.replace(':id:', enfermeiroId);
         
         modal.style.display = 'flex';
     }
@@ -195,14 +185,9 @@
         }
     });
 
-    // ------------------------------------------
-    // LÓGICA DE FILTRAGEM
-    // ------------------------------------------
-
     function filterEnfermeiros() {
         const searchInput = document.getElementById('searchInput').value.toLowerCase();
         const filterStatus = document.getElementById('filterStatus').value;
-
         const rows = document.querySelectorAll('tbody tr');
         let visibleRowsCount = 0;
         let emptyRow = null;
@@ -213,15 +198,12 @@
                 row.style.display = 'none';
                 return;
             }
-
             const name = row.children[0].textContent.toLowerCase();
             const coren = row.children[1].textContent.toLowerCase();
             const email = row.children[2].textContent.toLowerCase();
             const status = row.dataset.status;
-
             const matchesSearch = name.includes(searchInput) || coren.includes(searchInput) || email.includes(searchInput);
             const matchesStatus = !filterStatus || status === filterStatus;
-
             if (matchesSearch && matchesStatus) {
                 row.style.display = '';
                 visibleRowsCount++;

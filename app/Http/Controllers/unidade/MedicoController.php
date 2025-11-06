@@ -15,16 +15,18 @@ use Illuminate\Support\Facades\Mail;
 
 class MedicoController extends Controller
 {
+    // 🔥 CORREÇÃO: View agora pertence à 'unidade'
     public function index()
     {
         $medicos = Medico::with('usuario')->get();
-        return view('admin.manutencaoMedicos', compact('medicos'));
+        return view('unidade.manutencaoMedicos', compact('medicos'));
     }
 
+    // 🔥 CORREÇÃO: View agora pertence à 'unidade'
     public function create()
     {
         $unidades = Unidade::orderBy('nomeUnidade')->get();
-        return view('admin.cadastroMedico', compact('unidades'));
+        return view('unidade.cadastroMedico', compact('unidades'));
     }
 
     public function store(Request $request)
@@ -79,19 +81,19 @@ class MedicoController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Erro interno ao cadastrar médico: ' . $e->getMessage() // Adicionado para ajudar a depurar
+                'message' => 'Erro interno ao cadastrar médico: ' . $e->getMessage()
             ], 500);
         }
     }
     
-  
-
-    public function editar($id)
+    // 🔥 CORREÇÃO: Renomear método 'editar' para 'edit' e view para 'unidade'
+    public function edit($id)
     {
-        $medico = Medico::findOrFail($id);
-        return view('admin.editarMedico', compact('medico'));
+        $medico = Medico::with('usuario')->findOrFail($id);
+        return view('unidade.editarMedico', compact('medico'));
     }
 
+    // 🔥 CORREÇÃO: Rota de redirecionamento é da 'unidade'
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -121,16 +123,17 @@ class MedicoController extends Controller
 
         $usuario->save();
 
-        return redirect()->route('admin.manutencaoMedicos')->with('success', 'Dados atualizados com sucesso!');
+        return redirect()->route('unidade.manutencaoMedicos')->with('success', 'Dados atualizados com sucesso!');
     }
 
+    // 🔥 CORREÇÃO: Rota de redirecionamento é da 'unidade'
     public function toggleStatus($id)
     {
         $medico = Medico::with('usuario')->findOrFail($id);
         $mensagem = '';
 
         if (!$medico->usuario) {
-            return redirect()->route('admin.manutencaoMedicos')->with('error', 'Este médico não está vinculado a um usuário.');
+            return redirect()->route('unidade.manutencaoMedicos')->with('error', 'Este médico não está vinculado a um usuário.');
         }
 
         $usuario = $medico->usuario;
@@ -141,6 +144,6 @@ class MedicoController extends Controller
         $acao = $novoStatus ? 'ativado' : 'desativado';
         $mensagem = "O médico foi {$acao} com sucesso!";
 
-        return redirect()->route('admin.manutencaoMedicos')->with('success', $mensagem);
+        return redirect()->route('unidade.manutencaoMedicos')->with('success', $mensagem);
     }
 }

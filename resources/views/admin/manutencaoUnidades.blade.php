@@ -47,13 +47,13 @@
                 </thead>
                 <tbody>
                     @forelse ($unidades as $unidade)
-                    <tr data-status="{{ $unidade->trashed() ? 'inativo' : 'ativo' }}">
+                    <tr data-status="{{ $unidade->statusAtivoUnidade ? 'ativo' : 'inativo' }}">
                         <td>{{ $unidade->nomeUnidade }}</td>
                         <td>{{ $unidade->tipoUnidade }}</td>
                         {{-- Combinando os campos de endereço para exibição --}}
                         <td>{{ $unidade->logradouroUnidade }}, {{ $unidade->numLogradouroUnidade }} - {{ $unidade->cidadeUnidade }}</td>
                         <td>
-                            @if(!$unidade->trashed())
+                            @if($unidade->statusAtivoUnidade)
                                 <span class="status-badge status-ativo">Ativo</span>
                             @else
                                 <span class="status-badge status-inativo">Inativo</span>
@@ -64,15 +64,13 @@
                                 <i class="bi bi-pencil"></i>
                             </a>
 
-                            <a href="#" onclick="openStatusModal('{{ $unidade->idUnidadePK }}', '{{ $unidade->nomeUnidade }}', {{ $unidade->trashed() ? 0 : 1 }})" class="btn-action" title="{{ !$unidade->trashed() ? 'Desativar' : 'Ativar' }}">
-                                @if(!$unidade->trashed())
+                            <a href="#" onclick="openStatusModal('{{ $unidade->idUnidadePK }}', '{{ $unidade->nomeUnidade }}', {{ $unidade->statusAtivoUnidade ? 1 : 0 }})" class="btn-action" title="{{ $unidade->statusAtivoUnidade ? 'Desativar' : 'Ativar' }}">
+                                @if($unidade->statusAtivoUnidade)
                                     <i class="bi bi-slash-circle text-danger"></i>
                                 @else
                                     <i class="bi bi-check-circle text-success"></i>
                                 @endif
                             </a>
-
-                            {{-- REMOVEMOS O BOTÃO DE EXCLUIR PERMANENTEMENTE --}}
                         </td>
                     </tr>
                     @empty
@@ -92,8 +90,6 @@
     </div>
 </main>
 
-{{-- O MODAL DE EXCLUSÃO FOI REMOVIDO, POIS NÃO É MAIS NECESSÁRIO. --}}
-
 {{-- MODAL DE ALTERAÇÃO DE STATUS --}}
 <div id="statusModal" class="modal-overlay">
     <div class="modal-content">
@@ -101,6 +97,7 @@
         <p>Tem certeza que deseja <span id="statusAction"></span> a unidade <span id="statusNome"></span>?</p>
         <form id="statusForm" method="POST">
             @csrf
+            @method('POST')
             <div class="modal-buttons">
                 <button type="button" onclick="closeStatusModal()" class="btn-cancelar">Cancelar</button>
                 <button type="submit" class="btn-excluir">Sim, <span id="confirmStatusText"></span></button>
@@ -134,20 +131,22 @@
         document.addEventListener('DOMContentLoaded', () => openSuccessModal("{{ session('success') }}"));
     @endif
 
-    // As funções openDeleteModal e closeDeleteModal não são mais necessárias.
-    // O código a seguir já estava em sua view e está adaptado para a nova lógica.
-    
     function openStatusModal(id, nome, currentStatus) {
         const action = currentStatus == 1 ? 'desativar' : 'ativar';
         document.getElementById('statusNome').textContent = nome;
         document.getElementById('statusAction').textContent = action;
         document.getElementById('confirmStatusText').textContent = action;
         const form = document.getElementById('statusForm');
-        let url = "{{ route('admin.unidades.toggleStatus', ['id' => ':id']) }}";
+        
+        // ✅ CORREÇÃO: URL correta sem caracteres inválidos
+        let url = "{{ route('admin.unidades.toggle-status', ['id' => ':id']) }}";
         form.action = url.replace(':id', id);
         document.getElementById('statusModal').style.display = 'flex';
     }
-    function closeStatusModal() { document.getElementById('statusModal').style.display = 'none'; }
+    
+    function closeStatusModal() { 
+        document.getElementById('statusModal').style.display = 'none'; 
+    }
 
     // Fechamento dos modais clicando fora
     ['statusModal', 'successModal'].forEach(id => {

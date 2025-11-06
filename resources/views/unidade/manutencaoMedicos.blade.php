@@ -5,13 +5,13 @@
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/unidade/manutencaoMedicos.css') }}">
 
-@php $admin = auth()->guard('admin')->user(); @endphp
+@php $unidade = auth()->guard('unidade')->user(); @endphp
 
 <main class="main-dashboard">
     <div class="medico-container">
         <div class="medico-header">
             <h1><i class="bi bi-person-badge"></i> Gerenciamento de Médicos</h1>
-            <a href="{{ route('admin.medicos.create') }}" class="btn-add-medico">
+            <a href="{{ route('unidade.medicos.create') }}" class="btn-add-medico">
                 <i class="bi bi-plus-circle"></i> Cadastrar Médico
             </a>
         </div>
@@ -58,7 +58,8 @@
                             @endif
                         </td>
                         <td class="actions">
-                            <a href="{{ route('admin.medicos.editar', $medico->idMedicoPK) }}" class="btn-action btn-edit" title="Editar">
+                            {{-- 🔥 CORREÇÃO: A rota agora é 'unidade.medicos.edit' --}}
+                            <a href="{{ route('unidade.medicos.edit', $medico->idMedicoPK) }}" class="btn-action btn-edit" title="Editar">
                                 <i class="bi bi-pencil"></i>
                             </a>
 
@@ -71,7 +72,6 @@
                                     @endif
                                 </a>
                             @endif
-                            {{-- REMOVEMOS O BOTÃO DE EXCLUSÃO DEFINITIVAMENTE --}}
                         </td>
                     </tr>
                     @endforeach
@@ -93,9 +93,7 @@
     </div>
 </main>
 
-{{-- MODAL DE EXCLUSÃO FOI REMOVIDO --}}
-
-{{-- MODAL DE ALTERAÇÃO DE STATUS (EXISTENTE) --}}
+{{-- MODAL DE ALTERAÇÃO DE STATUS --}}
 <div id="statusMedicoModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -105,7 +103,8 @@
         
         <p>Tem certeza que deseja <span id="statusAction"></span> o(a) médico(a) <span id="statusMedicoNome"></span>?</p>
 
-        <form id="statusMedicoForm" method="POST">
+        {{-- 🔥 CORREÇÃO: Action com placeholder ':id:' para evitar erro de rota --}}
+        <form id="statusMedicoForm" method="POST" action="{{ route('unidade.medicos.toggleStatus', ':id:') }}">
             @csrf
             <div class="modal-buttons">
                 <button type="button" onclick="closeStatusModal()" class="btn-cancelar">Cancelar</button>
@@ -115,7 +114,7 @@
     </div>
 </div>
 
-{{-- MODAL DE SUCESSO UNIFICADO (EXISTENTE) --}}
+{{-- MODAL DE SUCESSO --}}
 <div id="statusSuccessModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -132,10 +131,7 @@
 </div>
 
 <script>
-    // ------------------------------------------
-    // LÓGICA DO MODAL DE SUCESSO UNIFICADO
-    // ------------------------------------------
-
+    // ... (código do modal de sucesso permanece igual) ...
     function openSuccessModal(message) {
         document.getElementById('successMessage').textContent = message;
         document.getElementById('statusSuccessModal').style.display = 'flex';
@@ -158,13 +154,7 @@
             openSuccessModal(message);
         });
     @endif
-
-    // ------------------------------------------
-    // LÓGICA DOS MODAIS DE MÉDICO
-    // ------------------------------------------
     
-    // As funções openDeleteMedicoModal e closeDeleteMedicoModal foram removidas.
-
     function openStatusModal(medicoId, medicoNome, currentStatus) {
         const modal = document.getElementById('statusMedicoModal');
         const nomeSpan = document.getElementById('statusMedicoNome');
@@ -179,8 +169,8 @@
         actionSpan.textContent = action;
         confirmText.textContent = confirmAction;
 
-        const statusRoute = "{{ route('admin.medicos.toggleStatus', ['id' => 'PLACEHOLDER_ID']) }}";
-        form.action = statusRoute.replace('PLACEHOLDER_ID', medicoId);
+        // 🔥 CORREÇÃO: Substituir o placeholder ':id:' pelo ID real
+        form.action = form.action.replace(':id:', medicoId);
         
         modal.style.display = 'flex';
     }
@@ -195,14 +185,10 @@
         }
     });
 
-    // ------------------------------------------
-    // LÓGICA DE FILTRAGEM
-    // ------------------------------------------
-
+    // ... (restante do seu JavaScript de filtragem permanece igual) ...
     function filterMedicos() {
         const searchInput = document.getElementById('searchInput').value.toLowerCase();
         const filterStatus = document.getElementById('filterStatus').value;
-
         const rows = document.querySelectorAll('tbody tr');
         let visibleRowsCount = 0;
         let emptyRow = null;
@@ -213,15 +199,12 @@
                 row.style.display = 'none';
                 return;
             }
-
             const name = row.children[0].textContent.toLowerCase();
             const crm = row.children[1].textContent.toLowerCase();
             const email = row.children[2].textContent.toLowerCase();
             const status = row.dataset.status;
-
             const matchesSearch = name.includes(searchInput) || crm.includes(searchInput) || email.includes(searchInput);
             const matchesStatus = !filterStatus || status === filterStatus;
-
             if (matchesSearch && matchesStatus) {
                 row.style.display = '';
                 visibleRowsCount++;

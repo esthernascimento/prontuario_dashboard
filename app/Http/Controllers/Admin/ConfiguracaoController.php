@@ -36,4 +36,12 @@ class ConfiguracaoController extends Controller
 
         return redirect()->route('admin.perfil')->with('success', 'Perfil atualizado com sucesso!');
     }
+
+    /**
+     * Exibe a página de configurações
+     */
+    public function configuracoes()
+    {
+        return view('admin.configuracoesAdmin');
+    }
 }
