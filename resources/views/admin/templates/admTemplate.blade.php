@@ -29,14 +29,7 @@
                 <i class="bi bi-people-fill"></i>
                 <span class="nav-text">Pacientes</span>
             </a>
-            <a href="{{ route('admin.manutencaoMedicos') }}" class="nav-item">
-                <i class="bi bi-plus-circle-fill"></i>
-                <span class="nav-text">Médicos</span>
-            </a>
-            <a href="{{ route('admin.manutencaoEnfermeiro') }}" class="nav-item">
-                <i class="bi bi-person-fill-add"></i>
-                <span class="nav-text">Enfermeiros</span>
-            </a>
+          
             <a href="{{ route('admin.unidades.index') }}" class="nav-item">
                 <i class="bi bi-hospital-fill"></i>
                 <span class="nav-text">Unidade</span>

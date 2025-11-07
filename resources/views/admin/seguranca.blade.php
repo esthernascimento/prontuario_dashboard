@@ -3,7 +3,7 @@
 @section('content')
 
 {{-- Garante que o CSS está linkado --}}
-<link rel="stylesheet" href="{{ asset('css/admin/seguranca.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin/AdmSeguranca.css') }}">
 
 @php $admin = auth()->guard('admin')->user(); @endphp
 

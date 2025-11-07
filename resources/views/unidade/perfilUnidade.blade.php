@@ -22,7 +22,6 @@
 
           <div class="box-foto">
             <img id="preview-img"
-              src="{{ $admin->foto ? asset('storage/fotos/' . $admin->foto) : asset('img/usuario-de-perfil.png') }}"
               alt="Foto atual">
           </div>
 

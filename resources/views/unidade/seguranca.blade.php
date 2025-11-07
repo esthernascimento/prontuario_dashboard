@@ -2,9 +2,9 @@
 
 @section('content')
 
-<link rel="stylesheet" href="{{ asset('css/unidade/seguranca.css') }}">
+<link rel="stylesheet" href="{{ asset('css/unidade/UnidadeSeguranca.css') }}">
 
-@php $unidade = auth()->guard('unidade')->user(); @endphp
+<!-- @php $unidade = auth()->guard('unidade')->user(); @endphp -->
 
 <main class="main-dashboard">
     <div class="security-container">

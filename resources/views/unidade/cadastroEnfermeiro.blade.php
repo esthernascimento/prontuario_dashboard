@@ -17,7 +17,7 @@
     
     <!-- Lado Esquerdo com imagem -->
     <div class="left-side">
-      <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo ilustrativa">
+      <img src="{{ asset('img/unidade-logo2.png') }}" alt="Logo ilustrativa">
     </div>
 
     <!-- Lado Direito com o formulário -->
@@ -107,7 +107,7 @@
         messagesDiv.textContent = '';
         messagesDiv.classList.remove('success', 'error');
 
-        fetch("{{ route('admin.enfermeiro.register') }}", {
+        fetch("{{ route('unidade.enfermeiro.register') }}", {
             method: 'POST',
             headers: {
               'X-CSRF-TOKEN': csrfToken,

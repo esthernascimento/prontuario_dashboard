@@ -14,7 +14,7 @@
 <body>
     <main class="main-container">
         <div class="left-side">
-        <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo ilustrativa">
+        <img src="{{ asset('img/unidade-logo2.png') }}" alt="Logo ilustrativa">
         </div>
 
         <div class="right-side">
@@ -97,7 +97,7 @@
             button.textContent = 'Cadastrando...';
             messagesDiv.style.display = 'none';
 
-            fetch("{{ route('admin.medicos.register') }}", {
+            fetch("{{ route('unidade.medicos.register') }}", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

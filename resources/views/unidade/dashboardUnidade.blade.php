@@ -57,7 +57,7 @@
         <div class="metric-card slide-up" style="animation-delay: 1.0s;">
             <div class="container-img">
                 <img src="{{ asset('img/usuario-de-perfil.png') }}" alt="Ícone de Paciente">
-                <span>Pacientes na Unidade</span>
+                <span>Recepcionista cadastrados</span>
             </div>
             <strong>{{ $patientsCount ?? 0 }}</strong>
         </div>

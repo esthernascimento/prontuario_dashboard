@@ -12,7 +12,7 @@ use App\Mail\emailEnfermeiro;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log; // Importado para debug
+use Illuminate\Support\Facades\Log;
 
 class EnfermeiroController extends Controller
 {
@@ -20,75 +20,99 @@ class EnfermeiroController extends Controller
     public function index()
     {
         $enfermeiros = Enfermeiro::with('usuario')->get();
-        return view('admin.manutencaoEnfermeiro', compact('enfermeiros'));
+        return view('unidade.manutencaoEnfermeiro', compact('enfermeiros'));
     }
 
     /**
-     * AJUSTADO: Mostra o formulário de cadastro E envia a lista de unidades.
+     * Mostra o formulário de cadastro e envia a lista de unidades.
      */
     public function create()
     {
-        // Busca todas as unidades para listarmos no formulário de seleção
         $unidades = Unidade::orderBy('nomeUnidade')->get();
-        return view('admin.cadastroEnfermeiro', compact('unidades'));
+        return view('unidade.cadastroEnfermeiro', compact('unidades'));
     }
 
     /**
-     * AJUSTADO: Salva o novo enfermeiro E as suas unidades de trabalho.
+     * Mostra o formulário de edição de enfermeiro.
+     */
+    public function edit($id)
+    {
+        $enfermeiro = Enfermeiro::with(['usuario', 'unidades'])->findOrFail($id);
+        $unidades = Unidade::orderBy('nomeUnidade')->get();
+        
+        return view('unidade.editarEnfermeiro', compact('enfermeiro', 'unidades'));
+    }
+
+    /**
+     * Salva o novo enfermeiro e as suas unidades de trabalho.
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'nomeEnfermeiro' => 'required|string|max:255',
-            'emailEnfermeiro' => [
-                'required',
-                'email',
-                Rule::unique((new Enfermeiro)->getTable(), 'emailEnfermeiro'),
-            ],
-            'corenEnfermeiro' => 'required|string|max:50',
-            'especialidadeEnfermeiro' => 'nullable|string|max:100',
-            'genero' => 'required|string|max:20',
-            'unidades' => 'nullable|array', // Valida que 'unidades' é uma lista (se enviada)
-            'unidades.*' => 'exists:tbUnidade,idUnidadePK', // Valida cada ID da lista
-        ]);
+        try {
+            $validated = $request->validate([
+                'nomeEnfermeiro' => 'required|string|max:255',
+                'corenEnfermeiro' => 'required|string|max:20|unique:tbEnfermeiro,corenEnfermeiro',
+                'emailEnfermeiro' => 'required|email|max:255|unique:tbUsuario,emailUsuario',
+                'especialidadeEnfermeiro' => 'nullable|string|max:100',
+                'genero' => 'required|string|in:Masculino,Feminino,Outro',
+                'unidades' => 'nullable|array',
+                'unidades.*' => 'exists:tbUnidade,idUnidadePK',
+            ], [
+                'nomeEnfermeiro.required' => 'O nome do enfermeiro é obrigatório.',
+                'corenEnfermeiro.required' => 'O COREN é obrigatório.',
+                'emailEnfermeiro.required' => 'O e-mail é obrigatório.',
+                'emailEnfermeiro.unique' => 'Este e-mail já está cadastrado.',
+                'genero.required' => 'O gênero é obrigatório.',
+            ]);
 
-        $senhaTemporaria = Str::random(10);
+            $senhaTemporaria = Str::random(10);
 
-        $usuario = Usuario::create([
-            'nomeUsuario' => $request->nomeEnfermeiro,
-            'emailUsuario' => $request->emailEnfermeiro,
-            'senhaUsuario' => Hash::make($senhaTemporaria),
-            'statusAtivoUsuario' => true,
-            'statusSenhaUsuario' => true,
-        ]);
+            // 1. Primeiro cria o usuário
+            $usuario = new Usuario();
+            $usuario->nomeUsuario = $request->nomeEnfermeiro;
+            $usuario->emailUsuario = $request->emailEnfermeiro;
+            $usuario->senhaUsuario = Hash::make($senhaTemporaria);
+            $usuario->statusAtivoUsuario = 1;
+            $usuario->statusSenhaUsuario = true;
+            $usuario->save();
 
-        $enfermeiro = Enfermeiro::create([
-            'nomeEnfermeiro' => $request->nomeEnfermeiro,
-            'emailEnfermeiro' => $request->emailEnfermeiro,
-            'corenEnfermeiro' => $request->corenEnfermeiro,
-            'especialidadeEnfermeiro' => $request->especialidadeEnfermeiro,
-            'genero' => $request->genero,
-            'id_usuario' => $usuario->idUsuarioPK,
-        ]);
+            // 2. Depois cria o enfermeiro vinculado ao usuário - ✅ CORREÇÃO: usar 'id_usuario'
+            $enfermeiro = new Enfermeiro();
+            $enfermeiro->id_usuario = $usuario->idUsuarioPK; // ✅ MUDOU PARA 'id_usuario'
+            $enfermeiro->nomeEnfermeiro = $request->nomeEnfermeiro;
+            $enfermeiro->corenEnfermeiro = $request->corenEnfermeiro;
+            $enfermeiro->emailEnfermeiro = $request->emailEnfermeiro;
+            $enfermeiro->especialidadeEnfermeiro = $request->input('especialidadeEnfermeiro', '');
+            $enfermeiro->genero = $request->genero;
+            $enfermeiro->save();
 
-        // Se o admin selecionou unidades no formulário, associa-as ao enfermeiro
-        if ($request->has('unidades')) {
-            $enfermeiro->unidades()->sync($request->unidades);
+            // 3. Associa as unidades se existirem
+            if ($request->has('unidades')) {
+                $enfermeiro->unidades()->sync($request->unidades);
+            }
+
+            // 4. Envia e-mail com as credenciais
+            Mail::to($usuario->emailUsuario)->send(new EmailEnfermeiro($usuario, $senhaTemporaria));
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Enfermeiro pré-cadastrado com sucesso!'
+            ]);
+
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro interno ao cadastrar enfermeiro: ' . $e->getMessage()
+            ], 500);
         }
-
-        Mail::to($request->emailEnfermeiro)->send(new emailEnfermeiro($usuario, $senhaTemporaria));
-
-
-        return response()->json(['message' => 'Enfermeiro pré-cadastrado com sucesso!']);
     }
 
-    public function editar($id)
-    {
-        $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
-        return view('admin.editarEnfermeiro', compact('enfermeiro'));
-    }
-
-    // MÉTODO UPDATE (EDITADO PARA MODAL DE SUCESSO)
+    // 🔥 CORREÇÃO: Rota de redirecionamento é da 'unidade'
     public function update(Request $request, $id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
@@ -103,7 +127,6 @@ class EnfermeiroController extends Controller
             'corenEnfermeiro' => 'required|string|max:50',
             'especialidadeEnfermeiro' => 'nullable|string|max:100',
             'genero' => 'required|string|max:20',
-
             'nomeUsuario' => 'required|string|max:255',
             'emailUsuario' => [
                 'required',
@@ -111,6 +134,8 @@ class EnfermeiroController extends Controller
                 Rule::unique((new Usuario)->getTable(), 'emailUsuario')
                     ->ignore($enfermeiro->usuario->idUsuarioPK, 'idUsuarioPK'),
             ],
+            'unidades' => 'nullable|array',
+            'unidades.*' => 'exists:tbUnidade,idUnidadePK',
         ]);
 
         $enfermeiro->update([
@@ -126,66 +151,46 @@ class EnfermeiroController extends Controller
             'emailUsuario' => $request->emailUsuario,
         ]);
 
-        // ADICIONANDO A FLAG 'updated' PARA DISPARAR O MODAL DE SUCESSO NO BLADE
-        return redirect()->route('admin.manutencaoEnfermeiro')->with([
+        // Atualiza as unidades do enfermeiro
+        if ($request->has('unidades')) {
+            $enfermeiro->unidades()->sync($request->unidades);
+        } else {
+            $enfermeiro->unidades()->detach();
+        }
+
+        return redirect()->route('unidade.manutencaoEnfermeiro')->with([
             'success' => 'Dados atualizados com sucesso.',
-            'updated' => true // Flag para edição/atualização
+            'updated' => true
         ]);
     }
 
+    // 🔥 CORREÇÃO: View de visualização agora pertence à 'unidade'
     public function show($id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
-        return view('admin.visualizarEnfermeiro', compact('enfermeiro'));
+        return view('unidade.visualizarEnfermeiro', compact('enfermeiro'));
     }
 
-    // MÉTODO TOGGLESTATUS (EDITADO PARA MODAL DE SUCESSO)
+    // 🔥 CORREÇÃO: Rota de redirecionamento é da 'unidade'
     public function toggleStatus($id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
-        $mensagem = 'Status do enfermeiro atualizado.'; // Mensagem padrão
+        $mensagem = 'Status do enfermeiro atualizado.';
 
         if ($enfermeiro->usuario) {
-            // Inverte o status
             $novoStatus = !$enfermeiro->usuario->statusAtivoUsuario;
             $enfermeiro->usuario->statusAtivoUsuario = $novoStatus;
             $enfermeiro->usuario->save();
 
-            // Mensagem mais específica para o modal
             $acao = $novoStatus ? 'ativado' : 'desativado';
             $mensagem = "O enfermeiro(a) foi {$acao} com sucesso!";
         }
 
-        // ADICIONANDO A FLAG 'status_changed' PARA DISPARAR O MODAL DE SUCESSO NO BLADE
-        return redirect()->route('admin.manutencaoEnfermeiro')->with([
+        return redirect()->route('unidade.manutencaoEnfermeiro')->with([
             'success' => $mensagem,
-            'status_changed' => true // Flag para alteração de status
+            'status_changed' => true
         ]);
     }
-
-    // REMOVEMOS A FUNÇÃO 'confirmarExclusao' E 'excluir' PARA ADOTAR A LÓGICA DE INATIVAR
-    // O código original ainda tinha essas funções, agora elas serão removidas para seguir a nova lógica.
-    
-    /*
-    public function confirmarExclusao($id)
-    {
-        $enfermeiro = Enfermeiro::findOrFail($id);
-        return view('admin.desativarEnfermeiro', compact('enfermeiro'));
-    }
-
-    public function excluir($id)
-    {
-        $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
-        if ($enfermeiro->usuario) {
-            $enfermeiro->usuario->delete();
-        }
-        $enfermeiro->delete();
-        return redirect()->route('admin.manutencaoEnfermeiro')->with([
-            'success' => 'Enfermeiro e usuário excluídos com sucesso.',
-            'deleted' => true 
-        ]);
-    }
-    */
 
     public function syncUnidades(Request $request, Enfermeiro $enfermeiro)
     {
