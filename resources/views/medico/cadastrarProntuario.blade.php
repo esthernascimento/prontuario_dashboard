@@ -418,9 +418,9 @@ function downloadPdf(type) {
     let url = '#';
     @if(isset($consulta))
         if (type === 'exames') {
-            url = "{{ route('medico.gerarPdfExames', $consulta->idConsultaPK) }}";
+            url = "{{ route('gerarPdfExames', $consulta->idConsultaPK) }}";
         } else if (type === 'receita') {
-            url = "{{ route('medico.consulta.receita.pdf', $consulta->idConsultaPK) }}";
+            url = "{{ route('consulta.receita.pdf', $consulta->idConsultaPK) }}";
         }
     @endif
     
@@ -516,21 +516,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Compila medicamentos selecionados para campo hidden 'medicamentosPrescritos'
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            // A parte de validação de texto de exames (se estivesse em textarea) não está aqui, mas o código de checkbox está certo.
-            
-            const selecionados = Array.from(document.querySelectorAll('input[name="medicamentos_prescritos[]"]:checked'))
-                .map(el => el.value.trim())
-                .filter(Boolean);
-            const hidden = document.getElementById('medicamentosPrescritos');
-            if (hidden) {
-                hidden.value = selecionados.join('\n');
+    // Removido a lógica do campo hidden pois os checkboxes são enviados diretamente
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    // Os checkboxes de medicamentos e exames são enviados diretamente pelo formulário
+                    // Não precisa de campo hidden adicional
+                });
             }
-        });
-    }
 
     // Adiciona listeners para atualização em tempo real do Modal PDF
     const examesCheckboxes = document.querySelectorAll('input[name="exames_solicitados[]"]');

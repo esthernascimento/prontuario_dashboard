@@ -9,13 +9,17 @@ use App\Models\Prontuario;
 use App\Models\Consulta;
 use App\Models\Medico;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Unidade;
 use App\Models\Medicamento;
 use App\Models\Exame;
 use App\Models\AnotacaoEnfermagem;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\DB; // Importar DB
 
 class MedicoProntuarioController extends Controller
 {
+    /**
+     * Exibe a FILA DE ATENDIMENTO do médico (tela principal)
+     */
     public function index()
     {
         $consultas_na_fila = Consulta::where('status_atendimento', 'AGUARDANDO_CONSULTA')
@@ -41,6 +45,9 @@ class MedicoProntuarioController extends Controller
         ]);
     }
 
+    /**
+     * Exibe o prontuário completo de um paciente (histórico)
+     */
     public function show($id)
     {
         $paciente = Paciente::findOrFail($id);
@@ -48,33 +55,36 @@ class MedicoProntuarioController extends Controller
 
         if (!$prontuario) {
             return redirect()
-                ->route('medico.prontuario')
+                ->route('medico.prontuario') // CORRIGIDO
                 ->with('error', 'Este paciente ainda não possui prontuário.');
         }
 
-        $consultas = Consulta::where('idProntuarioFK', $prontuario->idProntuarioPK)
-            ->whereNotNull('idMedicoFK')
+         $consultas = Consulta::where('idProntuarioFK', $prontuario->idProntuarioPK)
+            ->whereNotNull('idMedicoFK') 
             ->orderBy('dataConsulta', 'desc')
             ->get();
 
         $anotacoesEnfermagem = AnotacaoEnfermagem::where('idPacienteFK', $paciente->idPaciente)
-            ->orderBy('data_hora', 'desc')
-            ->get();
+             ->orderBy('data_hora', 'desc')
+             ->get();
 
         return view('medico.visualizarProntuario', compact('paciente', 'prontuario', 'consultas', 'anotacoesEnfermagem'));
     }
 
+    /**
+     * Exibe o formulário para CRIAR nova consulta (Médico inicia do zero)
+     */
     public function create($id)
     {
         $paciente = Paciente::findOrFail($id);
 
         if (!$paciente->statusPaciente) {
-            return redirect()->route('medico.prontuario')->with('error', 'Paciente inativo.');
+            return redirect()->route('medico.prontuario')->with('error', 'Paciente inativo.'); // CORRIGIDO
         }
 
         $medico = Auth::user()->medico;
         if (!$medico) {
-            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.');
+            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.'); // CORRIGIDO
         }
 
         Prontuario::firstOrCreate(
@@ -90,19 +100,26 @@ class MedicoProntuarioController extends Controller
         ]);
     }
 
+    /**
+     * Armazena uma NOVA consulta/prontuário (Médico inicia do zero)
+     */
     public function store(Request $request, $id)
     {
+        // Validação atualizada para arrays (checkboxes)
         $validated = $request->validate([
             'dataConsulta' => 'required|date',
             'observacoes' => 'nullable|string|max:2000',
-            'medicamentosPrescritos' => 'nullable|string|max:2000',
+            'exames_solicitados' => 'nullable|array', // Espera array
+            'exames_solicitados.*' => 'string|max:255',
+            'medicamentos_prescritos' => 'nullable|array', // Espera array
+            'medicamentos_prescritos.*' => 'string|max:255',
         ]);
 
         $paciente = Paciente::findOrFail($id);
         $medico = Auth::user()->medico;
 
         if (!$medico) {
-            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.');
+            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.'); // CORRIGIDO
         }
 
         $prontuario = Prontuario::firstOrCreate(
@@ -118,41 +135,56 @@ class MedicoProntuarioController extends Controller
         $consulta->dataConsulta = $validated['dataConsulta'];
         $consulta->observacoes = $validated['observacoes'] ?? null;
 
-        // ✅ EXAMES DOS CHECKBOXES
-        $examesCheckboxes = $request->input('exames_solicitados', []);
-        $consulta->examesSolicitados = implode("\n", $examesCheckboxes);
+        // Pega os dados dos arrays (checkboxes)
+        $examesCheckboxes = $validated['exames_solicitados'] ?? [];
+        $consulta->examesSolicitados = implode("\n", $examesCheckboxes); // Salva como texto
 
-        $consulta->medicamentosPrescritos = $validated['medicamentosPrescritos'] ?? null;
+        $medicamentosCheckboxes = $validated['medicamentos_prescritos'] ?? [];
+        $consulta->medicamentosPrescritos = implode("\n", $medicamentosCheckboxes); // Salva como texto
+        
         $consulta->status_atendimento = 'FINALIZADO';
         $consulta->idPacienteFK = $paciente->idPaciente;
 
-        DB::transaction(function () use ($consulta, $paciente, $validated, $prontuario) {
-            $consulta->save();
+        DB::transaction(function () use ($consulta, $paciente, $prontuario, $medicamentosCheckboxes, $examesCheckboxes) {
+            $consulta->save(); // Salva a consulta para ter o ID
 
-            // Medicamentos
-            if (!empty($validated['medicamentosPrescritos'])) {
-                $linhas = collect(preg_split('/\r?\n/', $validated['medicamentosPrescritos']))
-                    ->map(fn($l) => trim($l))
-                    ->filter()
-                    ->filter(fn($l) => preg_match('/[a-zA-ZÀ-ÿ]/', $l) && strlen($l) > 2 && strlen($l) < 255);
-
-                foreach ($linhas as $linha) {
+            // Medicamentos dos checkboxes
+            if (!empty($medicamentosCheckboxes)) {
+                foreach ($medicamentosCheckboxes as $medicamento) {
                     Medicamento::create([
                         'idConsultaFK' => $consulta->idConsultaPK,
                         'idProntuarioFK' => $prontuario->idProntuarioPK,
                         'idPacienteFK' => $paciente->idPaciente,
-                        'descMedicamento' => $linha,
-                        'nomeMedicamento' => $linha,
+                        'descMedicamento' => $medicamento,
+                        'nomeMedicamento' => $medicamento,
+                    ]);
+                }
+            }
+
+            // Exames dos checkboxes
+            if (!empty($examesCheckboxes)) {
+                foreach ($examesCheckboxes as $exame) {
+                    Exame::create([
+                        'idConsultaFK' => $consulta->idConsultaPK,
+                        'descExame' => $exame,
+                        'nomeExame' => $exame,
+                        'dataExame' => $consulta->dataConsulta ?? now(),
+                        'statusExame' => 'SOLICITADO',
+                        'idPacienteFK' => $paciente->idPaciente, // Correção
+                        'idProntuarioFK' => $prontuario->idProntuarioPK, // Correção
                     ]);
                 }
             }
         });
 
         return redirect()
-            ->route('medico.visualizarProntuario', $id)
+            ->route('medico.visualizarProntuario', $id) // Leva para o histórico
             ->with('success', 'Consulta registrada com sucesso!');
     }
 
+    /**
+     * Exibe o formulário para ATENDER/EDITAR uma consulta vinda da fila
+     */
     public function edit($idConsulta)
     {
         $consulta = Consulta::with(['paciente', 'prontuario'])->findOrFail($idConsulta);
@@ -161,10 +193,11 @@ class MedicoProntuarioController extends Controller
         $medico = Auth::user()->medico;
 
         if (!$medico) {
-            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.');
+            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.'); // CORRIGIDO
         }
 
         $anotacoesEnfermagem = AnotacaoEnfermagem::where('idPacienteFK', $paciente->idPaciente)
+            ->where('created_at', '>=', $consulta->created_at->subDay()) // Pega anotações do dia
             ->orderBy('data_hora', 'desc')
             ->get();
 
@@ -180,19 +213,26 @@ class MedicoProntuarioController extends Controller
         return view('medico.cadastrarProntuario', compact('consulta', 'paciente', 'medico', 'anotacoesEnfermagem'));
     }
 
+    /**
+     * Atualiza e FINALIZA uma consulta vinda da fila
+     */
     public function update(Request $request, $idConsulta)
     {
         $consulta = Consulta::findOrFail($idConsulta);
         $medico = Auth::user()->medico;
 
         if (!$medico) {
-            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.');
+            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.'); // CORRIGIDO
         }
 
+        // Validação atualizada para arrays (checkboxes)
         $validated = $request->validate([
             'dataConsulta' => 'required|date',
             'observacoes' => 'nullable|string|max:2000',
-            'medicamentosPrescritos' => 'nullable|string|max:2000',
+            'exames_solicitados' => 'nullable|array',
+            'exames_solicitados.*' => 'string|max:255',
+            'medicamentos_prescritos' => 'nullable|array',
+            'medicamentos_prescritos.*' => 'string|max:255',
         ]);
 
         $consulta->idMedicoFK = $medico->idMedicoPK;
@@ -202,11 +242,11 @@ class MedicoProntuarioController extends Controller
         $consulta->dataConsulta = $validated['dataConsulta'];
         $consulta->observacoes = $validated['observacoes'] ?? null;
 
-        // ✅ EXAMES DOS CHECKBOXES (CORRIGIDO)
-        $examesCheckboxes = $request->input('exames_solicitados', []);
+        $examesCheckboxes = $validated['exames_solicitados'] ?? [];
         $consulta->examesSolicitados = implode("\n", $examesCheckboxes);
 
-        $consulta->medicamentosPrescritos = $validated['medicamentosPrescritos'] ?? null;
+        $medicamentosCheckboxes = $validated['medicamentos_prescritos'] ?? [];
+        $consulta->medicamentosPrescritos = implode("\n", $medicamentosCheckboxes);
 
         if (!$consulta->idProntuarioFK && $consulta->paciente) {
             $prontuario = Prontuario::firstOrCreate(
@@ -216,35 +256,117 @@ class MedicoProntuarioController extends Controller
             $consulta->idProntuarioFK = $prontuario->idProntuarioPK;
         }
 
-        DB::transaction(function () use ($consulta, $validated) {
+        DB::transaction(function () use ($consulta, $medicamentosCheckboxes, $examesCheckboxes) {
             $consulta->save();
 
-            // Medicamentos
-            if (!empty($validated['medicamentosPrescritos'])) {
-                $linhas = collect(preg_split('/\r?\n/', $validated['medicamentosPrescritos']))
-                    ->map(fn($l) => trim($l))
-                    ->filter()
-                    ->filter(fn($l) => preg_match('/[a-zA-ZÀ-ÿ]/', $l) && strlen($l) > 2 && strlen($l) < 255);
+            // =============================================
+            // --- CORREÇÃO DO ERRO 'Duplicate entry' ---
+            // Força a exclusão permanente dos registros antigos
+            // =============================================
+            Medicamento::where('idConsultaFK', $consulta->idConsultaPK)->forceDelete();
+            Exame::where('idConsultaFK', $consulta->idConsultaPK)->forceDelete();
+            // =============================================
 
-                foreach ($linhas as $linha) {
-                    Medicamento::firstOrCreate([
+
+            // Medicamentos dos checkboxes
+            if (!empty($medicamentosCheckboxes)) {
+                foreach ($medicamentosCheckboxes as $medicamento) {
+                    Medicamento::create([ // Agora o create funciona
                         'idConsultaFK' => $consulta->idConsultaPK,
-                        'descMedicamento' => $linha,
-                    ], [
                         'idPacienteFK' => $consulta->idPacienteFK,
                         'idProntuarioFK' => $consulta->idProntuarioFK,
-                        'nomeMedicamento' => $linha,
+                        'descMedicamento' => $medicamento,
+                        'nomeMedicamento' => $medicamento,
+                    ]);
+                }
+            }
+
+            // Exames dos checkboxes
+            if (!empty($examesCheckboxes)) {
+                foreach ($examesCheckboxes as $exame) {
+                    Exame::create([ // Agora o create funciona
+                        'idConsultaFK' => $consulta->idConsultaPK,
+                        'descExame' => $exame,
+                        'nomeExame' => $exame,
+                        'dataExame' => $consulta->dataConsulta ?? now(),
+                        'statusExame' => 'SOLICITADO',
+                        'idPacienteFK' => $consulta->idPacienteFK, // Correção
+                        'idProntuarioFK' => $consulta->idProntuarioFK, // Correção
                     ]);
                 }
             }
         });
 
+        // =============================================
+        // --- CORREÇÃO DO ERRO DO REDIRECT ---
+        // =============================================
         return redirect()
-            ->route('medico.prontuario')
+            ->route('medico.prontuario') // Rota corrigida (removido o '.index')
             ->with('success', 'Atendimento finalizado com sucesso!');
     }
-
-//     public function destroy($idConsulta) {}
-// }
-}   
     
+    /**
+     * Gera o PDF de Pedido de Exames.
+     */
+    public function gerarPdfExames($idConsulta)
+    {
+        $consulta = Consulta::findOrFail($idConsulta);
+        $paciente = $consulta->paciente;
+        
+        // (Lógica futura: Carregar uma view de PDF com $consulta e $paciente)
+        
+        // Placeholder por enquanto:
+        return response("PDF de Exames para (Consulta ID: $idConsulta) do Paciente: $paciente->nomePaciente");
+    }
+
+    /**
+     * Gera o PDF de Receita Médica.
+     */
+    public function gerarPdfReceita($idConsulta)
+    {
+        $consulta = Consulta::findOrFail($idConsulta);
+        $paciente = $consulta->paciente;
+
+        // (Lógica futura: Carregar uma view de PDF com $consulta e $paciente)
+
+        // Placeholder por enquanto:
+        return response("PDF de Receita para (Consulta ID: $idConsulta) do Paciente: $paciente->nomePaciente");
+    }
+
+    /**
+     * Remove uma consulta (soft delete)
+     */
+    public function destroy($idConsulta) 
+    {
+        $consulta = Consulta::findOrFail($idConsulta);
+        $medico = Auth::user()->medico;
+         if (!$medico) {
+             return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.'); // CORRIGIDO
+         }
+
+        if ($consulta->idMedicoFK !== $medico->idMedicoPK) {
+             return redirect()
+                 ->route('medico.prontuario') // CORRIGIDO
+                 ->with('error', 'Você não tem permissão para excluir esta consulta.');
+         }
+
+        $pacienteId = null;
+        if($consulta->prontuario) {
+            $pacienteId = $consulta->prontuario->idPacienteFK;
+        } elseif ($consulta->paciente) {
+             $pacienteId = $consulta->paciente->idPaciente;
+        }
+        
+        $consulta->delete();
+
+        if ($pacienteId) {
+             return redirect()
+                ->route('medico.visualizarProntuario', $pacienteId)
+                ->with('success', 'Consulta excluída com sucesso!');
+        }
+        
+         return redirect()
+             ->route('medico.prontuario') // CORRIGIDO
+             ->with('success', 'Consulta excluída com sucesso!');
+    }
+}

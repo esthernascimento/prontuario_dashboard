@@ -40,6 +40,7 @@ use App\Http\Controllers\Recepcionista\RecepcionistaConfiguracaoController;
 use App\Http\Controllers\Unidade\LoginController as UnidadeLoginController;
 use App\Http\Controllers\Unidade\DashboardController as UnidadeDashboardController;
 use App\Http\Controllers\Unidade\MedicoController;
+// use App\Http\Controllers\Admin\MedicoController as AdminMedicoController; // Já importado
 use App\Http\Controllers\Unidade\EnfermeiroController;
 use App\Http\Controllers\Unidade\RecepcionistaController;
 use App\Http\Controllers\Unidade\SegurancaController as UnidadeSegurancaController;
@@ -81,28 +82,16 @@ Route::middleware('web')->group(function () {
 // --- ROTAS PROTEGIDAS DO ADMIN ---
 // ===================================================================================
 Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function () {
-
-    // Dashboard e páginas gerais
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/ajuda', fn() => view('geral.ajuda'))->name('ajuda');
     Route::post('/ajuda/enviar', [UnidadeSuporteController::class, 'enviarMensagem'])->name('ajuda.enviar');
-
-    // Perfil - ✅ Usa AdminConfiguracaoController
     Route::get('/perfil', [AdminConfiguracaoController::class, 'perfil'])->name('perfil');
     Route::post('/perfil/update', [AdminConfiguracaoController::class, 'atualizarPerfil'])->name('perfil.update');
-
-    // Segurança - ✅ Usa AdminSegurancaController  
     Route::get('/seguranca', [AdminSegurancaController::class, 'showAlterarSenhaForm'])->name('seguranca');
     Route::post('/alterar-senha', [AdminSegurancaController::class, 'alterarSenha'])->name('alterarSenha');
-
-    // Configurações - ✅ Usa AdminConfiguracaoController
     Route::get('/configuracoes', [AdminConfiguracaoController::class, 'configuracoes'])->name('configuracoes');
-
-    // Gestão de pacientes
     Route::post('pacientes/{paciente}/toggle-status', [AdminPacienteController::class, 'toggleStatus'])->name('pacientes.toggleStatus');
     Route::resource('pacientes', AdminPacienteController::class);
-
-    // CRUD Unidades
     Route::get('/unidades', [AdminUnidadeController::class, 'index'])->name('unidades.index');
     Route::get('/unidades/create', [AdminUnidadeController::class, 'create'])->name('unidades.create');
     Route::post('/unidades', [AdminUnidadeController::class, 'store'])->name('unidades.store');
@@ -116,25 +105,13 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
 // --- ROTAS PROTEGIDAS DA UNIDADE ---
 // ===================================================================================
 Route::middleware('auth:unidade')->prefix('unidade')->name('unidade.')->group(function () {
-    
-    // Dashboard e Logout
     Route::get('/dashboard', [UnidadeDashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [UnidadeLoginController::class, 'logout'])->name('logout');
-
-    // Rotas de Configuração e Ajuda
     Route::get('/ajuda', [UnidadeUnidadeController::class, 'ajuda'])->name('ajuda');
     Route::get('/perfil', [UnidadeUnidadeController::class, 'perfilUnidade'])->name('perfil');
     Route::get('/seguranca', [UnidadeUnidadeController::class, 'seguranca'])->name('seguranca');
-
-    // Rotas de Ação (POST/PUT)
     Route::put('/perfil/update', [UnidadeSegurancaController::class, 'atualizarPerfil'])->name('perfil.update');
     Route::post('/alterar-senha', [UnidadeSegurancaController::class, 'alterarSenha'])->name('alterarSenha');
-
-    // =================================================================================
-    // --- CRUD DE MÉDICOS, ENFERMEIROS E RECEPCIONISTAS ---
-    // =================================================================================
-
-    // CRUD Médicos
     Route::get('/manutencaoMedicos', [MedicoController::class, 'index'])->name('manutencaoMedicos');
     Route::get('/cadastroMedico', [MedicoController::class, 'create'])->name('medicos.create');
     Route::post('/medicos/register', [MedicoController::class, 'store'])->name('medicos.register');
@@ -144,8 +121,6 @@ Route::middleware('auth:unidade')->prefix('unidade')->name('unidade.')->group(fu
     Route::delete('/medicos/{id}', [MedicoController::class, 'excluir'])->name('medicos.excluir');
     Route::post('/medicos/{id}/toggle-status', [MedicoController::class, 'toggleStatus'])->name('medicos.toggleStatus');
     Route::post('/medicos/{medico}/unidades', [MedicoController::class, 'syncUnidades'])->name('medicos.syncUnidades');
-
-    // CRUD Enfermeiros
     Route::get('/manutencaoEnfermeiro', [EnfermeiroController::class, 'index'])->name('manutencaoEnfermeiro');
     Route::get('/cadastroEnfermeiro', [EnfermeiroController::class, 'create'])->name('enfermeiro.create');
     Route::post('/enfermeiro/register', [EnfermeiroController::class, 'store'])->name('enfermeiro.register');
@@ -155,8 +130,6 @@ Route::middleware('auth:unidade')->prefix('unidade')->name('unidade.')->group(fu
     Route::delete('/enfermeiro/{id}', [EnfermeiroController::class, 'excluir'])->name('enfermeiro.excluir');
     Route::post('/enfermeiro/{id}/toggle-status', [EnfermeiroController::class, 'toggleStatus'])->name('enfermeiro.toggleStatus');
     Route::post('/enfermeiro/{enfermeiro}/unidades', [EnfermeiroController::class, 'syncUnidades'])->name('enfermeiro.syncUnidades');
-
-    // 🔥 CRUD RECEPCIONISTAS (MOVIDO DO ADMIN PARA UNIDADE)
     Route::get('/manutencaoRecepcionista', [RecepcionistaController::class, 'index'])->name('manutencaoRecepcionista');
     Route::get('/recepcionistas/create', [RecepcionistaController::class, 'create'])->name('recepcionistas.create');
     Route::post('/recepcionistas', [RecepcionistaController::class, 'store'])->name('recepcionistas.store');
@@ -169,6 +142,7 @@ Route::middleware('auth:unidade')->prefix('unidade')->name('unidade.')->group(fu
 // ===================================================================================
 // --- ROTAS PROTEGIDAS DO MÉDICO ---
 // ===================================================================================
+// O 'name("medico.")' está no grupo principal
 Route::middleware('auth:medico')->prefix('medico')->name('medico.')->group(function () {
     
     // Dashboard e Configurações
@@ -184,42 +158,48 @@ Route::middleware('auth:medico')->prefix('medico')->name('medico.')->group(funct
     // Ajuda
     Route::get('/ajuda', fn() => view('medico.ajudaMedico'))->name('ajuda');
 
-    // Prontuário - CRUD
-    Route::prefix('prontuario')->group(function () {
-        Route::get('/', [MedicoProntuarioController::class, 'index'])->name('prontuario');
-        Route::get('/cadastrar-prontuario/{id}', [MedicoProntuarioController::class, 'create'])->name('cadastrarProntuario');
-        Route::post('/cadastrar-prontuario/{id}', [MedicoProntuarioController::class, 'store'])->name('prontuario.store');
-        Route::get('/editar/{id}', [MedicoProntuarioController::class, 'edit'])->name('prontuario.edit');
-        Route::put('/atualizar/{id}', [MedicoProntuarioController::class, 'update'])->name('prontuario.update');
-        Route::delete('/deletar/{id}', [MedicoProntuarioController::class, 'destroy'])->name('prontuario.destroy');
-        Route::get('/visualizar-prontuario/{id}', [MedicoProntuarioController::class, 'show'])->name('visualizarProntuario');
-        Route::get('/{id}', [MedicoProntuarioController::class, 'show'])->name('paciente.prontuario');
-        
-        // ROTAS DE PDF
-        Route::get('/pdf-exames/{idConsulta}', [MedicoPdfController::class, 'gerarPdfExames'])->name('gerarPdfExames');
-        Route::get('/consulta/{idConsulta}/receita/pdf', [MedicoPdfController::class, 'gerarPdfReceita'])->name('consulta.receita.pdf');
-    });
+    // --- CORREÇÃO: Rotas de Prontuário ---
+    // Rotas de Prontuário (NÃO estão em um subgrupo de nome)
+    // Isso garante que os nomes sejam 'medico.prontuario', 'medico.cadastrarProntuario', etc.
+    Route::get('/prontuario', [MedicoProntuarioController::class, 'index'])->name('prontuario');
+    Route::get('/cadastrar-prontuario/{id}', [MedicoProntuarioController::class, 'create'])->name('cadastrarProntuario');
+    Route::post('/cadastrar-prontuario/{id}', [MedicoProntuarioController::class, 'store'])->name('prontuario.store');
+    Route::get('/prontuario/editar/{id}', [MedicoProntuarioController::class, 'edit'])->name('prontuario.edit');
+    Route::put('/prontuario/atualizar/{id}', [MedicoProntuarioController::class, 'update'])->name('prontuario.update');
+    Route::delete('/prontuario/deletar/{id}', [MedicoProntuarioController::class, 'destroy'])->name('prontuario.destroy');
+    Route::get('/visualizar-prontuario/{id}', [MedicoProntuarioController::class, 'show'])->name('visualizarProntuario');
+    Route::get('/prontuario/{id}', [MedicoProntuarioController::class, 'show'])->name('paciente.prontuario');
+    // --- FIM DA CORREÇÃO ---
 });
+
+// ===================================================================================
+// --- ROTAS DE PDF DO MÉDICO (CORRIGIDAS) ---
+// ===================================================================================
+// Elas estão FORA do 'name("medico.")' para que os nomes 'gerarPdfExames' e 
+// 'consulta.receita.pdf' funcionem exatamente como a view espera.
+// Elas AINDA estão protegidas pelo middleware 'auth:medico'.
+Route::middleware('auth:medico')->prefix('medico/prontuario')->group(function () {
+     
+    Route::get('/pdf-exames/{idConsulta}', [MedicoPdfController::class, 'gerarPdfExames'])
+         ->name('gerarPdfExames'); // Nome: gerarPdfExames (CORRETO)
+         
+    Route::get('/consulta/{idConsulta}/receita/pdf', [MedicoPdfController::class, 'gerarPdfReceita'])
+         ->name('consulta.receita.pdf'); // Nome: consulta.receita.pdf (CORRETO)
+});
+
 
 // ===================================================================================
 // --- ROTAS PROTEGIDAS DO ENFERMEIRO ---
 // ===================================================================================
 Route::middleware('auth:enfermeiro')->prefix('enfermeiro')->name('enfermeiro.')->group(function () {
-
     Route::get('/dashboard', [EnfermeiroDashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [EnfermeiroLoginController::class, 'logout'])->name('logout');
     Route::get('/perfil', [ConfiguracaoEnfermeiroController::class, 'perfil'])->name('perfil');
-    
     Route::put('/perfil/update', [ConfiguracaoEnfermeiroController::class, 'atualizarPerfil'])->name('perfil.update');
-    
     Route::get('/seguranca', [SegurancaEnfermeiroController::class, 'showAlterarSenhaForm'])->name('seguranca');
     Route::post('/alterar-senha', [SegurancaEnfermeiroController::class, 'alterarSenha'])->name('alterarSenha');
-
-    // Pacientes
     Route::get('/paciente', fn() => view('enfermeiro.pacientes'))->name('pacientes');
     Route::get('/ajuda', fn() => view('enfermeiro.ajuda'))->name('ajuda');
-
-    // Prontuário / Anotações
     Route::get('/prontuario', [EnfermeiroProntuarioController::class, 'index'])->name('prontuario');
     Route::get('/visualizar-prontuario/{id}', [EnfermeiroProntuarioController::class, 'show'])->name('visualizarProntuario');
     Route::get('/prontuario/{id}/anotacao/criar', [EnfermeiroProntuarioController::class, 'create'])->name('anotacao.create');
@@ -232,22 +212,11 @@ Route::middleware('auth:enfermeiro')->prefix('enfermeiro')->name('enfermeiro.')-
 // ===================================================================================
 // --- ROTAS DO RECEPCIONISTA (PROTEGIDAS) ---
 // ===================================================================================
-
 Route::middleware('auth:recepcionista')->prefix('recepcionista')->name('recepcionista.')->group(function () {
-    
-    // A "dashboard" principal leva direto para o formulário de Acolhimento
     Route::get('/dashboard', [AcolhimentoController::class, 'create'])->name('dashboard');
-
-    // Rota para ONDE o formulário de acolhimento envia os dados
     Route::post('/acolhimento/salvar', [AcolhimentoController::class, 'store'])->name('acolhimento.store');
-    
-    // Rota que o AJAX da view de acolhimento usa para buscar pacientes
     Route::get('/pacientes/buscar', [AdminPacienteController::class, 'buscar'])->name('pacientes.buscar');
-
-    // Rota de Logout
     Route::post('/logout', [RecepcionistaLoginController::class, 'logout'])->name('logout');
-
-    // Perfil e Segurança
     Route::get('/perfil', [RecepcionistaConfiguracaoController::class, 'perfil'])->name('perfil');
     Route::post('/perfil/atualizar', [RecepcionistaConfiguracaoController::class, 'atualizarPerfil'])->name('atualizarPerfil');
     Route::post('/trocar-senha', [RecepcionistaConfiguracaoController::class, 'trocarSenha'])->name('trocarSenha');

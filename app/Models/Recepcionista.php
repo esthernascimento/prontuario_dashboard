@@ -21,7 +21,7 @@ class Recepcionista extends Authenticatable
         'nomeRecepcionista',
         'emailRecepcionista',
         'senhaRecepcionista',
-        'idUnidadeFK', // 🔥 CORREÇÃO: Mudei para idUnidadeFK
+        'idUnidadeFK', 
     ];
 
     protected $hidden = [
@@ -48,8 +48,6 @@ class Recepcionista extends Authenticatable
     /**
      * 🔥 ADICIONEI: Campo usado para login (email)
      */
-    public function getAuthIdentifierName()
-    {
-        return 'emailRecepcionista';
-    }
-}   
+   
+ 
+}  
