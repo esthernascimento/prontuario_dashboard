@@ -80,13 +80,12 @@
 
 
 <script>
-    const form = document.getElementById('securityForm'); // Referência ao FORM com o novo ID
+    const form = document.getElementById('securityForm'); 
     const openConfirmationModalButton = document.getElementById('openConfirmationModal');
     const confirmationModal = document.getElementById('confirmationModal');
     const confirmChangePasswordButton = document.getElementById('confirmChangePassword');
     const successModal = document.getElementById('successModal');
 
-    // Funções para o Modal de Confirmação
     function showConfirmationModal() {
         if (confirmationModal) confirmationModal.classList.add('show');
     }
@@ -102,11 +101,10 @@
 
     if (openConfirmationModalButton) {
         openConfirmationModalButton.addEventListener('click', (event) => {
-            // Verifica se o formulário é válido (campos 'required' preenchidos)
+
             if (form.checkValidity()) {
                 showConfirmationModal();
             } else {
-                // Se não for válido, dispara a validação padrão do navegador
                 form.reportValidity();
             }
         });
@@ -115,7 +113,7 @@
     if (confirmChangePasswordButton) {
         confirmChangePasswordButton.addEventListener('click', () => {
             hideConfirmationModal();
-            form.submit(); // Envia o formulário
+            form.submit(); 
         });
     }
 

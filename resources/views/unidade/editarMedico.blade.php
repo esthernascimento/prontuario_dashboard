@@ -111,22 +111,18 @@
 
 <script>
 function openEditModal() {
-    // Exibe o modal
     document.getElementById('editMedicoModal').style.display = 'flex';
 }
 
 function closeEditModal() {
-    // Esconde o modal
     document.getElementById('editMedicoModal').style.display = 'none';
 }
 
 function submitEditForm() {
-    // Submete o formulário com o ID 'editMedicoForm'
     document.getElementById('editMedicoForm').submit();
     closeEditModal(); // Fecha o modal após submeter
 }
 
-// Fechar modal clicando fora (usando o ID específico do modal de médico)
 document.getElementById('editMedicoModal').addEventListener('click', function(e) {
     if(e.target.id === 'editMedicoModal') {
         closeEditModal();

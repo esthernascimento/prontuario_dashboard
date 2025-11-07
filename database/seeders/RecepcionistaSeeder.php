@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Recepcionista; // Importe seu model
-use App\Models\Admin; // Importe o model Admin
+use App\Models\Recepcionista;
+use App\Models\Unidade;
 
 class RecepcionistaSeeder extends Seeder
 {
@@ -14,25 +14,55 @@ class RecepcionistaSeeder extends Seeder
      */
     public function run(): void
     {
-        // IMPORTANTE: Garanta que você tenha um Admin com ID 1
-        // ou troque o '1' por um ID de Admin que exista no seu banco.
-        $adminId = Admin::first()->idAdminPK ?? 1;
+        // Busca unidades existentes
+        $unidades = Unidade::all();
 
-        // Limpa a tabela antes de popular (opcional, mas bom para testes)
-        // Recepcionista::truncate(); // Cuidado se tiver chaves estrangeiras
+        if ($unidades->isEmpty()) {
+            $this->command->info('Nenhuma unidade encontrada. Criando recepcionistas com unidade padrão...');
+            
+            Recepcionista::create([
+                'nomeRecepcionista' => 'Carlos Almeida (Recepção)',
+                'emailRecepcionista' => 'recepcao@prontuario.com',
+                'senhaRecepcionista' => Hash::make('senha123'),
+                'idUnidadeFK' => 1, // ID padrão
+            ]);
 
-        Recepcionista::create([
-            'nomeRecepcionista' => 'Carlos Almeida (Recepção)',
-            'emailRecepcionista' => 'recepcao@prontuario.com',
-            'senhaRecepcionista' => Hash::make('senha123'), // Senha padrão
-            'idAdminFK' => $adminId, 
-        ]);
+            Recepcionista::create([
+                'nomeRecepcionista' => 'Ana Beatriz (Recepção Tarde)',
+                'emailRecepcionista' => 'ana.recep@prontuario.com',
+                'senhaRecepcionista' => Hash::make('senha123'),
+                'idUnidadeFK' => 1, // ID padrão
+            ]);
+        } else {
+            // Cria recepcionistas para cada unidade
+            foreach ($unidades as $index => $unidade) {
+                $recepcionistasData = [
+                    [
+                        'nomeRecepcionista' => 'Carlos Almeida',
+                        'emailRecepcionista' => 'recepcao.unidade' . ($index + 1) . '@prontuario.com',
+                        'senhaRecepcionista' => Hash::make('senha123'),
+                        'idUnidadeFK' => $unidade->idUnidadePK,
+                    ],
+                    [
+                        'nomeRecepcionista' => 'Ana Beatriz',
+                        'emailRecepcionista' => 'ana.unidade' . ($index + 1) . '@prontuario.com',
+                        'senhaRecepcionista' => Hash::make('senha123'),
+                        'idUnidadeFK' => $unidade->idUnidadePK,
+                    ],
+                    [
+                        'nomeRecepcionista' => 'João Silva',
+                        'emailRecepcionista' => 'joao.unidade' . ($index + 1) . '@prontuario.com',
+                        'senhaRecepcionista' => Hash::make('senha123'),
+                        'idUnidadeFK' => $unidade->idUnidadePK,
+                    ]
+                ];
 
-        Recepcionista::create([
-            'nomeRecepcionista' => 'Ana Beatriz (Recepção Tarde)',
-            'emailRecepcionista' => 'ana.recep@prontuario.com',
-            'senhaRecepcionista' => Hash::make('senha123'),
-            'idAdminFK' => $adminId,
-        ]);
+                foreach ($recepcionistasData as $data) {
+                    Recepcionista::create($data);
+                }
+            }
+
+            $this->command->info('Recepcionistas criados para ' . $unidades->count() . ' unidades.');
+        }
     }
 }

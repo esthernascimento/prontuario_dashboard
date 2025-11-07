@@ -110,14 +110,6 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
     Route::put('/unidades/{unidade}', [AdminUnidadeController::class, 'update'])->name('unidades.update');
     Route::delete('/unidades/{unidade}', [AdminUnidadeController::class, 'destroy'])->name('unidades.destroy');
     Route::post('/unidades/{id}/toggle-status', [AdminUnidadeController::class, 'toggleStatus'])->name('unidades.toggle-status');
-
-    // CRUD RECEPCIONISTAS
-    Route::get('/recepcionistas', [RecepcionistaController::class, 'index'])->name('recepcionistas.index');
-    Route::get('/recepcionistas/create', [RecepcionistaController::class, 'create'])->name('recepcionistas.create');
-    Route::post('/recepcionistas', [RecepcionistaController::class, 'store'])->name('recepcionistas.store');
-    Route::get('/recepcionistas/{recepcionista}/edit', [RecepcionistaController::class, 'edit'])->name('recepcionistas.edit');
-    Route::put('/recepcionistas/{recepcionista}', [RecepcionistaController::class, 'update'])->name('recepcionistas.update');
-    Route::delete('/recepcionistas/{recepcionista}', [RecepcionistaController::class, 'destroy'])->name('recepcionistas.destroy');
 });
 
 // ===================================================================================
@@ -134,12 +126,12 @@ Route::middleware('auth:unidade')->prefix('unidade')->name('unidade.')->group(fu
     Route::get('/perfil', [UnidadeUnidadeController::class, 'perfilUnidade'])->name('perfil');
     Route::get('/seguranca', [UnidadeUnidadeController::class, 'seguranca'])->name('seguranca');
 
-    // Rotas de Ação (POST)
-    Route::put('/perfil/update', [UnidadeUnidadeController::class, 'atualizarPerfil'])->name('perfil.update');
-    Route::post('/alterar-senha', [UnidadeUnidadeController::class, 'alterarSenha'])->name('alterarSenha');
+    // Rotas de Ação (POST/PUT)
+    Route::put('/perfil/update', [UnidadeSegurancaController::class, 'atualizarPerfil'])->name('perfil.update');
+    Route::post('/alterar-senha', [UnidadeSegurancaController::class, 'alterarSenha'])->name('alterarSenha');
 
     // =================================================================================
-    // --- CRUD DE MÉDICOS E ENFERMEIROS ---
+    // --- CRUD DE MÉDICOS, ENFERMEIROS E RECEPCIONISTAS ---
     // =================================================================================
 
     // CRUD Médicos
@@ -163,6 +155,15 @@ Route::middleware('auth:unidade')->prefix('unidade')->name('unidade.')->group(fu
     Route::delete('/enfermeiro/{id}', [EnfermeiroController::class, 'excluir'])->name('enfermeiro.excluir');
     Route::post('/enfermeiro/{id}/toggle-status', [EnfermeiroController::class, 'toggleStatus'])->name('enfermeiro.toggleStatus');
     Route::post('/enfermeiro/{enfermeiro}/unidades', [EnfermeiroController::class, 'syncUnidades'])->name('enfermeiro.syncUnidades');
+
+    // 🔥 CRUD RECEPCIONISTAS (MOVIDO DO ADMIN PARA UNIDADE)
+    Route::get('/manutencaoRecepcionista', [RecepcionistaController::class, 'index'])->name('manutencaoRecepcionista');
+    Route::get('/recepcionistas/create', [RecepcionistaController::class, 'create'])->name('recepcionistas.create');
+    Route::post('/recepcionistas', [RecepcionistaController::class, 'store'])->name('recepcionistas.store');
+    Route::get('/recepcionistas/{recepcionista}/edit', [RecepcionistaController::class, 'edit'])->name('recepcionistas.edit');
+    Route::put('/recepcionistas/{recepcionista}', [RecepcionistaController::class, 'update'])->name('recepcionistas.update');
+    Route::delete('/recepcionistas/{recepcionista}', [RecepcionistaController::class, 'destroy'])->name('recepcionistas.destroy');
+    Route::post('/recepcionistas/{id}/toggle-status', [RecepcionistaController::class, 'toggleStatus'])->name('recepcionistas.toggle-status');
 });
 
 // ===================================================================================

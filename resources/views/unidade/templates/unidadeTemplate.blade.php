@@ -26,7 +26,7 @@
                 <i class="bi bi-house-door-fill"></i>
                 <span class="nav-text">Dashboard</span>
             </a>
-          
+
             <a href="{{ route('unidade.manutencaoMedicos') }}" class="nav-item">
                 <i class="bi bi-plus-circle-fill"></i>
                 <span class="nav-text">Médicos</span>
@@ -35,6 +35,11 @@
             <a href="{{ route('unidade.manutencaoEnfermeiro') }}" class="nav-item">
                 <i class="bi bi-person-fill-add"></i>
                 <span class="nav-text">Enfermeiros</span>
+            </a>
+
+            <a href="{{ route('unidade.manutencaoRecepcionista') }}" class="nav-item">
+                <i class="bi bi-people-fill"></i>
+                <span class="nav-text">Recepcionista </span>
             </a>
 
             <a href="{{ route('unidade.ajuda') }}" class="nav-item">
@@ -63,9 +68,9 @@
         {{-- 🔥 CORREÇÃO: Usar a variável $unidade e a rota unidade.perfil --}}
         <a href="{{ route('unidade.perfil') }}" class="user-info" style="text-decoration: none; color: inherit;">
             @if(isset($unidade) && $unidade->foto)
-                <img src="{{ asset('storage/fotos/' . $unidade->foto) }}" alt="Foto da Unidade">
+            <img src="{{ asset('storage/fotos/' . $unidade->foto) }}" alt="Foto da Unidade">
             @else
-                <img src="{{ asset('img/usuario-de-perfil.png') }}" alt="Foto padrão">
+            <img src="{{ asset('img/usuario-de-perfil.png') }}" alt="Foto padrão">
             @endif
             {{-- 🔥 CORREÇÃO: Ajustar o nome da variável --}}
             <span>{{ $unidade->nomeUnidade ?? 'Unidade' }}</span>

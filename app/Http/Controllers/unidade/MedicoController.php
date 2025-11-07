@@ -15,14 +15,51 @@ use Illuminate\Support\Facades\Mail;
 
 class MedicoController extends Controller
 {
-    // 🔥 CORREÇÃO: View agora pertence à 'unidade'
-    public function index()
-    {
-        $medicos = Medico::with('usuario')->get();
-        return view('unidade.manutencaoMedicos', compact('medicos'));
+   public function index(Request $request)
+{
+    // Pega a unidade logada
+    $unidade = auth()->guard('unidade')->user();
+    
+    // --- 1. Prepara a Query Base com Filtros ---
+    $query = $unidade->medicos()->with('usuario');
+
+    // Filtro de busca por nome, CRM ou email
+    if ($request->filled('search')) {
+        $searchTerm = $request->get('search');
+        $query->where('nomeMedico', 'LIKE', "%{$searchTerm}%")
+              ->orWhere('crmMedico', 'LIKE', "%{$searchTerm}%")
+              ->orWhereHas('usuario', function($q) use ($searchTerm) {
+                  $q->where('emailUsuario', 'LIKE', "%{$searchTerm}%");
+              });
     }
 
-    // 🔥 CORREÇÃO: View agora pertence à 'unidade'
+    // Filtro de status (ativo/inativo)
+    if ($request->filled('status')) {
+        $status = $request->get('status');
+        if ($status === 'ativo') {
+            $query->whereHas('usuario', function($q) {
+                $q->where('statusAtivoUsuario', 1);
+            });
+        } elseif ($status === 'inativo') {
+            $query->whereHas('usuario', function($q) {
+                $q->where('statusAtivoUsuario', 0);
+            });
+        }
+    }
+
+    // --- 2. Busca TODOS os médicos (sem paginação) ---
+    $medicos = $query->orderBy('nomeMedico', 'ASC')->get();
+
+    // --- 3. Calcula as métricas baseadas na lista completa ---
+    $totalMedicos = $medicos->count();
+    $ativosCount = $medicos->where('usuario.statusAtivoUsuario', 1)->count();
+    $inativosCount = $medicos->where('usuario.statusAtivoUsuario', 0)->count();
+    $novosCount = $medicos->where('created_at', '>=', now()->startOfMonth())->count();
+
+    // --- 4. Retorna a view com todos os dados ---
+    return view('unidade.manutencaoMedicos', compact('medicos', 'totalMedicos', 'ativosCount', 'inativosCount', 'novosCount'));
+}
+
     public function create()
     {
         $unidades = Unidade::orderBy('nomeUnidade')->get();
@@ -86,14 +123,12 @@ class MedicoController extends Controller
         }
     }
     
-    // 🔥 CORREÇÃO: Renomear método 'editar' para 'edit' e view para 'unidade'
     public function edit($id)
     {
         $medico = Medico::with('usuario')->findOrFail($id);
         return view('unidade.editarMedico', compact('medico'));
     }
 
-    // 🔥 CORREÇÃO: Rota de redirecionamento é da 'unidade'
     public function update(Request $request, $id)
     {
         $request->validate([

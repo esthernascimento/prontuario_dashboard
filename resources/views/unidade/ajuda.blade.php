@@ -2,9 +2,11 @@
 
 @section('content')
 
-  @section('title', 'Dashboard - Painel Administrativo')
+@section('title', 'Dashboard - Painel Administrativo')
 
-   
+@php $unidade = auth()->guard('unidade')->user(); @endphp
+
+
 <link rel="stylesheet" href="{{ asset('css/unidade/ajuda.css') }}">
 
 <main class="main-dashboardAjuda">
@@ -81,4 +83,4 @@
         }
     }
 </script>
-    @endsection
+@endsection

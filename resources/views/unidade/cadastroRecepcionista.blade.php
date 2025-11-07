@@ -14,7 +14,7 @@
 <body>
     <main class="main-container">
         <div class="left-side">
-        <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo ilustrativa">
+            <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo ilustrativa">
         </div>
 
         <div class="right-side">
@@ -26,32 +26,29 @@
                     <div class="input-group">
                         <label for="nomeRecepcionista">Nome completo</label>
                         <div class="input-wrapper">
-                            <i class="fa-solid fa-user-doctor icon-left"></i>
+                            <i class="fa-solid fa-user icon-left"></i> <!-- 🔥 Mudei o ícone -->
                             <input type="text" id="nomeRecepcionista" name="nomeRecepcionista" required />
                         </div>
                     </div>
 
                     <div class="input-group">
-                        <label for="emailUsuario">E-mail</label>
+                        <label for="emailRecepcionista">E-mail</label> <!-- 🔥 Corrigi o name -->
                         <div class="input-wrapper">
                             <i class="fa-solid fa-envelope icon-left"></i>
-                            <input type="email" id="emailUsuario" name="emailUsuario" required />
+                            <input type="email" id="emailRecepcionista" name="emailRecepcionista" required /> <!-- 🔥 Corrigi o name -->
                         </div>
                     </div>
 
                     <div class="input-group">
-                        <label for="unidades">Unidades de Trabalho (segure Ctrl/Cmd para mais de uma)</label>
+                        <label for="senhaRecepcionista">Senha</label> <!-- 🔥 ADICIONEI campo senha -->
                         <div class="input-wrapper">
-                            <i class="fa-solid fa-hospital icon-left"></i>
-                            <select name="unidades[]" id="unidades" multiple style="height: 100px; padding-left: 35px; width: 100%; color: #333; background-color: #f0f0f0; border: 1px solid #ccc;">
-                                @forelse($unidades as $unidade)
-                                    <option value="{{ $unidade->idUnidadePK }}">{{ $unidade->nomeUnidade }}</option>
-                                @empty
-                                    <option disabled>Nenhuma unidade cadastrada. Crie uma primeiro.</option>
-                                @endforelse
-                            </select>
+                            <i class="fa-solid fa-lock icon-left"></i>
+                            <input type="password" id="senhaRecepcionista" name="senhaRecepcionista" required minlength="6" />
                         </div>
                     </div>
+
+                    <!-- 🔥 REMOVI o campo de unidades múltiplas (não existe na tabela Recepcionista) -->
+                    <!-- Recepcionista pertence a UMA unidade apenas (idUnidadeFK) -->
 
                     <button class="btn-login" type="submit">CADASTRAR</button>
                 </form>
@@ -69,43 +66,31 @@
             const messagesDiv = document.getElementById('form-messages');
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-            // CORREÇÃO CRUCIAL AQUI:
-            // O método Object.fromEntries() não lida bem com campos de seleção múltipla.
-            // Vamos construir o nosso objeto de dados manualmente para garantir que o array 'unidades' é enviado corretamente.
-            const data = {};
-            // Usamos o método getAll() para obter todos os valores do campo de seleção múltipla
-            data.unidades = formData.getAll('unidades[]');
-            
-            // Agora, adicionamos os outros campos
-            formData.forEach((value, key) => {
-                // Adicionamos apenas se não for o campo de unidades (para não duplicar)
-                if (!key.endsWith('[]')) {
-                    data[key] = value;
-                }
-            });
-
+            // 🔥 CORREÇÃO: Usar FormData normal (não JSON) para envio de formulário
             button.disabled = true;
             button.textContent = 'Cadastrando...';
             messagesDiv.style.display = 'none';
 
-            fetch("{{ route('unidade.medicos.register') }}", {
+            // 🔥 CORREÇÃO: Rota correta para recepcionistas
+            fetch("{{ route('unidade.recepcionistas.store') }}", {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
                     'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
                 },
-                body: JSON.stringify(data)
+                body: formData // 🔥 CORREÇÃO: Enviar FormData, não JSON
             })
             .then(response => {
-                if (!response.ok) { // Verifica se a resposta não foi bem-sucedida
+                if (!response.ok) { 
                     return response.json().then(err => { throw err; });
                 }
                 return response.json();
             })
             .then(result => {
-                if (result.success) {
-                    messagesDiv.textContent = result.message + " Redirecionando...";
+                if (result.success || result.idRecepcionistaPK) {
+                    const message = result.message || "Recepcionista cadastrado com sucesso!";
+                    messagesDiv.textContent = message + " Redirecionando...";
+                    messagesDiv.classList.remove('error');
                     messagesDiv.classList.add('success');
                     messagesDiv.style.display = 'block';
                     form.reset();
@@ -114,10 +99,11 @@
                     }, 2000);
                 }
             })
-            .catch(result => { // O 'catch' agora recebe o corpo do erro
-                let errorText = result.message || 'Ocorreu um erro.';
-                if (result.errors) {
-                    errorText = Object.values(result.errors).flat().join(' ');
+            .catch(error => { 
+                console.error('Erro:', error);
+                let errorText = error.message || 'Ocorreu um erro no cadastro.';
+                if (error.errors) {
+                    errorText = Object.values(error.errors).flat().join(' ');
                 }
                 messagesDiv.textContent = errorText;
                 messagesDiv.classList.remove('success');
@@ -140,6 +126,11 @@
                     input.parentElement.classList.remove("focused");
                 }
             });
+            
+            // 🔥 CORREÇÃO: Manter focused se já tiver valor
+            if (input.value !== "") {
+                input.parentElement.classList.add("focused");
+            }
         });
     </script>
 </body>
