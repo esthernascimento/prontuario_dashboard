@@ -1,26 +1,32 @@
 <?php
 
-namespace App\Models;
+namespace App\Models; // <-- Namespace do Model
 
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Unidade extends Model
+use App\Models\Paciente;
+use App\Models\Medico;
+use App\Models\Enfermeiro;
+
+
+class Unidade extends Authenticatable // <-- Herda de Authenticatable
 {
     use HasFactory, SoftDeletes;
 
     protected $table = 'tbUnidade';
     protected $primaryKey = 'idUnidadePK';
 
-    /**
-     * Os atributos que podem ser preenchidos em massa,
-     * agora incluindo todos os novos campos de endereço e telefone.
-     */
+    
     protected $fillable = [
         'nomeUnidade',
         'tipoUnidade',
+        'senhaUnidade',
         'telefoneUnidade',
+        'cnpjUnidade',
+        'emailUnidade',
+        'statusAtivoUnidade',
         'logradouroUnidade',
         'numLogradouroUnidade',
         'bairroUnidade',
@@ -31,20 +37,38 @@ class Unidade extends Model
         'paisUnidade',
     ];
 
+    protected $hidden = [
+        'senhaUnidade',
+        'remember_token',
+    ];
+
     /**
-     * Define a relação Muitos-para-Muitos com Médicos.
+     * Define o campo de senha usado pelo Auth.
+     */
+    public function getAuthPassword()
+    {
+        return $this->senhaUnidade;
+    }
+
+    /**
+     * Define o campo usado para login — neste caso, o CNPJ.
+     */
+    public function getAuthIdentifierName()
+    {
+        return 'cnpjUnidade';
+    }
+
+    /**
+     * Relações com médicos e enfermeiros.
      */
     public function medicos()
     {
         return $this->belongsToMany(Medico::class, 'tbMedicoUnidade', 'idUnidadeFK', 'idMedicoFK');
     }
 
-    /**
-     * Define a relação Muitos-para-Muitos com Enfermeiros.
-     */
+
     public function enfermeiros()
     {
         return $this->belongsToMany(Enfermeiro::class, 'tbEnfermeiroUnidade', 'idUnidadeFK', 'idEnfermeiroFK');
     }
 }
-

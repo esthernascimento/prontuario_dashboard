@@ -39,6 +39,19 @@
 
             <div class="split-group">
                 <div class="input-group">
+                    <label for="cnpjUnidade">CNPJ</label>
+                    <input type="text" name="cnpjUnidade" id="cnpjUnidade" value="{{ old('cnpjUnidade', $unidade->cnpjUnidade) }}" required>
+                </div>
+                <div class="input-group">
+                    <label for="emailUnidade">E-mail</label>
+                    <input type="email" name="emailUnidade" id="emailUnidade" value="{{ old('emailUnidade', $unidade->emailUnidade) }}" required>
+                </div>
+            </div>
+            
+            <div class="form-section-title">Detalhes e Contato</div>
+
+            <div class="split-group">
+                <div class="input-group">
                     <label for="tipoUnidade">Tipo de Unidade</label>
                     <input type="text" name="tipoUnidade" id="tipoUnidade" value="{{ old('tipoUnidade', $unidade->tipoUnidade) }}" placeholder="Ex: Hospital, UBS">
                 </div>
@@ -46,6 +59,49 @@
                 <div class="input-group">
                     <label for="telefoneUnidade">Telefone</label>
                     <input type="text" name="telefoneUnidade" id="telefoneUnidade" value="{{ old('telefoneUnidade', $unidade->telefoneUnidade) }}">
+                </div>
+            </div>
+            
+            <div class="form-section-title">Endereço</div>
+
+            <div class="split-group">
+                <div class="input-group">
+                    <label for="cepUnidade">CEP</label>
+                    <input type="text" name="cepUnidade" id="cepUnidade" value="{{ old('cepUnidade', $unidade->cepUnidade) }}" required>
+                </div>
+                <div class="input-group">
+                    <label for="logradouroUnidade">Logradouro</label>
+                    <input type="text" name="logradouroUnidade" id="logradouroUnidade" value="{{ old('logradouroUnidade', $unidade->logradouroUnidade) }}" required>
+                </div>
+            </div>
+            <div class="split-group">
+                <div class="input-group">
+                    <label for="numLogradouroUnidade">Número</label>
+                    <input type="text" name="numLogradouroUnidade" id="numLogradouroUnidade" value="{{ old('numLogradouroUnidade', $unidade->numLogradouroUnidade) }}" required>
+                </div>
+                <div class="input-group">
+                    <label for="bairroUnidade">Bairro</label>
+                    <input type="text" name="bairroUnidade" id="bairroUnidade" value="{{ old('bairroUnidade', $unidade->bairroUnidade) }}" required>
+                </div>
+            </div>
+            <div class="split-group">
+                <div class="input-group">
+                    <label for="cidadeUnidade">Cidade</label>
+                    <input type="text" name="cidadeUnidade" id="cidadeUnidade" value="{{ old('cidadeUnidade', $unidade->cidadeUnidade) }}" required>
+                </div>
+                <div class="input-group">
+                    <label for="ufUnidade">UF</label>
+                    <input type="text" name="ufUnidade" id="ufUnidade" value="{{ old('ufUnidade', $unidade->ufUnidade) }}" maxlength="2" required>
+                </div>
+            </div>
+            <div class="split-group">
+                <div class="input-group">
+                    <label for="estadoUnidade">Estado</label>
+                    <input type="text" name="estadoUnidade" id="estadoUnidade" value="{{ old('estadoUnidade', $unidade->estadoUnidade) }}" required>
+                </div>
+                <div class="input-group">
+                    <label for="paisUnidade">País</label>
+                    <input type="text" name="paisUnidade" id="paisUnidade" value="{{ old('paisUnidade', $unidade->paisUnidade) }}" required>
                 </div>
             </div>
 

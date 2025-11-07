@@ -77,6 +77,11 @@ class Paciente extends Authenticatable
         // Se a FK for diferente, ajuste o segundo parâmetro.
         return $this->hasMany(AnotacaoEnfermagem::class, 'idPacienteFK', 'idPaciente');
     }
-
+    
+    public function consultas()
+    {
+        return $this->hasMany(\App\Models\Consulta::class, 'idPacienteFK', 'idPaciente');
+    }
+    
 
 }

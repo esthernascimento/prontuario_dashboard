@@ -3,15 +3,16 @@
 @section('title', 'Prontuário dos Pacientes')
 
 @section('content')
+
+
 <link rel="stylesheet" href="{{ asset('css/enfermeiro/prontuario.css') }}">
 
 <main class="main-dashboard">
     <div class="enfermeiro-container">
         <div class="enfermeiro-header">
-            <h1><i class="bi bi-journal-medical"></i> Prontuário dos Pacientes</h1>
+            <h1><i class="bi bi-journal-medical"></i>Triagem dos Pacientes</h1>
         </div>
 
-        {{-- Filtros e Busca --}}
         <div class="search-filters">
             <div class="search-box">
                 <i class="bi bi-search"></i>
@@ -59,14 +60,12 @@
                                 <span class="status-badge {{ $statusClass }}">{{ $statusText }}</span>
                             </td>
                             <td class="actions">
-                                {{-- Visualizar Prontuário --}}
                                 <a href="{{ route('enfermeiro.visualizarProntuario', $paciente->idPaciente) }}"
                                    class="btn-action btn-view"
                                    title="Visualizar Prontuário e Histórico">
                                    <i class="bi bi-eye-fill"></i>
                                 </a>
 
-                                {{-- Criar Nova Anotação --}}
                                 <a href="{{ route('enfermeiro.anotacao.create', $paciente->idPaciente) }}"
                                    class="btn-action btn-add-anotacao"
                                    title="Criar Nova Anotação de Enfermagem">

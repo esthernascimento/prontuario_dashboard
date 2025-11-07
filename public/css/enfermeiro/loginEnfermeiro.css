@@ -30,10 +30,9 @@ body {
   height: 100vh;
 }
 
-/* --- Lado Esquerdo --- */
 .left-side {
   width: 50%;
-  background: linear-gradient(135deg, var(--verde) 0%, var(--verde-claro) 100%);
+  background: linear-gradient(135deg, #0a400c 0%, #134a18 50%, #2d7a35 100%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -41,7 +40,6 @@ body {
   box-shadow: inset 0 0 50px rgba(255,255,255,0.1);
   animation: slide-in-left 0.8s ease forwards;
 }
-
 .left-side img {
   width: 80%;
   max-width: 520px;
@@ -49,7 +47,6 @@ body {
   animation: fade-in 1.5s ease 0.5s forwards;
 }
 
-/* --- Lado Direito --- */
 .right-side {
   width: 50%;
   background-color: var(--branco);
@@ -74,7 +71,6 @@ body {
   transform: translateY(-3px);
 }
 
-/* --- Logo --- */
 .logo img {
   width: 180px;
   margin-bottom: 20px;
@@ -88,7 +84,6 @@ h2 {
   margin-bottom: 25px;
 }
 
-/* --- Inputs --- */
 .input-group {
   text-align: left;
   margin-bottom: 22px;
@@ -145,7 +140,6 @@ h2 {
   color: var(--verde-claro);
 }
 
-/* --- Botão --- */
 .btn-login {
   width: 100%;
   background: linear-gradient(135deg, var(--verde) 0%, var(--verde-claro) 100%);
@@ -165,7 +159,6 @@ h2 {
   transform: translateY(-2px);
 }
 
-/* --- Notificações --- */
 .notification {
   padding: 10px;
   margin-bottom: 15px;
@@ -180,7 +173,6 @@ h2 {
   color: #721c24;
 }
 
-/* --- Animações --- */
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
@@ -202,7 +194,6 @@ h2 {
   75% { transform: translateX(4px); }
 }
 
-/* --- Responsividade --- */
 @media (max-width: 950px) {
   .main-container {
     flex-direction: column;

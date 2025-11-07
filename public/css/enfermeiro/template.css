@@ -1,7 +1,3 @@
-/* ========== TEMPLATE ENFERMEIRO - CSS ========== */
-/* Este CSS afeta APENAS o template (sidebar e header) */
-
-/* Sidebar começa do topo absoluto sem gaps */
 .sidebar-enfermeiro {
   position: fixed;
   top: 0;
@@ -23,7 +19,6 @@
   width: 250px;
 }
 
-/* Logo centralizada com transição */
 .logo-link-enfermeiro {
   width: 100%;
   display: flex;
@@ -44,7 +39,6 @@
   width: 80px;
 }
 
-/* Navegação com espaçamento adequado */
 .nav-enfermeiro {
   display: flex;
   flex-direction: column;
@@ -53,7 +47,6 @@
   padding: 0 10px;
 }
 
-/* Items de navegação com hover suave */
 .nav-item-enfermeiro {
   display: flex;
   align-items: center;
@@ -82,7 +75,6 @@
   color: #b0d5b2;
 }
 
-/* Texto oculto por padrão, aparece ao hover na sidebar */
 .nav-text-enfermeiro {
   font-size: 14px;
   font-weight: 500;
@@ -97,7 +89,6 @@
   visibility: visible;
 }
 
-/* Header ajustado para acompanhar a sidebar */
 .header-enfermeiro {
   height: 60px;
   padding: 0 40px;
@@ -114,7 +105,6 @@
   transition: left 0.3s ease;
 }
 
-/* Header expande quando sidebar está em hover */
 .sidebar-enfermeiro:hover ~ .header-enfermeiro {
   left: 250px;
 }
@@ -145,16 +135,13 @@
   object-fit: cover;
 }
 
-/* Conteúdo principal - APENAS margem, SEM estilização de conteúdo */
 .main-content-enfermeiro {
   margin-left: 100px;
   margin-top: 60px;
   min-height: calc(100vh - 60px);
   transition: margin-left 0.3s ease;
-  /* REMOVIDO padding e background - deixa o conteúdo livre */
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
   .sidebar-enfermeiro {
     width: 70px;

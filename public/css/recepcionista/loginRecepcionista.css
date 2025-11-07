@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+:root {
+  --cinza-escuro: #606060;
+  --cinza-medio: #808080;
+  --cinza-claro: #dcdcdc;
+  --branco: #fff;
+  --sombra: 0 8px 20px rgba(96, 96, 96, 0.15);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--branco);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.main-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
+.left-side {
+  width: 50%;
+  background: linear-gradient(135deg, var(--cinza-escuro) 0%, var(--cinza-medio) 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 100px 100px 0;
+  box-shadow: inset 0 0 50px rgba(255,255,255,0.1);
+  animation: slide-in-left 0.8s ease forwards;
+}
+
+.left-side img {
+  width: 80%;
+  max-width: 520px;
+  opacity: 0;
+  animation: fade-in 1.5s ease 0.5s forwards;
+}
+
+.right-side {
+  width: 50%;
+  background-color: var(--branco);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: slide-in-right 0.8s ease forwards;
+}
+
+.login-content {
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: var(--sombra);
+  transition: transform 0.3s ease;
+}
+
+.login-content:hover {
+  transform: translateY(-3px);
+}
+
+.logo img {
+  width: 180px;
+  margin-bottom: 20px;
+  animation: fade-in 1.2s ease;
+}
+
+h2 {
+  color: var(--cinza-escuro);
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.input-group {
+  text-align: left;
+  margin-bottom: 22px;
+}
+
+.input-group label {
+  font-weight: 600;
+  color: var(--cinza-escuro);
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--cinza-claro);
+  border-radius: 8px;
+  padding: 10px 12px;
+  transition: all 0.3s ease;
+  background-color: #f8f8f8;
+}
+
+.input-wrapper.focused {
+  border-color: var(--cinza-escuro);
+  box-shadow: 0 0 0 3px rgba(96, 96, 96, 0.15);
+  background-color: #fff;
+}
+
+.input-wrapper input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  color: #333;
+  background: transparent;
+}
+
+.icon-left {
+  color: var(--cinza-escuro);
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.icon-right {
+  color: var(--cinza-escuro);
+  margin-left: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.icon-right:hover {
+  color: var(--cinza-medio);
+}
+
+.btn-login {
+  width: 100%;
+  background: linear-gradient(135deg, var(--cinza-escuro) 0%, var(--cinza-medio) 100%);
+  color: var(--branco);
+  border: none;
+  border-radius: 50px;
+  padding: 14px 0;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--sombra);
+}
+
+.btn-login:hover {
+  background: linear-gradient(135deg, var(--cinza-medio) 0%, var(--cinza-escuro) 100%);
+  transform: translateY(-2px);
+}
+
+.notification {
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  display: none;
+}
+
+.notification.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.notification.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.notification.info {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-left {
+  from { transform: translateX(-60px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(60px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@media (max-width: 950px) {
+  .main-container {
+    flex-direction: column;
+  }
+
+  .left-side {
+    width: 100%;
+    border-radius: 0;
+    height: 250px;
+  }
+
+  .right-side {
+    width: 100%;
+  }
+
+  .login-content {
+    max-width: 320px;
+    margin-top: -40px;
+  }
+}

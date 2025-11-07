@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Unidade;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -11,7 +11,6 @@ use App\Models\Unidade;
 
 class AnotacaoEnfermagemController extends Controller
 {
-    // Mostra o formulário de cadastro
     public function create()
     {
         $pacientes = Paciente::orderBy('nomePaciente')->get();
@@ -21,7 +20,6 @@ class AnotacaoEnfermagemController extends Controller
         return view('admin.cadastroAnotacao', compact('pacientes', 'enfermeiros', 'unidades'));
     }
 
-    // Salva a anotação no banco
     public function store(Request $request)
     {
         $request->validate([

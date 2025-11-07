@@ -181,9 +181,6 @@ body {
     box-shadow: 0 12px 24px -6px rgba(40, 167, 69, 0.4);
 }
 
-/* ============================================
- * BARRA DE PESQUISA E FILTROS (VERDE)
- * ============================================ */
 .search-filters {
     display: flex;
     align-items: center;
@@ -219,21 +216,14 @@ body {
     border-radius: var(--radius-md);
     height: 48px;
     background: var(--bg-white);
-    /* Adicionado */
     transition: all 0.3s ease;
-    /* Adicionado */
     font-family: 'Montserrat', sans-serif;
-    /* Adicionado */
 }
 
 .search-box input:focus {
     outline: none;
-    /* Adicionado */
     border-color: var(--primary-green);
-    /* Alterado */
     background: white;
-    /* Adicionado */
-    /* Adaptado para verde */
     box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
 }
 
@@ -241,17 +231,12 @@ body {
     color: var(--text-muted);
 }
 
-/* Adicionado */
-
-
-/* FILTRO CUSTOMIZADO */
 .custom-select {
     position: relative;
     width: 150px;
     cursor: pointer;
 }
 
-/* Estilo do Input que substituiu o 'selected' */
 .selected-filter-input {
     width: 100%;
     padding: 14px 40px 14px 15px;
@@ -263,11 +248,8 @@ body {
     box-shadow: none;
     transition: border-color 0.3s;
     font-weight: 500;
-    /* Adicionado */
     color: var(--text-primary);
-    /* Adicionado */
     font-size: 14px;
-    /* Adicionado */
 }
 
 .selected-filter-input:hover {
@@ -287,13 +269,10 @@ body {
     top: 50%;
     transform: translateY(-50%);
     color: var(--primary-green);
-    /* Alterado */
     pointer-events: none;
     font-size: 12px;
-    /* Adicionado */
 }
 
-/* Opções (Dropdown) */
 .custom-select .options {
     position: absolute;
     top: 100%;
@@ -311,7 +290,6 @@ body {
 }
 
 .custom-select.active .options {
-    /* Adicionado para mostrar o dropdown */
     display: block;
 }
 
@@ -319,12 +297,10 @@ body {
     padding: 12px 15px;
     border-bottom: 1px solid var(--bg-gray-100);
     transition: all 0.2s ease;
-    /* Adicionado */
     cursor: pointer;
 }
 
 .custom-select .options div:hover {
-    /* Adaptado para verde */
     background: linear-gradient(135deg, #F0FFF0 0%, #D1FAE5 100%);
     color: var(--primary-green-dark);
     font-weight: 600;
@@ -332,12 +308,8 @@ body {
 
 .custom-select .options div:last-child {
     border-bottom: none;
-    /* Adicionado */
 }
 
-/* ============================================
- * TABELA (VERDE)
- * ============================================ */
 .box-table {
     background: white;
     border-radius: var(--radius-md);
@@ -346,12 +318,9 @@ body {
     border: 1px solid var(--border-color);
     position: relative;
     margin-bottom: 20px;
-    /* Adicionado */
     animation: fadeIn 0.6s ease-out 0.4s backwards;
-    /* Adicionado */
 }
 
-/* Efeito de brilho na tabela - Restaurado */
 .box-table::before {
     content: '';
     position: absolute;
@@ -363,7 +332,6 @@ body {
     animation: tableShine 3s infinite;
     pointer-events: none;
     z-index: 1;
-    /* Adicionado para garantir que o brilho esteja sobre a tabela, mas sob o conteúdo */
 }
 
 table {
@@ -372,13 +340,11 @@ table {
 }
 
 thead {
-    /* Adaptado para verde */
     background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
 }
 
 th {
     background: transparent;
-    /* Adicionado */
     color: white;
     padding: 18px 20px;
     text-align: left;
@@ -386,15 +352,12 @@ th {
     font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    /* Adicionado */
     border-bottom: none;
-    /* Adicionado */
 }
 
 tbody tr {
     background-color: #FFFFFF;
     transition: all 0.3s ease;
-    /* Animação de linha de tabela - Restaurado */
     animation: slideInRow 0.4s ease-out backwards;
 }
 
@@ -419,14 +382,11 @@ tbody tr:nth-child(5) {
 }
 
 tbody tr:nth-child(even) {
-    /* Adaptado para verde (Fundo claro) */
     background-color: #F0FFF0;
 }
 
 tbody tr:hover {
-    /* Adaptado para verde (Fundo hover) */
     background-color: #ecfff6;
-    /* Adaptado para verde (Sombra hover) */
     box-shadow: 0 4px 12px rgba(40, 167, 69, 0.1);
     transform: scale(1.01);
 }
@@ -438,15 +398,11 @@ td {
     font-size: 14px;
 }
 
-/* Centraliza o cabeçalho das colunas de status e ações */
 .status-header,
 .actions-header {
     text-align: center !important;
 }
 
-/* ============================================
- * STATUS BADGE
- * ============================================ */
 
 .status-cell {
     text-align: center;
@@ -456,7 +412,6 @@ td {
     display: inline-block;
     padding: 6px 12px;
     border-radius: 9999px;
-    /* Arredondamento completo */
     font-weight: 600;
     font-size: 12px;
     text-transform: capitalize;
@@ -466,24 +421,17 @@ td {
 }
 
 .status-ativo {
-    /* COR: VERDE para Ativo/Internado */
     background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
-    /* Adicionado gradiente */
     color: #065F46;
     border: 1px solid #6EE7B7;
 }
 
 .status-alta {
-    /* COR: VERMELHO para Alta (Usando a cor de erro padrão) */
     background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
-    /* Adicionado gradiente */
     color: var(--error-color);
     border: 1px solid #FCA5A5;
 }
 
-/* ============================================
- * AÇÕES (TOOLTIP CORRIGIDO)
- * ============================================ */
 
 .actions {
     display: flex;
@@ -507,10 +455,8 @@ td {
     background: transparent;
     cursor: pointer;
     border: none;
-    /* Adicionado */
     text-decoration: none;
     color: #0a400c;
-    /* Adicionado */
 }
 
 .btn-view {
@@ -525,24 +471,19 @@ td {
 
 .btn-add-consulta {
     color: var(--primary-green);
-    /* Adaptado para verde */
 }
 
 .btn-add-consulta:hover {
-    /* Adaptado para verde */
     background: linear-gradient(135deg, #F0FFF0 0%, #D1FAE5 100%);
     transform: scale(1.15) rotate(90deg);
-    /* Efeito de rotação do original */
 }
 
-/* Aplica o pulsePlus no ícone se estiver presente */
 .btn-add-consulta i {
     animation: pulsePlus 2s ease-in-out infinite;
 }
 
 .btn-edit {
     color: #0d6efd;
-    /* Azul padrão */
 }
 
 .btn-edit:hover {
@@ -553,7 +494,6 @@ td {
 
 .btn-delete {
     color: var(--error-color);
-    /* Usando a cor de erro (vermelho) */
 }
 
 .btn-delete:hover {
@@ -569,15 +509,12 @@ td {
     padding: 0;
 }
 
-/* TOOLTIP - Restaurado o estilo e animação */
 .btn-action::after {
     content: attr(title);
     position: absolute;
     bottom: 100%;
-    /* Corrigido para cima */
     left: 50%;
     transform: translateX(-50%) translateY(-8px);
-    /* Corrigido para cima */
     background: #1f2937;
     color: white;
     padding: 6px 12px;
@@ -587,7 +524,6 @@ td {
     opacity: 0;
     pointer-events: none;
     transition: all 0.3s ease;
-    /* Transição completa */
     z-index: 10000;
     box-shadow: var(--shadow-lg);
 }
@@ -596,16 +532,13 @@ td {
     content: '';
     position: absolute;
     bottom: 100%;
-    /* Corrigido para cima */
     left: 50%;
     transform: translateX(-50%) translateY(-2px);
-    /* Corrigido para cima */
     border: 5px solid transparent;
     border-top-color: #1f2937;
     opacity: 0;
     pointer-events: none;
     transition: all 0.3s ease;
-    /* Transição completa */
     z-index: 10001;
 }
 
@@ -613,12 +546,7 @@ td {
 .btn-action:hover::before {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
-    /* Corrigido: move para a posição final */
 }
-
-/* ============================================
- * MENSAGEM VAZIA (Restaurado)
- * ============================================ */
 
 .no-enfermeiros {
     text-align: center;
@@ -629,25 +557,16 @@ td {
     font-size: 1rem;
 }
 
-
-/* ============================================
- * PAGINAÇÃO (Restaurado)
- * ============================================ */
-
 .pagination-container {
     display: flex;
     justify-content: center;
     margin-top: 20px;
 }
 
-/* ============================================
- * RESPONSIVIDADE (Restaurado e Unificado)
- * ============================================ */
 
 @media (max-width: 768px) {
     .main-dashboard {
         padding: 40px 20px;
-        /* Ajuste para melhor visualização em telas menores */
     }
 
     .enfermeiro-header {
@@ -672,13 +591,11 @@ td {
         display: block;
         overflow-x: auto;
         white-space: nowrap;
-        /* Impede que o conteúdo da tabela quebre */
     }
 
     .actions {
         gap: 5px;
         min-width: 120px;
-        /* Adiciona largura mínima para as ações */
     }
 
     .btn-action {
@@ -687,7 +604,6 @@ td {
         font-size: 14px;
     }
 
-    /* Desabilita tooltip em mobile */
     .btn-action::after,
     .btn-action::before {
         display: none;

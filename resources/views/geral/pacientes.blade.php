@@ -8,6 +8,9 @@ use Carbon\Carbon;
 <link rel="stylesheet" href="{{ asset('css/admin/pacientes.css') }}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+@php $admin = auth()->guard('admin')->user(); @endphp
+
+
 <main class="main-dashboard">
     <div class="patients-container">
         <div class="patients-header">

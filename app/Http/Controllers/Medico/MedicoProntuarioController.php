@@ -9,226 +9,242 @@ use App\Models\Prontuario;
 use App\Models\Consulta;
 use App\Models\Medico;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Unidade;
+use App\Models\Medicamento;
+use App\Models\Exame;
+use App\Models\AnotacaoEnfermagem;
+use Illuminate\Support\Facades\DB;
 
 class MedicoProntuarioController extends Controller
 {
-    /**
-     * Exibe a lista de pacientes com seus prontuários (tela principal)
-     * View: medico.prontuarioMedico
-     */
     public function index()
     {
-        $pacientes = Paciente::orderBy('nomePaciente', 'asc')->get();
-        
-        return view('medico.prontuarioMedico', compact('pacientes'));
+        $consultas_na_fila = Consulta::where('status_atendimento', 'AGUARDANDO_CONSULTA')
+            ->with('paciente')
+            ->orderByRaw("
+                CASE
+                    WHEN classificacao_risco = 'vermelho' THEN 1
+                    WHEN classificacao_risco = 'laranja' THEN 2
+                    WHEN classificacao_risco = 'amarelo' THEN 3
+                    WHEN classificacao_risco = 'verde' THEN 4
+                    WHEN classificacao_risco = 'azul' THEN 5
+                    ELSE 6
+                END
+            ")
+            ->orderBy('dataConsulta', 'asc')
+            ->get();
+
+        $pacientes_historico = Paciente::orderBy('nomePaciente', 'asc')->get();
+
+        return view('medico.prontuarioMedico', [
+            'consultas_na_fila' => $consultas_na_fila,
+            'pacientes' => $pacientes_historico
+        ]);
     }
 
-    /**
-     * Exibe o prontuário completo de um paciente (histórico de consultas)
-     * Rota: /medico/visualizar-prontuario/{id}
-     * View: medico.visualizarProntuario
-     */
     public function show($id)
     {
         $paciente = Paciente::findOrFail($id);
-        
-        // Busca o prontuário do paciente
         $prontuario = Prontuario::where('idPacienteFK', $paciente->idPaciente)->first();
-        
+
         if (!$prontuario) {
             return redirect()
                 ->route('medico.prontuario')
                 ->with('error', 'Este paciente ainda não possui prontuário.');
         }
-        
-        // Busca todas as consultas do prontuário ordenadas por data (mais recente primeiro)
+
         $consultas = Consulta::where('idProntuarioFK', $prontuario->idProntuarioPK)
+            ->whereNotNull('idMedicoFK')
             ->orderBy('dataConsulta', 'desc')
             ->get();
-        
-        return view('medico.visualizarProntuario', compact('paciente', 'prontuario', 'consultas'));
+
+        $anotacoesEnfermagem = AnotacaoEnfermagem::where('idPacienteFK', $paciente->idPaciente)
+            ->orderBy('data_hora', 'desc')
+            ->get();
+
+        return view('medico.visualizarProntuario', compact('paciente', 'prontuario', 'consultas', 'anotacoesEnfermagem'));
     }
 
-    /**
-     * Exibe o formulário para criar nova consulta
-     * Rota: /medico/cadastrar-prontuario/{id}
-     * View: medico.cadastrarProntuario
-     */
     public function create($id)
     {
         $paciente = Paciente::findOrFail($id);
-        
-        // Verifica se o paciente está ativo
+
         if (!$paciente->statusPaciente) {
-            return redirect()
-                ->route('medico.prontuario')
-                ->with('error', 'Não é possível criar consulta para paciente inativo.');
+            return redirect()->route('medico.prontuario')->with('error', 'Paciente inativo.');
         }
-        
-        // Busca os dados do médico logado
+
         $medico = Auth::user()->medico;
-        
-        // Verifica se o paciente tem prontuário, se não, cria um
-        $prontuario = Prontuario::firstOrCreate(
+        if (!$medico) {
+            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.');
+        }
+
+        Prontuario::firstOrCreate(
             ['idPacienteFK' => $paciente->idPaciente],
             ['dataAbertura' => now()->toDateString()]
         );
-        
-        return view('medico.cadastrarProntuario', compact('paciente', 'medico'));
+
+        return view('medico.cadastrarProntuario', [
+            'paciente' => $paciente,
+            'medico' => $medico,
+            'consulta' => null,
+            'anotacoesEnfermagem' => null
+        ]);
     }
 
-    /**
-     * Armazena uma nova consulta/prontuário
-     * Rota: POST /medico/cadastrar-prontuario/{id}
-     */
     public function store(Request $request, $id)
     {
         $validated = $request->validate([
             'dataConsulta' => 'required|date',
-            'unidade' => 'nullable|string|max:255',
             'observacoes' => 'nullable|string|max:2000',
-            'examesSolicitados' => 'nullable|string|max:2000',
             'medicamentosPrescritos' => 'nullable|string|max:2000',
-        ], [
-            'dataConsulta.required' => 'A data da consulta é obrigatória.',
-            'dataConsulta.date' => 'Data inválida.',
         ]);
 
         $paciente = Paciente::findOrFail($id);
-        
-        // Verifica se o paciente está ativo
-        if (!$paciente->statusPaciente) {
-            return redirect()
-                ->route('medico.prontuario')
-                ->with('error', 'Não é possível criar consulta para paciente inativo.');
+        $medico = Auth::user()->medico;
+
+        if (!$medico) {
+            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.');
         }
 
-        // Busca o médico logado
-        $medico = Auth::user()->medico;
-        
-        // Busca ou cria o prontuário do paciente
         $prontuario = Prontuario::firstOrCreate(
             ['idPacienteFK' => $paciente->idPaciente],
             ['dataAbertura' => now()->toDateString()]
         );
 
-        // Busca o ID da unidade com base no nome fornecido
-        $unidade = Unidade::where('nomeUnidade', $validated['unidade'])->first();
-        
-        // Cria a consulta
         $consulta = new Consulta();
         $consulta->idProntuarioFK = $prontuario->idProntuarioPK;
         $consulta->idMedicoFK = $medico->idMedicoPK;
-        
-        // Atribuimos os valores às colunas que agora existem na sua tabela
         $consulta->nomeMedico = $medico->nomeMedico;
         $consulta->crmMedico = $medico->crmMedico;
-        $consulta->idUnidadeFK = $unidade->idUnidadePK ?? null; 
         $consulta->dataConsulta = $validated['dataConsulta'];
-        $consulta->unidade = $validated['unidade'] ?? null;
         $consulta->observacoes = $validated['observacoes'] ?? null;
-        $consulta->examesSolicitados = $validated['examesSolicitados'] ?? null;
+
+        // ✅ EXAMES DOS CHECKBOXES
+        $examesCheckboxes = $request->input('exames_solicitados', []);
+        $consulta->examesSolicitados = implode("\n", $examesCheckboxes);
+
         $consulta->medicamentosPrescritos = $validated['medicamentosPrescritos'] ?? null;
+        $consulta->status_atendimento = 'FINALIZADO';
+        $consulta->idPacienteFK = $paciente->idPaciente;
 
-        $consulta->save();
+        DB::transaction(function () use ($consulta, $paciente, $validated, $prontuario) {
+            $consulta->save();
 
-        
+            // Medicamentos
+            if (!empty($validated['medicamentosPrescritos'])) {
+                $linhas = collect(preg_split('/\r?\n/', $validated['medicamentosPrescritos']))
+                    ->map(fn($l) => trim($l))
+                    ->filter()
+                    ->filter(fn($l) => preg_match('/[a-zA-ZÀ-ÿ]/', $l) && strlen($l) > 2 && strlen($l) < 255);
+
+                foreach ($linhas as $linha) {
+                    Medicamento::create([
+                        'idConsultaFK' => $consulta->idConsultaPK,
+                        'idProntuarioFK' => $prontuario->idProntuarioPK,
+                        'idPacienteFK' => $paciente->idPaciente,
+                        'descMedicamento' => $linha,
+                        'nomeMedicamento' => $linha,
+                    ]);
+                }
+            }
+        });
+
         return redirect()
-            ->route('medico.paciente.prontuario', $id)
+            ->route('medico.visualizarProntuario', $id)
             ->with('success', 'Consulta registrada com sucesso!');
     }
 
-    /**
-     * Exibe o formulário para editar uma consulta
-     * Rota: /medico/prontuario/editar/{id}
-     */
     public function edit($idConsulta)
     {
-        $consulta = Consulta::findOrFail($idConsulta);
+        $consulta = Consulta::with(['paciente', 'prontuario'])->findOrFail($idConsulta);
+        $paciente = $consulta->paciente;
         $prontuario = $consulta->prontuario;
-        $paciente = Paciente::where('idPaciente', $prontuario->idPacienteFK)->firstOrFail();
         $medico = Auth::user()->medico;
-        
-        // Verifica se o médico logado é o dono da consulta
-        if ($consulta->idMedicoFK !== $medico->idMedicoPK) {
-            return redirect()
-                ->route('medico.prontuario')
-                ->with('error', 'Você não tem permissão para editar esta consulta.');
+
+        if (!$medico) {
+            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.');
         }
-        
-        return view('medico.editarProntuario', compact('consulta', 'paciente', 'medico'));
+
+        $anotacoesEnfermagem = AnotacaoEnfermagem::where('idPacienteFK', $paciente->idPaciente)
+            ->orderBy('data_hora', 'desc')
+            ->get();
+
+        if (!$prontuario && $paciente) {
+            $prontuario = Prontuario::firstOrCreate(
+                ['idPacienteFK' => $paciente->idPaciente],
+                ['dataAbertura' => now()->toDateString()]
+            );
+            $consulta->idProntuarioFK = $prontuario->idProntuarioPK;
+            $consulta->save();
+        }
+
+        return view('medico.cadastrarProntuario', compact('consulta', 'paciente', 'medico', 'anotacoesEnfermagem'));
     }
 
-    /**
-     * Atualiza uma consulta existente
-     * Rota: PUT /medico/prontuario/atualizar/{id}
-     */
     public function update(Request $request, $idConsulta)
     {
         $consulta = Consulta::findOrFail($idConsulta);
         $medico = Auth::user()->medico;
-        
-        // Verifica se o médico logado é o dono da consulta
-        if ($consulta->idMedicoFK !== $medico->idMedicoPK) {
-            return redirect()
-                ->route('medico.prontuario')
-                ->with('error', 'Você não tem permissão para editar esta consulta.');
+
+        if (!$medico) {
+            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.');
         }
 
         $validated = $request->validate([
             'dataConsulta' => 'required|date',
-            'unidade' => 'nullable|string|max:255',
             'observacoes' => 'nullable|string|max:2000',
-            'examesSolicitados' => 'nullable|string|max:2000',
             'medicamentosPrescritos' => 'nullable|string|max:2000',
-        ], [
-            'dataConsulta.required' => 'A data da consulta é obrigatória.',
-            'dataConsulta.date' => 'Data inválida.',
         ]);
 
-        // Busca o ID da unidade com base no nome fornecido
-        $unidade = Unidade::where('nomeUnidade', $validated['unidade'])->first();
-        
+        $consulta->idMedicoFK = $medico->idMedicoPK;
+        $consulta->nomeMedico = $medico->nomeMedico;
+        $consulta->crmMedico = $medico->crmMedico;
+        $consulta->status_atendimento = 'FINALIZADO';
         $consulta->dataConsulta = $validated['dataConsulta'];
-        $consulta->idUnidadeFK = $unidade->idUnidadePK ?? null;
-        $consulta->unidade = $validated['unidade'] ?? null;
         $consulta->observacoes = $validated['observacoes'] ?? null;
-        $consulta->examesSolicitados = $validated['examesSolicitados'] ?? null;
+
+        // ✅ EXAMES DOS CHECKBOXES (CORRIGIDO)
+        $examesCheckboxes = $request->input('exames_solicitados', []);
+        $consulta->examesSolicitados = implode("\n", $examesCheckboxes);
+
         $consulta->medicamentosPrescritos = $validated['medicamentosPrescritos'] ?? null;
-        $consulta->save();
 
-        $prontuario = $consulta->prontuario;
-        $paciente = Paciente::where('idPaciente', $prontuario->idPacienteFK)->first();
-
-        return redirect()
-            ->route('medico.paciente.prontuario', $paciente->idPaciente)
-            ->with('success', 'Consulta atualizada com sucesso!');
-    }
-
-    /**
-     * Remove uma consulta (soft delete)
-     * Rota: DELETE /medico/prontuario/deletar/{id}
-     */
-    public function destroy($idConsulta)
-    {
-        $consulta = Consulta::findOrFail($idConsulta);
-        $medico = Auth::user()->medico;
-        
-        // Verifica se o médico logado é o dono da consulta
-        if ($consulta->idMedicoFK !== $medico->idMedicoPK) {
-            return redirect()
-                ->route('medico.prontuario')
-                ->with('error', 'Você não tem permissão para excluir esta consulta.');
+        if (!$consulta->idProntuarioFK && $consulta->paciente) {
+            $prontuario = Prontuario::firstOrCreate(
+                ['idPacienteFK' => $consulta->paciente->idPaciente],
+                ['dataAbertura' => now()->toDateString()]
+            );
+            $consulta->idProntuarioFK = $prontuario->idProntuarioPK;
         }
 
-        $prontuario = $consulta->prontuario;
-        $paciente = Paciente::where('idPaciente', $prontuario->idPacienteFK)->first();
-        
-        $consulta->delete();
+        DB::transaction(function () use ($consulta, $validated) {
+            $consulta->save();
+
+            // Medicamentos
+            if (!empty($validated['medicamentosPrescritos'])) {
+                $linhas = collect(preg_split('/\r?\n/', $validated['medicamentosPrescritos']))
+                    ->map(fn($l) => trim($l))
+                    ->filter()
+                    ->filter(fn($l) => preg_match('/[a-zA-ZÀ-ÿ]/', $l) && strlen($l) > 2 && strlen($l) < 255);
+
+                foreach ($linhas as $linha) {
+                    Medicamento::firstOrCreate([
+                        'idConsultaFK' => $consulta->idConsultaPK,
+                        'descMedicamento' => $linha,
+                    ], [
+                        'idPacienteFK' => $consulta->idPacienteFK,
+                        'idProntuarioFK' => $consulta->idProntuarioFK,
+                        'nomeMedicamento' => $linha,
+                    ]);
+                }
+            }
+        });
 
         return redirect()
-            ->route('medico.paciente.prontuario', $paciente->idPaciente)
-            ->with('success', 'Consulta excluída com sucesso!');
+            ->route('medico.prontuario')
+            ->with('success', 'Atendimento finalizado com sucesso!');
     }
-}
+
+//     public function destroy($idConsulta) {}
+// }
+}   
+    

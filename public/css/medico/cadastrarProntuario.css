@@ -1,10 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
-/* ============================================
-   CADASTRO DE PRONTUÁRIO - CSS ATUALIZADO
-   TEMA: VERMELHO MÉDICO
-   ============================================ */
-
 :root {
     --primary-red: #DC2626;
     --primary-red-dark: #991B1B;
@@ -43,6 +38,90 @@ body {
     min-height: 100vh;
 }
 
+.anotacoes-enfermagem-container {
+    margin: 32px 36px;
+    padding: 28px;
+    background-color: #f0f9ff; /* Azul bem claro */
+    border: 1px solid #cce5ff;
+    border-left: 5px solid #0d6efd; /* Destaque azul */
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+.anotacoes-enfermagem-container h3 {
+    color: #0a58ca; /* Azul escuro */
+    font-size: 1.15rem;
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+}
+ .anotacoes-enfermagem-container h3 i {
+    font-size: 1.3rem;
+}
+.anotacao-item {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed var(--border-color);
+}
+ .anotacao-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+.anotacao-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+ .anotacao-header strong {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+.anotacao-body p {
+    margin: 5px 0;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+ .anotacao-body strong {
+    font-weight: 600;
+}
+.sinais-vitais-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px 20px;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+ .sinal-vital-item {
+    background-color: #e6f7ff;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid #b3e0ff;
+ }
+
+ .sinal-vital-item strong { color: #0056b3; }
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: 20px;
+    text-transform: uppercase;
+    color: white;
+    min-width: 100px;
+    text-align: center;
+}
+.status-vermelho { background-color: #dc3545; }
+.status-laranja { background-color: #fd7e14; }
+.status-amarelo { background-color: #ffc107; color: #000; }
+.status-verde { background-color: #198754; }
+.status-azul { background-color: #0d6efd; }
+
 .cadastrar-container {
     max-width: 950px;
     margin: 0 auto;
@@ -63,10 +142,6 @@ body {
         transform: translateY(0);
     }
 }
-
-/* ============================================
-   HEADER DO FORMULÁRIO
-   ============================================ */
 
 .cadastrar-header {
     background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
@@ -117,10 +192,6 @@ body {
     letter-spacing: -0.5px;
     z-index: 1;
 }
-
-/* ============================================
-   CARD DE INFORMAÇÕES DO PACIENTE E MÉDICO
-   ============================================ */
 
 .paciente-info {
     margin: 32px 36px;
@@ -185,10 +256,6 @@ body {
     font-weight: 500;
 }
 
-/* ============================================
-   FORMULÁRIO
-   ============================================ */
-
 form {
     padding: 0 36px 36px 36px;
 }
@@ -214,10 +281,6 @@ form {
     background: linear-gradient(180deg, var(--primary-red) 0%, var(--accent-pink) 100%);
     border-radius: 3px;
 }
-
-/* ============================================
-   GRUPOS DE INPUT
-   ============================================ */
 
 .input-group {
     margin-bottom: 26px;
@@ -246,7 +309,6 @@ form {
     font-size: 1.1rem;
 }
 
-/* Inputs de Texto e Data */
 .input-group input.input-date,
 .input-group input.input-text {
     width: 100%;
@@ -283,7 +345,6 @@ form {
     transform: translateY(-2px);
 }
 
-/* Textareas */
 .input-group textarea {
     width: 100%;
     padding: 14px 16px;
@@ -317,14 +378,12 @@ form {
     transform: translateY(-2px);
 }
 
-/* Efeito de preenchimento */
 .input-group input:not(:placeholder-shown):valid,
 .input-group textarea:not(:placeholder-shown):valid {
     background: white;
     border-color: var(--success-green);
 }
 
-/* Mensagem de erro */
 .input-group .error {
     display: block;
     color: var(--error-red);
@@ -340,9 +399,6 @@ form {
     75% { transform: translateX(8px); }
 }
 
-/* ============================================
-   BOTÕES DE AÇÃO
-   ============================================ */
 
 .button-group {
     display: flex;
@@ -355,7 +411,8 @@ form {
 }
 
 .btn-cancelar,
-.save-button {
+.save-button,
+.btn-pdf-download { /* Adicionado aqui */
     padding: 14px 32px;
     font-size: 1rem;
     font-weight: 700;
@@ -412,15 +469,164 @@ form {
 }
 
 .save-button:active,
-.btn-cancelar:active {
+.btn-cancelar:active,
+.btn-pdf-download:active {
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
 }
 
-/* ============================================
-   RESPONSIVIDADE
-   ============================================ */
+/* NOVO ESTILO PARA O BOTÃO PDF */
+.btn-pdf-download {
+    color: white;
+    /* Usando uma cor diferente do "Finalizar" para evitar confusão */
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%); 
+    box-shadow: var(--shadow-md);
+    margin-right: 0px; 
+}
 
+.btn-pdf-download:hover {
+    background: linear-gradient(135deg, #0a58ca 0%, #0d6efd 100%); 
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px -5px rgba(13, 110, 253, 0.4);
+}
+
+/* =============== CHECKBOXES MINIMALISTAS - MEDICAMENTOS =============== */
+.input-filtro {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    background: var(--bg-gray-50);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    box-sizing: border-box;
+    margin-top: 8px;
+}
+
+.input-filtro:hover {
+    border-color: var(--primary-red-light);
+    background: white;
+}
+
+.input-filtro:focus {
+    border-color: var(--border-focus);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+}
+
+.input-filtro::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+
+.checkbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+    max-height: 250px;
+    overflow-y: auto;
+    padding: 12px;
+    background: var(--bg-gray-50);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.checkbox-list:focus-within {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+}
+
+.checkbox-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.checkbox-list::-webkit-scrollbar-track {
+    background: var(--bg-gray-100);
+    border-radius: 4px;
+}
+
+.checkbox-list::-webkit-scrollbar-thumb {
+    background: var(--primary-red);
+    border-radius: 4px;
+}
+
+.checkbox-list::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-red-dark);
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.2s ease;
+    user-select: none;
+}
+
+.checkbox-item:hover {
+    background-color: white;
+}
+
+.checkbox-item input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    background: white;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.checkbox-item input[type="checkbox"]:hover {
+    border-color: var(--primary-red);
+}
+
+.checkbox-item input[type="checkbox"]:checked {
+    background: var(--primary-red);
+    border-color: var(--primary-red);
+}
+
+.checkbox-item input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Foco acessível */
+.checkbox-item input[type="checkbox"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.3);
+}
+
+/* Item selecionado com destaque sutil */
+.checkbox-item:has(input:checked) {
+    background: #fef2f2;
+    font-weight: 600;
+    color: var(--primary-red-dark);
+}
 @media (max-width: 768px) {
     .main-dashboard {
         padding: 20px;
@@ -474,9 +680,15 @@ form {
         flex-direction: column-reverse;
         gap: 12px;
     }
+    
+    /* Ordem dos botões no mobile: Cancelar, PDF, Finalizar */
+    .button-group .btn-cancelar { order: 3; }
+    .button-group .btn-pdf-download { order: 2; margin-right: 0; }
+    .button-group .save-button { order: 1; }
 
     .btn-cancelar,
-    .save-button {
+    .save-button,
+    .btn-pdf-download {
         width: 100%;
         justify-content: center;
     }
@@ -510,15 +722,12 @@ form {
     }
 
     .save-button,
-    .btn-cancelar {
+    .btn-cancelar,
+    .btn-pdf-download {
         padding: 14px 24px;
         font-size: 0.95rem;
     }
 }
-
-/* ============================================
-   MICRO INTERAÇÕES
-   ============================================ */
 
 textarea:focus,
 input:focus {
@@ -540,4 +749,440 @@ input:focus {
 .save-button:disabled:hover {
     transform: none;
     box-shadow: var(--shadow-md);
+}
+
+
+/* =============== SEÇÃO PDF (Box do topo) =============== */
+.pdf-section {
+    margin: 32px 36px;
+    animation: fadeIn 0.6s ease-out 0.25s backwards;
+}
+
+.pdf-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px;
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border: 2px solid #fecaca;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+
+.pdf-container:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-red);
+}
+
+.pdf-icon {
+    font-size: 3rem;
+    color: var(--primary-red);
+    animation: pdfPulse 2s ease-in-out infinite;
+}
+
+@keyframes pdfPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.pdf-info {
+    flex: 1;
+}
+
+.pdf-info h4 {
+    color: var(--primary-red-dark);
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+}
+
+.pdf-info p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin: 0;
+    font-weight: 500;
+}
+
+.btn-pdf-generate {
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+    color: white;
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+.btn-pdf-generate:hover {
+    background: linear-gradient(135deg, var(--primary-red-dark) 0%, var(--primary-red) 100%);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-pdf-generate i {
+    font-size: 1.1rem;
+}
+
+/* Responsividade para a seção PDF do topo */
+@media (max-width: 768px) {
+    .pdf-section {
+        margin: 24px 20px;
+    }
+    
+    .pdf-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+        padding: 20px;
+    }
+    
+    .pdf-icon {
+        font-size: 2.5rem;
+    }
+    
+    .btn-pdf-generate {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .pdf-container {
+        padding: 16px;
+    }
+    
+    .pdf-info h4 {
+        font-size: 1.1rem;
+    }
+    
+    .pdf-info p {
+        font-size: 0.9rem;
+    }
+}
+
+/* =============== MODAL CUSTOMIZADO DE PDF (Estilo Confirmação) =============== */
+
+/* Overlay do Modal - INICIALMENTE OCULTO */
+.modal-overlay-pdf {
+    display: none; /* IMPORTANTE: Começa oculto */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    animation: fadeInOverlay 0.3s ease-out;
+}
+
+/* Quando o modal está ativo */
+.modal-overlay-pdf.active {
+    display: flex !important; /* Força exibição quando ativo */
+}
+
+@keyframes fadeInOverlay {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Conteúdo do Modal */
+.modal-content-pdf {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 0;
+    width: 90%;
+    max-width: 650px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+    animation: slideUpModal 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+@keyframes slideUpModal {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Header do Modal */
+.modal-header-pdf {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    padding: 28px 32px;
+    text-align: center;
+    position: relative;
+}
+
+.modal-header-pdf i {
+    font-size: 3.5rem;
+    color: white;
+    margin-bottom: 12px;
+    display: block;
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.modal-header-pdf h2 {
+    color: white;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header-pdf p {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 1rem;
+    margin: 8px 0 0 0;
+    font-weight: 500;
+}
+
+/* Body do Modal */
+.modal-body-pdf {
+    padding: 32px;
+    background: var(--bg-gray-50);
+}
+
+/* Opções de PDF */
+.pdf-modal-option {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    margin-bottom: 16px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.pdf-modal-option:last-child {
+    margin-bottom: 0;
+}
+
+.pdf-modal-option:hover:not(.disabled) {
+    background: #f0f9ff;
+    border-color: #0d6efd;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px -4px rgba(13, 110, 253, 0.3);
+}
+
+.pdf-modal-option.disabled {
+    opacity: 0.6;
+    background: var(--bg-gray-100);
+    cursor: not-allowed;
+    border-color: var(--text-muted);
+}
+
+.pdf-modal-option.disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* Ícone da opção */
+.pdf-modal-option .option-icon {
+    font-size: 2.8rem;
+    color: #0d6efd;
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #e7f3ff 0%, #f0f9ff 100%);
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+}
+
+.pdf-modal-option:hover:not(.disabled) .option-icon {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    color: white;
+    transform: rotate(5deg) scale(1.1);
+}
+
+.pdf-modal-option.disabled .option-icon {
+    color: var(--text-muted);
+    background: var(--bg-gray-100);
+}
+
+/* Info da opção */
+.pdf-modal-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.pdf-modal-info h3 {
+    margin: 0 0 4px 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.pdf-modal-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.pdf-modal-option.disabled .pdf-modal-info h3 {
+    color: var(--text-muted);
+}
+
+.pdf-modal-option.disabled .pdf-modal-info p {
+    color: var(--text-muted);
+}
+
+/* Status badge */
+.pdf-status-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pdf-status-badge.disponivel {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.pdf-status-badge.indisponivel {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Footer do Modal */
+.modal-footer-pdf {
+    padding: 20px 32px;
+    background: white;
+    border-top: 2px solid var(--bg-gray-100);
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.modal-footer-pdf .btn-fechar {
+    padding: 12px 32px;
+    font-size: 1rem;
+    font-weight: 700;
+    background: var(--bg-gray-100);
+    color: var(--text-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-footer-pdf .btn-fechar:hover {
+    background: white;
+    border-color: var(--text-secondary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Responsividade do Modal */
+@media (max-width: 768px) {
+    .modal-content-pdf {
+        width: 95%;
+        margin: 20px;
+    }
+
+    .modal-header-pdf {
+        padding: 24px 20px;
+    }
+
+    .modal-header-pdf i {
+        font-size: 3rem;
+    }
+
+    .modal-header-pdf h2 {
+        font-size: 1.4rem;
+    }
+
+    .modal-body-pdf {
+        padding: 24px 20px;
+    }
+
+    .pdf-modal-option {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px 16px;
+    }
+
+    .pdf-modal-option .option-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 3rem;
+    }
+
+    .modal-footer-pdf {
+        padding: 16px 20px;
+    }
+
+    .modal-footer-pdf .btn-fechar {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-header-pdf i {
+        font-size: 2.5rem;
+    }
+
+    .modal-header-pdf h2 {
+        font-size: 1.25rem;
+    }
+
+    .modal-header-pdf p {
+        font-size: 0.9rem;
+    }
+
+    .pdf-modal-option {
+        padding: 16px;
+    }
+
+    .pdf-modal-info h3 {
+        font-size: 1.05rem;
+    }
+
+    .pdf-modal-info p {
+        font-size: 0.85rem;
+    }
 }

@@ -9,19 +9,18 @@ use Illuminate\Support\Facades\DB;
 class UnidadeSeeder extends Seeder
 {
     /**
-     * Popula a tabela tbUnidade com unidades de exemplo, garantindo distribuição regional.
+     * Popula a tabela tbUnidade com unidades de exemplo, cobrindo todas as regiões do Brasil.
      */
     public function run(): void
     {
-        // Desativa a verificação de chaves estrangeiras para limpar a tabela
+        // Desativa verificação de chaves estrangeiras para limpar a tabela
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        // Limpa a tabela antes de a popular para evitar duplicados
         Unidade::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        // Lista de unidades de saúde de exemplo, cobrindo todas as regiões
+        // Lista de unidades de saúde (por região)
         $unidades = [
-            // EXEMPLOS DA REGIÃO SUDESTE (SP, RJ, MG, ES)
+            // SUDESTE
             [
                 'nomeUnidade' => 'Hospital Municipal Central',
                 'tipoUnidade' => 'Hospital Geral',
@@ -71,7 +70,7 @@ class UnidadeSeeder extends Seeder
                 'paisUnidade' => 'Brasil',
             ],
 
-            // EXEMPLOS DA REGIÃO NORDESTE (BA, PE, CE, etc.)
+            // NORDESTE
             [
                 'nomeUnidade' => 'UBS Centro de Saúde Ceará',
                 'tipoUnidade' => 'Unidade Básica de Saúde',
@@ -84,8 +83,8 @@ class UnidadeSeeder extends Seeder
                 'cepUnidade' => '60165-080',
                 'paisUnidade' => 'Brasil',
             ],
-            
-            // EXEMPLOS DA REGIÃO SUL (PR, SC, RS)
+
+            // SUL
             [
                 'nomeUnidade' => 'Unidade de Pronto Atendimento Sul',
                 'tipoUnidade' => 'UPA',
@@ -99,7 +98,7 @@ class UnidadeSeeder extends Seeder
                 'paisUnidade' => 'Brasil',
             ],
 
-            // EXEMPLOS DA REGIÃO CENTRO-OESTE (DF, GO, MT, MS)
+            // CENTRO-OESTE
             [
                 'nomeUnidade' => 'UBS Planalto Central',
                 'tipoUnidade' => 'Unidade Básica de Saúde',
@@ -112,8 +111,8 @@ class UnidadeSeeder extends Seeder
                 'cepUnidade' => '70070-700',
                 'paisUnidade' => 'Brasil',
             ],
-            
-            // EXEMPLOS DA REGIÃO NORTE (AM, PA, TO, etc.)
+
+            // NORTE
             [
                 'nomeUnidade' => 'Hospital do Rio Amazonas',
                 'tipoUnidade' => 'Hospital',
@@ -128,16 +127,30 @@ class UnidadeSeeder extends Seeder
             ],
         ];
 
-        // Insere os dados na tabela
-        foreach ($unidades as $unidade) {
-            // Certifica-se de que os campos opcionais têm um valor padrão se não estiverem na lista de teste.
+        // Popula o banco com CNPJ, email e senha
+        foreach ($unidades as $index => $unidade) {
+            $nomeSlug = strtolower(str_replace(' ', '', $unidade['nomeUnidade']));
+            $email = "{$nomeSlug}@exemplo.com.br";
+
+            // Gera um CNPJ fictício válido (mas aleatório)
+            $cnpj = sprintf(
+                '%02d.%03d.%03d/%04d-%02d',
+                rand(10, 99),
+                rand(100, 999),
+                rand(100, 999),
+                rand(1000, 9999),
+                rand(10, 99)
+            );
+
             Unidade::create(array_merge([
-                'telefoneUnidade' => null,
-                'estadoUnidade' => null,
-                'paisUnidade' => 'Brasil',
+                'telefoneUnidade' => '(11) 0000-0000',
+                'statusAtivoUnidade' => true,
+                'cnpjUnidade' => $cnpj,
+                'emailUnidade' => $email,
+                'senhaUnidade' => '12345678',
             ], $unidade));
         }
 
-        $this->command->info('Tabela de Unidades populada com sucesso, cobrindo todas as 5 regiões!');
+        $this->command->info('Tabela tbUnidade populada com sucesso com senhas fixas.');
     }
 }

@@ -1,25 +1,18 @@
-/* ============================================
-    GERENCIAMENTO DE ENFERMEIROS - CSS PROFISSIONAL
-    ============================================ */
-
-    :root {
-        /* Cores */
+ :root {
         --primary-blue: #0618b9;
         --primary-blue-dark: #04108a;
         --primary-blue-light: #0820e0;
         --bg-white: #FFFFFF;
         --bg-gray-50: #F9FAFB;
         --bg-gray-100: #F3F4F6;
-        --bg-table-even: #F7F7FF; /* Fundo mais claro para linhas pares */
-        --bg-table-odd: #F0F0F5;  /* Fundo sutil para linhas ímpares */
+        --bg-table-even: #F7F7FF; 
+        --bg-table-odd: #F0F0F5;  
         --text-primary: #111827;
         --text-secondary: #6B7280;
         --text-muted: #9CA3AF;
         --border-color: #E5E7EB;
         --success-green: #10B981;
         --error-red: #DC2626;
-    
-        /* Sombras e Bordas */
         --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
         --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
@@ -29,7 +22,6 @@
         --radius-lg: 16px;
     }
     
-    /* Base e Layout */
     * {
         margin: 0;
         padding: 0;
@@ -59,9 +51,6 @@
         to { opacity: 1; transform: translateY(0); }
     }
     
-    /* --------------------------------------------
-        HEADER
-        -------------------------------------------- */
     
     .enfermeiro-header {
         display: flex;
@@ -114,9 +103,6 @@
         box-shadow: 0 8px 15px -4px rgba(6, 24, 185, 0.5);
     }
     
-    /* --------------------------------------------
-        BARRA DE PESQUISA E FILTROS
-        -------------------------------------------- */
     
     .search-filters {
         display: flex;
@@ -168,7 +154,7 @@
         box-shadow: 0 0 0 3px rgba(6, 24, 185, 0.1);
     }
     
-    /* Custom Select (Filtro) */
+ 
     .custom-select {
         position: relative;
         width: 180px;
@@ -233,9 +219,6 @@
         color: var(--primary-blue);
     }
     
-    /* --------------------------------------------
-        TABELA
-        -------------------------------------------- */
     
     .box-table {
         background: white;
@@ -251,7 +234,7 @@
     .box-table table {
         width: 100%;
         border-collapse: collapse;
-        min-width: 900px; /* Garante que a tabela não quebre em telas menores */
+        min-width: 900px; 
     }
     
     .box-table thead {
@@ -324,10 +307,7 @@
         background: #FEE2E2;
         color: var(--error-red);
     }
-    
-    /* ============================================
-        AÇÕES - ÍCONES LADO A LADO (CORRIGIDO)
-        ============================================ */
+
     
     .action-buttons {
         display: flex !important;
@@ -377,8 +357,7 @@
         background: rgba(220, 38, 38, 0.2);
         border-color: var(--error-red);
     }
-    
-    /* Ícone de Status Toggle */
+
     .btn-action i.text-danger {
         color: var(--error-red) !important;
     }
@@ -395,19 +374,12 @@
         color: var(--success-green) !important; 
     }
     
-    /* --------------------------------------------
-        PAGINAÇÃO
-        -------------------------------------------- */
     .pagination-container {
         display: flex;
         justify-content: center;
         margin-top: 32px;
     }
     
-    
-    /* --------------------------------------------
-        MODAIS
-        -------------------------------------------- */
     
     .modal-overlay {
         position: fixed;
@@ -442,7 +414,6 @@
     .modal-header { margin-bottom: 20px; }
     .modal-header h2 { font-size: 1.5rem; color: var(--text-primary); font-weight: 700; margin-top: 10px; }
     
-    /* Estilo dos Ícones nos Modais */
     #deleteEnfermeiroModal .modal-header i { font-size: 3rem; color: var(--error-red); }
     #statusEnfermeiroModal .modal-header i { font-size: 3rem; color: var(--primary-blue); }
     #statusSuccessModal .modal-header i { font-size: 3rem; color: var(--success-green); }
@@ -465,22 +436,17 @@
     
     .btn-cancelar { background: var(--bg-gray-100); color: var(--text-secondary); }
     .btn-cancelar:hover { background: #EBEBEB; }
-    
-    /* Botão de Excluir */
+
     .btn-excluir { background: var(--error-red); color: var(--bg-white); }
     .btn-excluir:hover { background: #C22020; transform: translateY(-1px); }
     
-    /* Botão de Confirmação para Status/Sucesso (Azul Primário) */
     #statusEnfermeiroModal .btn-excluir,
     #statusSuccessModal .btn-excluir { background: var(--primary-blue); }
     
     #statusEnfermeiroModal .btn-excluir:hover,
     #statusSuccessModal .btn-excluir:hover { background: var(--primary-blue-dark); }
     
-    
-    /* --------------------------------------------
-        MEDIA QUERIES (Responsividade)
-        -------------------------------------------- */
+
     @media (max-width: 768px) {
         .main-dashboard { padding: 20px; }
         .enfermeiro-header { flex-direction: column; align-items: flex-start; gap: 15px; }

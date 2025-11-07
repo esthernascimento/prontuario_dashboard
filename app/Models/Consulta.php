@@ -25,10 +25,18 @@ class Consulta extends Model
         'observacoes',
         'examesSolicitados',
         'medicamentosPrescritos',
+        
+        // --- ADICIONADO: Campos do novo fluxo ---
+        'idPacienteFK', 
+        'idRecepcionistaFK',
+        'queixa_principal',
+        'classificacao_risco',
+        'status_atendimento',
+        // --- FIM DA ADIÇÃO ---
     ];
 
     protected $casts = [
-        'dataConsulta' => 'date',
+        'dataConsulta' => 'datetime', // Use datetime se incluir hora, ou date se for só data
     ];
 
     /**
@@ -36,22 +44,20 @@ class Consulta extends Model
      */
     public function prontuario()
     {
+        // Chave estrangeira 'idProntuarioFK' na tbConsulta
+        // Chave primária 'idProntuarioPK' na tbProntuario
         return $this->belongsTo(Prontuario::class, 'idProntuarioFK', 'idProntuarioPK');
     }
 
     /**
-     * Relacionamento com Paciente (através do Prontuário)
+     * Relacionamento com Paciente (Ligação Direta)
+     * --- FUNÇÃO CORRIGIDA ---
      */
     public function paciente()
     {
-        return $this->hasOneThrough(
-            Paciente::class,
-            Prontuario::class,
-            'idProntuarioPK',      // FK na tabela prontuario
-            'idPaciente',           // FK na tabela paciente
-            'idProntuarioFK',       // Local key na tabela consulta
-            'idPacienteFK'          // Local key na tabela prontuario
-        );
+        // Chave estrangeira 'idPacienteFK' na tbConsulta
+        // Chave primária 'idPaciente' na tbPaciente (Confirmar se é 'idPaciente' ou 'idPacientePK')
+        return $this->belongsTo(Paciente::class, 'idPacienteFK', 'idPaciente'); 
     }
 
     /**
@@ -59,6 +65,8 @@ class Consulta extends Model
      */
     public function medico()
     {
+         // Chave estrangeira 'idMedicoFK' na tbConsulta
+         // Chave primária 'idMedicoPK' na tbMedico
         return $this->belongsTo(Medico::class, 'idMedicoFK', 'idMedicoPK');
     }
 
@@ -67,6 +75,8 @@ class Consulta extends Model
      */
     public function enfermeiro()
     {
+         // Chave estrangeira 'idEnfermeiroFK' na tbConsulta
+         // Chave primária 'idEnfermeiroPK' na tbEnfermeiro
         return $this->belongsTo(Enfermeiro::class, 'idEnfermeiroFK', 'idEnfermeiroPK');
     }
 
@@ -75,6 +85,19 @@ class Consulta extends Model
      */
     public function unidade()
     {
+         // Chave estrangeira 'idUnidadeFK' na tbConsulta
+         // Chave primária 'idUnidadePK' na tbUnidade
         return $this->belongsTo(Unidade::class, 'idUnidadeFK', 'idUnidadePK');
+    }
+
+    /**
+     * Relacionamento com Recepcionista
+     * --- ADICIONADO ---
+     */
+    public function recepcionista()
+    {
+         // Chave estrangeira 'idRecepcionistaFK' na tbConsulta
+         // Chave primária 'idRecepcionistaPK' na tbRecepcionista
+        return $this->belongsTo(Recepcionista::class, 'idRecepcionistaFK', 'idRecepcionistaPK');
     }
 }

@@ -40,8 +40,9 @@ class LoginController extends Controller
             ], 401);
         }
 
-        // Autenticar o usuário dono do médico
-        Auth::login($medico->usuario);
+        // 🔥 CORREÇÃO APLICADA AQUI:
+        // Autenticar o usuário usando o guard 'medico' para que o middleware funcione corretamente.
+        Auth::guard('medico')->login($medico->usuario);
 
         // Verificar perfil completo (ex: especialidade preenchida)
         if (empty($medico->especialidadeMedico)) {
@@ -83,7 +84,7 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('medico')->logout(); // 🔥 BOA PRÁTICA: Especificar o guard no logout também.
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

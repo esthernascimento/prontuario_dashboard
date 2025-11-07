@@ -20,6 +20,7 @@ class Enfermeiro extends Model
         'corenEnfermeiro',
         'especialidadeEnfermeiro',
         'genero',
+        'foto', // 🔥 ADICIONAR: Campo foto no fillable
     ];
 
     public function usuario()

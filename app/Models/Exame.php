@@ -15,7 +15,9 @@ class Exame extends Model
     // Ajuste dos campos fillable para refletir a estrutura da sua tabela
     protected $fillable = [
         'idConsultaFK', 
-        'idPacienteFK', // Adicione se for um campo que pode ser preenchido
+        'idPacienteFK',
+        'nomeExame',
+        'tipoExame',
         'descExame',
         'resultadoExame',
         'dataExame',

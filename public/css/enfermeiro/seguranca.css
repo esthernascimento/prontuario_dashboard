@@ -1,8 +1,4 @@
-/* ============================================
-   SEGURANÇA - CSS PROFISSIONAL (TEMA VERDE)
-   ============================================ */
-
-   :root {
+:root {
     --primary-green: #0a400c;
     --primary-green-dark: #062806;
     --primary-green-light: #0d5810;
@@ -38,9 +34,6 @@ body {
     min-height: 100vh;
 }
 
-/* ============================================
-   CONTAINER PRINCIPAL DA PÁGINA DE SEGURANÇA
-   ============================================ */
 .security-container {
     background: var(--bg-white);
     max-width: 580px;
@@ -63,9 +56,6 @@ body {
     }
 }
 
-/* ============================================
-   CABEÇALHO (h1 e p diretos)
-   ============================================ */
 .security-container > h1 {
     background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
     padding: 32px 36px;
@@ -121,9 +111,6 @@ body {
     line-height: 1.6;
 }
 
-/* ============================================
-   SEÇÃO DE ALTERAR SENHA
-   ============================================ */
 .security-section {
     background: var(--bg-white);
     padding: 32px 36px;
@@ -153,9 +140,6 @@ body {
     border-radius: 3px;
 }
 
-/* ============================================
-   FORMULÁRIO DE SEGURANÇA
-   ============================================ */
 .security-form {
     max-width: 100%;
     margin: 0 auto;
@@ -165,6 +149,7 @@ body {
     margin-bottom: 18px;
     animation: fadeIn 0.6s ease-out backwards;
     text-align: left;
+    position: relative;
 }
 
 @keyframes fadeIn {
@@ -187,9 +172,15 @@ body {
     transition: color 0.3s ease;
 }
 
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
 .form-group input {
     width: 100%;
-    padding: 11px 16px;
+    padding: 11px 45px 11px 16px; /* Espaço à direita para o ícone */
     border-radius: var(--radius-md);
     border: 2px solid var(--border-color);
     background: var(--bg-gray-50);
@@ -223,6 +214,29 @@ body {
     border-color: var(--success-green);
 }
 
+.toggle-password {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    z-index: 10;
+    padding: 5px;
+    user-select: none;
+}
+
+.toggle-password:hover {
+    color: var(--primary-green);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.toggle-password:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
 .form-hint {
     color: var(--text-muted);
     font-size: 0.85rem;
@@ -237,9 +251,6 @@ body {
     display: block;
 }
 
-/* ============================================
-   BOTÃO PRIMÁRIO (ALTERAR SENHA)
-   ============================================ */
 .btn-primary {
     display: block;
     background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
@@ -282,9 +293,6 @@ body {
     transform: translateY(-1px);
 }
 
-/* ============================================
-   MENSAGENS DE ALERTA (SUCESSO/ERRO)
-   ============================================ */
 .alert {
     padding: 15px 20px;
     margin: 25px 36px;
@@ -313,17 +321,14 @@ body {
     list-style-type: disc;
 }
 
-/* ============================================
-   MODAIS
-   ============================================ */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(6px);
     display: none;
     align-items: center;
     justify-content: center;
@@ -343,10 +348,10 @@ body {
 .modal-box {
     background: white;
     border-radius: var(--radius-lg);
-    padding: 40px;
+    padding: 45px 40px;
     max-width: 480px;
     width: 90%;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
     text-align: center;
     animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
@@ -356,7 +361,7 @@ body {
 @keyframes scaleIn {
     from {
         opacity: 0;
-        transform: scale(0.8) translateY(20px);
+        transform: scale(0.85) translateY(30px);
     }
     to {
         opacity: 1;
@@ -370,37 +375,37 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    height: 6px;
+    height: 5px;
     background: linear-gradient(90deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
 }
 
 .modal-icon {
-    font-size: 4rem;
+    font-size: 4.5rem;
     margin-bottom: 20px;
     display: inline-block;
     animation: iconPulse 2s ease-in-out infinite;
 }
 
 .icon-warning {
-    color: #f59e0b;
-    filter: drop-shadow(0 4px 12px rgba(245, 158, 11, 0.3));
+    color: #F59E0B;
+    filter: drop-shadow(0 4px 16px rgba(245, 158, 11, 0.4));
 }
 
 .icon-success {
-    color: var(--primary-green);
-    filter: drop-shadow(0 4px 12px rgba(10, 64, 12, 0.3));
+    color: var(--success-green);
+    filter: drop-shadow(0 4px 16px rgba(16, 185, 129, 0.4));
 }
 
 @keyframes iconPulse {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+    50% { transform: scale(1.08); }
 }
 
 .modal-box h2 {
-    font-size: 1.75rem;
+    font-size: 1.85rem;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     letter-spacing: -0.5px;
 }
 
@@ -411,9 +416,6 @@ body {
     line-height: 1.6;
 }
 
-/* ============================================
-   BOTÕES DO MODAL
-   ============================================ */
 .modal-buttons {
     display: flex;
     gap: 12px;
@@ -421,7 +423,7 @@ body {
 }
 
 .modal-btn {
-    padding: 12px 28px;
+    padding: 13px 32px;
     border-radius: var(--radius-md);
     font-size: 1rem;
     font-weight: 600;
@@ -431,6 +433,7 @@ body {
     position: relative;
     overflow: hidden;
     flex: 1;
+    font-family: inherit;
 }
 
 .modal-btn-cancel {
@@ -476,9 +479,6 @@ body {
     transform: translateY(0);
 }
 
-/* ============================================
-   RESPONSIVIDADE
-   ============================================ */
 @media (max-width: 768px) {
     body {
         padding: 10px;
@@ -522,23 +522,15 @@ body {
 
     .modal-box {
         width: 95%;
-        padding: 30px;
+        padding: 40px 30px;
     }
 
     .modal-box h2 {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
     }
 
     .modal-box p {
-        font-size: 0.95rem;
-    }
-
-    .modal-buttons {
-        flex-direction: column;
-    }
-
-    .modal-btn {
-        width: 100%;
+        font-size: 1rem;
     }
 }
 
@@ -580,8 +572,13 @@ body {
     }
 
     .form-group input {
-        padding: 10px 12px;
+        padding: 10px 40px 10px 12px;
         font-size: 0.9rem;
+    }
+
+    .toggle-password {
+        font-size: 1.1rem;
+        right: 12px;
     }
 
     .btn-primary {
@@ -592,5 +589,30 @@ body {
     .alert {
         margin-left: 15px;
         margin-right: 15px;
+    }
+
+    .modal-box {
+        width: 95%;
+        padding: 35px 25px;
+    }
+
+    .modal-icon {
+        font-size: 3.5rem;
+    }
+
+    .modal-box h2 {
+        font-size: 1.5rem;
+    }
+
+    .modal-box p {
+        font-size: 0.95rem;
+    }
+
+    .modal-buttons {
+        flex-direction: column;
+    }
+
+    .modal-btn {
+        width: 100%;
     }
 }

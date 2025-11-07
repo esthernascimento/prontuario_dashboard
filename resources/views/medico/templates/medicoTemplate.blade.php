@@ -55,12 +55,19 @@
     {{-- Header --}}
     <header class="header-medico">
         <a href="{{ route('medico.perfil') }}" class="user-info-medico" style="text-decoration: none; color: inherit;">
-            @php $medico = auth()->user(); @endphp
+            @php 
+                // 🔥 CORREÇÃO: Buscar o médico relacionado ao usuário logado
+                $usuario = auth()->user();
+                $medico = $usuario ? App\Models\Medico::where('id_usuarioFK', $usuario->idUsuarioPK)->first() : null;
+            @endphp
+            
             @if($medico && $medico->foto)
                 <img src="{{ asset('storage/fotos/' . $medico->foto) }}" alt="Foto do Médico">
             @else
                 <img src="{{ asset('img/usuario-de-perfil.png') }}" alt="Foto padrão">
             @endif
+            
+            {{-- 🔥 AGORA VAI MOSTRAR O NOME CORRETO DO BANCO --}}
             <span>{{ $medico->nomeMedico ?? 'Médico' }}</span>
         </a>
     </header>

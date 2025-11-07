@@ -5,7 +5,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Sidebar agora começa do topo absoluto sem gaps */
 .sidebar {
   position: fixed;
   top: 0;
@@ -27,7 +26,6 @@ body {
   width: 250px;
 }
 
-/* Logo centralizada com transição */
 .logo-link {
   width: 100%;
   display: flex;
@@ -48,7 +46,6 @@ body {
   width: 80px;
 }
 
-/* Navegação com espaçamento adequado */
 .sidebar nav {
   display: flex;
   flex-direction: column;
@@ -57,7 +54,6 @@ body {
   padding: 0 10px;
 }
 
-/* Items de navegação com hover suave */
 .nav-item {
   display: flex;
   align-items: center;
@@ -86,7 +82,6 @@ body {
   color: #98b5ff;
 }
 
-/* Texto oculto por padrão, aparece ao hover na sidebar */
 .nav-text {
   font-size: 14px;
   font-weight: 500;
@@ -101,7 +96,6 @@ body {
   visibility: visible;
 }
 
-/* Header ajustado para acompanhar a sidebar */
 .header {
   height: 60px;
   padding: 0 40px;
@@ -144,16 +138,13 @@ body {
   object-fit: cover;
 }
 
-/* Conteúdo principal com margem para a sidebar */
 .main-dashboard {
   margin-left: 100px;
   margin-top: 60px;
   min-height: calc(100vh - 60px);
   transition: margin-left 0.3s ease;
-  /* REMOVIDO padding fixo - cada página controla seu próprio padding */
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
   .sidebar {
     width: 70px;

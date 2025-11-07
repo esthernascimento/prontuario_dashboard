@@ -1,10 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
-/* ============================================
-    VISUALIZAR PRONTUÁRIO - DESIGN MODERNO
-    TEMA: VERMELHO MÉDICO
-    ============================================ */
-
 :root {
     --primary-red: #DC2626;
     --primary-red-dark: #991B1B;
@@ -54,10 +49,6 @@ body {
         transform: translateY(0);
     }
 }
-
-/* ============================================
-    HEADER DA PÁGINA
-    ============================================ */
 
 .page-header {
     background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
@@ -145,10 +136,6 @@ body {
 .btn-add-consulta i {
     font-size: 1.3rem;
 }
-
-/* ============================================
-    CARD DO PACIENTE
-    ============================================ */
 
 .patient-card {
     background: white;
@@ -262,10 +249,6 @@ body {
     font-size: 1.4rem;
 }
 
-/* ============================================
-    SEÇÃO DE HISTÓRICO
-    ============================================ */
-
 .history-section {
     animation: fadeIn 0.6s ease-out 0.3s backwards;
 }
@@ -302,9 +285,6 @@ body {
     font-size: 0.95rem;
 }
 
-/* ============================================
-    ESTADO VAZIO
-    ============================================ */
 
 .empty-state {
     background: white;
@@ -353,13 +333,8 @@ body {
     box-shadow: 0 16px 36px rgba(220, 38, 38, 0.4);
 }
 
-/* ============================================
-    TIMELINE DE CONSULTAS
-    ============================================ */
-
 .consultas-list {
     position: relative;
-    /* Ajustado para centralizar o marcador da timeline */
     padding-left: 40px; 
 }
 
@@ -380,13 +355,12 @@ body {
     border-color: var(--primary-red-light);
 }
 
-/* Marcador da Timeline (Dot e Line) */
 .timeline-marker {
     position: absolute;
-    left: -24px; /* Move o marcador para a linha vertical */
+    left: -24px; 
     top: 0;
     bottom: 0;
-    width: 4px; /* Linha vertical */
+    width: 4px; 
     background: var(--primary-red-light);
 }
 
@@ -406,14 +380,13 @@ body {
 .timeline-line {
     position: absolute;
     top: 50px;
-    bottom: -24px; /* Garante que a linha cubra o espaço até o próximo item */
+    bottom: -24px; 
     left: 0;
     width: 4px;
     background: var(--primary-red-light);
 }
 
 .consulta-content {
-    /* Garante que o conteúdo comece depois do marcador da timeline */
     margin-left: 0; 
 }
 
@@ -546,7 +519,7 @@ body {
     font-weight: 600;
     margin-bottom: 20px;
     padding: 10px 15px;
-    background: #F0F9FF; /* Cor de destaque para localização */
+    background: #F0F9FF; 
     border: 1px solid #E0F2FE;
     border-radius: var(--radius-sm);
     display: inline-flex;
@@ -556,7 +529,6 @@ body {
     color: #0EA5E9;
 }
 
-/* Estilos para Detalhes da Consulta (Observações, Exames, Medicamentos) */
 .consulta-details {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -600,13 +572,11 @@ body {
     margin-top: 5px;
 }
 
-/* Estilo para quebras de linha em conteúdo de textarea (Exames/Medicamentos) */
 .detail-content.pre-formatted {
     white-space: pre-wrap;
 }
 
 
-/* Footer */
 .consulta-footer {
     margin-top: 20px;
     padding-top: 15px;
@@ -649,10 +619,6 @@ body {
 .btn-voltar i {
     font-size: 1.4rem;
 }
-
-/* ============================================
-    RESPONSIVIDADE
-    ============================================ */
 
 @media (max-width: 768px) {
     .main-dashboard {

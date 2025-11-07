@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Unidade;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -15,16 +15,55 @@ use Illuminate\Support\Facades\Mail;
 
 class MedicoController extends Controller
 {
-    public function index()
-    {
-        $medicos = Medico::with('usuario')->get();
-        return view('admin.manutencaoMedicos', compact('medicos'));
+   public function index(Request $request)
+{
+    // Pega a unidade logada
+    $unidade = auth()->guard('unidade')->user();
+    
+    // --- 1. Prepara a Query Base com Filtros ---
+    $query = $unidade->medicos()->with('usuario');
+
+    // Filtro de busca por nome, CRM ou email
+    if ($request->filled('search')) {
+        $searchTerm = $request->get('search');
+        $query->where('nomeMedico', 'LIKE', "%{$searchTerm}%")
+              ->orWhere('crmMedico', 'LIKE', "%{$searchTerm}%")
+              ->orWhereHas('usuario', function($q) use ($searchTerm) {
+                  $q->where('emailUsuario', 'LIKE', "%{$searchTerm}%");
+              });
     }
+
+    // Filtro de status (ativo/inativo)
+    if ($request->filled('status')) {
+        $status = $request->get('status');
+        if ($status === 'ativo') {
+            $query->whereHas('usuario', function($q) {
+                $q->where('statusAtivoUsuario', 1);
+            });
+        } elseif ($status === 'inativo') {
+            $query->whereHas('usuario', function($q) {
+                $q->where('statusAtivoUsuario', 0);
+            });
+        }
+    }
+
+    // --- 2. Busca TODOS os médicos (sem paginação) ---
+    $medicos = $query->orderBy('nomeMedico', 'ASC')->get();
+
+    // --- 3. Calcula as métricas baseadas na lista completa ---
+    $totalMedicos = $medicos->count();
+    $ativosCount = $medicos->where('usuario.statusAtivoUsuario', 1)->count();
+    $inativosCount = $medicos->where('usuario.statusAtivoUsuario', 0)->count();
+    $novosCount = $medicos->where('created_at', '>=', now()->startOfMonth())->count();
+
+    // --- 4. Retorna a view com todos os dados ---
+    return view('unidade.manutencaoMedicos', compact('medicos', 'totalMedicos', 'ativosCount', 'inativosCount', 'novosCount'));
+}
 
     public function create()
     {
         $unidades = Unidade::orderBy('nomeUnidade')->get();
-        return view('admin.cadastroMedico', compact('unidades'));
+        return view('unidade.cadastroMedico', compact('unidades'));
     }
 
     public function store(Request $request)
@@ -79,17 +118,15 @@ class MedicoController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Erro interno ao cadastrar médico: ' . $e->getMessage() // Adicionado para ajudar a depurar
+                'message' => 'Erro interno ao cadastrar médico: ' . $e->getMessage()
             ], 500);
         }
     }
     
-  
-
-    public function editar($id)
+    public function edit($id)
     {
-        $medico = Medico::findOrFail($id);
-        return view('admin.editarMedico', compact('medico'));
+        $medico = Medico::with('usuario')->findOrFail($id);
+        return view('unidade.editarMedico', compact('medico'));
     }
 
     public function update(Request $request, $id)
@@ -121,16 +158,17 @@ class MedicoController extends Controller
 
         $usuario->save();
 
-        return redirect()->route('admin.manutencaoMedicos')->with('success', 'Dados atualizados com sucesso!');
+        return redirect()->route('unidade.manutencaoMedicos')->with('success', 'Dados atualizados com sucesso!');
     }
 
+    // 🔥 CORREÇÃO: Rota de redirecionamento é da 'unidade'
     public function toggleStatus($id)
     {
         $medico = Medico::with('usuario')->findOrFail($id);
         $mensagem = '';
 
         if (!$medico->usuario) {
-            return redirect()->route('admin.manutencaoMedicos')->with('error', 'Este médico não está vinculado a um usuário.');
+            return redirect()->route('unidade.manutencaoMedicos')->with('error', 'Este médico não está vinculado a um usuário.');
         }
 
         $usuario = $medico->usuario;
@@ -141,6 +179,6 @@ class MedicoController extends Controller
         $acao = $novoStatus ? 'ativado' : 'desativado';
         $mensagem = "O médico foi {$acao} com sucesso!";
 
-        return redirect()->route('admin.manutencaoMedicos')->with('success', $mensagem);
+        return redirect()->route('unidade.manutencaoMedicos')->with('success', $mensagem);
     }
 }

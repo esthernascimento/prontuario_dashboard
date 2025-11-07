@@ -1,4 +1,3 @@
-/* Importação da fonte Montserrat */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
 /* Cores principais: 
@@ -13,7 +12,6 @@ body {
     margin-top: 30px;
     padding: 30px;
     overflow-x: hidden;
-    /* Aplica a fonte globalmente */
 }
 
 .main-dashboard {
@@ -41,31 +39,25 @@ body {
     width: 150px;
 }
 
-/* --- 1. Título Geral --- */
-
 .dashboard-title {
     color: #333;
     font-size: 1.8em;
     margin-bottom: 30px;
     padding: 0 0 10px 0;
-    /* Espaçamento interno */
 }
 
-/* --- 2. Banner de Boas-vindas --- */
 
 .welcome-banner {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #8c1007;
-    /* Vermelho Principal */
     color: white;
     padding: 25px 40px;
     border-radius: 15px;
     margin-bottom: 30px;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
     height: 150px;
-    /* Altura fixa para ser proeminente */
 }
 
 .banner-left {
@@ -95,7 +87,6 @@ body {
 .banner-logo-placeholder i {
     font-size: 2em;
     transform: rotate(45deg);
-    /* Para simular o visual do logo */
 }
 
 .welcome-banner h2 {
@@ -106,7 +97,6 @@ body {
 
 .doctor-name {
     font-weight: 600;
-    /* Destaque em negrito como na imagem */
 }
 
 .welcome-banner p {
@@ -120,11 +110,8 @@ body {
 .banner-illustration-icon {
     font-size: 7em;
     color: rgba(255, 255, 255, 0.4);
-    /* Ícone esmaecido para simular a ilustração */
 }
 
-
-/* --- 3. Cards de Métricas Quadrados e SUS Container --- */
 .main-metrics-wrapper {
     display: flex;
     gap: 20px;
@@ -138,10 +125,8 @@ body {
 }
 
 .metric-square {
-    /* Cor de fundo mais clara e opaca para contraste */
     background-color: #ffffff;
     border: 1px solid #f0f0f0;
-    /* Borda suave */
     color: #8c1007;
     padding: 30px;
     border-radius: 15px;
@@ -160,20 +145,16 @@ body {
 
 .metric-square:hover {
     transform: translateY(-5px);
-    /* Efeito de elevação ao passar o mouse */
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     background-color: #fffafa;
-    /* Fundo levemente alterado */
 }
 
 .icon-metric {
     width: 70px;
-    /* Ícones maiores */
     height: 70px;
     object-fit: contain;
     margin-bottom: 15px;
     filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
-    /* Sombra no ícone */
 }
 
 .metric-square strong {
@@ -190,15 +171,11 @@ body {
     color: #a33e38;
 }
 
-
-/* Estilo do Logo SUS (Container) */
 .sus-logo-container {
     background-color: #e9f0f9;
-    /* Fundo azul claro para o container SUS */
     border-radius: 15px;
     padding: 20px;
     flex: 0 0 220px;
-    /* Tamanho fixo ligeiramente maior */
     height: 250px;
     display: flex;
     flex-direction: column;
@@ -227,8 +204,6 @@ body {
     font-weight: 600;
 }
 
-
-/* --- 4. Layout de Gráficos --- */
 .chart-and-logo-wrapper {
     display: flex;
     gap: 20px;
@@ -261,11 +236,9 @@ body {
     margin-bottom: 20px;
     font-weight: 700;
     border-bottom: 1px dashed #ddd;
-    /* Linha tracejada sutil */
     padding-bottom: 10px;
 }
 
-/* Responsividade */
 @media (max-width: 1200px) {
     .main-metrics-wrapper {
         flex-wrap: wrap;
@@ -285,13 +258,11 @@ body {
         flex: 1 1 100%;
         height: 150px;
         flex-direction: row;
-        /* Layout horizontal no tablet/mobile */
         gap: 30px;
     }
 
     .sus-logo-container p {
         display: none;
-        /* Esconde o texto descritivo no layout horizontal */
     }
 
     .sus-icon {
@@ -345,16 +316,10 @@ body {
     }
 }
 
-
-/* ======================================= */
-/* ====== ANIMAÇÕES DE TRANSIÇÃO CSS ===== */
-/* ======================================= */
-
-/* 1. Keyframes: Fade In & Slide Up */
 @keyframes fadeInSlideUp {
     from {
         opacity: 0;
-        transform: translateY(20px); /* Começa 20px abaixo */
+        transform: translateY(20px); 
     }
     to {
         opacity: 1;
@@ -362,7 +327,6 @@ body {
     }
 }
 
-/* 2. Keyframes: Apenas Fade In (para elementos menos impactantes, como o título) */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -372,44 +336,33 @@ body {
     }
 }
 
-/* --- Aplicação da Animação (Começa tudo com opacidade 0 e o "forwards" garante que termine em 1) --- */
-
-/* 1. Título principal: Aparece primeiro (apenas fade) */
 .dashboard-title {
-    opacity: 0; /* Começa invisível */
+    opacity: 0; 
     animation: fadeIn 0.8s ease-out 0.1s forwards;
 }
 
-/* 2. Banner de Boas-vindas */
 .welcome-banner {
-    opacity: 0; /* Começa invisível */
+    opacity: 0;
     animation: fadeInSlideUp 0.8s ease-out 0.3s forwards;
 }
 
-/* 3. Wrapper de Métricas (Cards e SUS) */
 .main-metrics-wrapper {
-    opacity: 0; /* Começa invisível */
+    opacity: 0; 
     animation: fadeInSlideUp 0.8s ease-out 0.5s forwards;
 }
 
-/* 4. Wrapper de Gráficos */
 .chart-and-logo-wrapper {
-    opacity: 0; /* Começa invisível */
+    opacity: 0; 
     animation: fadeInSlideUp 0.8s ease-out 0.7s forwards;
 }
 
 
-/* Animação individual dos quadrados de métricas para efeito cascata */
 .metric-square {
-    /* Mantém os estilos existentes, adicionando animação */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    
-    /* Animação de entrada mais rápida para não competir com o wrapper */
     opacity: 0;
     animation: fadeInSlideUp 0.6s ease-out forwards;
 }
 
-/* Atraso individual nos quadrados (ajustados para serem acionados após o wrapper) */
 .metric-square:nth-child(1) {
     animation-delay: 0.8s; 
 }
