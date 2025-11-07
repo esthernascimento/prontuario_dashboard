@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Recepcionista;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Consulta; // Seu model tbConsulta
-use App\Models\Unidade;
+use App\Models\Consulta;
+use App\Models\Unidade; // Certifique-se que Unidade está importada
 
 class AcolhimentoController extends Controller
 {
@@ -15,7 +15,11 @@ class AcolhimentoController extends Controller
      */
     public function create()
     {
-        $unidades = Unidade::orderBy('nomeUnidade')->get();
+        // Busca todas as unidades para o <select>
+        $unidades = Unidade::where('statusAtivoUnidade', true) // Apenas unidades ativas
+                            ->orderBy('nomeUnidade')
+                            ->get();
+                            
         return view('recepcionista.acolhimento.create', compact('unidades'));
     }
 
@@ -27,9 +31,8 @@ class AcolhimentoController extends Controller
         // Validação
         $dadosValidados = $request->validate([
             'paciente_id' => 'required|exists:tbPaciente,idPaciente',
-            'unidade_id' => 'required|exists:tbUnidade,idUnidadePK',
-            // REMOVIDO: 'classificacao_risco'
-            'queixa_principal' => 'required|string|min:10', 
+            'unidade_id' => 'required|exists:tbUnidade,idUnidadePK', // Espera um 'unidade_id' do form
+            'queixa_principal' => 'required|string|min:10',
         ]);
 
         // Cria a consulta
@@ -38,13 +41,13 @@ class AcolhimentoController extends Controller
         $consulta->idPacienteFK = $dadosValidados['paciente_id'];
         $consulta->queixa_principal = $dadosValidados['queixa_principal'];
         $consulta->idUnidadeFK = $dadosValidados['unidade_id'];
-        // Armazena também o nome para compatibilidade com telas existentes (se usado)
+        
+        // Busca o nome da unidade para salvar (boa prática)
         $unidade = Unidade::find($dadosValidados['unidade_id']);
         $consulta->unidade = $unidade?->nomeUnidade;
+   
+        $consulta->idRecepcionistaFK = Auth::guard('recepcionista')->id(); 
         
-        // REMOVIDO: $consulta->classificacao_risco
-        
-        $consulta->idRecepcionistaFK = Auth::id(); 
         $consulta->dataConsulta = now();
         $consulta->status_atendimento = 'AGUARDANDO_TRIAGEM';
         
@@ -54,4 +57,3 @@ class AcolhimentoController extends Controller
                          ->with('success', 'Paciente encaminhado para triagem!');
     }
 }
-

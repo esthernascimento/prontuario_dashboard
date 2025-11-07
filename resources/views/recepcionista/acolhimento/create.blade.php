@@ -6,6 +6,7 @@
     <div class="row">
         <div class="col-md-10 offset-md-1"> 
             
+            {{-- Bloco para mostrar sucesso (quando funciona) --}}
             @if(session('success'))
                 <div class="alert alert-success shadow-sm mb-4" role="alert">
                     <i class="bi bi-check-circle-fill me-2"></i>
@@ -13,10 +14,11 @@
                 </div>
             @endif
             
+            {{-- Bloco para mostrar erros de validação (o "F5 infinito") --}}
             @if($errors->any())
                 <div class="alert alert-danger shadow-sm mb-4" role="alert">
-                    <strong>Ops!</strong> Havia algo errado com os dados:
-                    <ul>
+                    <strong><i class="bi bi-exclamation-triangle-fill me-2"></i> Ops! Algo deu errado:</strong>
+                    <ul class="mt-2 mb-0">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
@@ -29,6 +31,7 @@
             <form action="{{ route('recepcionista.acolhimento.store') }}" method="POST">
                 @csrf
 
+                {{-- Card 1: Paciente --}}
                 <div class="card mb-4 shadow-sm">
                     <div class="card-header">
                         <h4 class="mb-0">1. Identificação do Paciente</h4>
@@ -48,38 +51,50 @@
                             <strong>CPF:</strong> <span id="info_cpf"></span>
                         </div>
 
-                        <input type="hidden" id="paciente_id" name="paciente_id" required>
+                        <input type="hidden" id="paciente_id" name="paciente_id">
                     </div>
                 </div>
 
+                {{-- Este é o 'passo_2' que aparece após selecionar o paciente --}}
                 <div id="passo_2_acolhimento" style="display: none;">
                     
+                    {{-- ============================================= --}}
+                    {{-- --- ADICIONADO: Card 2 (Seleção de Unidade) --- --}}
+                    {{-- ============================================= --}}
                     <div class="card mb-4 shadow-sm">
                         <div class="card-header">
-                            {{-- TÍTULO ATUALIZADO --}}
-                            <h4 class="mb-0">2. Queixa Principal</h4>
+                            <h4 class="mb-0">2. Unidade de Atendimento</h4>
                         </div>
                         <div class="card-body">
-                            <div class="form-group mb-4">
-                                <label for="queixa_principal" class="form-label fs-5">Queixa Principal / Motivo da Visita:</label>
-                                <textarea name="queixa_principal" id="queixa_principal" class="form-control" rows="4" placeholder="Descreva o que o paciente está sentindo..." required></textarea>
-                            </div>
-
-                            {{-- ====================================== --}}
-                            {{-- BLOCO DE CLASSIFICAÇÃO FOI REMOVIDO --}}
-                            {{-- ====================================== --}}
-                            <div class="form-group mb-4">
-                                <label for="unidade_id" class="form-label fs-5">Unidade de Atendimento:</label>
-                                <select name="unidade_id" id="unidade_id" class="form-select" required>
-                                    <option value="" disabled selected>Selecione a unidade</option>
-                                    @foreach(($unidades ?? []) as $unidade)
-                                        <option value="{{ $unidade->idUnidadePK }}">{{ $unidade->nomeUnidade }}</option>
+                            <div class="form-group">
+                                <label for="unidade_id" class="form-label fs-5">Selecione a Unidade:</label>
+                                {{-- O Controller (método create) envia a variável $unidades --}}
+                                <select name="unidade_id" id="unidade_id" class="form-select form-select-lg" required>
+                                    <option value="" disabled selected>Selecione...</option>
+                                    @foreach($unidades as $unidade)
+                                        <option value="{{ $unidade->idUnidadePK }}">
+                                            {{ $unidade->nomeUnidade }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                     </div>
 
+                    {{-- Card 3: Queixa Principal --}}
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header">
+                            <h4 class="mb-0">3. Queixa Principal</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group mb-4">
+                                <label for="queixa_principal" class="form-label fs-5">Queixa Principal / Motivo da Visita:</label>
+                                <textarea name="queixa_principal" id="queixa_principal" class="form-control" rows="4" placeholder="Descreva o que o paciente está sentindo..." required></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Botão Final --}}
                     <div class="text-center mt-4">
                         <button type="submit" class="btn btn-primary btn-lg w-100 py-3 fs-4">
                             Salvar e Encaminhar para Triagem (Enfermagem)
@@ -98,6 +113,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         
+        // --- Lógica de busca de paciente (não muda) ---
         const campoBusca = document.getElementById('busca_paciente');
         const resultadosDiv = document.getElementById('resultados_busca_paciente');
         const pacienteIdInput = document.getElementById('paciente_id');
@@ -161,10 +177,11 @@
                 item.href = '#';
                 item.className = 'list-group-item list-group-item-action';
                 
+                // O PacienteController@buscar retorna 'idPaciente'
                 item.innerHTML = `<strong>${paciente.nomePaciente}</strong><br>
                                   <small>CPF: ${paciente.cpfPaciente || 'Não informado'}</small>`;
                 
-                item.dataset.id = paciente.idPaciente; 
+                item.dataset.id = paciente.idPaciente; // Usa idPaciente (como na validação)
                 item.dataset.nome = paciente.nomePaciente;
                 item.dataset.cpf = paciente.cpfPaciente || 'Não informado';
                 item.dataset.nasc = paciente.dataNascPaciente || 'Não informada';
@@ -200,4 +217,3 @@
     });
 </script>
 @endpush
-
