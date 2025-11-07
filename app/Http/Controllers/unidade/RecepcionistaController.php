@@ -7,85 +7,112 @@ use App\Models\Recepcionista;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Auth; // Para obter o Admin logado
+use Illuminate\Support\Facades\Auth;
 
 class RecepcionistaController extends Controller
 {
-    /**
-     * Lista todos os recepcionistas.
-     */
     public function index()
     {
-        $recepcionistas = Recepcionista::paginate(15);
-        // Retornará uma view de manutenção que criaremos depois
-        // return view('admin.manutencaoRecepcionistas', compact('recepcionistas')); 
-        return response()->json($recepcionistas); // Temporário para teste
+        // 🔥 REMOVIDO: paginate() e substituído por all()
+        $recepcionistas = Recepcionista::all();
+        return view('unidade.manutencaoRecepcionista', compact('recepcionistas'));
     }
 
-    /**
-     * Cria um novo recepcionista.
-     */
+    public function create()
+    {
+        return view('unidade.cadastroRecepcionista');
+    }
+
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'nomeRecepcionista' => 'required|string|max:255',
-            'emailRecepcionista' => ['required', 'email', 'unique:tbRecepcionista,emailRecepcionista'],
-            'senhaRecepcionista' => 'required|string|min:6',
-        ]);
+        try {
+            $data = $request->validate([
+                'nomeRecepcionista' => 'required|string|max:255',
+                'emailRecepcionista' => ['required', 'email', 'unique:tbRecepcionista,emailRecepcionista'],
+                'senhaRecepcionista' => 'required|string|min:6',
+            ]);
 
-        $data['senhaRecepcionista'] = Hash::make($data['senhaRecepcionista']);
-        // Associa o recepcionista ao Admin que está a fazer o cadastro
-        $data['idAdminFK'] = Auth::guard('admin')->id(); 
+            $data['senhaRecepcionista'] = Hash::make($data['senhaRecepcionista']);
+            
+            $unidade = Auth::guard('unidade')->user();
+            
+            if (!$unidade) {
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Unidade não autenticada.'
+                    ], 401);
+                }
+                return back()->withErrors(['auth' => 'Unidade não autenticada.']);
+            }
 
-        $recepcionista = Recepcionista::create($data);
+            $data['idUnidadeFK'] = $unidade->idUnidadePK;
 
-        // Retornará para a página de listagem com mensagem de sucesso
-        // return redirect()->route('admin.recepcionistas.index')->with('success', 'Recepcionista criado com sucesso!');
-        return response()->json($recepcionista, 201); // Temporário para teste
+            $recepcionista = Recepcionista::create($data);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Recepcionista cadastrado com sucesso!',
+                    'idRecepcionistaPK' => $recepcionista->idRecepcionistaPK
+                ], 201);
+            }
+
+            return redirect()->route('unidade.manutencaoRecepcionista')->with('success', 'Recepcionista cadastrado com sucesso!');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Erro de validação',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            return back()->withErrors($e->errors());
+            
+        } catch (\Exception $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Erro ao cadastrar recepcionista: ' . $e->getMessage()
+                ], 500);
+            }
+            return back()->withErrors(['error' => 'Erro ao cadastrar recepcionista: ' . $e->getMessage()]);
+        }
     }
 
-    /**
-     * Exibe um recepcionista específico.
-     */
     public function show(Recepcionista $recepcionista)
     {
-        // Retornará uma view de detalhes que criaremos depois
-        // return view('admin.detalhesRecepcionista', compact('recepcionista'));
-         return response()->json($recepcionista); // Temporário para teste
+        return view('unidade.visualizarRecepcionista', compact('recepcionista'));
     }
 
-    /**
-     * Atualiza um recepcionista.
-     */
+    public function edit(Recepcionista $recepcionista)
+    {
+        return view('unidade.editarRecepcionista', compact('recepcionista'));
+    }
+
     public function update(Request $request, Recepcionista $recepcionista)
     {
         $data = $request->validate([
             'nomeRecepcionista' => 'sometimes|string|max:255',
             'emailRecepcionista' => ['sometimes', 'email', Rule::unique('tbRecepcionista')->ignore($recepcionista->idRecepcionistaPK, 'idRecepcionistaPK')],
-            'senhaRecepcionista' => 'sometimes|nullable|string|min:6', // Senha opcional na atualização
+            'senhaRecepcionista' => 'sometimes|nullable|string|min:6',
         ]);
 
         if (!empty($data['senhaRecepcionista'])) {
             $data['senhaRecepcionista'] = Hash::make($data['senhaRecepcionista']);
         } else {
-            unset($data['senhaRecepcionista']); // Remove a senha do array se estiver vazia
+            unset($data['senhaRecepcionista']);
         }
 
         $recepcionista->update($data);
 
-        // Retornará para a página de listagem com mensagem de sucesso
-        // return redirect()->route('admin.recepcionistas.index')->with('success', 'Recepcionista atualizado com sucesso!');
-        return response()->json($recepcionista->fresh()); // Temporário para teste
+        return redirect()->route('unidade.manutencaoRecepcionista')->with('success', 'Recepcionista atualizado com sucesso!');
     }
 
-    /**
-     * Remove (soft delete) um recepcionista.
-     */
     public function destroy(Recepcionista $recepcionista)
     {
         $recepcionista->delete();
-        // Retornará para a página de listagem com mensagem de sucesso
-        // return redirect()->route('admin.recepcionistas.index')->with('success', 'Recepcionista desativado com sucesso!');
-        return response()->noContent(); // Temporário para teste
+        return redirect()->route('unidade.manutencaoRecepcionista')->with('success', 'Recepcionista excluído com sucesso!');
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable; // Usa Authenticatable para login
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,19 +15,18 @@ class Recepcionista extends Authenticatable
     protected $table = 'tbRecepcionista';
     protected $primaryKey = 'idRecepcionistaPK';
     
-    // Assume que a tabela terá created_at e updated_at
     public $timestamps = true; 
 
     protected $fillable = [
         'nomeRecepcionista',
         'emailRecepcionista',
         'senhaRecepcionista',
-        'idAdminFK',
+        'idUnidadeFK', // 🔥 CORREÇÃO: Mudei para idUnidadeFK
     ];
 
     protected $hidden = [
         'senhaRecepcionista',
-        'remember_token', // --- ADICIONADO --- (Boa prática do Laravel)
+        'remember_token',
     ];
 
     /**
@@ -39,16 +38,18 @@ class Recepcionista extends Authenticatable
     }
 
     /**
-     * Define a relação: Um Recepcionista pertence a um Admin.
+     * 🔥 CORREÇÃO: Define a relação: Um Recepcionista pertence a uma Unidade.
      */
-    public function admin()
+    public function unidade()
     {
-        return $this->belongsTo(Admin::class, 'idAdminFK', 'idAdminPK');
+        return $this->belongsTo(Unidade::class, 'idUnidadeFK', 'idUnidadePK');
     }
 
-    // No futuro, podemos adicionar a relação com as Consultas que ele iniciou
-    // public function consultasIniciadas()
-    // {
-    //     return $this->hasMany(Consulta::class, 'idRecepcionistaFK', 'idRecepcionistaPK');
-    // }
-}
+    /**
+     * 🔥 ADICIONEI: Campo usado para login (email)
+     */
+    public function getAuthIdentifierName()
+    {
+        return 'emailRecepcionista';
+    }
+}   

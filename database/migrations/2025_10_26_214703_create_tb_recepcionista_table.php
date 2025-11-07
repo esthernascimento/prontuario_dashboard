@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('emailRecepcionista')->unique();
             $table->string('senhaRecepcionista');
             
-            // Chave estrangeira para ligar ao Admin que o criou/gere
-            $table->foreignId('idAdminFK')->constrained('tbAdmin', 'idAdminPK'); 
+            // Chave estrangeira para ligar ao Admin que o criou/gere 
+            $table->foreignId('idUnidadeFK')->constrained('tbUnidade', 'idUnidadePK');
             
             $table->timestamps(); // Colunas created_at e updated_at
             $table->softDeletes(); // Coluna deleted_at

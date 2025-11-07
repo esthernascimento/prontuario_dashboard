@@ -10,17 +10,12 @@ use Illuminate\Support\Facades\Storage;
 
 class SegurancaController extends Controller 
 {
-    /**
-     * Exibe o formulário de alteração de senha.
-     */
+   
     public function showAlterarSenhaForm()
     {
         return view('unidade.seguranca');
     }
 
-    /**
-     * 🔥 MOVIDO DO UnidadeController: Processa a atualização do perfil da unidade e do usuário relacionado.
-     */
     public function atualizarPerfil(Request $request)
     {
         $unidade = Auth::guard('unidade')->user();
@@ -31,22 +26,19 @@ class SegurancaController extends Controller
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Atualiza os dados da tabela Unidade
         $unidade->update([
             'nomeUnidade' => $request->nomeUnidade,
             'emailUnidade' => $request->emailUnidade,
         ]);
 
-        // Atualiza a foto na tabela Usuario (se houver)
         if ($request->hasFile('foto')) {
-            $usuario = $unidade->usuario; // Assumindo que existe relacionamento usuario()
+            $usuario = $unidade->usuario; 
             if ($usuario) {
-                // Deletar foto antiga
+
                 if ($usuario->foto && Storage::disk('public')->exists('fotos/' . $usuario->foto)) {
                     Storage::disk('public')->delete('fotos/' . $usuario->foto);
                 }
 
-                // Salvar nova foto
                 $fotoPath = $request->file('foto')->store('fotos', 'public');
                 $usuario->foto = basename($fotoPath);
                 $usuario->save();
@@ -56,9 +48,6 @@ class SegurancaController extends Controller
         return redirect()->route('unidade.perfil')->with('success', 'Perfil atualizado com sucesso!');
     }
 
-    /**
-     * 🔥 MOVIDO DO UnidadeController: Processa a alteração de senha do usuário logado.
-     */
     public function alterarSenha(Request $request)
     {
         $request->validate([
@@ -70,7 +59,7 @@ class SegurancaController extends Controller
         ]);
 
         $unidade = Auth::guard('unidade')->user();
-        $usuario = $unidade->usuario; // Pega o usuário relacionado
+        $usuario = $unidade->usuario;
 
         if (!$usuario) {
             return back()->withErrors(['auth' => 'Não foi possível identificar o usuário logado.']);

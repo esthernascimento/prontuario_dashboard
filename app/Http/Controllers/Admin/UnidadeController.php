@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Mail\UnidadeAccessCredentials;
-use Illuminate\Validation\Rule; // ADICIONADO: Para forçar o validador 'unique' a usar a tabela 'tbUnidade'
+use Illuminate\Validation\Rule; 
 
 class UnidadeController extends Controller
 {
@@ -46,17 +46,14 @@ class UnidadeController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. Validação dos Dados - Usando os nomes exatos das colunas do seu Model/Tabela
         try {
             $validatedData = $request->validate([
                 'nomeUnidade' => 'required|string|max:255',
-                // Corrigido: Usando Rule::unique para garantir que a tabela correta 'tbUnidade' seja usada
                 'cnpjUnidade' => ['required', 'string', 'regex:/^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/', Rule::unique('tbUnidade', 'cnpjUnidade')],
                 'emailUnidade' => ['required', 'email', 'max:255', Rule::unique('tbUnidade', 'emailUnidade')],
                 'telefoneUnidade' => 'nullable|string|max:20', 
                 'tipoUnidade' => 'nullable|string|max:100', 
                 
-                // Campos de Endereço (todos obrigatórios, conforme o formulário Blade e Tabela)
                 'cepUnidade' => 'required|string|max:9',
                 'logradouroUnidade' => 'required|string|max:255',
                 'numLogradouroUnidade' => 'required|string|max:20',
@@ -65,9 +62,7 @@ class UnidadeController extends Controller
                 'ufUnidade' => 'required|string|max:2',
                 'estadoUnidade' => 'required|string|max:255',
                 'paisUnidade' => 'required|string|max:255',
-                // 'statusAtivoUnidade' pode vir do request ou ser definido como padrão
             ], [
-                // Mensagens de erro personalizadas
                 'cnpjUnidade.unique' => 'Este CNPJ já está cadastrado.',
                 'cnpjUnidade.regex' => 'O CNPJ deve estar no formato 00.000.000/0000-00.',
                 'emailUnidade.unique' => 'Este e-mail já está cadastrado.',
@@ -99,25 +94,20 @@ class UnidadeController extends Controller
             $unidade->estadoUnidade = $request->estadoUnidade;
             $unidade->paisUnidade = $request->paisUnidade;
 
-            // Define status e senha
-            // Use o valor do request se existir, senão defina como true
+        
             $unidade->statusAtivoUnidade = $request->input('statusAtivoUnidade', true); 
             $unidade->senhaUnidade = Hash::make($senhaTemporaria);
 
-            // LINHA REMOVIDA: A coluna 'statusUnidade' não existe no banco de dados,
-            // conforme indicado pelos logs de erro.
-            // $unidade->statusUnidade = true; 
+        
 
-            $unidade->save(); // Salva no banco de dados
+            $unidade->save(); 
 
-            // Envia e-mail com a senha
             $credentials = [
-                'login' => $unidade->cnpjUnidade, // CNPJ
-                'password' => $senhaTemporaria, // Senha em texto simples
+                'login' => $unidade->cnpjUnidade, 
+                'password' => $senhaTemporaria, 
                 'unidadeNome' => $unidade->nomeUnidade
             ];
             
-            // Utiliza o Mailable que você criou (UnidadeAccessCredentials)
             Mail::to($unidade->emailUnidade)->send(new \App\Mail\EmailUnidade($unidade, $senhaTemporaria));
             
             DB::commit();
@@ -138,7 +128,7 @@ class UnidadeController extends Controller
     /**
      * Mostra o formulário de edição de unidade.
      *
-     * @param \App\Models\Unidade $unidade
+     * @param \App\Models\Unidade
      * @return \Illuminate\View\View
      */
     public function edit(Unidade $unidade)
@@ -157,13 +147,11 @@ class UnidadeController extends Controller
     {
         $validatedData = $request->validate([
             'nomeUnidade' => 'required|string|max:255',
-            // Corrigido: Usando Rule::unique para garantir que a tabela correta 'tbUnidade' seja usada
             'cnpjUnidade' => ['required', 'string', 'regex:/^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/', Rule::unique('tbUnidade', 'cnpjUnidade')->ignore($unidade->idUnidadePK, 'idUnidadePK')],
             'emailUnidade' => ['required', 'email', 'max:255', Rule::unique('tbUnidade', 'emailUnidade')->ignore($unidade->idUnidadePK, 'idUnidadePK')],
             'telefoneUnidade' => 'nullable|string|max:20',
             'tipoUnidade' => 'nullable|string|max:100',
             
-            // Campos de Endereço
             'cepUnidade' => 'required|string|max:9',
             'logradouroUnidade' => 'required|string|max:255',
             'numLogradouroUnidade' => 'required|string|max:20',
@@ -189,8 +177,7 @@ class UnidadeController extends Controller
         ]);
 
         try {
-            // Mapeia os dados para o Model. Removemos a senha para não sobrescrever
-            // a senha existente, a menos que haja um campo específico no formulário de edição.
+       
             $unidadeData = $validatedData;
             
             $unidade->update($unidadeData);
@@ -236,7 +223,6 @@ class UnidadeController extends Controller
     public function toggleStatus($id)
     {
         try {
-            // O findOrFail deve usar a chave primária correta
             $unidade = Unidade::findOrFail($id); 
             $unidade->statusAtivoUnidade = !$unidade->statusAtivoUnidade;
             $unidade->save();

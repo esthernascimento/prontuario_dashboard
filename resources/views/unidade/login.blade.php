@@ -17,12 +17,10 @@
 <body>
   <main class="main-container">
 
-    <!-- Lado esquerdo -->
     <div class="left-side">
       <img src="{{ asset('img/unidade-logo2.png') }}" alt="Logo Enfermeiro(a)">
     </div>
 
-    <!-- Lado direito -->
     <div class="right-side">
       <div class="login-content">
         <div class="logo">
@@ -65,12 +63,9 @@
   </main>
 
   <script>
-    // Alternar visibilidade da senha
     const togglePassword = document.getElementById("togglePassword");
-    // CORREÇÃO AQUI: O ID correto para o input de senha é 'senhaUnidade', não 'senha'.
     const passwordInput = document.getElementById("senhaUnidade"); 
 
-    // Verifica se os elementos existem antes de adicionar o listener
     if (togglePassword && passwordInput) {
         togglePassword.addEventListener("click", () => {
             const isPassword = passwordInput.type === "password";
@@ -81,19 +76,16 @@
     }
 
 
-    // Estilizar foco nos inputs
     const inputs = document.querySelectorAll(".input-wrapper input");
     inputs.forEach(input => {
       input.addEventListener("focus", () => {
         input.parentElement.classList.add("focused");
       });
       input.addEventListener("blur", () => {
-        // CORREÇÃO AQUI: Remove a classe 'focused' apenas se o campo estiver VAZIO.
         if (input.value === "") { 
           input.parentElement.classList.remove("focused");
         }
       });
-      // Adiciona 'focused' ao carregar se já houver valor (útil para old())
       if (input.value !== "") {
           input.parentElement.classList.add("focused");
       }

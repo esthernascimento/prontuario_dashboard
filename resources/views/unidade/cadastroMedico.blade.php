@@ -47,7 +47,6 @@
                         </div>
                     </div>
 
-                    <!-- CAMPO ADICIONADO PARA AS UNIDADES -->
                     <div class="input-group">
                         <label for="unidades">Unidades de Trabalho (segure Ctrl/Cmd para mais de uma)</label>
                         <div class="input-wrapper">
@@ -78,16 +77,11 @@
             const messagesDiv = document.getElementById('form-messages');
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-            // CORREÇÃO CRUCIAL AQUI:
-            // O método Object.fromEntries() não lida bem com campos de seleção múltipla.
-            // Vamos construir o nosso objeto de dados manualmente para garantir que o array 'unidades' é enviado corretamente.
+           
             const data = {};
-            // Usamos o método getAll() para obter todos os valores do campo de seleção múltipla
             data.unidades = formData.getAll('unidades[]');
             
-            // Agora, adicionamos os outros campos
             formData.forEach((value, key) => {
-                // Adicionamos apenas se não for o campo de unidades (para não duplicar)
                 if (!key.endsWith('[]')) {
                     data[key] = value;
                 }
@@ -107,7 +101,7 @@
                 body: JSON.stringify(data)
             })
             .then(response => {
-                if (!response.ok) { // Verifica se a resposta não foi bem-sucedida
+                if (!response.ok) { 
                     return response.json().then(err => { throw err; });
                 }
                 return response.json();
@@ -123,7 +117,7 @@
                     }, 2000);
                 }
             })
-            .catch(result => { // O 'catch' agora recebe o corpo do erro
+            .catch(result => { 
                 let errorText = result.message || 'Ocorreu um erro.';
                 if (result.errors) {
                     errorText = Object.values(result.errors).flat().join(' ');

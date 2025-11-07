@@ -15,13 +15,11 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        // Valida o CNPJ e a senha
         $credentials = $request->validate([
             'cnpjUnidade' => 'required|string',
             'senhaUnidade' => 'required|string',
         ]);
 
-        // Tenta autenticar usando o CNPJ
         if (Auth::guard('unidade')->attempt([
             'cnpjUnidade' => $credentials['cnpjUnidade'],
             'password' => $credentials['senhaUnidade'],

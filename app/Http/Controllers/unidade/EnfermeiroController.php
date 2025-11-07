@@ -16,25 +16,18 @@ use Illuminate\Support\Facades\Log;
 
 class EnfermeiroController extends Controller
 {
-    // Listagem de enfermeiros
     public function index()
     {
         $enfermeiros = Enfermeiro::with('usuario')->get();
         return view('unidade.manutencaoEnfermeiro', compact('enfermeiros'));
     }
 
-    /**
-     * Mostra o formulário de cadastro e envia a lista de unidades.
-     */
     public function create()
     {
         $unidades = Unidade::orderBy('nomeUnidade')->get();
         return view('unidade.cadastroEnfermeiro', compact('unidades'));
     }
 
-    /**
-     * Mostra o formulário de edição de enfermeiro.
-     */
     public function edit($id)
     {
         $enfermeiro = Enfermeiro::with(['usuario', 'unidades'])->findOrFail($id);
@@ -43,9 +36,6 @@ class EnfermeiroController extends Controller
         return view('unidade.editarEnfermeiro', compact('enfermeiro', 'unidades'));
     }
 
-    /**
-     * Salva o novo enfermeiro e as suas unidades de trabalho.
-     */
     public function store(Request $request)
     {
         try {
@@ -67,7 +57,6 @@ class EnfermeiroController extends Controller
 
             $senhaTemporaria = Str::random(10);
 
-            // 1. Primeiro cria o usuário
             $usuario = new Usuario();
             $usuario->nomeUsuario = $request->nomeEnfermeiro;
             $usuario->emailUsuario = $request->emailEnfermeiro;
@@ -76,9 +65,8 @@ class EnfermeiroController extends Controller
             $usuario->statusSenhaUsuario = true;
             $usuario->save();
 
-            // 2. Depois cria o enfermeiro vinculado ao usuário - ✅ CORREÇÃO: usar 'id_usuario'
             $enfermeiro = new Enfermeiro();
-            $enfermeiro->id_usuario = $usuario->idUsuarioPK; // ✅ MUDOU PARA 'id_usuario'
+            $enfermeiro->id_usuario = $usuario->idUsuarioPK; 
             $enfermeiro->nomeEnfermeiro = $request->nomeEnfermeiro;
             $enfermeiro->corenEnfermeiro = $request->corenEnfermeiro;
             $enfermeiro->emailEnfermeiro = $request->emailEnfermeiro;
@@ -86,12 +74,10 @@ class EnfermeiroController extends Controller
             $enfermeiro->genero = $request->genero;
             $enfermeiro->save();
 
-            // 3. Associa as unidades se existirem
             if ($request->has('unidades')) {
                 $enfermeiro->unidades()->sync($request->unidades);
             }
 
-            // 4. Envia e-mail com as credenciais
             Mail::to($usuario->emailUsuario)->send(new EmailEnfermeiro($usuario, $senhaTemporaria));
 
             return response()->json([
@@ -112,7 +98,6 @@ class EnfermeiroController extends Controller
         }
     }
 
-    // 🔥 CORREÇÃO: Rota de redirecionamento é da 'unidade'
     public function update(Request $request, $id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
@@ -151,7 +136,6 @@ class EnfermeiroController extends Controller
             'emailUsuario' => $request->emailUsuario,
         ]);
 
-        // Atualiza as unidades do enfermeiro
         if ($request->has('unidades')) {
             $enfermeiro->unidades()->sync($request->unidades);
         } else {
@@ -164,14 +148,12 @@ class EnfermeiroController extends Controller
         ]);
     }
 
-    // 🔥 CORREÇÃO: View de visualização agora pertence à 'unidade'
     public function show($id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
         return view('unidade.visualizarEnfermeiro', compact('enfermeiro'));
     }
 
-    // 🔥 CORREÇÃO: Rota de redirecionamento é da 'unidade'
     public function toggleStatus($id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);

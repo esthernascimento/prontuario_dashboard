@@ -15,12 +15,10 @@
 <body>
   <main class="main-container">
     
-    <!-- Lado Esquerdo com imagem -->
     <div class="left-side">
       <img src="{{ asset('img/unidade-logo2.png') }}" alt="Logo ilustrativa">
     </div>
 
-    <!-- Lado Direito com o formulário -->
     <div class="right-side">
       <div class="login-content">
 

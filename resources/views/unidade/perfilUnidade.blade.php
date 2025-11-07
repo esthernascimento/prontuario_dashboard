@@ -15,6 +15,7 @@
 
     <form action="{{ route('unidade.perfil.update') }}" method="POST" enctype="multipart/form-data">
       @csrf
+      @method('PUT')
 
       {{-- Bloco da Foto (Fundo Azul) --}}
       <div class="foto-upload-container">
@@ -22,10 +23,10 @@
 
           <div class="box-foto">
             <img id="preview-img"
+              src="{{ $unidade->usuario && $unidade->usuario->foto ? asset('storage/fotos/'.$unidade->usuario->foto) : '' }}"
               alt="Foto atual">
           </div>
 
-          {{-- Texto e Ícone Centralizados na imagem --}}
           <div class="overlay">
             <i class="bi bi-camera"></i>
             <span>Alterar Foto</span>
@@ -34,27 +35,25 @@
         <input type="file" id="foto" name="foto" accept="image/*" hidden onchange="previewFoto(event)">
       </div>
 
-      {{-- Campos de Dados --}}
       <div class="input-group">
-        {{-- Removendo a label se você quer o design da imagem --}}
-        <input type="text" name="nomeAdmin" id="nomeAdmin" value="{{ $unidade->nomeUnidade }}" required>
+        <input type="text" name="nomeUnidade" id="nomeUnidade" value="{{ $unidade->nomeUnidade }}" required>
       </div>
 
       <div class="input-group">
-        <input type="email" name="emailAdmin" id="emailAdmin" value="{{ $unidade->emailUnidade }}" required>
+        <input type="email" name="emailUnidade" id="emailUnidade" value="{{ $unidade->emailUnidade }}" required>
       </div>
 
-      {{-- Botões de Ação --}}
       <div class="button-group">
-        <a href="{{ route('unidade.seguranca') }}" class="btn-trocar-senha">Trocar Senha</a> <button type="submit" class="save-button">Salvar Alterações</button>
+        <a href="{{ route('unidade.seguranca') }}" class="btn-trocar-senha">Trocar Senha</a>
+        <button type="submit" class="save-button">Salvar Alterações</button>
       </div>
     </form>
+
   </div>
 </main>
 
 <script>
-
-    function previewFoto(event) {
+  function previewFoto(event) {
     const input = event.target;
     const preview = document.getElementById('preview-img');
 
