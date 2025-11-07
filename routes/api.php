@@ -100,4 +100,3 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/admin/unidades/{unidade}', [UnidadeController::class, 'update']);
     Route::delete('/admin/unidades/{unidade}', [UnidadeController::class, 'destroy']);
 });
-

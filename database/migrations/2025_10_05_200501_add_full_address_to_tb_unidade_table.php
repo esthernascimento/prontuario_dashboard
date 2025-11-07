@@ -27,6 +27,7 @@ return new class extends Migration
             $table->char('ufUnidade', 2)->nullable()->after('cidadeUnidade');
             $table->string('estadoUnidade', 100)->nullable()->after('ufUnidade');
             $table->string('paisUnidade', 100)->nullable()->after('estadoUnidade');
+                $table->string('foto')->nullable()->after('enderecoUnidade');
         });
     }
 

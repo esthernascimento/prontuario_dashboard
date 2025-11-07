@@ -1,0 +1,34 @@
+RESUMO DAS CORREÇÕES APLICADAS:
+
+1. **Problema Identificado**: 
+   - Medicamentos não estavam sendo salvos porque o controller esperava um campo string 'medicamentosPrescritos' mas a view enviava checkboxes 'medicamentos_prescritos[]'
+   - Exames estavam sendo salvos apenas no campo string da consulta, mas não como registros na tabela exames
+
+2. **Correções Aplicadas**:
+   
+   **No Controller MedicoProntuarioController.php:**
+   - Método store():
+     * Atualizada validação para aceitar array de medicamentos
+     * Adicionado processamento de exames checkboxes para criar registros na tabela Exame
+     * Adicionado processamento de medicamentos checkboxes para criar registros na tabela Medicamento
+   
+   - Método update():
+     * Mesmas correções do método store()
+   
+   **Na View cadastrarProntuario.blade.php:**
+   - Removida lógica de campo hidden desnecessária
+   - Corrigidos nomes das rotas de PDF
+
+3. **Fluxo Agora**:
+   - Médico seleciona exames e medicamentos via checkboxes
+   - Controller processa os arrays e salva:
+     * String no campo da consulta (para visualização)
+     * Registros individuais nas tabelas Exame e Medicamento (para consultas posteriores)
+   - PDFs podem ser gerados com base nos dados salvos
+
+4. **Testar**:
+   - Acesse uma consulta
+   - Selecione alguns exames e medicamentos
+   - Salve a consulta
+   - Verifique se os registros foram criados nas tabelas
+   - Teste a geração de PDFs
