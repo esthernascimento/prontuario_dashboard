@@ -20,37 +20,20 @@ class EnfermeiroSeeder extends Seeder
     {
         $faker = Faker::create('pt_BR');
         
+        // Pega as unidades que o UnidadeSeeder criou
         $unidades = Unidade::all();
         if ($unidades->isEmpty()) {
-            $this->command->info('Criando unidades de saúde para associar aos enfermeiros...');
-            $unidades = [];
-            for ($i = 0; $i < 5; $i++) {
-                $cnpj = $faker->numerify('##.###.###/0001-##');
-                $telefone = $faker->numerify('(##) ####-####');
-                $cep = $faker->numerify('#####-###');
-                
-                $unidades[] = Unidade::create([
-                    'nomeUnidade' => $faker->company . ' - Unidade ' . ($i + 1),
-                    'tipoUnidade' => $faker->randomElement(['Hospital', 'Clínica', 'Posto de Saúde', 'UBS', 'UPA']),
-                    'cnpjUnidade' => $cnpj,
-                    'emailUnidade' => $faker->unique()->companyEmail(),
-                    'senhaUnidade' => Hash::make('senha123'),
-                    'telefoneUnidade' => $telefone,
-                    'cepUnidade' => $cep,
-                    'logradouroUnidade' => $faker->streetName,
-                    'numLogradouroUnidade' => $faker->buildingNumber,
-                    'bairroUnidade' => $faker->citySuffix . ' ' . $faker->lastName,
-                    'cidadeUnidade' => $faker->city,
-                    'ufUnidade' => $faker->stateAbbr,
-                    'estadoUnidade' => $faker->state,
-                    'paisUnidade' => 'Brasil',
-                ]);
-            }
+            $this->command->error('Nenhuma unidade encontrada. Rode o UnidadeSeeder primeiro.');
+            return;
         }
-        $unidadeIds = collect($unidades)->pluck('idUnidadePK')->toArray();
+        $unidadeIds = $unidades->pluck('idUnidadePK')->toArray();
+        $primeiraUnidadeId = $unidades->first()->idUnidadePK;
+
+        // ================================================================
+        // --- REMOVIDO: Bloco que criava unidades duplicadas ---
+        // ================================================================
 
         $usedCorens = [];
-
         $generateUniqueCoren = function () use ($faker, &$usedCorens) {
             do {
                 $coren = $faker->numerify('######') . '-' . $faker->stateAbbr;
@@ -59,30 +42,63 @@ class EnfermeiroSeeder extends Seeder
             return $coren;
         };
 
-        for ($i = 0; $i < 120; $i++) {
+        // ================================================================
+        // --- ADICIONADO: Enfermeiro Fixo (ID 1) ---
+        // ================================================================
+        $emailFixo = 'enfermeiro.teste@prontuario.com';
+        $corenFixo = '123456-SP';
+        $usedCorens[] = $corenFixo; // Garante que não será usado pelo faker
+
+        // Cria o Usuário para o Enfermeiro
+        $usuarioEnf = Usuario::firstOrCreate(
+            ['emailUsuario' => $emailFixo],
+            [
+                'nomeUsuario' => 'Ana Costa (Enfermeira)', // Nome na tbUsuario
+                'senhaUsuario' => Hash::make('senha123'),
+                'statusAtivoUsuario' => true,
+            ]
+        );
+
+        // Cria o Enfermeiro
+        $enfFixo = Enfermeiro::create([
+            'id_usuario' => $usuarioEnf->idUsuarioPK,
+            'nomeEnfermeiro' => 'Ana Costa', // Nome na tbEnfermeiro
+            'emailEnfermeiro' => $emailFixo,
+            'corenEnfermeiro' => $corenFixo,
+            'especialidadeEnfermeiro' => 'Enfermeiro Geral',
+            'genero' => 'Feminino',
+        ]);
+        
+        // Associa o enfermeiro fixo à primeira unidade
+        $enfFixo->unidades()->sync([$primeiraUnidadeId]);
+
+        // ================================================================
+        // --- Loop para os 119 enfermeiros aleatórios restantes ---
+        // ================================================================
+        for ($i = 0; $i < 119; $i++) { // <-- CORRIGIDO: de 120 para 119
             $nomeCompleto = $faker->name();
             $email = $faker->unique()->safeEmail();
 
             $usuario = Usuario::create([
-                'nomeUsuario'       => $nomeCompleto,
-                'emailUsuario'      => $email,
-                'senhaUsuario'      => Hash::make('password'),
+                'nomeUsuario' => $nomeCompleto,
+                'emailUsuario' => $email,
+                'senhaUsuario' => Hash::make('password'),
                 'statusAtivoUsuario' => $faker->boolean(90),
             ]);
 
             $enfermeiro = Enfermeiro::create([
-                'id_usuario'                => $usuario->idUsuarioPK,
-                'nomeEnfermeiro'            => $nomeCompleto,
-                'emailEnfermeiro'           => $email,
-                'corenEnfermeiro'           => $generateUniqueCoren(),
-                'especialidadeEnfermeiro'   => $faker->randomElement(['Enfermeiro Geral', 'Enfermeiro Pediátrico', 'Enfermeiro de Urgência', 'Enfermeiro Obstétrico']),
-                'genero'                    => $faker->randomElement(['Masculino', 'Feminino']),
+                'id_usuario' => $usuario->idUsuarioPK,
+                'nomeEnfermeiro' => $nomeCompleto,
+                'emailEnfermeiro' => $email,
+                'corenEnfermeiro' => $generateUniqueCoren(),
+                'especialidadeEnfermeiro' => $faker->randomElement(['Enfermeiro Geral', 'Enfermeiro Pediátrico', 'Enfermeiro de Urgência', 'Enfermeiro Obstétrico']),
+                'genero' => $faker->randomElement(['Masculino', 'Feminino']),
             ]);
 
             $unidadesAleatorias = $faker->randomElements($unidadeIds, $faker->numberBetween(1, 2));
             $enfermeiro->unidades()->sync($unidadesAleatorias);
         }
         
-        $this->command->info('120 enfermeiros criados com sucesso!');
+        $this->command->info('120 enfermeiros (1 fixo + 119 aleatórios) criados com sucesso!');
     }
 }
