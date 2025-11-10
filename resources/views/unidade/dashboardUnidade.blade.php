@@ -16,7 +16,6 @@
     $medicosCount = 15;
     $nursesCount = 20;
     $patientsCount = 10; // Usado para recepcionistas neste contexto
-    $nomeUnidade = 'Unidade Modelo Alfa';
     $dadosGenero = ['Homens' => 45, 'Mulheres' => 55];
     $medicosPorEspecialidade = collect([
         (object)['especialidadeMedico' => 'Cardio', 'total' => 12],
@@ -48,7 +47,8 @@
                 <img src="{{ asset('img/unidade-logo2.png') }}" alt="Logo Prontuário+" class="banner-logo">
             </div>
             <div class="banner-center">
-                <h2>Bem-vindo(a), <span class="highlight">{{ $nomeUnidade ?? 'Usuário' }}</span></h2>
+                <h2>Bem-vindo(a),<span class="highlight">{{ $nomeUnidade ?? 'Usuário' }}</span></h2>
+
                 <p><i class="bi bi-heart-pulse"></i> O Prontuário+ fica feliz com a sua presença e dedicação à saúde.</p>
             </div>
             <div class="banner-right">
