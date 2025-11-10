@@ -28,14 +28,20 @@
                 @csrf
                 <div class="form-group">
                     <label for="senha_atual">Senha Atual:</label>
-                    <input type="password" id="senha_atual" name="senha_atual" required>
+                    <div class="password-input-container">
+                        <input type="password" id="senha_atual" name="senha_atual" required>
+                        <i class="bi bi-eye-fill toggle-password" data-target="senha_atual"></i>
+                    </div>
                     @error('senha_atual')
                         <small class="error-message">{{ $message }}</small>
                     @enderror
                 </div>
                 <div class="form-group">
                     <label for="nova_senha">Nova Senha:</label>
-                    <input type="password" id="nova_senha" name="nova_senha" required>
+                    <div class="password-input-container">
+                        <input type="password" id="nova_senha" name="nova_senha" required>
+                        <i class="bi bi-eye-fill toggle-password" data-target="nova_senha"></i>
+                    </div>
                     <small class="form-hint">Mínimo de 8 caracteres, incluindo números e letras</small>
                     @error('nova_senha')
                         <small class="error-message">{{ $message }}</small>
@@ -43,7 +49,10 @@
                 </div>
                 <div class="form-group">
                     <label for="nova_senha_confirmation">Confirmar Nova Senha:</label>
-                    <input type="password" id="nova_senha_confirmation" name="nova_senha_confirmation" required>
+                    <div class="password-input-container">
+                        <input type="password" id="nova_senha_confirmation" name="nova_senha_confirmation" required>
+                        <i class="bi bi-eye-fill toggle-password" data-target="nova_senha_confirmation"></i>
+                    </div>
                 </div>
 
                 <button type="button" id="openConfirmationModal" class="btn-primary">Alterar Senha</button>
@@ -78,7 +87,6 @@
 </div>
 @endif
 
-
 <script>
     const form = document.getElementById('securityForm'); 
     const openConfirmationModalButton = document.getElementById('openConfirmationModal');
@@ -86,6 +94,30 @@
     const confirmChangePasswordButton = document.getElementById('confirmChangePassword');
     const successModal = document.getElementById('successModal');
 
+    // Funções para mostrar/ocultar senha
+    function setupPasswordToggle() {
+        const toggleButtons = document.querySelectorAll('.toggle-password');
+        
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const passwordInput = document.getElementById(targetId);
+                const icon = this;
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('bi-eye-fill');
+                    icon.classList.add('bi-eye-slash-fill');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('bi-eye-slash-fill');
+                    icon.classList.add('bi-eye-fill');
+                }
+            });
+        });
+    }
+
+    // Funções dos modais
     function showConfirmationModal() {
         if (confirmationModal) confirmationModal.classList.add('show');
     }
@@ -95,13 +127,17 @@
     }
 
     function hideSuccessModal() {
-        if (successModal) successModal.classList.remove('show');
+        if (successModal) {
+            successModal.classList.remove('show');
+            // Redireciona para o perfil após fechar o modal de sucesso
+            setTimeout(() => {
+                window.location.href = "{{ route('unidade.perfil') }}";
+            }, 300);
+        }
     }
 
-
-    if (openConfirmationModalButton) {
+    if (openConfirmationModalButton && form) {
         openConfirmationModalButton.addEventListener('click', (event) => {
-
             if (form.checkValidity()) {
                 showConfirmationModal();
             } else {
@@ -110,7 +146,7 @@
         });
     }
 
-    if (confirmChangePasswordButton) {
+    if (confirmChangePasswordButton && form) {
         confirmChangePasswordButton.addEventListener('click', () => {
             hideConfirmationModal();
             form.submit(); 
@@ -118,13 +154,24 @@
     }
 
     window.onclick = function(event) {
-        if (event.target == confirmationModal) {
+        if (event.target === confirmationModal) {
             hideConfirmationModal();
         }
-        if (event.target == successModal) {
+        if (event.target === successModal) {
             hideSuccessModal();
         }
     }
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            hideConfirmationModal();
+            hideSuccessModal();
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        setupPasswordToggle();
+    });
 </script>
 
 @endsection

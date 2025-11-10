@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,7 +15,7 @@
 
 <body>
   <main class="main-container">
-    
+
     <div class="left-side">
       <img src="{{ asset('img/unidade-logo2.png') }}" alt="Logo ilustrativa">
     </div>
@@ -25,63 +26,71 @@
         <h2>Cadastro de Enfermeiro(a)</h2>
 
         <form id="cadastroEnfermeiroForm">
-  @csrf
+          @csrf
 
-  <div class="input-group">
-    <label for="name">Nome completo</label>
-    <div class="input-wrapper">
-      <i class="fa-solid fa-user icon-left"></i>
-      <input type="text" id="name" name="nomeEnfermeiro" required />
-    </div>
-  </div>
+          <div class="input-group">
+            <label for="name">Nome completo</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-user icon-left"></i>
+              <input type="text" id="name" name="nomeEnfermeiro" required />
+            </div>
+          </div>
 
-  <div class="input-group">
-    <label for="corem">COREN</label>
-    <div class="input-wrapper">
-      <i class="fa-solid fa-id-card icon-left"></i>
-      <input type="text" id="corem" name="corenEnfermeiro" required />
-    </div>
-  </div>
+          <div class="input-group">
+            <label for="corem">COREN</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-id-card icon-left"></i>
+              <input type="text" id="corem" name="corenEnfermeiro" required />
+            </div>
+          </div>
 
-  <div class="input-group">
-    <label for="genero">Gênero</label>
-    <div class="input-wrapper">
-      <i class="fa-solid fa-venus-mars icon-left"></i>
-      <select name="genero" required>
-        <option value="">Selecione</option>
-        <option value="Masculino">Masculino</option>
-        <option value="Feminino">Feminino</option>
-        <option value="Outro">Outro</option>
-      </select>
-    </div>
-  </div>
+          <div class="input-group">
+            <label for="genero">Gênero</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-venus-mars icon-left"></i>
+              <select name="genero" required>
+                <option value="">Selecione</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </div>
+          </div>
 
-  <div class="input-group">
-    <label for="email">E-mail</label>
-    <div class="input-wrapper">
-      <i class="fa-solid fa-envelope icon-left"></i>
-      <input type="email" id="email" name="emailEnfermeiro" required />
-    </div>
-  </div>
-  
-  <div class="input-group">
-    <label for="unidades">Unidades de Trabalho...</label>
-    <div class="input-wrapper">
-        <i class="fa-solid fa-hospital icon-left"></i>
-        <select name="unidades[]" id="unidades" multiple>
-            @forelse($unidades as $unidade)
-                <option value="{{ $unidade->idUnidadePK }}">{{ $unidade->nomeUnidade }}</option>
-            @empty
-                ...
-            @endforelse
-        </select>
-    </div>
-</div>
+          <div class="input-group">
+            <label for="email">E-mail</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-envelope icon-left"></i>
+              <input type="email" id="email" name="emailEnfermeiro" required />
+            </div>
+          </div>
 
+          <div class="input-group">
+            <label for="unidade">Unidade de Trabalho</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-hospital icon-left"></i>
+              @if($unidadeLogada)
+              <input
+                type="text"
+                id="unidade"
+                name="unidade"
+                value="{{ $unidadeLogada->nomeUnidade }}"
+                readonly
+                style="background-color: #f0f0f0; color: #666; cursor: not-allowed;" />
+              <input type="hidden" name="unidade_id" value="{{ $unidadeLogada->idUnidadePK }}">
+              @else
+              <input
+                type="text"
+                value="Nenhuma unidade encontrada"
+                readonly
+                style="background-color: #f0f0f0; color: #999; cursor: not-allowed;" />
+              @endif
+            </div>
+          </div>
 
-  <button type="submit">CADASTRAR</button>
-  <div id="form-messages" style="display:none;"></div>
-</form>
+          <button type="submit">CADASTRAR</button>
+          <div id="form-messages" style="display:none;"></div>
+        </form>
 
       </div>
     </div>
@@ -150,4 +159,5 @@
     });
   </script>
 </body>
+
 </html>
