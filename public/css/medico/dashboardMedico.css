@@ -1,325 +1,489 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
-/* Cores principais: 
-   - #8c1007 (Vermelho Principal - Forte, usado no template)
-   - #a33e38 (Vermelho Mais Claro/Rose para Cards de Background)
-   - #7b0e06 (Vermelho Escuro para Destaque)
-   - #004d99 (Azul SUS Profissional)
-*/
+/* ============================================
+   DASHBOARD MÉDICO - CORES PRINCIPAIS
+   ============================================ */
+:root {
+    --primary-red: #8c1007;
+    --primary-red-light: #a33e38;
+    --primary-red-dark: #7b0e06;
+    --sus-blue: #004d99;
+    --text-primary: #333;
+    --text-secondary: #666;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 15px;
+    --radius-xl: 20px;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 6px 15px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.15);
+    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
 
 body {
     font-family: 'Montserrat', sans-serif;
-    margin-top: 30px;
-    padding: 30px;
+    margin: 0;
+    padding: 0;
     overflow-x: hidden;
+    background-color: #f8f9fa;
 }
 
 .main-dashboard {
     padding: 0;
+    min-height: 100vh;
 }
 
-.main-dashboard h1 {
-    color: #8c1007;
-    font-size: 30px;
-    font-weight: 600;
+.overview-container {
+    max-width: 1750px;
+    margin: 0 auto;
+    padding: 20px 40px;
 }
 
-.banner-logo {
-    width: 150px;
-}
-
-.funcionarios-image {
-    width: 100%;
-    border-radius: 10px;
-    margin-bottom: 0px;
-    margin-top: 40px;
-}
-
-.icon-prontuario {
-    width: 150px;
-}
-
-.dashboard-title {
-    color: #333;
-    font-size: 1.8em;
+/* ============================================
+   ESTRUTURA BÁSICA E CORES (HEADER, BANNER)
+   ============================================ */
+.dashboard-header {
     margin-bottom: 30px;
-    padding: 0 0 10px 0;
 }
 
-
-.welcome-banner {
+.header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #8c1007;
-    color: white;
-    padding: 25px 40px;
-    border-radius: 15px;
-    margin-bottom: 30px;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-    height: 150px;
-}
-
-.banner-left {
-    flex-basis: 15%;
-}
-
-.banner-center {
-    flex-basis: 50%;
-}
-
-.banner-right {
-    flex-basis: 35%;
-    display: flex;
-    
-}
-
-
-.banner-logo-placeholder {
-    font-size: 1.2em;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    letter-spacing: 1px;
-}
-
-.banner-logo-placeholder i {
-    font-size: 2em;
-    transform: rotate(45deg);
-}
-
-.welcome-banner h2 {
-    font-size: 2.2em;
-    margin: 0;
-    font-weight: 300;
-}
-
-.doctor-name {
-    font-weight: 600;
-}
-
-.welcome-banner p {
-    margin-top: 5px;
-    font-size: 1em;
-    opacity: 0.9;
-}
-
-
-
-.banner-illustration-icon {
-    font-size: 7em;
-    color: rgba(255, 255, 255, 0.4);
-}
-
-.main-metrics-wrapper {
-    display: flex;
+    flex-wrap: wrap;
     gap: 20px;
-    margin-bottom: 30px;
 }
 
-.metric-square-container {
-    display: flex;
-    gap: 20px;
-    flex: 1;
-}
-
-.metric-square {
-    background-color: #ffffff;
-    border: 1px solid #f0f0f0;
-    color: #8c1007;
-    padding: 30px;
-    border-radius: 15px;
-    flex: 1;
-    min-width: 200px;
-    min-height: 250px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-    /* Sombra elevada */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.metric-square:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-    background-color: #fffafa;
-}
-
-.icon-metric {
-    width: 70px;
-    height: 70px;
-    object-fit: contain;
-    margin-bottom: 15px;
-    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
-}
-
-.metric-square strong {
-    font-size: 3.5em;
-    font-weight: 800;
-    display: block;
-    margin: 5px 0 10px 0;
-    line-height: 1;
-}
-
-.metric-square span {
-    font-size: 1.1em;
-    font-weight: 600;
-    color: #a33e38;
-}
-
-.sus-logo-container {
-    background-color: #e9f0f9;
-    border-radius: 15px;
-    padding: 20px;
-    flex: 0 0 220px;
-    height: 250px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-}
-
-.sus-icon {
-    font-size: 5em;
-    color: #004d99;
+.header-left h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--primary-red);
     margin-bottom: 5px;
 }
 
-.sus-text {
-    font-size: 2.5em;
-    font-weight: 800;
-    color: #004d99;
+.header-subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.date-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    padding: 12px 20px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.date-badge i {
+    color: var(--primary-red);
+    font-size: 1.2rem;
+}
+
+.welcome-banner {
+    position: relative;
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+    color: white;
+    padding: 40px;
+    border-radius: var(--radius-xl);
+    margin-bottom: 35px;
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+}
+
+.banner-decoration {
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulseFloat 6s ease-in-out infinite;
+}
+
+@keyframes pulseFloat {
+    0%, 100% { 
+        transform: translate(0, 0) scale(1); 
+        opacity: 0.3; 
+    }
+    50% { 
+        transform: translate(-20px, -20px) scale(1.1); 
+        opacity: 0.6; 
+    }
+}
+
+.banner-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+.banner-logo {
+    width: 300px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { 
+        transform: translateY(0); 
+    }
+    50% { 
+        transform: translateY(-10px); 
+    }
+}
+
+.banner-center h2 {
+    font-size: 2rem;
+    font-weight: 300;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.banner-center .doctor-name {
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.banner-center p {
+    font-size: 1rem;
+    opacity: 0.95;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.funcionarios-image {
+    width: 450px;
+    border-radius: 10px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.content-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+/* MÉTRICAS E SUS LOGO */
+.metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    flex: 1;
+}
+
+.metric-card {
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+    color: white;
+    padding: 25px;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    min-width: 250px;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.metric-card:hover::before {
+    left: 100%;
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.metric-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.15);
+    flex-shrink: 0;
+}
+
+.icon-metric-img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+.metric-label {
+    display: block;
+    font-size: 15px;
+    color: #fff !important;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+.metric-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
     line-height: 1;
 }
 
+.sus-logo-container {
+    background: linear-gradient(135deg, #e9f0f9 0%, #d4e4f7 100%);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    flex: 0 0 250px;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.sus-logo-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 77, 153, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.sus-logo-container:hover::before {
+    left: 100%;
+}
+
+.sus-logo-container:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.sus-icon {
+    font-size: 4rem;
+    color: var(--sus-blue);
+    margin-bottom: 10px;
+    animation: float 3s ease-in-out infinite;
+}
+
+.sus-text {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--sus-blue);
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
 .sus-logo-container p {
-    font-size: 0.9em;
+    font-size: 0.85rem;
     color: #444;
     margin-top: 5px;
     font-weight: 600;
+    text-align: center;
 }
 
-.chart-and-logo-wrapper {
+/* ============================================
+   SEÇÃO DE GRÁFICOS
+   ============================================ */
+.charts-section {
+    margin-bottom: 40px;
+}
+
+.section-header {
+    margin-bottom: 25px;
+}
+
+.section-header h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-red);
+    margin-bottom: 5px;
     display: flex;
-    gap: 20px;
-    margin-bottom: 30px;
+    align-items: center;
+    gap: 12px;
 }
 
-.chart-column-left {
-    flex-basis: 35%;
-    min-width: 300px;
+.section-header p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
 }
 
-.chart-column-right {
-    flex-basis: 65%;
-    min-width: 400px;
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 25px;
 }
 
-.chart-container {
-    background-color: #fff;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-    height: 400px;
+.chart-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.chart-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+.chart-card-small {
+    grid-column: span 1;
+}
+
+.chart-header {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 2px solid #f0f0f0;
 }
 
 .chart-title {
-    font-size: 1.4em;
-    color: #333;
-    margin-bottom: 20px;
-    font-weight: 700;
-    border-bottom: 1px dashed #ddd;
-    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-@media (max-width: 1200px) {
-    .main-metrics-wrapper {
-        flex-wrap: wrap;
-    }
-
-    .metric-square-container {
-        flex: 1 1 100%;
-        justify-content: space-between;
-    }
-
-    .metric-square {
-        flex: 1 1 48%;
-        min-width: unset;
-    }
-
-    .sus-logo-container {
-        flex: 1 1 100%;
-        height: 150px;
-        flex-direction: row;
-        gap: 30px;
-    }
-
-    .sus-logo-container p {
-        display: none;
-    }
-
-    .sus-icon {
-        font-size: 3em;
-    }
-
-    .sus-text {
-        font-size: 2em;
-    }
+.chart-title i {
+    font-size: 1.5rem;
+    color: var(--primary-red);
 }
 
-@media (max-width: 768px) {
-    .welcome-banner {
-        padding: 20px;
-    }
+.chart-title h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
 
-    .welcome-banner h2 {
-        font-size: 1.8em;
-    }
+.chart-options {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
+    transition: all 0.3s ease;
+}
 
-    .doctor-name {
-        font-size: 1em;
-    }
+.chart-options:hover {
+    background: #f0f0f0;
+    color: var(--primary-red);
+}
 
-    .banner-left,
-    .banner-center {
-        flex-basis: 100%;
-        text-align: center;
-        margin-bottom: 15px;
-    }
+.chart-body {
+    padding: 30px 25px;
+    height: 300px;
+}
 
-    .banner-right {
-        display: none;
-    }
+.chart-body-donut {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 25px;
+    height: 350px;
+}
 
-    .metric-square {
-        flex: 1 1 100%;
-    }
+.chart-footer {
+    padding: 15px 25px;
+    background: #f9fafb;
+    border-top: 1px solid #f0f0f0;
+}
 
-    .chart-and-logo-wrapper {
-        flex-direction: column;
-    }
+.chart-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
 
-    .chart-column-left,
-    .chart-column-right {
-        flex-basis: 100%;
-    }
+.chart-info i {
+    color: var(--primary-red);
+}
 
-    .chart-container {
-        height: 300px;
-    }
+.legend-row {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+}
+
+/* ============================================
+   ANIMAÇÕES (PADRÃO SEQUENCIAL)
+   ============================================ */
+.fade-in, .slide-up, .zoom-in-banner {
+    /* Define o estado inicial para todas as classes animáveis */
+    opacity: 0;
+    /* Adiciona transição de fallback e para garantir a suavidade ao ser ativado pelo JS */
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.slide-up {
+    transform: translateY(20px);
+}
+
+.zoom-in-banner {
+    transform: scale(0.95);
+}
+
+/* Keyframes baseados no seu código para o JS chamar se necessário */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes fadeInSlideUp {
     from {
         opacity: 0;
-        transform: translateY(20px); 
+        transform: translateY(20px);
     }
     to {
         opacity: 1;
@@ -327,45 +491,68 @@ body {
     }
 }
 
-@keyframes fadeIn {
+@keyframes zoomIn {
     from {
         opacity: 0;
+        transform: scale(0.95);
     }
     to {
         opacity: 1;
+        transform: scale(1);
     }
 }
 
-.dashboard-title {
-    opacity: 0; 
-    animation: fadeIn 0.8s ease-out 0.1s forwards;
+
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
+@media (max-width: 1200px) {
+    .content-wrapper {
+        flex-direction: column;
+    }
+
+    .metrics {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .sus-logo-container {
+        flex: 1 1 100%;
+        min-height: 150px;
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    .sus-logo-container p {
+        display: none;
+    }
+
+    .sus-icon {
+        font-size: 3rem;
+        margin-bottom: 0;
+    }
+
+    .sus-text {
+        font-size: 2rem;
+    }
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
-.welcome-banner {
-    opacity: 0;
-    animation: fadeInSlideUp 0.8s ease-out 0.3s forwards;
-}
+@media (max-width: 768px) {
+    .metrics {
+        grid-template-columns: 1fr;
+    }
 
-.main-metrics-wrapper {
-    opacity: 0; 
-    animation: fadeInSlideUp 0.8s ease-out 0.5s forwards;
-}
+    .metric-card {
+        min-width: unset;
+    }
 
-.chart-and-logo-wrapper {
-    opacity: 0; 
-    animation: fadeInSlideUp 0.8s ease-out 0.7s forwards;
-}
+    .sus-logo-container {
+        padding: 15px;
+    }
 
-
-.metric-square {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    opacity: 0;
-    animation: fadeInSlideUp 0.6s ease-out forwards;
-}
-
-.metric-square:nth-child(1) {
-    animation-delay: 0.8s; 
-}
-.metric-square:nth-child(2) {
-    animation-delay: 0.9s; 
+    .overview-container {
+        padding: 20px;
+    }
 }

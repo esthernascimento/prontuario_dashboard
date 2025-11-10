@@ -8,10 +8,25 @@
 
 <link rel="stylesheet" href="{{ asset('css/unidade/dashboardUnidade.css') }}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{{-- NOTA: O bloco PHP para dados dos gráficos foi omitido aqui para concisão, mas deve estar no seu arquivo. --}}
+@php 
+    // Variáveis de exemplo (devem vir do seu backend)
+    $medicosCount = 15;
+    $nursesCount = 20;
+    $patientsCount = 10; // Usado para recepcionistas neste contexto
+    $nomeUnidade = 'Unidade Modelo Alfa';
+    $dadosGenero = ['Homens' => 45, 'Mulheres' => 55];
+    $medicosPorEspecialidade = collect([
+        (object)['especialidadeMedico' => 'Cardio', 'total' => 12],
+        (object)['especialidadeMedico' => 'Pediatria', 'total' => 8],
+    ]);
+    $dadosLinha = ['meses' => ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'], 'pacientes' => [45, 52, 61, 58, 70, 78]];
+@endphp
 
 <div class="dashboard-container">
-    <!-- HEADER COM BOAS-VINDAS -->
-    <div class="dashboard-header fade-in">
+    <div class="dashboard-header fade-in" style="animation-delay: 0s;">
         <div class="header-content">
             <div class="header-left">
                 <h1>Dashboard da Unidade</h1>
@@ -26,8 +41,7 @@
         </div>
     </div>
 
-    <!-- BANNER DE BOAS-VINDAS -->
-    <div class="welcome-banner zoom-in">
+    <div class="welcome-banner zoom-in" style="animation-delay: 0.1s;">
         <div class="banner-decoration"></div>
         <div class="banner-content">
             <div class="banner-left">
@@ -38,27 +52,23 @@
                 <p><i class="bi bi-heart-pulse"></i> O Prontuário+ fica feliz com a sua presença e dedicação à saúde.</p>
             </div>
             <div class="banner-right">
-                <img src="{{ asset('img/ministerio.png') }}" alt="Ministério da Saúde" class="banner-gov-logo">
+                <img src="{{ asset('img/icon-hospital.png') }}" alt="unidade" class="banner-gov-logo">
             </div>
         </div>
     </div>
 
-    <!-- CARDS DE MÉTRICAS PRINCIPAIS -->
     <div class="metrics-grid">
-        <div class="metric-card slide-up" style="animation-delay: 0.1s;">
-            <div class="metric-icon blue">
+        <div class="metric-card slide-up" style="animation-delay: 0.2s;">
+            <div class="metric-icon red">
                 <i class="bi bi-person-hearts"></i>
             </div>
             <div class="metric-content">
                 <span class="metric-label">Médicos Cadastrados</span>
                 <strong class="metric-value">{{ $medicosCount ?? 0 }}</strong>
             </div>
-            <div class="metric-badge">
-                <i class="bi bi-graph-up"></i>
-            </div>
         </div>
 
-        <div class="metric-card slide-up" style="animation-delay: 0.2s;">
+        <div class="metric-card slide-up" style="animation-delay: 0.3s;">
             <div class="metric-icon green">
                 <i class="bi bi-heart-pulse-fill"></i>
             </div>
@@ -66,12 +76,9 @@
                 <span class="metric-label">Enfermeiros Cadastrados</span>
                 <strong class="metric-value">{{ $nursesCount ?? 0 }}</strong>
             </div>
-            <div class="metric-badge">
-                <i class="bi bi-graph-up"></i>
-            </div>
         </div>
 
-        <div class="metric-card slide-up" style="animation-delay: 0.3s;">
+        <div class="metric-card slide-up" style="animation-delay: 0.4s;">
             <div class="metric-icon purple">
                 <i class="bi bi-person-check"></i>
             </div>
@@ -79,12 +86,9 @@
                 <span class="metric-label">Recepcionistas Cadastrados</span>
                 <strong class="metric-value">{{ $patientsCount ?? 0 }}</strong>
             </div>
-            <div class="metric-badge">
-                <i class="bi bi-graph-up"></i>
-            </div>
         </div>
 
-        <div class="metric-card slide-up" style="animation-delay: 0.4s;">
+        <div class="metric-card slide-up" style="animation-delay: 0.5s;">
             <div class="metric-icon orange">
                 <i class="bi bi-people-fill"></i>
             </div>
@@ -92,22 +96,17 @@
                 <span class="metric-label">Total de Profissionais</span>
                 <strong class="metric-value">{{ ($medicosCount ?? 0) + ($nursesCount ?? 0) + ($patientsCount ?? 0) }}</strong>
             </div>
-            <div class="metric-badge">
-                <i class="bi bi-award-fill"></i>
-            </div>
         </div>
     </div>
 
-    <!-- SEÇÃO DE GRÁFICOS -->
     <div class="charts-section">
-        <div class="section-header fade-in">
+        <div class="section-header fade-in" style="animation-delay: 0.6s;">
             <h2><i class="bi bi-bar-chart-fill"></i> Estatísticas e Análises</h2>
             <p>Acompanhe os dados da sua unidade em tempo real</p>
         </div>
 
         <div class="charts-grid">
-            <!-- GRÁFICO 1: MÉDICOS POR ESPECIALIDADE -->
-            <div class="chart-card slide-up" style="animation-delay: 0.5s;">
+            <div class="chart-card slide-up" style="animation-delay: 0.7s;">
                 <div class="chart-header">
                     <div class="chart-title">
                         <i class="bi bi-clipboard2-pulse"></i>
@@ -128,8 +127,7 @@
                 </div>
             </div>
 
-            <!-- GRÁFICO 2: CRESCIMENTO DE PACIENTES -->
-            <div class="chart-card slide-up" style="animation-delay: 0.6s;">
+            <div class="chart-card slide-up" style="animation-delay: 0.8s;">
                 <div class="chart-header">
                     <div class="chart-title">
                         <i class="bi bi-graph-up-arrow"></i>
@@ -150,8 +148,7 @@
                 </div>
             </div>
 
-            <!-- GRÁFICO 3: GÊNERO DOS PACIENTES -->
-            <div class="chart-card chart-card-small slide-up" style="animation-delay: 0.7s;">
+            <div class="chart-card chart-card-small slide-up" style="animation-delay: 0.9s;">
                 <div class="chart-header">
                     <div class="chart-title">
                         <i class="bi bi-gender-ambiguous"></i>
@@ -180,44 +177,8 @@
         </div>
     </div>
 
-    <!-- SEÇÃO DE AÇÕES RÁPIDAS -->
-    <div class="quick-actions-section fade-in">
-        <div class="section-header">
-            <h2><i class="bi bi-lightning-charge-fill"></i> Ações Rápidas</h2>
-            <p>Acesso rápido às funcionalidades principais</p>
-        </div>
-
-        <div class="quick-actions-grid">
-                <div class="action-icon blue">
-                    <i class="bi bi-person-badge"></i>
-                </div>
-                <div class="action-content">
-                    <h4>Gerenciar Médicos</h4>
-                    <p>Cadastre e gerencie médicos</p>
-                </div>
-                <div class="action-arrow">
-                    <i class="bi bi-arrow-right"></i>
-                </div>
-            </a>
-
-            <a href="#" class="action-card slide-up" style="animation-delay: 1.1s;">
-                <div class="action-icon orange">
-                    <i class="bi bi-file-earmark-medical"></i>
-                </div>
-                <div class="action-content">
-                    <h4>Relatórios</h4>
-                    <p>Visualize relatórios gerenciais</p>
-                </div>
-                <div class="action-arrow">
-                    <i class="bi bi-arrow-right"></i>
-                </div>
-            </a>
-        </div>
-    </div>
-
-    <!-- INFORMAÇÕES ADICIONAIS -->
     <div class="info-section">
-        <div class="info-card-large slide-up" style="animation-delay: 1.2s;">
+        <div class="info-card-large slide-up" style="animation-delay: 1.0s;">
             <div class="info-icon">
                 <i class="bi bi-info-circle-fill"></i>
             </div>
@@ -233,39 +194,38 @@
             </div>
         </div>
 
-        <div class="info-card-small slide-up" style="animation-delay: 1.3s;">
+        <div class="info-card-small slide-up" style="animation-delay: 1.1s;">
             <div class="support-content">
                 <i class="bi bi-headset"></i>
                 <h4>Precisa de Ajuda?</h4>
                 <p>Nossa equipe está pronta para atendê-lo</p>
-                <button class="support-btn">
+                <a class="support-btn" href="{{ route('unidade.ajuda') }}">
                     <i class="bi bi-chat-dots-fill"></i>
                     Falar com Suporte
-                </button>
+                </a>
             </div>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
-    // Configuração global dos gráficos
+    // Configurações e Instanciação dos Gráficos Chart.js
     Chart.defaults.font.family = 'Montserrat, sans-serif';
     Chart.defaults.color = '#6B7280';
+    const primaryColor = '#3C0061';
+    const secondaryColor = '#DC2626';
 
-    // GRÁFICO 1: Médicos por Especialidade
+    // === Gráfico de Especialidades ===
     const ctxEspecialidade = document.getElementById('graficoEspecialidades');
     if (ctxEspecialidade) {
-        const especialidadesData = {!! json_encode($medicosPorEspecialidade) !!};
+        const especialidadesData = @json($medicosPorEspecialidade);
         
-        // Se não houver dados, exibir dados de exemplo
         const labels = especialidadesData.length > 0 
-            ? {!! json_encode($medicosPorEspecialidade->pluck('especialidadeMedico')) !!}
+            ? especialidadesData.map(item => item.especialidadeMedico)
             : ['Cardiologia', 'Pediatria', 'Ortopedia', 'Clínico Geral', 'Ginecologia'];
         
         const data = especialidadesData.length > 0 
-            ? {!! json_encode($medicosPorEspecialidade->pluck('total')) !!}
+            ? especialidadesData.map(item => item.total)
             : [12, 8, 6, 15, 10];
 
         new Chart(ctxEspecialidade, {
@@ -276,10 +236,10 @@
                     label: 'Médicos',
                     data: data,
                     backgroundColor: 'rgba(60, 0, 97, 0.8)',
-                    borderColor: '#3C0061',
+                    borderColor: primaryColor,
                     borderWidth: 2,
                     borderRadius: 8,
-                    hoverBackgroundColor: '#3C0061',
+                    hoverBackgroundColor: primaryColor,
                 }]
             },
             options: {
@@ -292,7 +252,7 @@
                         padding: 12,
                         titleColor: '#fff',
                         bodyColor: '#fff',
-                        borderColor: '#3C0061',
+                        borderColor: primaryColor,
                         borderWidth: 1,
                         displayColors: false,
                         callbacks: {
@@ -309,23 +269,18 @@
                             color: 'rgba(0, 0, 0, 0.05)',
                             drawBorder: false
                         },
-                        ticks: {
-                            stepSize: 5,
-                            font: { size: 11 }
-                        }
+                        ticks: { stepSize: 5, font: { size: 11 } }
                     },
                     x: {
                         grid: { display: false },
-                        ticks: {
-                            font: { size: 11 }
-                        }
+                        ticks: { font: { size: 11 } }
                     }
                 }
             }
         });
     }
 
-    // GRÁFICO 2: Crescimento de Pacientes (Linha)
+    // === Gráfico de Crescimento (Linha) ===
     const ctxLinha = document.getElementById('graficoLinha');
     if (ctxLinha) {
         const dadosLinha = @json($dadosLinha);
@@ -345,7 +300,7 @@
                 datasets: [{
                     label: 'Pacientes',
                     data: pacientes,
-                    borderColor: '#3C0061',
+                    borderColor: primaryColor,
                     backgroundColor: 'rgba(60, 0, 97, 0.1)',
                     fill: true,
                     tension: 0.4,
@@ -353,9 +308,9 @@
                     pointRadius: 5,
                     pointHoverRadius: 7,
                     pointBackgroundColor: '#fff',
-                    pointBorderColor: '#3C0061',
+                    pointBorderColor: primaryColor,
                     pointBorderWidth: 2,
-                    pointHoverBackgroundColor: '#3C0061',
+                    pointHoverBackgroundColor: primaryColor,
                     pointHoverBorderColor: '#fff',
                 }]
             },
@@ -382,22 +337,18 @@
                             color: 'rgba(0, 0, 0, 0.05)',
                             drawBorder: false
                         },
-                        ticks: {
-                            font: { size: 11 }
-                        }
+                        ticks: { font: { size: 11 } }
                     },
                     x: {
                         grid: { display: false },
-                        ticks: {
-                            font: { size: 11 }
-                        }
+                        ticks: { font: { size: 11 } }
                     }
                 }
             }
         });
     }
 
-    // GRÁFICO 3: Gênero (Donut)
+    // === Gráfico de Gênero (Donut) ===
     const ctxGenero = document.getElementById('graficoDonutGenero');
     if (ctxGenero) {
         const homens = {{ $dadosGenero['Homens'] ?? 45 }};
@@ -409,7 +360,7 @@
                 labels: ['Homens', 'Mulheres'],
                 datasets: [{
                     data: [homens, mulheres],
-                    backgroundColor: ['#3C0061', '#DC2626'],
+                    backgroundColor: [primaryColor, secondaryColor],
                     borderWidth: 3,
                     borderColor: '#fff',
                     hoverOffset: 10
@@ -420,9 +371,7 @@
                 maintainAspectRatio: true,
                 cutout: '70%',
                 plugins: {
-                    legend: {
-                        display: false
-                    },
+                    legend: { display: false },
                     tooltip: {
                         backgroundColor: '#111827',
                         padding: 12,
@@ -439,14 +388,22 @@
         });
     }
 
-    // Animação suave ao carregar
+</script>
+<script>
     document.addEventListener('DOMContentLoaded', function() {
-        const cards = document.querySelectorAll('.slide-up, .fade-in, .zoom-in');
-        cards.forEach((card, index) => {
+        // Seleciona todos os elementos com as classes de animação
+        const animatedElements = document.querySelectorAll('.slide-up, .fade-in, .zoom-in');
+
+        animatedElements.forEach(element => {
+            const delay = parseFloat(element.style.animationDelay) * 1000 || 0;
+
             setTimeout(() => {
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0) scale(1)';
-            }, index * 100);
+       
+                element.style.opacity = '1'; 
+                element.style.transform = 'translateY(0) scale(1)';
+
+       
+            }, delay);
         });
     });
 </script>

@@ -1,143 +1,247 @@
 @extends('enfermeiro.templates.enfermeiroTemplate')
 
+@section('title', 'Dashboard - Prontuário+')
+
 @section('content')
-
-
 
 <link rel="stylesheet" href="{{ asset('css/enfermeiro/dashboardEnfermeiro.css') }}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<main class="content">
-    <div class="page-container">
+@php
+    $atendimentosDia = 25;
+    $pacientesProprios = 150;
+    $unidadeAtuacao = 'UBS Central';
+    $agendamentosHoje = 8;
+    $dadosGeneroEnfermeiro = ['Homens' => 40, 'Mulheres' => 60];
+@endphp
 
-        <h1 class="dashboard-title">Dashboard Enfermeiro</h1>
+<div class="main-dashboard">
+    <div class="overview-container">
 
-        <div class="welcome-banner">
-            <div class="banner-left">
-                <div class="banner-logo-container">
-                    <img src="{{ asset('img/enfermeiro-logo2.png') }}" alt="Logo Prontuário+" class="banner-logo">
+        <div class="dashboard-header fade-in">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>Dashboard do Enfermeiro</h1>
+                    <p class="header-subtitle">Visão geral e estatísticas em tempo real</p>
+                </div>
+                <div class="header-right">
+                    <div class="date-badge">
+                        <i class="bi bi-calendar3"></i>
+                        <span>{{ \Carbon\Carbon::now()->locale('pt_BR')->isoFormat('DD [de] MMMM [de] YYYY') }}</span>
+                    </div>
                 </div>
             </div>
-
-            <div class="banner-center">
-                <h2>
-                    Bem-vindo(a)
-                    <span class="name">
-                        Enfermeiro(a) {{ $enfermeiro->nomeEnfermeiro ?? 'Usuário' }}
-                    </span>
-                </h2>
-                <p>O Prontuário+ fica feliz com a sua presença e dedicação à saúde.</p>
-            </div>
-
-            <div class="banner-right">
-                <img src="{{ asset('img/enfermeiros.png') }}" alt="Ilustração de Enfermeiros" class="enfermeiros-image">
+        </div>
+        
+        <div class="welcome-banner zoom-in-banner" style="animation-delay: 0.4s;">
+            <div class="banner-decoration"></div>
+            <div class="banner-content">
+                <div class="banner-left">
+                    <div class="banner-logo-container">
+                        <img src="{{ asset('img/enfermeiro-logo2.png') }}" alt="Logo Prontuário+" class="banner-logo">
+                    </div>
+                </div>
+                <div class="banner-center">
+               
+                    <h2>Bem-vindo(a), <span class="name">{{ $nome ?? 'Enfermeiro(a)' }}</span></h2>
+                    <p><i class="bi bi-heart-pulse"></i>O Prontuário+ fica feliz com a sua presença e dedicação à saúde.</p>
+                </div>
+                <div class="banner-right">
+                    <img src="{{ asset('img/enfermeiros.png') }}" alt="Ilustração de Enfermeiros" class="funcionarios-image">
+                </div>
             </div>
         </div>
 
         <div class="metrics">
-    <div class="metric-card">
-        <div class="container-img">
-            {{-- Substitua a tag <img> pela tag <i> do Bootstrap Icons --}}
-            <i class="bi bi-person-fill"></i> 
-            <span>Pacientes no sistema</span>
+            <div class="metric-card slide-up" style="animation-delay: 0.6s;">
+                <div class="metric-icon red">
+                    <i class="bi bi-person-fill-gear"></i>
+                </div>
+                <div class="metric-content">
+                    <span class="metric-label">Atendimentos no Dia</span>
+                    <strong class="metric-value">{{ $atendimentosDia ?? 0 }}</strong>
+                </div>
+            </div>
+
+            <div class="metric-card slide-up" style="animation-delay: 0.8s;">
+                <div class="metric-icon purple">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div class="metric-content">
+                    <span class="metric-label">Pacientes Próprios</span>
+                    <strong class="metric-value">{{ $pacientesProprios ?? 0 }}</strong>
+                </div>
+            </div>
+
+            <div class="metric-card slide-up" style="animation-delay: 1.0s;">
+                <div class="metric-icon green">
+                    <i class="bi bi-hospital-fill"></i>
+                </div>
+                <div class="metric-content">
+                    <span class="metric-label">Unidade de Atuação</span>
+                    <strong class="metric-value metric-text-small">{{ $unidadeAtuacao ?? 'N/A' }}</strong>
+                </div>
+            </div>
+
+            <div class="metric-card slide-up" style="animation-delay: 1.2s;">
+                <div class="metric-icon orange">
+                    <i class="bi bi-calendar-check-fill"></i>
+                </div>
+                <div class="metric-content">
+                    <span class="metric-label">Agendamentos Hoje</span>
+                    <strong class="metric-value">{{ $agendamentosHoje ?? 0 }}</strong>
+                </div>
+            </div>
         </div>
-        <strong>{{ $patientsCount ?? 0 }}</strong>
-    </div>
-    
-    <div class="metric-card">
-        <div class="container-img">
-            <i class="bi bi-file-earmark-text-fill"></i>
-            <span>Prontuários disponíveis</span>
+
+
+        <div class="charts-section">
+            <div class="section-header slide-up" style="animation-delay: 1.4s;">
+                <h2><i class="bi bi-bar-chart-fill"></i> Estatísticas e Análises</h2>
+                <p>Monitore seus pacientes e atendimentos em tempo real</p>
+            </div>
+            <div class="content-wrapper"> 
+                <div class="charts"> 
+                 
+                    <div class="chart-container slide-up" style="animation-delay: 1.6s;">
+                        <canvas id="graficoPacientesMes"></canvas>
+                    </div>
+
+                    {{-- GRÁFICO DE DONUT ENFERMEIRO --}}
+                    <div class="chart-container info-card slide-up" style="animation-delay: 1.8s;">
+                        <h3>Índice de Gênero</h3>
+                        <div class="donut-chart">
+                            <canvas id="graficoDonutEnfermeiro"></canvas>
+                        </div>
+                    </div>
+                    
+                    {{-- GRÁFICO DE BARRAS DE SERVIÇOS --}}
+                    <div class="chart-container slide-up" style="animation-delay: 2.0s;">
+                        <canvas id="graficoVazio"></canvas>
+                    </div>
+                </div>
+
+                <div class="info-cards-container">
+                    <div class="info-card slide-up" style="animation-delay: 2.2s;">
+                        <h3>Taxa de Acolhimento</h3>
+                        <strong style="font-size: 3rem;">92%</strong>
+                        <p>Pacientes atendidos no tempo correto</p>
+                    </div>
+                    <div class="info-card slide-up" style="animation-delay: 2.4s;">
+                        <h3>Média de Espera</h3>
+                        <strong style="font-size: 3rem;">15 min</strong>
+                        <p>Tempo médio até o primeiro atendimento</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <strong>{{ $prontuariosCount ?? 0 }}</strong>
+
     </div>
 </div>
 
-        <div class="content-wrapper">
-            <div class="charts-left chart-container">
-                <h4 style="color: #0a400c; margin-bottom: 20px;">Gráfico de Pacientes por Mês</h4>
-                <canvas id="graficoPacientesMes"></canvas>
-            </div>
-
-            <div class="right-column">
-                <div class="welcome-card">
-                    O SUS agradece a sua <br>colaboração para o nosso sistema!
-                    <img src="{{ asset('img/exames.png') }}" alt="Prontuário">
-                </div>
-
-                <div class="donut-card">
-                    <div class="text-info">
-                        Enfermeiros(a) ativos:<br>Homens e Mulheres
-                    </div>
-                    <canvas id="graficoDonutEnfermeiro" class="donut-chart-canvas"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Gráfico de Donut
-    const ctxEnfermeiro = document.getElementById('graficoDonutEnfermeiro');
-    new Chart(ctxEnfermeiro, {
-        type: 'pie',
+    // Definição das cores para o tema verde
+    const greenPrimary = '#2e7d32'; // Verde Escuro Principal
+    const greenLightBackground = '#E8F5E9'; // Fundo suave para linha/área
+
+    Chart.defaults.font.family = 'Montserrat, sans-serif';
+    Chart.defaults.color = '#4b5563';
+
+    // Gráfico de Pacientes por Mês (Linhas)
+    const ctxPacientes = document.getElementById('graficoPacientesMes').getContext('2d');
+    new Chart(ctxPacientes, {
+        type: 'line',
         data: {
-            labels: ['Homens', 'Mulheres'],
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
             datasets: [{
-                data: [
-                    {{ $dadosGeneroEnfermeiro['Homens'] ?? 0 }},
-                    {{ $dadosGeneroEnfermeiro['Mulheres'] ?? 0 }},
-                ],
-                backgroundColor: ['#0a400c', '#34a537']
+                label: 'Atendimentos',
+                data: [12, 19, 8, 15, 10, 13],
+                borderColor: greenPrimary, // Verde
+                backgroundColor: 'rgba(46, 125, 50, 0.1)', // Fundo suave verde
+                fill: true,
+                tension: 0.3
             }]
         },
         options: {
             responsive: true,
+            scales: {
+                y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+                x: { grid: { display: false } }
+            },
             plugins: {
-                legend: {
-                    position: 'top',
-                    labels: {
-                        usePointStyle: true,
-                        font: { size: 14 },
-                        color: '#0a400c'
-                    }
-                },
-                tooltip: {
-                    backgroundColor: '#ffffff',
-                    titleColor: '#000000',
-                    bodyColor: '#000000',
-                    borderColor: '#0a400c',
-                    borderWidth: 1
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: 'Evolução de Atendimentos nos Últimos Meses',
+                    color: greenPrimary, // Verde
+                    font: { size: 16, weight: 'bold' }
                 }
             }
         }
     });
 
-    // Gráfico de Barras (Pacientes)
-    const ctxPacientesMes = document.getElementById('graficoPacientesMes');
-    new Chart(ctxPacientesMes, {
-        type: 'bar',
+    // Gráfico de Donut - Gênero dos Enfermeiros 
+    const ctxEnfermeiro = document.getElementById('graficoDonutEnfermeiro').getContext('2d');
+    new Chart(ctxEnfermeiro, {
+        type: 'doughnut',
         data: {
-            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'],
+            labels: ['Homens', 'Mulheres'],
             datasets: [{
-                label: 'Pacientes Cadastrados',
-                data: [12, 19, 3, 5, 2],
-                backgroundColor: '#0a400c'
+                data: [
+                    {{ $dadosGeneroEnfermeiro['Homens'] ?? 40 }},
+                    {{ $dadosGeneroEnfermeiro['Mulheres'] ?? 60 }}
+                ],
+                // Cores de gênero ajustadas: um verde (homens) e um rosa/magenta (mulheres) para contraste
+                backgroundColor: [greenPrimary, '#ff0066'], 
+                borderColor: '#fff',
+                borderWidth: 3,
+                hoverOffset: 10
             }]
         },
         options: {
             responsive: true,
+            cutout: '70%',
+            plugins: { 
+                legend: { 
+                    position: 'top', 
+                    align: 'center',
+                    labels: { usePointStyle: true }
+                }
+            }
+        }
+    });
+
+    // Gráfico Vazio (Exemplo de Gráfico de Barras)
+    const ctxVazio = document.getElementById('graficoVazio').getContext('2d');
+    new Chart(ctxVazio, {
+        type: 'bar',
+        data: {
+            labels: ['Maniçoba', 'Vacinação', 'Curativos', 'Triagem'],
+            datasets: [{
+                label: 'Frequência de Serviços',
+                data: [10, 25, 15, 30],
+                backgroundColor: greenPrimary, // Verde
+                borderRadius: 5,
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true, max: 40, ticks: { stepSize: 5 } },
+                x: { grid: { display: false } }
+            },
             plugins: {
                 legend: { display: false },
                 title: {
                     display: true,
-                    text: 'Pacientes Cadastrados (Últimos meses)',
-                    color: '#0a400c'
+                    text: 'Serviços Mais Realizados (Exemplo)',
+                    color: greenPrimary, // Verde
+                    font: { size: 16, weight: 'bold' }
                 }
-            },
-            scales: { y: { beginAtZero: true } }
+            }
         }
     });
 </script>
+
 @endsection

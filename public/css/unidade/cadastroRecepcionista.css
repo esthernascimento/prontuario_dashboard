@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 
 :root {
-  --azul: #0618b9;
-  --azul-claro: #304bff;
-  --cinza: #dcdcdc;
-  --branco: #fff;
-  --sombra: 0 8px 20px rgba(6, 24, 185, 0.15);
+  --roxo: #3C0061;
+  --roxo-claro: #AF54F7;
+  --cinza: rgb(222, 187, 247);
+  --branco: #ffffff;
+  --sombra: 0 8px 20px  rgba(60, 0, 97, 0.2);
 }
+
 
 * {
   margin: 0;
@@ -33,7 +34,7 @@ body {
 /* --- Lado Esquerdo --- */
 .left-side {
   width: 50%;
-  background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%);
+  background: linear-gradient(135deg, #27003f 0%, #4a0077 50%, #7405ba 100%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,7 +83,7 @@ body {
 }
 
 h2 {
-  color: var(--azul);
+  color: var(--roxo);
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 25px;
@@ -97,7 +98,7 @@ h2 {
 
 .input-group label {
   font-weight: 600;
-  color: var(--azul);
+  color: var(--roxo);
   display: block;
   margin-bottom: 8px;
   font-size: 14px;
@@ -115,8 +116,8 @@ h2 {
 }
 
 .input-wrapper.focused {
-  border-color: var(--azul);
-  box-shadow: 0 0 0 3px rgba(6, 24, 185, 0.15);
+  border-color: var(--roxo);
+  box-shadow: 0 0 0 3px  rgba(60, 0, 97, 0.2);
   background-color: #fff;
 }
 
@@ -131,20 +132,20 @@ h2 {
 }
 
 .icon-left {
-  color: var(--azul);
+  color: var(--roxo);
   margin-right: 10px;
   font-size: 16px;
 }
 
 .icon-right {
-  color: var(--azul);
+  color: var(--roxo);
   margin-left: 8px;
   cursor: pointer;
   transition: 0.3s;
 }
 
 .icon-right:hover {
-  color: var(--azul-claro);
+  color: var(--roxo-claro);
 }
 
 /* --- Select sem wrapper --- */
@@ -155,7 +156,7 @@ select {
   border-radius: 8px;
   border: 1.5px solid var(--cinza);
   background-color: #f0f4ff;
-  color: var(--azul);
+  color: var(--roxo);
   font-family: 'Montserrat', sans-serif;
   font-size: 14px;
   appearance: none;
@@ -164,8 +165,8 @@ select {
 
 select:focus {
   outline: none;
-  border-color: var(--azul);
-  box-shadow: 0 0 0 3px rgba(6, 24, 185, 0.15);
+  border-color: var(--roxo);
+  box-shadow: 0 0 0 3px  rgba(60, 0, 97, 0.2);
   background-color: #fff;
 }
 
@@ -173,7 +174,7 @@ select:focus {
 .btn-login,
 button {
   width: 100%;
-  background: linear-gradient(135deg, var(--azul) 0%, var(--azul-claro) 100%);
+  background: linear-gradient(135deg, var(--roxo) 0%, var(--roxo-claro) 100%);
   color: var(--branco);
   border: none;
   border-radius: 50px;
@@ -187,14 +188,14 @@ button {
 }
 
 button:hover {
-  background: linear-gradient(135deg, var(--azul-claro) 0%, var(--azul) 100%);
+  background: linear-gradient(135deg, var(--roxo-claro) 0%, var(--roxo) 100%);
   transform: translateY(-2px);
 }
 
 /* --- Alerta --- */
 .success {
   background-color: #e0e7ff;
-  color: #0618b9;
+  color: #3C0061;
   padding: 10px;
   border-radius: 8px;
   font-size: 13px;
