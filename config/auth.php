@@ -38,6 +38,15 @@ return [
             'driver' => 'session',
             'provider' => 'unidades',
         ],
+
+        // =======================================================
+        // --- ADICIONADO: Guard do Paciente para API (Sanctum) ---
+        // =======================================================
+        'paciente' => [
+            'driver' => 'sanctum',
+            'provider' => 'pacientes',
+        ],
+
     ],
 
     'providers' => [
@@ -51,11 +60,10 @@ return [
             'model' => App\Models\Admin::class,
         ],
 
-        // 🔥 O PROVIDER 'medicos' NÃO É MAIS NECESSÁRIO E PODE SER REMOVIDO.
-        // 'medicos' => [
-        //     'driver' => 'eloquent',
-        //     'model' => App\Models\Medico::class,
-        // ],
+        'pacientes' => [ // <-- Isto já estava correto!
+            'driver' => 'eloquent',
+            'model' => App\Models\Paciente::class,
+        ],
 
         'enfermeiros' => [
             'driver' => 'eloquent',

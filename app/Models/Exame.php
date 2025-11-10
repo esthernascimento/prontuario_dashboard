@@ -16,11 +16,13 @@ class Exame extends Model
     protected $fillable = [
         'idConsultaFK', 
         'idPacienteFK',
+        'idProntuarioFK',
         'nomeExame',
         'tipoExame',
         'descExame',
         'resultadoExame',
         'dataExame',
+        'statusExame'
     ];
     
     // Opcional: Define os campos de data

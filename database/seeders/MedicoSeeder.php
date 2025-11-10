@@ -20,37 +20,16 @@ class MedicoSeeder extends Seeder
     {
         $faker = Faker::create('pt_BR');
         
+        // Pega as unidades que o UnidadeSeeder criou
         $unidades = Unidade::all();
         if ($unidades->isEmpty()) {
-            $this->command->info('Criando unidades de saúde para associar aos médicos...');
-            $unidades = [];
-            for ($i = 0; $i < 5; $i++) {
-                $cnpj = $faker->numerify('##.###.###/0001-##');
-                $telefone = $faker->numerify('(##) ####-####');
-                $cep = $faker->numerify('#####-###');
-                
-                $unidades[] = Unidade::create([
-                    'nomeUnidade' => $faker->company . ' - Unidade ' . ($i + 1),
-                    'tipoUnidade' => $faker->randomElement(['Hospital', 'Clínica', 'Posto de Saúde', 'UBS', 'UPA']),
-                    'cnpjUnidade' => $cnpj,
-                    'emailUnidade' => $faker->unique()->companyEmail(),
-                    'senhaUnidade' => Hash::make('senha123'),
-                    'telefoneUnidade' => $telefone,
-                    'cepUnidade' => $cep,
-                    'logradouroUnidade' => $faker->streetName,
-                    'numLogradouroUnidade' => $faker->buildingNumber,
-                    'bairroUnidade' => $faker->citySuffix . ' ' . $faker->lastName,
-                    'cidadeUnidade' => $faker->city,
-                    'ufUnidade' => $faker->stateAbbr,
-                    'estadoUnidade' => $faker->state,
-                    'paisUnidade' => 'Brasil',
-                ]);
-            }
+            $this->command->error('Nenhuma unidade encontrada. Rode o UnidadeSeeder primeiro.');
+            return;
         }
-        $unidadeIds = collect($unidades)->pluck('idUnidadePK')->toArray();
+        $unidadeIds = $unidades->pluck('idUnidadePK')->toArray();
+        $primeiraUnidadeId = $unidades->first()->idUnidadePK;
 
         $usedCrms = [];
-
         $generateUniqueCrm = function () use ($faker, &$usedCrms) {
             do {
                 $crm = $faker->numerify('#####') . '/' . $faker->stateAbbr;
@@ -59,31 +38,55 @@ class MedicoSeeder extends Seeder
             return $crm;
         };
 
-        for ($i = 0; $i < 120; $i++) {
+        // ================================================================
+        // --- ADICIONADO: Médico Fixo (ID 1) ---
+        // ================================================================
+        $emailFixo = 'medico.teste@prontuario.com';
+        $crmFixo = '12345/SP';
+        $usedCrms[] = $crmFixo; // Garante que não será usado pelo faker
+
+        // Cria o Usuário para o Médico
+        $usuarioMedico = Usuario::firstOrCreate(
+            ['emailUsuario' => $emailFixo],
+            [
+                'nomeUsuario' => 'Dr. House (Médico)', // Nome na tbUsuario
+                'senhaUsuario' => Hash::make('senha123'),
+                'statusAtivoUsuario' => true,
+                'statusSenhaUsuario' => true,
+            ]
+        );
+
+        // Cria o Médico
+        $medicoFixo = Medico::create([
+            'id_usuarioFK' => $usuarioMedico->idUsuarioPK,
+            'nomeMedico' => 'Dr. Gregory House', // Nome na tbMedico
+            'crmMedico' => $crmFixo,
+            'especialidadeMedico' => 'Clínico Geral',
+        ]);
+        
+        // Associa o médico fixo à primeira unidade
+        $medicoFixo->unidades()->sync([$primeiraUnidadeId]);
+
+   
+        for ($i = 0; $i < 119; $i++) { // <-- CORRIGIDO: de 120 para 119
             $nomeCompleto = $faker->name();
             $email = $faker->unique()->safeEmail();
 
             $usuario = Usuario::create([
-                'nomeUsuario'       => $nomeCompleto,
-                'emailUsuario'      => $email,
-                'senhaUsuario'      => Hash::make('password'),
+                'nomeUsuario' => $nomeCompleto,
+                'emailUsuario' => $email,
+                'senhaUsuario' => Hash::make('password'),
                 'statusAtivoUsuario' => $faker->boolean(90),
                 'statusSenhaUsuario' => true,
             ]);
 
             $medico = Medico::create([
-                'id_usuarioFK'          => $usuario->idUsuarioPK,
-                'nomeMedico'            => $nomeCompleto,
-                'crmMedico'             => $generateUniqueCrm(),
-                'especialidadeMedico'   => $faker->randomElement([
-                    'Clínico Geral', 
-                    'Pediatra', 
-                    'Cardiologista', 
-                    'Dermatologista', 
-                    'Ortopedista', 
-                    'Ginecologista',
-                    'Neurologista',
-                    'Psiquiatra'
+                'id_usuarioFK' => $usuario->idUsuarioPK,
+                'nomeMedico' => $nomeCompleto,
+                'crmMedico' => $generateUniqueCrm(),
+                'especialidadeMedico' => $faker->randomElement([
+                    'Clínico Geral', 'Pediatra', 'Cardiologista', 'Dermatologista', 
+                    'Ortopedista', 'Ginecologista', 'Neurologista', 'Psiquiatra'
                 ]),
             ]);
 
@@ -91,6 +94,6 @@ class MedicoSeeder extends Seeder
             $medico->unidades()->sync($unidadesAleatorias);
         }
         
-        $this->command->info('120 médicos criados com sucesso!');
+        $this->command->info('120 médicos (1 fixo + 119 aleatórios) criados com sucesso!');
     }
 }

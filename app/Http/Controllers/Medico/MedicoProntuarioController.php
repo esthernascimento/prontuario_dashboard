@@ -105,13 +105,12 @@ class MedicoProntuarioController extends Controller
      */
     public function store(Request $request, $id)
     {
-        // Validação atualizada para arrays (checkboxes)
         $validated = $request->validate([
             'dataConsulta' => 'required|date',
             'observacoes' => 'nullable|string|max:2000',
-            'exames_solicitados' => 'nullable|array', // Espera array
+            'exames_solicitados' => 'nullable|array', 
             'exames_solicitados.*' => 'string|max:255',
-            'medicamentos_prescritos' => 'nullable|array', // Espera array
+            'medicamentos_prescritos' => 'nullable|array', 
             'medicamentos_prescritos.*' => 'string|max:255',
         ]);
 
@@ -135,20 +134,18 @@ class MedicoProntuarioController extends Controller
         $consulta->dataConsulta = $validated['dataConsulta'];
         $consulta->observacoes = $validated['observacoes'] ?? null;
 
-        // Pega os dados dos arrays (checkboxes)
         $examesCheckboxes = $validated['exames_solicitados'] ?? [];
-        $consulta->examesSolicitados = implode("\n", $examesCheckboxes); // Salva como texto
+        $consulta->examesSolicitados = implode("\n", $examesCheckboxes); 
 
         $medicamentosCheckboxes = $validated['medicamentos_prescritos'] ?? [];
-        $consulta->medicamentosPrescritos = implode("\n", $medicamentosCheckboxes); // Salva como texto
+        $consulta->medicamentosPrescritos = implode("\n", $medicamentosCheckboxes); 
         
         $consulta->status_atendimento = 'FINALIZADO';
         $consulta->idPacienteFK = $paciente->idPaciente;
 
         DB::transaction(function () use ($consulta, $paciente, $prontuario, $medicamentosCheckboxes, $examesCheckboxes) {
-            $consulta->save(); // Salva a consulta para ter o ID
+            $consulta->save(); 
 
-            // Medicamentos dos checkboxes
             if (!empty($medicamentosCheckboxes)) {
                 foreach ($medicamentosCheckboxes as $medicamento) {
                     Medicamento::create([
@@ -161,24 +158,34 @@ class MedicoProntuarioController extends Controller
                 }
             }
 
-            // Exames dos checkboxes
+            // --- Bloco CORRIGIDO (store) ---
             if (!empty($examesCheckboxes)) {
                 foreach ($examesCheckboxes as $exame) {
+                    $nomeExame = $exame;
+                    $descExame = $exame;
+                     if (strpos($exame, ':') !== false) {
+                         $partes = explode(':', $exame, 2); $nomeExame = trim($partes[0]); $descExame = trim($partes[1]) ?: $nomeExame;
+                    } elseif (strpos($exame, ' - ') !== false) {
+                         $partes = explode(' - ', $exame, 2); $nomeExame = trim($partes[0]); $descExame = trim($partes[1]) ?: $nomeExame;
+                    } elseif (strlen($exame) > 50) {
+                         $palavras = explode(' ', $exame); $nomeExame = implode(' ', array_slice($palavras, 0, 3));
+                    }
+                    
                     Exame::create([
                         'idConsultaFK' => $consulta->idConsultaPK,
-                        'descExame' => $exame,
-                        'nomeExame' => $exame,
+                        'descExame' => $descExame,
+                        'nomeExame' => $nomeExame,
                         'dataExame' => $consulta->dataConsulta ?? now(),
                         'statusExame' => 'SOLICITADO',
-                        'idPacienteFK' => $paciente->idPaciente, // Correção
-                        'idProntuarioFK' => $prontuario->idProntuarioPK, // Correção
+                        'idPacienteFK' => $paciente->idPaciente, // <-- CORREÇÃO
+                        'idProntuarioFK' => $prontuario->idProntuarioPK, // <-- CORREÇÃO
                     ]);
                 }
             }
         });
 
         return redirect()
-            ->route('medico.visualizarProntuario', $id) // Leva para o histórico
+            ->route('medico.visualizarProntuario', $id) 
             ->with('success', 'Consulta registrada com sucesso!');
     }
 
@@ -193,11 +200,11 @@ class MedicoProntuarioController extends Controller
         $medico = Auth::user()->medico;
 
         if (!$medico) {
-            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.'); // CORRIGIDO
+            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.');
         }
 
         $anotacoesEnfermagem = AnotacaoEnfermagem::where('idPacienteFK', $paciente->idPaciente)
-            ->where('created_at', '>=', $consulta->created_at->subDay()) // Pega anotações do dia
+            ->where('created_at', '>=', $consulta->created_at->subDay()) 
             ->orderBy('data_hora', 'desc')
             ->get();
 
@@ -222,10 +229,9 @@ class MedicoProntuarioController extends Controller
         $medico = Auth::user()->medico;
 
         if (!$medico) {
-            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.'); // CORRIGIDO
+            return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.');
         }
 
-        // Validação atualizada para arrays (checkboxes)
         $validated = $request->validate([
             'dataConsulta' => 'required|date',
             'observacoes' => 'nullable|string|max:2000',
@@ -259,19 +265,12 @@ class MedicoProntuarioController extends Controller
         DB::transaction(function () use ($consulta, $medicamentosCheckboxes, $examesCheckboxes) {
             $consulta->save();
 
-            // =============================================
-            // --- CORREÇÃO DO ERRO 'Duplicate entry' ---
-            // Força a exclusão permanente dos registros antigos
-            // =============================================
             Medicamento::where('idConsultaFK', $consulta->idConsultaPK)->forceDelete();
             Exame::where('idConsultaFK', $consulta->idConsultaPK)->forceDelete();
-            // =============================================
 
-
-            // Medicamentos dos checkboxes
             if (!empty($medicamentosCheckboxes)) {
                 foreach ($medicamentosCheckboxes as $medicamento) {
-                    Medicamento::create([ // Agora o create funciona
+                    Medicamento::create([
                         'idConsultaFK' => $consulta->idConsultaPK,
                         'idPacienteFK' => $consulta->idPacienteFK,
                         'idProntuarioFK' => $consulta->idProntuarioFK,
@@ -281,27 +280,37 @@ class MedicoProntuarioController extends Controller
                 }
             }
 
-            // Exames dos checkboxes
+            // --- Bloco CORRIGIDO (update) ---
             if (!empty($examesCheckboxes)) {
                 foreach ($examesCheckboxes as $exame) {
-                    Exame::create([ // Agora o create funciona
+                    $nomeExame = $exame;
+                    $descExame = $exame;
+                     if (strpos($exame, ':') !== false) {
+                         $partes = explode(':', $exame, 2); $nomeExame = trim($partes[0]); $descExame = trim($partes[1]) ?: $nomeExame;
+                    } elseif (strpos($exame, ' - ') !== false) {
+                         $partes = explode(' - ', $exame, 2); $nomeExame = trim($partes[0]); $descExame = trim($partes[1]) ?: $nomeExame;
+                    } elseif (strlen($exame) > 50) {
+                         $palavras = explode(' ', $exame); $nomeExame = implode(' ', array_slice($palavras, 0, 3));
+                    }
+                    
+                    Exame::create([
                         'idConsultaFK' => $consulta->idConsultaPK,
-                        'descExame' => $exame,
-                        'nomeExame' => $exame,
+                        'descExame' => $descExame,
+                        'nomeExame' => $nomeExame,
                         'dataExame' => $consulta->dataConsulta ?? now(),
                         'statusExame' => 'SOLICITADO',
-                        'idPacienteFK' => $consulta->idPacienteFK, // Correção
-                        'idProntuarioFK' => $consulta->idProntuarioFK, // Correção
+                        
+                        // --- CORREÇÃO ADICIONADA (aqui estava o erro) ---
+                        'idPacienteFK' => $consulta->idPacienteFK,
+                        'idProntuarioFK' => $consulta->idProntuarioFK,
+                        // --- FIM DA CORREÇÃO ---
                     ]);
                 }
             }
         });
 
-        // =============================================
-        // --- CORREÇÃO DO ERRO DO REDIRECT ---
-        // =============================================
         return redirect()
-            ->route('medico.prontuario') // Rota corrigida (removido o '.index')
+            ->route('medico.prontuario') // Redireciona de volta para a fila
             ->with('success', 'Atendimento finalizado com sucesso!');
     }
     
@@ -313,9 +322,6 @@ class MedicoProntuarioController extends Controller
         $consulta = Consulta::findOrFail($idConsulta);
         $paciente = $consulta->paciente;
         
-        // (Lógica futura: Carregar uma view de PDF com $consulta e $paciente)
-        
-        // Placeholder por enquanto:
         return response("PDF de Exames para (Consulta ID: $idConsulta) do Paciente: $paciente->nomePaciente");
     }
 
@@ -327,9 +333,6 @@ class MedicoProntuarioController extends Controller
         $consulta = Consulta::findOrFail($idConsulta);
         $paciente = $consulta->paciente;
 
-        // (Lógica futura: Carregar uma view de PDF com $consulta e $paciente)
-
-        // Placeholder por enquanto:
         return response("PDF de Receita para (Consulta ID: $idConsulta) do Paciente: $paciente->nomePaciente");
     }
 
@@ -341,12 +344,12 @@ class MedicoProntuarioController extends Controller
         $consulta = Consulta::findOrFail($idConsulta);
         $medico = Auth::user()->medico;
          if (!$medico) {
-             return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.'); // CORRIGIDO
+             return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.');
          }
 
         if ($consulta->idMedicoFK !== $medico->idMedicoPK) {
              return redirect()
-                 ->route('medico.prontuario') // CORRIGIDO
+                 ->route('medico.prontuario')
                  ->with('error', 'Você não tem permissão para excluir esta consulta.');
          }
 
@@ -366,7 +369,7 @@ class MedicoProntuarioController extends Controller
         }
         
          return redirect()
-             ->route('medico.prontuario') // CORRIGIDO
+             ->route('medico.prontuario')
              ->with('success', 'Consulta excluída com sucesso!');
     }
 }

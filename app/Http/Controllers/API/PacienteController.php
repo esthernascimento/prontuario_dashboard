@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
+// Imports para as novas funções
+use App\Models\Consulta;
+use App\Models\Alergia;
+use App\Models\Medicamento;
+use App\Models\Exame;
+
 class PacienteController extends Controller
 {
     public function index()
@@ -140,5 +146,70 @@ class PacienteController extends Controller
             'paciente' => $paciente,
             'token'    => $token
         ]);
+    }
+
+    
+    public function me(Request $request)
+    {
+        // $request->user() é o paciente autenticado pelo token (Sanctum)
+        return response()->json($request->user());
+    }
+
+    /**
+     * Retorna o histórico de consultas (Prontuário) do paciente logado.
+     */
+    public function getConsultas(Request $request)
+    {
+        $pacienteId = $request->user()->idPaciente; // Pega o ID do paciente logado
+
+        $consultas = Consulta::where('idPacienteFK', $pacienteId)
+                            ->with('medico', 'unidade') // Puxa dados do médico e unidade
+                            ->orderBy('dataConsulta', 'desc')
+                            ->get();
+        
+        return response()->json($consultas);
+    }
+
+    /**
+     * Retorna as alergias do paciente logado.
+     */
+    public function getAlergias(Request $request)
+    {
+        $pacienteId = $request->user()->idPaciente;
+        $alergias = Alergia::where('idPacienteFK', $pacienteId)->get();
+        return response()->json($alergias);
+    }
+
+    /**
+     * Retorna os medicamentos prescritos ao paciente logado.
+     */
+    public function getMedicamentos(Request $request)
+    {
+        $pacienteId = $request->user()->idPaciente;
+        $medicamentos = Medicamento::where('idPacienteFK', $pacienteId)
+                                    ->orderBy('created_at', 'desc')
+                                    ->get();
+        return response()->json($medicamentos);
+    }
+
+    /**
+     * Retorna os exames solicitados ao paciente logado.
+     */
+    public function getExames(Request $request)
+    {
+        $pacienteId = $request->user()->idPaciente;
+        $exames = Exame::where('idPacienteFK', $pacienteId)
+                       ->orderBy('dataExame', 'desc')
+                       ->get();
+        return response()->json($exames);
+    }
+
+    /**
+     * Rota de Logout (Requer Token)
+     */
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Logout realizado com sucesso']);
     }
 }

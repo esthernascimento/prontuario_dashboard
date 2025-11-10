@@ -24,9 +24,13 @@ use App\Http\Controllers\Admin\UnidadeController;
 
 
 
-// --- ROTAS PÚBLICAS (Acessíveis sem login) ---
+/*
+|--------------------------------------------------------------------------
+| ROTAS PÚBLICAS (Acessíveis sem login)
+|--------------------------------------------------------------------------
+*/
 
-// Login de Admin/Médico/Enfermeiro (via tbUsuario)
+// Login geral (Admin / Médico / Enfermeiro)
 Route::post('/login', [AuthController::class, 'login']);
 
 // Rotas de login dinâmico
@@ -36,64 +40,108 @@ Route::post('/enfermeiro/profile/complete', [EnfermeiroLoginController::class, '
 // Rotas de login e registo de Pacientes (via tbPaciente, para a app mobile)
 Route::post('/pacientes/login', [PacienteController::class, 'login']);
 Route::post('/pacientes', [PacienteController::class, 'store']);
+
+// Rota pública de index (Mantida, como no seu arquivo)
 Route::get('/pacientes', [PacienteController::class, 'index']);
-Route::get('/pacientes/{id}', [PacienteController::class, 'show']);
-Route::put('/pacientes/{id}', [PacienteController::class, 'update']);
-Route::delete('/pacientes/{id}', [PacienteController::class, 'destroy']);
+
+// (Rotas de show, update e delete foram MOVIDAS para o grupo protegido abaixo)
+// Route::get('/pacientes/{id}', [PacienteController::class, 'show']);
+// Route::put('/pacientes/{id}', [PacienteController::class, 'update']);
+// Route::delete('/pacientes/{id}', [PacienteController::class, 'destroy']);
 
 
 
+/*
+|--------------------------------------------------------------------------
+| ROTAS PROTEGIDAS DO PACIENTE (Token obrigatório)
+|--------------------------------------------------------------------------
+|
+| Essas rotas usam o guard 'paciente' definido no config/auth.php
+| O app mobile deve enviar o Bearer Token no header Authorization
+|
+*/
+Route::middleware(['auth:sanctum', 'auth:paciente'])->group(function () {
 
-// --- ROTAS PROTEGIDAS (Exigem autenticação com token) ---
-Route::middleware('auth:sanctum')->group(function () {
-    
-    // Rota para obter dados do utilizador logado
+    // Dados do paciente logado
+    Route::get('/paciente/me', [PacienteController::class, 'me']);
+
+    // Logout (revoga token)
+    Route::post('/paciente/logout', [PacienteController::class, 'logout']);
+
+    // Prontuário do paciente
+    Route::get('/paciente/consultas', [PacienteController::class, 'getConsultas']);
+    Route::get('/paciente/alergias', [PacienteController::class, 'getAlergias']);
+    Route::get('/paciente/medicamentos', [PacienteController::class, 'getMedicamentos']);
+    Route::get('/paciente/exames', [PacienteController::class, 'getExames']);
+
+    // --- CORREÇÃO DE SEGURANÇA ---
+    // Perfil do paciente (ver/atualizar)
+    // Estas rotas agora exigem que o paciente esteja logado
+    Route::get('/pacientes/{id}', [PacienteController::class, 'show']);
+    Route::put('/pacientes/{id}', [PacienteController::class, 'update']);
+    Route::delete('/pacientes/{id}', [PacienteController::class, 'destroy']);
+});
+
+
+
+/*
+|--------------------------------------------------------------------------
+| ROTAS PROTEGIDAS GERAIS (Admin / Médico / Enfermeiro)
+|--------------------------------------------------------------------------
+| Usam o login do AuthController
+*/
+Route::middleware(['auth:sanctum'])->group(function () {
+
+    // Dados do utilizador autenticado
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
 
-    // Rota para fazer logout
+    // Logout (Esta rota estava duplicada, mas é ok manter)
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // --- ROTAS DO PRONTUÁRIO (Acessíveis pelo paciente/médico logado) ---
-    
-    // Rota principal para obter o prontuário completo de um paciente
+    /*
+    |--------------------------------------------------------------------------
+    | PRONTUÁRIO (Rotas genéricas)
+    |--------------------------------------------------------------------------
+    */
     Route::get('/prontuarios/{idPaciente}', [ProntuarioController::class, 'show']);
-    // Rota para abrir um novo prontuário
     Route::post('/prontuarios', [ProntuarioController::class, 'store']);
 
-    // CRUD para as partes do prontuário
+    // CRUD para partes do prontuário
     Route::apiResource('consultas', ConsultaController::class);
     Route::apiResource('medicamentos', MedicamentoController::class);
     Route::apiResource('exames', ExameController::class);
     Route::apiResource('alergias', AlergiaController::class);
 
 
-    // --- ROTAS DE ADMINISTRAÇÃO ---
-    
-    // Admin pré-cadastra Médico/Enfermeiro
+    /*
+    |--------------------------------------------------------------------------
+    | ADMINISTRAÇÃO (Rotas do Painel de Admin)
+    |--------------------------------------------------------------------------
+    */
+
+    // Registro de Médico e Enfermeiro pelo Admin
     Route::post('/admin/register/medico', [AuthController::class, 'adminRegisterMedico'])->name('api.admin.register.medico');
     Route::post('/admin/register/enfermeiro', [AuthController::class, 'adminRegisterEnfermeiro'])->name('api.admin.register.enfermeiro');
 
-    // CRUD Médico (Gerido pelo Admin)
+    // CRUD Médico
     Route::get('/admin/medicos', [MedicoController::class, 'index']);
     Route::post('/admin/medicos', [MedicoController::class, 'store']);
     Route::put('/admin/medicos/{id}', [MedicoController::class, 'update']);
     Route::delete('/admin/medicos/{id}', [MedicoController::class, 'excluir']);
     Route::post('/admin/medicos/{id}/toggle-status', [MedicoController::class, 'toggleStatus']);
-    // ADICIONADO: Rota para associar unidades a um médico
     Route::post('/admin/medicos/{medico}/unidades', [MedicoController::class, 'syncUnidades']);
 
-    // CRUD Enfermeiro (Gerido pelo Admin)
+    // CRUD Enfermeiro
     Route::get('/admin/enfermeiro', [EnfermeiroController::class, 'index']);
     Route::post('/admin/enfermeiro', [EnfermeiroController::class, 'store']);
     Route::put('/admin/enfermeiro/{id}', [EnfermeiroController::class, 'update']);
     Route::delete('/admin/enfermeiro/{id}', [EnfermeiroController::class, 'excluir']);
     Route::post('/admin/enfermeiro/{id}/toggle-status', [EnfermeiroController::class, 'toggleStatus']);
-    // ADICIONADO: Rota para associar unidades a um enfermeiro
     Route::post('/admin/enfermeiro/{enfermeiro}/unidades', [EnfermeiroController::class, 'syncUnidades']);
 
-    // ADICIONADO: CRUD Unidade (Gerido pelo Admin, no formato explícito)
+    // CRUD Unidade
     Route::get('/admin/unidades', [UnidadeController::class, 'index']);
     Route::post('/admin/unidades', [UnidadeController::class, 'store']);
     Route::get('/admin/unidades/{unidade}', [UnidadeController::class, 'show']);

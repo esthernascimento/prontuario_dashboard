@@ -41,10 +41,42 @@ class PacienteSeeder extends Seeder
             return $susCard;
         };
 
+
+        $testCpf = '81773179896';
+        $testSus = '420588032068787';
+        $testNome = 'Tomás Delgado';
+
+        $usedCpfs[] = $testCpf;
+        $usedSusCards[] = $testSus;
+
+        Paciente::create([
+            'nomePaciente'          => $testNome,
+            'cpfPaciente'           => $testCpf,
+            'dataNascPaciente'      => '1981-08-27',
+            'cartaoSusPaciente'     => $testSus,
+            'generoPaciente'        => 'Masculino',
+            'statusPaciente'        => true,
+            'emailPaciente'         => 'pablo.sandoval@example.org',
+            'senhaPaciente'         => Hash::make('senha123'), // <-- Senha correta
+            'telefonePaciente'      => '13941737807',
+            'fotoPaciente'          => 'avatars/tomas-delgado.jpg',
+            'logradouroPaciente'    => 'Av. Natan Soares',
+            'numLogradouroPaciente' => '70',
+            'cepPaciente'           => '51737114',
+            'bairroPaciente'        => 'do Leste',
+            'cidadePaciente'        => 'Santiago do Norte',
+            'ufPaciente'            => 'BA',
+            'estadoPaciente'        => 'Paraná',
+            'paisPaciente'          => 'Brasil',
+            'created_at'            => '2025-09-23 21:00:29',
+            'updated_at'            => '2025-09-23 21:00:29',
+        ]);
+
+  
         $startDate = Carbon::create(2025, 5, 1);
         $endDate = Carbon::now();
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 99; $i++) { // <-- CORRIGIDO: de 100 para 99
             $genero = $faker->randomElement($generos);
             $uf = $faker->randomElement($estados);
             
