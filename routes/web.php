@@ -112,6 +112,8 @@ Route::middleware('auth:unidade')->prefix('unidade')->name('unidade.')->group(fu
     Route::get('/seguranca', [UnidadeUnidadeController::class, 'seguranca'])->name('seguranca');
     Route::put('/perfil/update', [UnidadeSegurancaController::class, 'atualizarPerfil'])->name('perfil.update');
     Route::post('/alterar-senha', [UnidadeSegurancaController::class, 'alterarSenha'])->name('alterarSenha');
+    
+    // ----------------- MÉDICOS -----------------
     Route::get('/manutencaoMedicos', [MedicoController::class, 'index'])->name('manutencaoMedicos');
     Route::get('/cadastroMedico', [MedicoController::class, 'create'])->name('medicos.create');
     Route::post('/medicos/register', [MedicoController::class, 'store'])->name('medicos.register');
@@ -121,6 +123,8 @@ Route::middleware('auth:unidade')->prefix('unidade')->name('unidade.')->group(fu
     Route::delete('/medicos/{id}', [MedicoController::class, 'excluir'])->name('medicos.excluir');
     Route::post('/medicos/{id}/toggle-status', [MedicoController::class, 'toggleStatus'])->name('medicos.toggleStatus');
     Route::post('/medicos/{medico}/unidades', [MedicoController::class, 'syncUnidades'])->name('medicos.syncUnidades');
+    
+    // ----------------- ENFERMEIROS -----------------
     Route::get('/manutencaoEnfermeiro', [EnfermeiroController::class, 'index'])->name('manutencaoEnfermeiro');
     Route::get('/cadastroEnfermeiro', [EnfermeiroController::class, 'create'])->name('enfermeiro.create');
     Route::post('/enfermeiro/register', [EnfermeiroController::class, 'store'])->name('enfermeiro.register');
@@ -130,13 +134,18 @@ Route::middleware('auth:unidade')->prefix('unidade')->name('unidade.')->group(fu
     Route::delete('/enfermeiro/{id}', [EnfermeiroController::class, 'excluir'])->name('enfermeiro.excluir');
     Route::post('/enfermeiro/{id}/toggle-status', [EnfermeiroController::class, 'toggleStatus'])->name('enfermeiro.toggleStatus');
     Route::post('/enfermeiro/{enfermeiro}/unidades', [EnfermeiroController::class, 'syncUnidades'])->name('enfermeiro.syncUnidades');
+    
+    // ----------------- RECEPCIONISTAS -----------------
     Route::get('/manutencaoRecepcionista', [RecepcionistaController::class, 'index'])->name('manutencaoRecepcionista');
     Route::get('/recepcionistas/create', [RecepcionistaController::class, 'create'])->name('recepcionistas.create');
     Route::post('/recepcionistas', [RecepcionistaController::class, 'store'])->name('recepcionistas.store');
     Route::get('/recepcionistas/{recepcionista}/edit', [RecepcionistaController::class, 'edit'])->name('recepcionistas.edit');
     Route::put('/recepcionistas/{recepcionista}', [RecepcionistaController::class, 'update'])->name('recepcionistas.update');
     Route::delete('/recepcionistas/{recepcionista}', [RecepcionistaController::class, 'destroy'])->name('recepcionistas.destroy');
-    Route::post('/recepcionistas/{id}/toggle-status', [RecepcionistaController::class, 'toggleStatus'])->name('recepcionistas.toggle-status');
+    
+    // Rotas AJAX para Recepcionistas (sem status)
+    Route::get('/recepcionistas/{recepcionista}/quick-view', [RecepcionistaController::class, 'quickView'])->name('recepcionistas.quickView');
+    Route::get('/recepcionistas/export', [RecepcionistaController::class, 'export'])->name('recepcionistas.export');
 });
 
 // ===================================================================================
@@ -186,7 +195,6 @@ Route::middleware('auth:medico')->prefix('medico/prontuario')->group(function ()
     Route::get('/consulta/{idConsulta}/receita/pdf', [MedicoPdfController::class, 'gerarPdfReceita'])
          ->name('consulta.receita.pdf'); // Nome: consulta.receita.pdf (CORRETO)
 });
-
 
 // ===================================================================================
 // --- ROTAS PROTEGIDAS DO ENFERMEIRO ---

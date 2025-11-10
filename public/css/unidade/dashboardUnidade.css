@@ -1,8 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
 
-/* ============================================
-   VARIÁVEIS CSS
-   ============================================ */
 :root {
     --primary-blue: #3C0061;
     --primary-blue-dark: #2A0045;
@@ -135,7 +132,7 @@ body {
 }
 
 .banner-logo {
-    width: 130px;
+    width: 300px;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
     animation: float 3s ease-in-out infinite;
 }
@@ -158,7 +155,7 @@ body {
 
 .banner-center .highlight {
     font-weight: 700;
-    color: #FFD700;
+    color: #ffffff;
 }
 
 .banner-center p {
@@ -181,7 +178,7 @@ body {
 /* ============================================
    CARDS DE MÉTRICAS
    ============================================ */
-.metrics-grid {
+   .metrics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 20px;
@@ -189,37 +186,39 @@ body {
 }
 
 .metric-card {
-    background: white;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+    color: white;
     padding: 25px;
     border-radius: var(--radius-lg);
+    flex: 1;
+    min-width: 250px;
     box-shadow: var(--shadow-md);
-    display: flex;
-    align-items: center;
-    gap: 20px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
 }
 
 .metric-card::before {
     content: '';
     position: absolute;
     top: 0;
-    right: 0;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    opacity: 0.1;
-    transition: all 0.3s ease;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.metric-card:hover::before {
+    left: 100%;
 }
 
 .metric-card:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
-}
-
-.metric-card:hover::before {
-    transform: scale(1.5);
 }
 
 .metric-icon {
@@ -233,54 +232,36 @@ body {
     flex-shrink: 0;
 }
 
-.metric-icon.blue {
-    background: rgba(60, 0, 97, 0.1);
-    color: var(--primary-blue);
-}
 
-.metric-icon.green {
-    background: rgba(16, 185, 129, 0.1);
-    color: var(--success-green);
-}
-
-.metric-icon.purple {
-    background: rgba(139, 92, 246, 0.1);
-    color: var(--info-purple);
-}
-
-.metric-icon.orange {
-    background: rgba(245, 158, 11, 0.1);
-    color: var(--warning-orange);
+.metric-icon{
+    background-color: rgba(255, 255, 255, 0.081);
+    color: #fff;
 }
 
 .metric-content {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
 }
 
 .metric-label {
     display: block;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
+    font-size: 15px;
+    color: #fff !important;
     font-weight: 500;
-    margin-bottom: 8px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    text-align: center;
 }
 
 .metric-value {
     font-size: 2.5rem;
     font-weight: 700;
-    color: var(--text-primary);
+    color: #ffffff;
     line-height: 1;
-}
-
-.metric-badge {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    font-size: 1.2rem;
-    color: var(--success-green);
-    opacity: 0.5;
 }
 
 /* ============================================
@@ -769,4 +750,17 @@ body {
         height: 250px;
         padding: 20px 15px;
     }
+}
+
+.fade-in, .slide-up, .zoom-in {
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    opacity: 0;
+}
+
+.slide-up {
+    transform: translateY(30px); 
+}
+
+.zoom-in {
+    transform: scale(0.95); 
 }

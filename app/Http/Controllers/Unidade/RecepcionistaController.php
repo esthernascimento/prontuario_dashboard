@@ -13,7 +13,6 @@ class RecepcionistaController extends Controller
 {
     public function index()
     {
-        // 🔥 REMOVIDO: paginate() e substituído por all()
         $recepcionistas = Recepcionista::all();
         return view('unidade.manutencaoRecepcionista', compact('recepcionistas'));
     }
@@ -33,6 +32,7 @@ class RecepcionistaController extends Controller
             ]);
 
             $data['senhaRecepcionista'] = Hash::make($data['senhaRecepcionista']);
+            $data['statusAtivoRecepcionista'] = 1; // Define como ativo por padrão
             
             $unidade = Auth::guard('unidade')->user();
             
@@ -114,5 +114,50 @@ class RecepcionistaController extends Controller
     {
         $recepcionista->delete();
         return redirect()->route('unidade.manutencaoRecepcionista')->with('success', 'Recepcionista excluído com sucesso!');
+    }
+    
+    /**
+     * Visualização rápida de um recepcionista (para AJAX)
+     */
+    public function quickView(Recepcionista $recepcionista)
+    {
+        // Formata a data para exibição
+        $createdAt = $recepcionista->created_at->format('d/m/Y');
+        
+        return response()->json([
+            'id' => $recepcionista->idRecepcionistaPK,
+            'nome' => $recepcionista->nomeRecepcionista,
+            'email' => $recepcionista->emailRecepcionista,
+            'status' => $recepcionista->statusAtivoRecepcionista,
+            'created_at' => $createdAt,
+            // Estes campos podem ser adicionados se existirem na tabela
+            'atendimentos' => $recepcionista->atendimentos ?? 0,
+            'horas_trabalhadas' => $recepcionista->horas_trabalhadas ?? 0,
+            'avaliacao' => $recepcionista->avaliacao ?? 'N/A'
+        ]);
+    }
+    
+    /**
+     * Exporta recepcionistas para Excel
+     */
+    public function export()
+    {
+        // Implementação básica - você pode usar uma biblioteca como Laravel Excel
+        $recepcionistas = Recepcionista::all();
+        
+        $csv = "Nome,Email,Status,Cadastrado em\n";
+        
+        foreach ($recepcionistas as $recepcionista) {
+            $status = $recepcionista->statusAtivoRecepcionista == 1 ? 'Ativo' : 'Inativo';
+            $dataCadastro = $recepcionista->created_at->format('d/m/Y');
+            $csv .= "{$recepcionista->nomeRecepcionista},{$recepcionista->emailRecepcionista},{$status},{$dataCadastro}\n";
+        }
+        
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="recepcionistas.csv"',
+        ];
+        
+        return response($csv, 200, $headers);
     }
 }

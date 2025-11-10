@@ -14,7 +14,7 @@
 <body>
     <main class="main-container">
         <div class="left-side">
-            <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo ilustrativa">
+            <img src="{{ asset('img/unidade-logo2.png') }}" alt="Logo ilustrativa">
         </div>
 
         <div class="right-side">
@@ -40,15 +40,12 @@
                     </div>
 
                     <div class="input-group">
-                        <label for="senhaRecepcionista">Senha</label> <!-- 🔥 ADICIONEI campo senha -->
+                        <label for="senhaRecepcionista">Senha</label>
                         <div class="input-wrapper">
                             <i class="fa-solid fa-lock icon-left"></i>
                             <input type="password" id="senhaRecepcionista" name="senhaRecepcionista" required minlength="6" />
                         </div>
                     </div>
-
-                    <!-- 🔥 REMOVI o campo de unidades múltiplas (não existe na tabela Recepcionista) -->
-                    <!-- Recepcionista pertence a UMA unidade apenas (idUnidadeFK) -->
 
                     <button class="btn-login" type="submit">CADASTRAR</button>
                 </form>
@@ -66,19 +63,17 @@
             const messagesDiv = document.getElementById('form-messages');
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-            // 🔥 CORREÇÃO: Usar FormData normal (não JSON) para envio de formulário
             button.disabled = true;
             button.textContent = 'Cadastrando...';
             messagesDiv.style.display = 'none';
 
-            // 🔥 CORREÇÃO: Rota correta para recepcionistas
             fetch("{{ route('unidade.recepcionistas.store') }}", {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': csrfToken,
                     'Accept': 'application/json',
                 },
-                body: formData // 🔥 CORREÇÃO: Enviar FormData, não JSON
+                body: formData 
             })
             .then(response => {
                 if (!response.ok) { 
@@ -126,8 +121,7 @@
                     input.parentElement.classList.remove("focused");
                 }
             });
-            
-            // 🔥 CORREÇÃO: Manter focused se já tiver valor
+
             if (input.value !== "") {
                 input.parentElement.classList.add("focused");
             }

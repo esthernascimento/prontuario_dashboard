@@ -17,11 +17,15 @@ return new class extends Migration
             $table->string('emailRecepcionista')->unique();
             $table->string('senhaRecepcionista');
             
-            // Chave estrangeira para ligar ao Admin que o criou/gere 
-            $table->foreignId('idUnidadeFK')->constrained('tbUnidade', 'idUnidadePK');
+            // --- CORREÇÃO (Voltando à sua lógica correta) ---
+            // Chave estrangeira para ligar à Unidade que o cadastrou
+            $table->foreignId('idUnidadeFK')
+                  ->nullable() // Deixei nulo por segurança, mas pode ser obrigatório
+                  ->constrained('tbUnidade', 'idUnidadePK') // Assumindo PK da tbUnidade
+                  ->nullOnDelete(); // Se a unidade for deletada, o recepcionista fica "sem unidade"
             
-            $table->timestamps(); // Colunas created_at e updated_at
-            $table->softDeletes(); // Coluna deleted_at
+            $table->timestamps(); 
+            $table->softDeletes(); 
         });
     }
 
@@ -30,6 +34,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // Método robusto para apagar
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('tbRecepcionista');
+        Schema::enableForeignKeyConstraints();
     }
 };

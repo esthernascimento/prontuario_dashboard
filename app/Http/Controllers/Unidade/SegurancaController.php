@@ -31,18 +31,16 @@ class SegurancaController extends Controller
             'emailUnidade' => $request->emailUnidade,
         ]);
 
+        // Se a unidade tem campo de foto próprio, use isso:
         if ($request->hasFile('foto')) {
-            $usuario = $unidade->usuario; 
-            if ($usuario) {
-
-                if ($usuario->foto && Storage::disk('public')->exists('fotos/' . $usuario->foto)) {
-                    Storage::disk('public')->delete('fotos/' . $usuario->foto);
-                }
-
-                $fotoPath = $request->file('foto')->store('fotos', 'public');
-                $usuario->foto = basename($fotoPath);
-                $usuario->save();
+            if ($unidade->foto && Storage::disk('public')->exists('fotos/' . $unidade->foto)) {
+                Storage::disk('public')->delete('fotos/' . $unidade->foto);
             }
+
+            // Salva nova foto
+            $fotoPath = $request->file('foto')->store('fotos', 'public');
+            $unidade->foto = basename($fotoPath);
+            $unidade->save();
         }
 
         return redirect()->route('unidade.perfil')->with('success', 'Perfil atualizado com sucesso!');
@@ -59,19 +57,14 @@ class SegurancaController extends Controller
         ]);
 
         $unidade = Auth::guard('unidade')->user();
-        $usuario = $unidade->usuario;
 
-        if (!$usuario) {
-            return back()->withErrors(['auth' => 'Não foi possível identificar o usuário logado.']);
-        }
-
-        if (!Hash::check($request->senha_atual, $usuario->senhaUsuario)) {
+        if (!Hash::check($request->senha_atual, $unidade->senhaUnidade)) {
             return back()->withErrors(['senha_atual' => 'Senha atual incorreta.']);
         }
 
-        $usuario->senhaUsuario = Hash::make($request->nova_senha);
-        $usuario->save();
+        $unidade->senhaUnidade = Hash::make($request->nova_senha);
+        $unidade->save();
         
         return back()->with('success', 'Senha alterada com sucesso!');
     }
-}
+} 

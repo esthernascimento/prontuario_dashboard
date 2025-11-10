@@ -3,10 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\User as Authenticatable; 
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\HasApiTokens; 
 use Illuminate\Database\Eloquent\SoftDeletes;
+
+use App\Models\Prontuario;
+use App\Models\Alergia;
+use App\Models\AnotacaoEnfermagem;
+use App\Models\Consulta;
+use App\Models\Medicamento; 
+use App\Models\Exame;      
 
 class Paciente extends Authenticatable
 {
@@ -41,10 +48,11 @@ class Paciente extends Authenticatable
 
     protected $hidden = [
         'senhaPaciente',
+        'remember_token', 
     ];
 
     protected $casts = [
-        'datanascimento' => 'date',
+   
         'statusPaciente'   => 'boolean',
         'dataNascPaciente' => 'date',
     ];
@@ -56,7 +64,7 @@ class Paciente extends Authenticatable
     }
 
     /**
-     * Relações (exemplos — ajuste os nomes das FKs conforme suas migrations)
+     * Relações
      */
     public function prontuario()
     {
@@ -72,9 +80,6 @@ class Paciente extends Authenticatable
 
     public function anotacoesEnfermagem()
     {
-        // ASSUMINDO que o Model de Anotação se chama AnotacaoEnfermagem
-        // e que a FK na tabela de anotações é 'idPacienteFK'.
-        // Se a FK for diferente, ajuste o segundo parâmetro.
         return $this->hasMany(AnotacaoEnfermagem::class, 'idPacienteFK', 'idPaciente');
     }
     
@@ -82,6 +87,31 @@ class Paciente extends Authenticatable
     {
         return $this->hasMany(\App\Models\Consulta::class, 'idPacienteFK', 'idPaciente');
     }
-    
 
+    public function medicamentos()
+    {
+        return $this->hasManyThrough(
+            Medicamento::class, // Model Final
+            Consulta::class,    // Model Intermediário
+            'idPacienteFK',     // Chave estrangeira na tbConsulta (ligando a Paciente)
+            'idConsultaFK',     // Chave estrangeira na tbMedicamento (ligando a Consulta)
+            'idPaciente',       // Chave local na tbPaciente
+            'idConsultaPK'      // Chave local na tbConsulta
+        );
+    }
+    
+    /**
+     * Busca todos os exames solicitados ao paciente através de suas consultas.
+     */
+    public function exames()
+    {
+        return $this->hasManyThrough(
+            Exame::class,       // Model Final
+            Consulta::class,    // Model Intermediário
+            'idPacienteFK',     // Chave estrangeira na tbConsulta (ligando a Paciente)
+            'idConsultaFK',     // Chave estrangeira na tbExame (ligando a Consulta)
+            'idPaciente',       // Chave local na tbPaciente
+            'idConsultaPK'      // Chave local na tbConsulta
+        );
+    }
 }

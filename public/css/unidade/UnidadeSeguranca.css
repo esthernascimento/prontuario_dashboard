@@ -1,5 +1,4 @@
 :root {
-    /* VARIÁVEIS DO TEMA AZUL */
     --primary-blue: #3C0061;
     --primary-blue-dark: #3C0061;
     --primary-blue-light: #3C0061;
@@ -489,6 +488,59 @@ body {
     transform: translateY(0);
 }
 
+
+/* Estilos para os campos de senha com olho */
+.password-input-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-input-container input {
+    padding-right: 45px !important;
+    width: 100%;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+    background: none;
+    border: none;
+    padding: 5px;
+    z-index: 2;
+}
+
+.toggle-password:hover {
+    color: var(--primary-blue);
+}
+
+/* Ajuste para o foco no campo de senha */
+.password-input-container:focus-within .toggle-password {
+    color: var(--primary-blue);
+}
+
+/* Garantir que o input tenha z-index menor */
+.password-input-container input {
+    position: relative;
+    z-index: 1;
+}
+
+/* Ajustes para mobile */
+@media (max-width: 480px) {
+    .password-input-container input {
+        padding-right: 40px !important;
+    }
+    
+    .toggle-password {
+        right: 10px;
+        font-size: 1rem;
+    }
+}
 
 @media (max-width: 768px) {
     body {

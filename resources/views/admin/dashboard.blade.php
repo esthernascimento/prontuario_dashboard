@@ -12,56 +12,82 @@ $admin = auth()->guard('admin')->user();
 @endphp
 
 <div class="overview-container">
-    <h1 class="dashboard-title fade-in" style="animation-delay: 0.2s;">Dashboard Administrador</h1>
+    <div class="dashboard-header fade-in">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>Dashboard do Ministério da Saúde</h1>
+                    <p class="header-subtitle">Visão geral e estatísticas em tempo real</p>
+                </div>
+                <div class="header-right">
+                    <div class="date-badge">
+                        <i class="bi bi-calendar3"></i>
+                        <span>{{ \Carbon\Carbon::now()->locale('pt_BR')->isoFormat('DD [de] MMMM [de] YYYY') }}</span>
+                    </div>
+                </div>
+            </div>
+    </div>
 
     <div class="welcome-banner zoom-in-banner" style="animation-delay: 0.4s;">
+    <div class="banner-decoration"></div>
+    <div class="banner-content">
         <div class="banner-left">
             <div class="banner-logo-container">
                 <img src="{{ asset('img/adm-logo2.png') }}" alt="Logo Prontuário+" class="banner-logo">
             </div>
         </div>
         <div class="banner-center">
-            <h2>Bem-vindo(a) <span class="name">{{ $nomeAdmin ?? 'Gabriel A' }}</span></h2>
-            <p>O Prontuário+ fica feliz com a sua presença e dedicação à saúde.</p>
+            <h2>Bem-vindo(a), <span class="name">{{ $nomeAdmin ?? 'Gabriel A' }}</span></h2>
+            <p><i class="bi bi-heart-pulse"></i>O Prontuário+ fica feliz com a sua presença e dedicação à saúde.</p>
         </div>
         <div class="banner-right">
             <img src="{{ asset('img/ministerio.png') }}" alt="Ilustração de Médicos" class="funcionarios-image">
         </div>
     </div>
+</div>
+
 
     <div class="metrics">
         <div class="metric-card slide-up" style="animation-delay: 0.6s;">
-            <div class="container-img">
-                <img src="{{ asset('img/usuario-de-perfil.png') }}" alt="Ícone de Médico">
-                <span>Médicos cadastrados</span>
+            <div class="metric-icon red">
+                <i class="bi bi-person-hearts"></i>
             </div>
-            <strong>{{ $medicosCount ?? 0 }}</strong>
+            <div class="metric-content">
+                <span class="metric-label">Médicos cadastrados</span>
+                <strong class="metric-value">{{ $medicosCount ?? 0 }}</strong>
+            </div>
         </div>
 
         <div class="metric-card slide-up" style="animation-delay: 0.8s;">
-            <div class="container-img">
-                <img src="{{ asset('img/usuario-de-perfil.png') }}" alt="Ícone de Paciente">
-                <span>Pacientes cadastrados</span>
+            <div class="metric-icon purple">
+                <i class="bi bi-person-check"></i>
             </div>
-            <strong>{{ $patientsCount ?? 0 }}</strong>
+            <div class="metric-content">
+                <span class="metric-label">Pacientes cadastrados</span>
+                <strong class="metric-value">{{ $patientsCount ?? 0 }}</strong>
+            </div>
         </div>
 
         <div class="metric-card slide-up" style="animation-delay: 1.0s;">
-            <div class="container-img">
-                <img src="{{ asset('img/usuario-de-perfil.png') }}" alt="Ícone de Enfermeiro">
-                <span>Enfermeiros cadastrados</span>
+            <div class="metric-icon green">
+                <i class="bi bi-heart-pulse-fill"></i>
             </div>
-            <strong>{{ $nursesCount ?? 0 }}</strong>
-        </div>
+            <div class="metric-content">
+                <span class="metric-label">Enfermeiros cadastrados</span>
+                <strong class="metric-value">{{ $nursesCount ?? 0 }}</strong>
+            </div>
+    </div>
 
-        <div class="metric-card slide-up" style="animation-delay: 1.2s;">
-            <div class="container-img">
-                <img src="{{ asset('img/usuario-de-perfil.png') }}" alt="Ícone de Hospital">
-                <span>Unidades Cadastradas</span>
-            </div>
-            <strong>{{ $unidadesCount ?? 0 }}</strong>
+    <div class="metric-card slide-up" style="animation-delay: 1.2s;">
+        <div class="metric-icon orange">
+            <i class="bi bi-hospital"></i>
+        </div>
+        <div class="metric-content">
+            <span class="metric-label">Unidades Cadastradas</span>
+            <strong class="metric-value">{{ $unidadesCount ?? 0 }}</strong>
         </div>
     </div>
+</div>
+
 
     <div class="content-wrapper">
         <div class="charts">

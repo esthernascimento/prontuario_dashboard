@@ -34,7 +34,7 @@ body {
 /* --- Lado Esquerdo --- */
 .left-side {
   width: 50%;
-  background: linear-gradient(135deg, var(--roxo) 0%, var(--roxo-claro) 100%);
+  background: linear-gradient(135deg, #27003f 0%, #4a0077 50%, #7405ba 100%);
   display: flex;
   justify-content: center;
   align-items: center;
