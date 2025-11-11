@@ -211,7 +211,7 @@
         </div>
 
         <div class="page-footer">
-            <a href="{{ route('enfermeiro.pacientes') }}" class="btn-voltar">
+            <a href="{{ route('enfermeiro.prontuario') }}" class="btn-voltar">
                 <i class="bi bi-arrow-left-circle"></i>
                 <span>Voltar para Lista de Pacientes</span>
             </a>

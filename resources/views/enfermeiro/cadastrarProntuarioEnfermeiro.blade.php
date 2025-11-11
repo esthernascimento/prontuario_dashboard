@@ -43,6 +43,11 @@
                     <strong>COREN:</strong>
                     <span>{{ $enfermeiro->corenEnfermeiro ?? 'N/A' }}</span>
                 </div>
+                {{-- NOVO: Exibir a unidade de trabalho do enfermeiro --}}
+                <div class="info-item">
+                    <strong>Unidade de Trabalho:</strong>
+                    <span>{{ $unidadeEnfermeiro->nomeUnidade ?? 'Não especificada' }}</span>
+                </div>
                 <div class="info-item">
                     <strong>Função:</strong>
                     <span>Enfermeiro(a)</span>
@@ -170,7 +175,7 @@
 
             <div class="form-section-title">Detalhes da Ocorrência</div>
 
-            {{-- Alergias --}}
+            {{-- Alergias com Tipo e Severidade --}}
             <div class="input-group">
                 <label>
                     <i class="bi bi-exclamation-triangle-fill"></i> Alergias Identificadas
@@ -178,9 +183,6 @@
                 <input type="text" id="filtroAlergias" class="input-filtro" placeholder="Pesquisar alergia...">
 
                 <div id="listaAlergias" class="checkbox-list">
-                    {{-- Campo hidden removido, pois a validação de array cuida disso --}}
-                    {{-- <input type="hidden" name="alergias" value=""> --}}
-
                     @php
                         $alergias = [
                             'Dipirona', 'Penicilina', 'Amoxicilina', 'Iodo', 'Látex', 'Glúten', 'Lactose', 
@@ -190,14 +192,45 @@
                             'Pólen', 'Pelagem animal', 'Fungos', 'Produtos de limpeza', 'Antibióticos diversos',
                             'Outros'
                         ];
+                        
+                        $tiposAlergia = [
+                            'Alimentar', 'Medicamentosa', 'Ambiental', 'Contato', 'Outra'
+                        ];
+                        
+                        $severidadesAlergia = [
+                            'Baixa', 'Média', 'Alta'
+                        ];
                     @endphp
 
                     @foreach($alergias as $alergia)
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="alergias[]" value="{{ $alergia }}"
-                                {{ is_array(old('alergias')) && in_array($alergia, old('alergias')) ? 'checked' : '' }}>
-                            {{ $alergia }}
-                        </label>
+                        <div class="alergia-item" data-alergia="{{ $alergia }}">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="alergias[]" value="{{ $alergia }}"
+                                    {{ is_array(old('alergias')) && in_array($alergia, old('alergias')) ? 'checked' : '' }}
+                                    onchange="toggleAlergiaDetails('{{ $alergia }}', this.checked)">
+                                {{ $alergia }}
+                            </label>
+                            
+                            <div class="alergia-details" id="alergia-details-{{ str_replace(' ', '-', $alergia) }}" style="display: none;">
+                                <div class="alergia-detail-row">
+                                    <label for="tipo-{{ str_replace(' ', '-', $alergia) }}">Tipo:</label>
+                                    <select name="alergia_tipos[{{ $alergia }}]" id="tipo-{{ str_replace(' ', '-', $alergia) }}" class="alergia-select">
+                                        @foreach($tiposAlergia as $tipo)
+                                            <option value="{{ $tipo }}" {{ (old('alergia_tipos')[$alergia] ?? null) == $tipo ? 'selected' : '' }}>{{ $tipo }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                
+                                <div class="alergia-detail-row">
+                                    <label for="severidade-{{ str_replace(' ', '-', $alergia) }}">Severidade:</label>
+                                    <select name="alergia_severidades[{{ $alergia }}]" id="severidade-{{ str_replace(' ', '-', $alergia) }}" class="alergia-select">
+                                        @foreach($severidadesAlergia as $severidade)
+                                            <option value="{{ $severidade }}" {{ (old('alergia_severidades')[$alergia] ?? null) == $severidade ? 'selected' : '' }}>{{ $severidade }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     @endforeach
                 </div>
                 @error('alergias')
@@ -205,41 +238,7 @@
                 @enderror
             </div>
 
-            <!-- Medicações -->
-            <div class="input-group">
-                <label>
-                    <i class="bi bi-capsule"></i> Medicações / Procedimentos Ministrados
-                </label>
-                <input type="text" id="filtroMedicacoes" class="input-filtro" placeholder="Pesquisar medicação...">
-
-                <div id="listaMedicacoes" class="checkbox-list">
-                    {{-- Campo hidden removido --}}
-                    {{-- <input type="hidden" name="medicacoes_ministradas" value=""> --}}
-
-                    @php
-                        $medicacoes = [
-                            'Paracetamol', 'Dipirona', 'Soro fisiológico', 'Glicose 5%', 'Ranitidina', 
-                            'Metoclopramida', 'Omeprazol', 'Buscopan', 'Tramal', 'Cetoprofeno',
-                            'Hidrocortisona', 'Prednisona', 'Clorexidina', 'Diclofenaco', 
-                            'Adrenalina', 'Insulina', 'Amoxicilina', 'Azitromicina', 
-                            'Atadura', 'Curativo', 'Inalação', 'Suturas', 'Antisséptico', 'Soroterapia', 
-                            'Curativo com gaze', 'Glicemia capilar', 'Administração IM', 'Administração EV',
-                            'Administração VO', 'Outros'
-                        ];
-                    @endphp
-
-                    @foreach($medicacoes as $medicacao)
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="medicacoes_ministradas[]" value="{{ $medicacao }}"
-                                {{ is_array(old('medicacoes_ministradas')) && in_array($medicacao, old('medicacoes_ministradas')) ? 'checked' : '' }}>
-                            {{ $medicacao }}
-                        </label>
-                    @endforeach
-                </div>
-                 @error('medicacoes_ministradas')
-                    <span class="error" style="color: var(--error-red); font-size: 0.85rem; font-weight: 600; margin-top: 6px;">{{ $message }}</span>
-                @enderror
-            </div>
+           
             
             {{-- Campo Descrição/Evolução --}}
             <div class="input-group">
@@ -258,16 +257,21 @@
                 @enderror
             </div>
             
-            {{-- CAMPO DE SELEÇÃO DE UNIDADE AJUSTADO --}}
+            {{-- CAMPO DE SELEÇÃO DE UNIDADE AJUSTADO E PRÉ-SELECIONADO --}}
             <div class="input-group">
                 <label for="unidade_atendimento">
                     <i class="bi bi-hospital"></i> Unidade de Atendimento *
                 </label>
                 <select id="unidade_atendimento" name="unidade_atendimento" class="input-select" required>
-                    <option value="" disabled selected>Selecione a unidade</option>
+                    <option value="" disabled>Selecione a unidade</option>
                     {{-- Percorre a coleção de unidades e cria uma opção para cada uma --}}
                     @foreach($unidades as $unidade)
-                        <option value="{{ $unidade->idUnidadePK }}" {{ old('unidade_atendimento') == $unidade->idUnidadePK ? 'selected' : '' }}>
+                        <option value="{{ $unidade->idUnidadePK }}" 
+                            {{ 
+                                (old('unidade_atendimento') == $unidade->idUnidadePK) || 
+                                (isset($unidadeEnfermeiro) && $unidade->idUnidadePK == $unidadeEnfermeiro->idUnidadePK) 
+                                ? 'selected' : '' 
+                            }}>
                             {{ $unidade->nomeUnidade }}
                         </option>
                     @endforeach
@@ -291,25 +295,36 @@
 </main>
 </body>
 
-
 <script>
     // Filtro de pesquisa para Alergias
     document.getElementById('filtroAlergias').addEventListener('input', function() {
         const termo = this.value.toLowerCase();
-        document.querySelectorAll('#listaAlergias .checkbox-item').forEach(item => {
+        document.querySelectorAll('#listaAlergias .alergia-item').forEach(item => {
             const texto = item.textContent.toLowerCase();
             item.style.display = texto.includes(termo) ? '' : 'none';
         });
     });
 
+    // Função para mostrar/ocultar detalhes da alergia
+    function toggleAlergiaDetails(alergia, isChecked) {
+        const detailsId = 'alergia-details-' + alergia.replace(/\s+/g, '-');
+        const detailsElement = document.getElementById(detailsId);
+        
+        if (detailsElement) {
+            detailsElement.style.display = isChecked ? 'block' : 'none';
+        }
+    }
 
-    document.getElementById('filtroMedicacoes').addEventListener('input', function() {
-        const termo = this.value.toLowerCase();
-        document.querySelectorAll('#listaMedicacoes .checkbox-item').forEach(item => {
-            const texto = item.textContent.toLowerCase();
-            item.style.display = texto.includes(termo) ? '' : 'none';
+    // Inicializar detalhes das alergias marcadas (se houver) ao carregar a página
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkboxes = document.querySelectorAll('input[name="alergias[]"]');
+        
+        checkboxes.forEach(function(checkbox) {
+            if (checkbox.checked) {
+                const alergia = checkbox.value;
+                toggleAlergiaDetails(alergia, true);
+            }
         });
     });
 </script>
 @endsection
-

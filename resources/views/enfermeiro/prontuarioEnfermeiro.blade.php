@@ -4,84 +4,142 @@
 
 @section('content')
 
-
 <link rel="stylesheet" href="{{ asset('css/enfermeiro/prontuario.css') }}">
 
 <main class="main-dashboard">
     <div class="enfermeiro-container">
+        
+        <!-- Header -->
         <div class="enfermeiro-header">
-            <h1><i class="bi bi-journal-medical"></i>Triagem dos Pacientes</h1>
+            <h1>
+                <i class="bi bi-journal-medical"></i> 
+                    Prontuário dos Pacientes
+            </h1>
         </div>
 
+        <!-- Search Bar -->
         <div class="search-filters">
             <div class="search-box">
                 <i class="bi bi-search"></i>
-                <input type="text" id="searchInput" placeholder="Pesquisar por nome, CPF..." onkeyup="filterPatients()">
+                <input type="text" 
+                       id="searchInput" 
+                       placeholder="Pesquisar por nome, CPF..." 
+                       onkeyup="filterPatients()">
             </div>
+        </div>      
 
-            <div class="filters">
-                <div class="custom-select" id="customStatus">
-                    <input type="text" readonly class="selected-filter-input selected" value="Status" id="selectedFilterText">
-                    <i class="bi bi-chevron-down select-icon"></i>
-
-                    <div class="options">
-                        <div data-value="">Todos</div>
-                        <div data-value="1">Ativo</div>
-                        <div data-value="2">Alta</div>
-                    </div>
-                </div>
-                <input type="hidden" id="filterStatus" value="">
+        <!-- Abas para separar pacientes -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('fila')">
+                    <i class="bi bi-clock-history"></i> Pacientes na Fila
+                    <span class="badge badge-fila">{{ $pacientes_na_fila->count() }}</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('atendidos')">
+                    <i class="bi bi-check-circle"></i> Pacientes Atendidos
+                    <span class="badge badge-atendidos">{{ $pacientes_atendidos->count() }}</span>
+                </button>
             </div>
         </div>
 
-        <div class="box-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>CPF</th>
-                        <th>Nascimento</th>
-                        <th class="status-header">Status</th>
-                        <th class="actions-header">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($pacientes as $paciente)
-                        @php
-                            $statusValue = $paciente->statusPaciente ?? 1;
-                            $statusText = $statusValue == 1 ? 'Ativo' : 'Alta';
-                            $statusClass = $statusValue == 1 ? 'status-ativo' : 'status-alta';
-                        @endphp
-                        <tr data-status="{{ $statusValue }}" data-name="{{ strtolower($paciente->nomePaciente) }}" data-cpf="{{ $paciente->cpfPaciente }}">
-                            <td>{{ $paciente->nomePaciente }}</td>
-                            <td>{{ $paciente->cpfPaciente }}</td>
-                            <td>{{ $paciente->dataNascPaciente ? \Carbon\Carbon::parse($paciente->dataNascPaciente)->format('d/m/Y') : 'N/A' }}</td>
-                            <td class="status-cell">
-                                <span class="status-badge {{ $statusClass }}">{{ $statusText }}</span>
-                            </td>
-                            <td class="actions">
-                                <a href="{{ route('enfermeiro.visualizarProntuario', $paciente->idPaciente) }}"
-                                   class="btn-action btn-view"
-                                   title="Visualizar Prontuário e Histórico">
-                                   <i class="bi bi-eye-fill"></i>
-                                </a>
+        <!-- Conteúdo das abas -->
+        <div class="tab-content">
+            <!-- Aba: Pacientes na Fila -->
+            <div id="fila-tab" class="tab-pane active">
+                <div class="box-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>CPF</th>
+                                <th>Nascimento</th>
+                                <th class="status-header">Status</th>
+                                <th class="actions-header">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($pacientes_na_fila as $paciente)
+                                <tr>
+                                    <td>{{ $paciente->nomePaciente }}</td>
+                                    <td>{{ $paciente->cpfPaciente }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($paciente->dataNascPaciente)->format('d/m/Y') }}</td>
+                                    <td class="status-cell">
+                                        <span class="status-badge status-ativo">
+                                            Aguardando Triagem
+                                        </span>
+                                    </td>
+                                    <td class="actions">
+                                        <a href="{{ route('enfermeiro.anotacao.create', $paciente->idPaciente) }}"
+                                           class="btn-action btn-add-consulta"
+                                           title="Realizar Triagem">
+                                           <i class="bi bi-file-earmark-text-fill"></i>
+                                        </a>
+                                        <a href="{{ route('enfermeiro.visualizarProntuario', $paciente->idPaciente) }}"
+                                           class="btn-action btn-view"
+                                           title="Ver Histórico">
+                                           <i class="bi bi-clipboard2-pulse"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="no-enfermeiros">
+                                        Nenhum paciente aguardando triagem no momento.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-                                <a href="{{ route('enfermeiro.anotacao.create', $paciente->idPaciente) }}"
-                                   class="btn-action btn-add-anotacao"
-                                   title="Criar Nova Anotação de Enfermagem">
-                                   <i class="bi bi-file-earmark-text-fill"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="no-enfermeiros">Nenhum paciente encontrado.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-
-         
+            <!-- Aba: Pacientes Atendidos -->
+            <div id="atendidos-tab" class="tab-pane">
+                <div class="box-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>CPF</th>
+                                <th>Última Triagem</th>
+                                <th>Médico Responsável</th>
+                                <th class="actions-header">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($pacientes_atendidos as $paciente)
+                                @php
+                                    // Busca a última anotação de enfermagem
+                                    $ultimaAnotacao = $paciente->anotacoesEnfermagem->sortByDesc('data_hora')->first();
+                                    
+                                    // Busca a última consulta finalizada
+                                    $ultimaConsulta = $paciente->consultas()->where('status_atendimento', 'FINALIZADO')->latest()->first();
+                                    $medicoResponsavel = $ultimaConsulta && $ultimaConsulta->medico ? $ultimaConsulta->medico->nomeMedico : 'N/A';
+                                @endphp
+                                <tr>
+                                    <td>{{ $paciente->nomePaciente }}</td>
+                                    <td>{{ $paciente->cpfPaciente }}</td>
+                                    <td>{{ $ultimaAnotacao ? \Carbon\Carbon::parse($ultimaAnotacao->data_hora)->format('d/m/Y H:i') : 'N/A' }}</td>
+                                    <td>{{ $medicoResponsavel }}</td>
+                                    <td class="actions">
+                                        <a href="{{ route('enfermeiro.visualizarProntuario', $paciente->idPaciente) }}"
+                                               class="btn-action btn-view"
+                                               title="Ver Histórico Completo">
+                                               <i class="bi bi-eye-fill"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="no-enfermeiros">
+                                        Nenhum paciente com atendimento finalizado recentemente.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </main>
@@ -89,54 +147,36 @@
 <script>
 function filterPatients() {
     const searchInput = document.getElementById('searchInput').value.toLowerCase();
-    const filterStatusValue = document.getElementById('filterStatus').value;
-    const rows = document.querySelectorAll('tbody tr');
+    const activeTab = document.querySelector('.tab-pane.active');
+    const rows = activeTab.querySelectorAll('tbody tr');
 
     rows.forEach(row => {
-        if (!row.dataset.name) { row.style.display = 'none'; return; }
+        // Ignora a linha de "nenhum paciente encontrado"
+        if (row.querySelector('.no-enfermeiros')) {
+            row.style.display = searchInput === '' ? '' : 'none';
+            return;
+        }
 
-        const name = row.dataset.name;
-        const cpf = row.dataset.cpf;
-        const status = row.dataset.status;
+        // Pega o texto de todas as células (exceto ações)
+        const cells = row.querySelectorAll('td:not(.actions)');
+        let textContent = '';
+        cells.forEach(cell => {
+            textContent += cell.textContent.toLowerCase() + ' ';
+        });
 
-        const matchesSearch = name.includes(searchInput) || cpf.includes(searchInput);
-        const matchesStatus = filterStatusValue === '' || status === filterStatusValue;
-
-        row.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
+        // Mostra ou esconde baseado na busca
+        row.style.display = textContent.includes(searchInput) ? '' : 'none';
     });
-
-    checkNoResults();
 }
 
-const customSelect = document.getElementById("customStatus");
-const selectedInput = customSelect.querySelector(".selected-filter-input");
-const options = customSelect.querySelector(".options");
-const hiddenStatusInput = document.getElementById('filterStatus');
-
-selectedInput.addEventListener("click", () => customSelect.classList.toggle('active'));
-
-options.querySelectorAll("div").forEach(option => {
-    option.addEventListener("click", () => {
-        selectedInput.value = option.textContent;
-        hiddenStatusInput.value = option.getAttribute('data-value');
-        customSelect.classList.remove('active');
-        filterPatients();
-    });
-});
-
-document.addEventListener("click", e => {
-    if (!customSelect.contains(e.target)) customSelect.classList.remove('active');
-});
-
-function checkNoResults() {
-    const rows = document.querySelectorAll('tbody tr');
-    let visibleCount = 0;
-    rows.forEach(row => { if (row.dataset.name && row.style.display !== 'none') visibleCount++; });
-
-    const noPatientsRow = document.querySelector('td.no-enfermeiros')?.closest('tr');
-    if (noPatientsRow) { noPatientsRow.style.display = visibleCount === 0 ? '' : 'none'; }
+// Função para alternar entre abas
+function switchTab(tabName) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+    
+    document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
+    document.getElementById(`${tabName}-tab`).classList.add('active');
 }
-
-window.onload = checkNoResults;
 </script>
+
 @endsection

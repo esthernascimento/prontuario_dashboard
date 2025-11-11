@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon; 
 
 class Consulta extends Model
 {
@@ -100,4 +101,14 @@ class Consulta extends Model
          // Chave primária 'idRecepcionistaPK' na tbRecepcionista
         return $this->belongsTo(Recepcionista::class, 'idRecepcionistaFK', 'idRecepcionistaPK');
     }
+
+
+        public function setDataConsultaAttribute($value)
+    {
+  
+        $date = $value ? Carbon::parse($value) : Carbon::now('America/Sao_Paulo');
+        
+        $this->attributes['dataConsulta'] = $date->format('Y-m-d H:i:s');
+    }
 }
+

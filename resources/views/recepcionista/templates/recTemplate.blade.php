@@ -12,9 +12,8 @@
 
     @yield('styles')
 </head>
-<body>
-<body>
 
+<body>
     <div class="sidebar-recepcionista d-flex flex-column">
         <div class="logo-recepcionista-container">
             <img src="{{ asset('img/recepcionista-logo2.png') }}" class="logo-recepcionista"
@@ -46,16 +45,21 @@
             </form>
         </div>
     </div>
+    
     <header class="navbar-recepcionista">
         <div class="user-info-recepcionista">
-            <span>{{ Auth::user()->name ?? 'Recepcionista' }}</span>
-            <img src="{{ Auth::user()->foto_perfil_url ?? asset('img/default-avatar.png') }}"
-                alt="Avatar Recepcionista">
+            <a href="{{ route('recepcionista.perfil') }}" class="user-info" style="text-decoration: none; color: inherit;">
+                <span>{{ Auth::user()->name ?? 'Recepcionista' }}</span>
+                <img src="{{ Auth::user()->foto_perfil_url ?? asset('img/usuario-de-perfil.png') }}"
+                    alt="Avatar Recepcionista">
+            </a>
         </div>
     </header>
+    
     <main class="main-content">
         @yield('content')
     </main>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     @stack('scripts')

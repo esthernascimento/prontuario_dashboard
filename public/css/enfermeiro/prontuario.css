@@ -1,9 +1,4 @@
-/* ============================================
- * PRONTUÁRIO DOS PACIENTES - CSS ENFERMEIRO
- * TEMA: VERDE ENFERMAGEM
- * * Este CSS adapta o estilo profissional (Vermelho Médico)
- * para o tema de Enfermagem (Verde).
- * ============================================ */
+
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
@@ -627,3 +622,90 @@ td {
         min-width: 60px;
     }
 }
+
+/* ============================================
+   ABAS PARA PACIENTES ATENDIDOS
+   ============================================ */
+.tabs-container {
+    margin-bottom: 25px;
+    background: white;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: 0;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 18px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tab-btn:hover {
+    color: var(--primary-green);
+    background-color: rgba(10, 184, 129, 0.05);
+}
+
+.tab-btn.active {
+    color: var(--primary-green);
+    border-bottom: 3px solid var(--primary-green);
+    background-color: rgba(10, 184, 129, 0.05);
+}
+
+.tab-btn i {
+    font-size: 18px;
+}
+
+.badge {
+    background-color: var(--primary-green);
+    color: white;
+    border-radius: 12px;
+    padding: 3px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+    line-height: 1;
+}
+
+.badge-fila {
+    background-color: var(--primary-green-light);
+}
+
+.badge-atendidos {
+    background-color: var(--success-green);
+}
+
+.tab-content {
+    position: relative;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+.tabs-container + .box-table {
+    margin-top: 0;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
