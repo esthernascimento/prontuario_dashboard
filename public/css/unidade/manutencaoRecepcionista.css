@@ -1,6 +1,6 @@
 /* ============================================
-   VARIÁVEIS CSS - Recepcionistas
-   ============================================ */
+    VARIÁVEIS CSS - Recepcionistas
+    ============================================ */
 :root {
     --primary-blue: #3C0061;
     --primary-blue-dark: #2A0045;
@@ -86,8 +86,8 @@ body {
 }
 
 /* ============================================
-   DASHBOARD DE MÉTRICAS
-   ============================================ */
+    DASHBOARD DE MÉTRICAS
+    ============================================ */
 .metrics-dashboard {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -213,8 +213,8 @@ body {
 }
 
 /* ============================================
-   HEADER MELHORADO
-   ============================================ */
+    HEADER MELHORADO
+    ============================================ */
 .recepcionista-header {
     display: flex;
     justify-content: space-between;
@@ -321,8 +321,8 @@ body {
 }
 
 /* ============================================
-   FILTROS AVANÇADOS
-   ============================================ */
+    FILTROS AVANÇADOS
+    ============================================ */
 .search-filters {
     display: flex;
     align-items: center;
@@ -456,8 +456,8 @@ body {
 }
 
 /* ============================================
-   TOGGLE DE VISUALIZAÇÃO
-   ============================================ */
+    TOGGLE DE VISUALIZAÇÃO
+    ============================================ */
 .view-toggle {
     display: flex;
     background: white;
@@ -510,8 +510,8 @@ body {
 }
 
 /* ============================================
-   TABELA (VISUALIZAÇÃO EM LISTA)
-   ============================================ */
+    TABELA (VISUALIZAÇÃO EM LISTA)
+    ============================================ */
 .box-table {
     background: white;
     border-radius: var(--radius-lg);
@@ -584,16 +584,7 @@ body {
 
 .box-table tbody tr.new-entry {
     position: relative;
-}
-
-.box-table tbody tr.new-entry::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-   
+    /* REMOVIDO: Estilo da barra lateral laranja para new-entry */
 }
 
 .box-table td {
@@ -640,7 +631,8 @@ body {
     color: var(--text-primary);
 }
 
-.badge-new {
+/* REMOVIDO: Estilo para o badge 'NOVO' que criava o destaque */
+/* .badge-new {
     display: inline-block;
     background: var(--warning-orange);
     color: white;
@@ -650,7 +642,7 @@ body {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-}
+} */
 
 .no-recepcionistas {
     text-align: center;
@@ -667,14 +659,46 @@ body {
 }
 
 /* ============================================
-   AÇÕES DA TABELA
-   ============================================ */
+    STATUS BADGES 
+    ============================================ */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.status-badge i {
+    font-size: 0.6rem;
+}
+
+.status-ativo {
+    color: var(--success-green);
+    background: rgba(16, 185, 129, 0.1); 
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-inativo {
+    color: var(--error-red);
+    background: rgba(220, 38, 38, 0.1); 
+    border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+/* ============================================
+    AÇÕES DA TABELA
+    ============================================ */
 .actions {
     display: flex;
     gap: 8px;
     align-items: center;
     justify-content: center;
-    width: 100%; /* Garante que o flex ocupe o espaço total do TD */
+    width: 100%; 
 }
 
 .btn-action {
@@ -737,8 +761,8 @@ body {
 }
 
 /* ============================================
-   VISUALIZAÇÃO EM CARDS (GRID)
-   ============================================ */
+    VISUALIZAÇÃO EM CARDS (GRID)
+    ============================================ */
 .grid-view {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -827,8 +851,8 @@ body {
 }
 
 /* ============================================
-   PAGINAÇÃO
-   ============================================ */
+    PAGINAÇÃO
+    ============================================ */
 .pagination-container {
     display: flex;
     justify-content: center;
@@ -836,8 +860,8 @@ body {
 }
 
 /* ============================================
-   MODAIS
-   ============================================ */
+    MODAIS
+    ============================================ */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -957,8 +981,8 @@ body {
 }
 
 /* ============================================
-   QUICK VIEW MODAL
-   ============================================ */
+    QUICK VIEW MODAL
+    ============================================ */
 .quick-view-content {
     text-align: left;
     max-height: 500px;
@@ -1092,8 +1116,8 @@ body {
 }
 
 /* ============================================
-   RESPONSIVIDADE
-   ============================================ */
+    RESPONSIVIDADE
+    ============================================ */
 @media (max-width: 1200px) {
     .main-dashboard {
         padding: 30px 20px;
