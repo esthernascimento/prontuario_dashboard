@@ -310,7 +310,8 @@ form {
 }
 
 .input-group input.input-date,
-.input-group input.input-text {
+.input-group input.input-text,
+.input-group input.input-datetime {
     width: 100%;
     padding: 14px 16px;
     font-size: 0.95rem;
@@ -324,8 +325,9 @@ form {
     font-weight: 500;
 }
 
-.input-group input.input-date {
-    max-width: 250px;
+.input-group input.input-date,
+.input-group input.input-datetime {
+    max-width: 300px;
 }
 
 .input-group input::placeholder {
@@ -412,7 +414,7 @@ form {
 
 .btn-cancelar,
 .save-button,
-.btn-pdf-download { /* Adicionado aqui */
+.btn-pdf-download {
     padding: 14px 32px;
     font-size: 1rem;
     font-weight: 700;
@@ -468,20 +470,12 @@ form {
     box-shadow: 0 20px 35px -5px rgba(220, 38, 38, 0.4);
 }
 
-.save-button:active,
-.btn-cancelar:active,
-.btn-pdf-download:active {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
-}
-
 /* NOVO ESTILO PARA O BOTÃO PDF */
 .btn-pdf-download {
     color: white;
     /* Usando uma cor diferente do "Finalizar" para evitar confusão */
     background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%); 
     box-shadow: var(--shadow-md);
-    margin-right: 0px; 
 }
 
 .btn-pdf-download:hover {
@@ -627,6 +621,64 @@ form {
     font-weight: 600;
     color: var(--primary-red-dark);
 }
+
+/* =============== ESTILOS PARA OS DETALHES DE EXAMES E MEDICAMENTOS =============== */
+.exame-item, .medicamento-item {
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 12px;
+}
+
+.exame-item:last-child, .medicamento-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.exame-details, .medicamento-details {
+    margin-top: 10px;
+    padding: 12px;
+    background-color: var(--bg-gray-50);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--primary-red-light);
+}
+
+.exame-detail-row, .medicamento-detail-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 12px;
+}
+
+.exame-detail-row:last-child, .medicamento-detail-row:last-child {
+    margin-bottom: 0;
+}
+
+.exame-detail-row label, .medicamento-detail-row label {
+    min-width: 80px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+    color: var(--text-secondary);
+}
+
+.exame-select, .medicamento-select, .medicamento-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background-color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.exame-select:focus, .medicamento-select:focus, .medicamento-input:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
 @media (max-width: 768px) {
     .main-dashboard {
         padding: 20px;
@@ -672,7 +724,8 @@ form {
         font-size: 1.1rem;
     }
 
-    .input-group input.input-date {
+    .input-group input.input-date,
+    .input-group input.input-datetime {
         max-width: 100%;
     }
 
@@ -869,6 +922,154 @@ input:focus {
         font-size: 0.9rem;
     }
 }
+
+/* ... (restante do seu CSS existente) ... */
+
+/* =============== ESTILOS DO MODAL DE CONFIRMAÇÃO =============== */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeInOverlay 0.3s ease-out;
+}
+
+.modal-overlay.active {
+    display: flex !important;
+}
+
+@keyframes fadeInOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 0;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: slideUpModal 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+@keyframes slideUpModal {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+    padding: 24px 32px;
+    text-align: center;
+    color: white;
+}
+
+.modal-header i {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.modal-body {
+    padding: 32px;
+    text-align: center;
+}
+
+.modal-body p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+.modal-footer {
+    padding: 20px 32px;
+    background: var(--bg-gray-50);
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.btn-cancel-modal, .btn-confirm-modal {
+    padding: 12px 28px;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-cancel-modal {
+    background: var(--bg-gray-100);
+    color: var(--text-secondary);
+    border: 2px solid var(--border-color);
+}
+
+.btn-cancel-modal:hover {
+    background: white;
+    border-color: var(--text-secondary);
+    transform: translateY(-2px);
+}
+
+.btn-confirm-modal {
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+.btn-confirm-modal:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Responsividade do Modal de Confirmação */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        margin: 20px;
+    }
+    .modal-header {
+        padding: 20px;
+    }
+    .modal-header i {
+        font-size: 2.5rem;
+    }
+    .modal-header h2 {
+        font-size: 1.3rem;
+    }
+    .modal-body {
+        padding: 24px 20px;
+    }
+    .modal-footer {
+        padding: 16px 20px;
+        flex-direction: column;
+    }
+    .btn-cancel-modal, .btn-confirm-modal {
+        width: 100%;
+    }
+}
+
 
 /* =============== MODAL CUSTOMIZADO DE PDF (Estilo Confirmação) =============== */
 
@@ -1152,7 +1353,7 @@ input:focus {
     }
 
     .modal-footer-pdf {
-        padding: 16px 20px;
+        padding:16px 20px;
     }
 
     .modal-footer-pdf .btn-fechar {

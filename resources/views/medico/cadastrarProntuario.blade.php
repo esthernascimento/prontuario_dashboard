@@ -46,6 +46,14 @@
                     <strong>Especialidade:</strong>
                     <span>{{ $medico->especialidadeMedico }}</span>
                 </div>
+                <div class="info-item">
+                    <strong>Data e Hora da Consulta:</strong>
+                    <span>{{ isset($consulta) && $consulta->dataConsulta ? \Carbon\Carbon::parse($consulta->dataConsulta)->format('d/m/Y H:i') : \Carbon\Carbon::now()->format('d/m/Y H:i') }}</span>
+                </div>
+                <div class="info-item">
+                    <strong>Unidade de Atendimento:</strong>
+                    <span>{{ $unidadeMedico->nomeUnidade ?? 'Não especificada' }}</span>
+                </div>
                 @if (isset($consulta) && $consulta->classificacao_risco)
                     <div class="info-item">
                         <strong>Classificação de Risco:</strong>
@@ -103,15 +111,15 @@
 
             <div class="input-group">
                 <label for="dataConsulta">
-                    <i class="bi bi-calendar-check"></i> Data da Consulta *
+                    <i class="bi bi-calendar-check"></i> Data e Hora da Consulta *
                 </label>
                 <input
-                    type="date"
+                    type="datetime-local"
                     id="dataConsulta"
                     name="dataConsulta"
-                    value="{{ old('dataConsulta', isset($consulta) && $consulta->dataConsulta ? \Carbon\Carbon::parse($consulta->dataConsulta)->format('Y-m-d') : date('Y-m-d')) }}"
+                    value="{{ old('dataConsulta', isset($consulta) && $consulta->dataConsulta ? \Carbon\Carbon::parse($consulta->dataConsulta)->format('Y-m-d\TH:i') : \Carbon\Carbon::now()->format('Y-m-d\TH:i')) }}"
                     required
-                    class="input-date"
+                    class="input-datetime"
                 >
                 @error('dataConsulta')
                     <span class="error">{{ $message }}</span>
@@ -133,7 +141,7 @@
                 @enderror
             </div>
 
-            {{-- EXAMES COM CHECKBOX --}}
+            {{-- EXAMES COM CHECKBOX E TIPO --}}
             <div class="input-group">
                 <label>
                     <i class="bi bi-clipboard2-pulse"></i> Exames Solicitados
@@ -142,9 +150,11 @@
                 <input type="text" id="filtroExames" class="input-filtro" placeholder="Pesquisar exame...">
 
                 <div id="listaExames" class="checkbox-list">
-                    <input type="hidden" name="exames_solicitados" value="">
-
                     @php
+                        $tiposExame = [
+                            'Análises Clínicas', 'Imagem', 'Endoscopia', 'Biopsia', 'Testes Funcionais', 'Outros'
+                        ];
+                        
                         $exames = [
                             'Hemograma Completo', 'Glicemia de Jejum', 'Colesterol Total e Frações', 'Triglicerídeos',
                             'Creatinina', 'Ureia', 'Ácido Úrico', 'TGO (AST)', 'TGP (ALT)', 'Bilirrubinas',
@@ -171,11 +181,25 @@
                     @endphp
 
                     @foreach($exames as $exame)
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="exames_solicitados[]" value="{{ $exame }}"
-                                {{ is_array(old('exames_solicitados')) && in_array($exame, old('exames_solicitados')) ? 'checked' : '' }}>
-                            {{ $exame }}
-                        </label>
+                        <div class="exame-item" data-exame="{{ $exame }}">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="exames_solicitados[]" value="{{ $exame }}"
+                                    {{ is_array(old('exames_solicitados')) && in_array($exame, old('exames_solicitados')) ? 'checked' : '' }}
+                                    onchange="toggleExameDetails('{{ $exame }}', this.checked)">
+                                {{ $exame }}
+                            </label>
+                            
+                            <div class="exame-details" id="exame-details-{{ str_replace(' ', '-', $exame) }}" style="display: none;">
+                                <div class="exame-detail-row">
+                                    <label for="tipo-exame-{{ str_replace(' ', '-', $exame) }}">Tipo de Exame:</label>
+                                    <select name="exame_tipos[{{ $exame }}]" id="tipo-exame-{{ str_replace(' ', '-', $exame) }}" class="exame-select">
+                                        @foreach($tiposExame as $tipo)
+                                            <option value="{{ $tipo }}">{{ $tipo }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     @endforeach
                 </div>
                 @error('exames_solicitados')
@@ -183,7 +207,7 @@
                 @enderror
             </div>
 
-            {{-- MEDICAMENTOS COM CHECKBOX --}}
+            {{-- MEDICAMENTOS COM CHECKBOX E DETALHES --}}
             <div class="input-group">
                 <label>
                     <i class="bi bi-capsule-pill"></i> Medicamentos Prescritos
@@ -192,36 +216,66 @@
                 <input type="text" id="filtroMedicamentos" class="input-filtro" placeholder="Pesquisar medicamento...">
 
                 <div id="listaMedicamentos" class="checkbox-list">
-                    <input type="hidden" id="medicamentosPrescritos" name="medicamentosPrescritos" value="">
-
                     @php
+                        $tiposMedicamento = [
+                            'Analgésico', 'Anti-inflamatório', 'Antibiótico', 'Antiviral', 'Antifúngico', 
+                            'Antihistamínico', 'Broncodilatador', 'Corticosteroide', 'Anti-hipertensivo', 
+                            'Diurético', 'Antidiabético', 'Anticonvulsivante', 'Antidepressivo', 'Ansiolítico', 
+                            'Vitamina', 'Suplemento', 'Outros'
+                        ];
+                        
                         $medicamentos = [
-                            'Paracetamol 500mg', 'Paracetamol 750mg', 'Dipirona 500mg', 'Dipirona 1g',
-                            'Ibuprofeno 400mg', 'Ibuprofeno 600mg', 'Amoxicilina 500mg', 'Amoxicilina 875mg',
-                            'Azitromicina 500mg', 'Cefalexina 500mg', 'Ciprofloxacino 500mg',
-                            'Omeprazol 20mg', 'Omeprazol 40mg', 'Pantoprazol 40mg', 'Ranitidina 150mg',
-                            'Metoclopramida 10mg', 'Bromoprida 10mg', 'Domperidona 10mg',
-                            'Diclofenaco 50mg', 'Diclofenaco Gel', 'Nimesulida 100mg',
-                            'Prednisona 5mg', 'Prednisona 20mg', 'Dexametasona 4mg',
-                            'Loratadina 10mg', 'Desloratadina 5mg', 'Cetirizina 10mg',
-                            'Captopril 25mg', 'Losartana 50mg', 'Enalapril 10mg',
-                            'Sinvastatina 20mg', 'Atorvastatina 20mg',
-                            'Metformina 500mg', 'Metformina 850mg', 'Glibenclamida 5mg',
-                            'Levotiroxina 25mcg', 'Levotiroxina 50mcg', 'Levotiroxina 100mcg',
-                            'Soro Fisiológico 0,9%', 'Glicose 5%', 'Ringer Lactato',
-                            'Vitamina C', 'Complexo B', 'Sulfato Ferroso',
+                            'Paracetamol', 'Dipirona', 'Ibuprofeno', 'Amoxicilina', 'Azitromicina', 
+                            'Cefalexina', 'Ciprofloxacino', 'Omeprazol', 'Pantoprazol', 'Ranitidina',
+                            'Metoclopramida', 'Bromoprida', 'Domperidona', 'Diclofenaco', 'Nimesulida',
+                            'Prednisona', 'Dexametasona', 'Loratadina', 'Desloratadina', 'Cetirizina',
+                            'Captopril', 'Losartana', 'Enalapril', 'Sinvastatina', 'Atorvastatina',
+                            'Metformina', 'Glibenclamida', 'Levotiroxina', 'Sulfato Ferroso',
+                            'Vitamina C', 'Complexo B', 'Soro Fisiológico', 'Glicose 5%', 'Ringer Lactato',
                             'Outros'
                         ];
                     @endphp
 
                     @foreach($medicamentos as $medicamento)
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="medicamentos_prescritos[]" value="{{ $medicamento }}"
-                                {{ is_array(old('medicamentos_prescritos')) && in_array($medicamento, old('medicamentos_prescritos')) ? 'checked' : '' }}>
-                            {{ $medicamento }}
-                        </label>
+                        <div class="medicamento-item" data-medicamento="{{ $medicamento }}">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="medicamentos_prescritos[]" value="{{ $medicamento }}"
+                                    {{ is_array(old('medicamentos_prescritos')) && in_array($medicamento, old('medicamentos_prescritos')) ? 'checked' : '' }}
+                                    onchange="toggleMedicamentoDetails('{{ $medicamento }}', this.checked)">
+                                {{ $medicamento }}
+                            </label>
+                            
+                            <div class="medicamento-details" id="medicamento-details-{{ str_replace(' ', '-', $medicamento) }}" style="display: none;">
+                                <div class="medicamento-detail-row">
+                                    <label for="tipo-medicamento-{{ str_replace(' ', '-', $medicamento) }}">Tipo:</label>
+                                    <select name="medicamento_tipos[{{ $medicamento }}]" id="tipo-medicamento-{{ str_replace(' ', '-', $medicamento) }}" class="medicamento-select">
+                                        @foreach($tiposMedicamento as $tipo)
+                                            <option value="{{ $tipo }}">{{ $tipo }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                
+                                <div class="medicamento-detail-row">
+                                    <label for="dosagem-medicamento-{{ str_replace(' ', '-', $medicamento) }}">Dosagem:</label>
+                                    <input type="text" name="medicamento_dosagens[{{ $medicamento }}]" id="dosagem-medicamento-{{ str_replace(' ', '-', $medicamento) }}" class="medicamento-input" placeholder="Ex: 500mg">
+                                </div>
+                                
+                                <div class="medicamento-detail-row">
+                                    <label for="frequencia-medicamento-{{ str_replace(' ', '-', $medicamento) }}">Frequência:</label>
+                                    <input type="text" name="medicamento_frequencias[{{ $medicamento }}]" id="frequencia-medicamento-{{ str_replace(' ', '-', $medicamento) }}" class="medicamento-input" placeholder="Ex: 8/8 horas">
+                                </div>
+                                
+                                <div class="medicamento-detail-row">
+                                    <label for="periodo-medicamento-{{ str_replace(' ', '-', $medicamento) }}">Período:</label>
+                                    <input type="text" name="medicamento_periodos[{{ $medicamento }}]" id="periodo-medicamento-{{ str_replace(' ', '-', $medicamento) }}" class="medicamento-input" placeholder="Ex: 5 dias">
+                                </div>
+                            </div>
+                        </div>
                     @endforeach
                 </div>
+                @error('medicamentos_prescritos')
+                    <span class="error">{{ $message }}</span>
+                @enderror
             </div>
 
             {{-- BOTÕES DE AÇÃO --}}
@@ -237,13 +291,31 @@
                 </button>
                 @endif
 
-                <button type="submit" class="save-button">
+                {{-- BOTÃO ALTERADO PARA ABRIR O MODAL DE CONFIRMAÇÃO --}}
+                <button type="button" class="save-button" onclick="openConfirmModal()">
                     <i class="bi bi-check-circle"></i> {{ isset($consulta) ? 'Finalizar Atendimento' : 'Salvar Prontuário' }}
                 </button>
             </div>
         </form>
     </div>
 </main>
+
+{{-- MODAL DE CONFIRMAÇÃO --}}
+<div id="confirmModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <h2>Confirmar Finalização</h2>
+        </div>
+        <div class="modal-body">
+            <p>Tem certeza que deseja finalizar este atendimento? Após a confirmação, o paciente será encaminhado e a consulta não poderá mais ser editada por aqui.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn-cancel-modal" onclick="closeConfirmModal()">Cancelar</button>
+            <button type="button" class="btn-confirm-modal" onclick="submitForm()">Confirmar e Finalizar</button>
+        </div>
+    </div>
+</div>
 
 {{-- MODAL CUSTOMIZADO DE PDF --}}
 @if(isset($consulta))
@@ -437,10 +509,10 @@ function downloadPdf(type) {
             optionIcon.innerHTML = '<i class="bi bi-prescription2"></i>'; 
         }
         
-        // Reverte a cor do badge (depois do showNotification)
+    
         statusBadge.style.background = ''; 
         statusBadge.style.color = '';
-        updatePdfOptions(); // Garante o status correto após o loading
+        updatePdfOptions(); 
     }, 1000);
 }
 
@@ -473,7 +545,6 @@ function showNotification(message, type) {
     }, 3000);
 }
 
-// Fecha modal ao clicar fora
 document.addEventListener('click', function(event) {
     const modal = document.getElementById('pdfOptionsModal');
     if (modal && event.target === modal) {
@@ -481,12 +552,70 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// Fecha modal com ESC
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
         closePdfModal();
     }
 });
+
+// ===== FUNÇÕES DO MODAL DE CONFIRMAÇÃO =====
+function openConfirmModal() {
+    const modal = document.getElementById('confirmModal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeConfirmModal() {
+    const modal = document.getElementById('confirmModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+function submitForm() {
+    closeConfirmModal();
+    document.getElementById('prontuarioForm').submit();
+}
+
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('confirmModal');
+    if (modal && event.target === modal) {
+        closeConfirmModal();
+    }
+});
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeConfirmModal();
+
+        const pdfModal = document.getElementById('pdfOptionsModal');
+        if (pdfModal && pdfModal.classList.contains('active')) {
+            closePdfModal();
+        }
+    }
+});
+
+// ===== FUNÇÕES PARA DETALHES DE EXAMES E MEDICAMENTOS =====
+function toggleExameDetails(exame, isChecked) {
+    const detailsId = 'exame-details-' + exame.replace(/\s+/g, '-');
+    const detailsElement = document.getElementById(detailsId);
+    
+    if (detailsElement) {
+        detailsElement.style.display = isChecked ? 'block' : 'none';
+    }
+}
+
+function toggleMedicamentoDetails(medicamento, isChecked) {
+    const detailsId = 'medicamento-details-' + medicamento.replace(/\s+/g, '-');
+    const detailsElement = document.getElementById(detailsId);
+    
+    if (detailsElement) {
+        detailsElement.style.display = isChecked ? 'block' : 'none';
+    }
+}
 
 // ===== CÓDIGO EXISTENTE E LISTENERS PARA ATUALIZAÇÃO =====
 document.addEventListener('DOMContentLoaded', function() {
@@ -496,11 +625,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (filtroMedicamentos) {
         filtroMedicamentos.addEventListener('input', function() {
             const termo = this.value.toLowerCase();
-            document.querySelectorAll('#listaMedicamentos .checkbox-item').forEach(item => {
+            document.querySelectorAll('#listaMedicamentos .medicamento-item').forEach(item => {
                 const texto = item.textContent.toLowerCase();
                 item.style.display = texto.includes(termo) ? '' : 'none';
             });
-            // Não precisa chamar updatePdfOptions aqui, o change do checkbox já faz.
         });
     }
 
@@ -508,22 +636,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (filtroExames) {
         filtroExames.addEventListener('input', function() {
             const termo = this.value.toLowerCase();
-            document.querySelectorAll('#listaExames .checkbox-item').forEach(item => {
+            document.querySelectorAll('#listaExames .exame-item').forEach(item => {
                 const texto = item.textContent.toLowerCase();
                 item.style.display = texto.includes(termo) ? '' : 'none';
             });
-            // Não precisa chamar updatePdfOptions aqui, o change do checkbox já faz.
         });
     }
-
-    // Removido a lógica do campo hidden pois os checkboxes são enviados diretamente
-            const form = document.querySelector('form');
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    // Os checkboxes de medicamentos e exames são enviados diretamente pelo formulário
-                    // Não precisa de campo hidden adicional
-                });
-            }
 
     // Adiciona listeners para atualização em tempo real do Modal PDF
     const examesCheckboxes = document.querySelectorAll('input[name="exames_solicitados[]"]');
@@ -534,6 +652,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const medicamentosCheckboxes = document.querySelectorAll('input[name="medicamentos_prescritos[]"]');
     medicamentosCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', updatePdfOptions);
+    });
+
+    // Inicializa detalhes de exames e medicamentos marcados (se houver)
+    const examesMarcados = document.querySelectorAll('input[name="exames_solicitados[]"]:checked');
+    examesMarcados.forEach(checkbox => {
+        toggleExameDetails(checkbox.value, true);
+    });
+    
+    const medicamentosMarcados = document.querySelectorAll('input[name="medicamentos_prescritos[]"]:checked');
+    medicamentosMarcados.forEach(checkbox => {
+        toggleMedicamentoDetails(checkbox.value, true);
     });
 
     updatePdfOptions(); 

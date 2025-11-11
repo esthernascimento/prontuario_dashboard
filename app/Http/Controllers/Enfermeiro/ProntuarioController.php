@@ -9,21 +9,52 @@ use App\Models\Unidade;
 use App\Models\AnotacaoEnfermagem;
 use App\Models\Enfermeiro;
 use App\Models\Consulta;
-use App\Models\Alergia; // Importar o model Alergia
+use App\Models\Alergia;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB; // Importar DB para a transaction
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ProntuarioController extends Controller
 {
     public function index()
     {
-        $pacientes = Paciente::whereHas('consultas', function ($query) {
+        $enfermeiro = Enfermeiro::where('id_usuario', Auth::id())->first();
+        if (!$enfermeiro) {
+             return redirect()->route('enfermeiro.login')->with('error', 'Enfermeiro não encontrado.');
+        }
+
+        // Busca a unidade do enfermeiro
+        $unidadeEnfermeiro = $enfermeiro->unidades()->first();
+
+        // Pacientes AGUARDANDO TRIAGEM (lógica existente)
+        $pacientes_na_fila = Paciente::whereHas('consultas', function ($query) {
             $query->where('status_atendimento', 'AGUARDANDO_TRIAGEM');
         })
         ->orderBy('nomePaciente', 'asc')
         ->get();
 
-        return view('enfermeiro.prontuarioEnfermeiro', compact('pacientes'));
+        // --- NOVO: Busca pacientes ATENDIDOS ---
+        $pacientes_atendidos = $this->getPacientesAtendidos($enfermeiro->idEnfermeiroPK);
+
+        return view('enfermeiro.prontuarioEnfermeiro', compact('pacientes_na_fila', 'pacientes_atendidos', 'enfermeiro', 'unidadeEnfermeiro'));
+    }
+
+    /**
+     * Busca pacientes que já tiveram atendimento finalizado.
+     */
+    private function getPacientesAtendidos($idEnfermeiro)
+    {
+        // Busca IDs de pacientes únicos que já tiveram consulta finalizada
+        $pacientes_ids = Consulta::where('status_atendimento', 'FINALIZADO')
+            ->whereNotNull('idEnfermeiroFK') // Garante que a triagem foi feita
+            ->pluck('idPacienteFK')
+            ->unique()
+            ->values();
+
+        // Busca os dados desses pacientes
+        return Paciente::whereIn('idPaciente', $pacientes_ids)
+            ->orderBy('nomePaciente', 'asc')
+            ->get();
     }
 
     public function create($pacienteId)
@@ -34,21 +65,21 @@ class ProntuarioController extends Controller
         $consulta = Consulta::where('idPacienteFK', $pacienteId)
                             ->where('status_atendimento', 'AGUARDANDO_TRIAGEM')
                             ->orderBy('dataConsulta', 'desc')
-                            ->firstOrFail(); // Garante que a consulta exista
+                            ->firstOrFail(); 
 
-        $enfermeiro = Enfermeiro::where('id_usuario', Auth::id())->first();
+        $enfermeiro = Enfermeiro::where('id_usuario', Auth::id())->firstOrFail();
         if (!$enfermeiro) {
-            // Lidar com enfermeiro não encontrado (ex: logar e redirecionar)
              return redirect()->route('enfermeiro.prontuario')->with('error', 'Enfermeiro não encontrado.');
         }
 
-        return view('enfermeiro.cadastrarProntuarioEnfermeiro', compact('paciente', 'unidades', 'consulta', 'enfermeiro'));
+        // NOVO: Obter a primeira unidade associada a este enfermeiro
+        $unidadeEnfermeiro = $enfermeiro->unidades()->first();
+
+        return view('enfermeiro.cadastrarProntuarioEnfermeiro', compact('paciente', 'unidades', 'consulta', 'enfermeiro', 'unidadeEnfermeiro'));
     }
 
-    
     public function store(Request $request, $pacienteId)
     {
-
         $validatedData = $request->validate([
             'idConsulta' => 'required|exists:tbConsulta,idConsultaPK',
             'classificacao_risco' => 'required|string',
@@ -63,17 +94,16 @@ class ProntuarioController extends Controller
             'saturacao' => 'nullable|string',
             'dor' => 'nullable|integer|min:0|max:10',
             
-            // --- CORREÇÃO: Validação voltando para array ---
             'alergias' => 'nullable|array', 
-            'alergias.*' => 'nullable|string', // Valida cada item dentro do array
+            'alergias.*' => 'nullable|string',
+            'alergia_tipos' => 'nullable|array',
+            'alergia_severidades' => 'nullable|array',
             'medicacoes_ministradas' => 'nullable|array', 
-            'medicacoes_ministradas.*' => 'nullable|string', // Valida cada item
+            'medicamentos_ministradas.*' => 'nullable|string',
         ]);
-
 
         $enfermeiro = Enfermeiro::where('id_usuario', Auth::id())->firstOrFail();
         
-        // --- CORREÇÃO: Reintroduzindo o implode() ---
         $alergias_str = !empty($validatedData['alergias']) ? implode(', ', $validatedData['alergias']) : null;
         $medicacoes_str = !empty($validatedData['medicacoes_ministradas']) ? implode(', ', $validatedData['medicacoes_ministradas']) : null;
         
@@ -85,19 +115,18 @@ class ProntuarioController extends Controller
         $anotacao->descricao = $validatedData['descricao'];
         $anotacao->unidade_atendimento = $validatedData['unidade_atendimento'];
         $anotacao->pressao_arterial = $validatedData['pressao_arterial'];
-        $anotacao->temperatura = $validatedData['temperatura'];
+        $anfermeiro->temperatura = $validatedData['temperatura'];
         $anotacao->frequencia_cardiaca = $validatedData['frequencia_cardiaca'];
         $anotacao->frequencia_respiratoria = $validatedData['frequencia_respiratoria'];
         $anotacao->saturacao = $validatedData['saturacao'] ? str_replace('%', '', $validatedData['saturacao']) : null;
         $anotacao->dor = $validatedData['dor'];
         
-        // --- CORREÇÃO: Atribui as strings convertidas ---
         $anotacao->alergias = $alergias_str;
         $anotacao->medicacoes_ministradas = $medicacoes_str;
         
         // Persistência atômica da anotação, atualização da consulta e inserção de alergias
-        DB::transaction(function () use ($anotacao, $validatedData, $enfermeiro) {
-            $anotacao->save(); // Salva a anotação primeiro
+        DB::transaction(function () use ($anotacao, $validatedData, $enfermeiro, $request) {
+            $anotacao->save();
 
             // Atualiza a consulta
             $consulta = Consulta::findOrFail($validatedData['idConsulta']);
@@ -111,18 +140,25 @@ class ProntuarioController extends Controller
             $consulta->save();
 
             // Inserir alergias do paciente com base nas anotações, se informado
-            if (!empty($anotacao->alergias)) {
-                $nomes = collect(explode(',', $anotacao->alergias)) // Separa a string por vírgula
-                    ->map(fn($v) => trim($v)) // Limpa espaços
-                    ->filter(); // Remove vazios
+            if (!empty($validatedData['alergias'])) {
+                $alergia_tipos = $request->input('alergia_tipos', []);
+                $alergia_severidades = $request->input('alergia_severidades', []);
                 
-                foreach ($nomes as $nome) {
+                foreach ($validatedData['alergias'] as $alergia) {
+                    $tipo = $alergia_tipos[$alergia] ?? 'Não especificado';
+                    $severidade = $alergia_severidades[$alergia] ?? 'Não especificado';
                     
-                    // Bug 'nomeAlergia' já estava corrigido
-                    Alergia::firstOrCreate([
-                        'idPacienteFK' => $anotacao->idPacienteFK,
-                        'descAlergia' => $nome,
-                    ]);
+                    // CORREÇÃO: Usar 'descAlergia' para encontrar o registro e os campos corretos
+                    Alergia::updateOrCreate(
+                        [
+                            'idPacienteFK' => $anotacao->idPacienteFK,
+                            'descAlergia' => $alergia, 
+                        ],
+                        [
+                            'tipoAlergia' => $tipo,
+                            'severidadeAlergia' => $severidade,
+                        ]
+                    );
                 }
             }
         });
@@ -142,4 +178,3 @@ class ProntuarioController extends Controller
         return view('enfermeiro.visualizarProntuarioEnfermeiro', compact('paciente', 'anotacoes'));
     }
 }
-

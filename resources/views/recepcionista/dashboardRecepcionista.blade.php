@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-10 offset-md-1"> 
             
-            {{-- Banner de Boas-vindas --}}
+    
             <div class="welcome-banner-rec mb-4">
                 <div class="banner-left-rec">
                     <img src="{{ asset('img/recepcionista-logo2.png') }}" class="banner-logo-rec" alt="Logo">
@@ -20,7 +20,6 @@
                 </div>
             </div>
 
-            {{-- Mensagens de Feedback --}}
             @if(session('success'))
                 <div class="alert alert-success shadow-sm mb-4 alert-dismissible fade show" role="alert">
                     <i class="bi bi-check-circle-fill me-2"></i>
