@@ -470,7 +470,7 @@ td {
 
 .btn-add-consulta:hover {
     background: linear-gradient(135deg, #F0FFF0 0%, #D1FAE5 100%);
-    transform: scale(1.15) rotate(90deg);
+    transform: scale(1.15);
 }
 
 .btn-add-consulta i {
