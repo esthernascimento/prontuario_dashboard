@@ -115,7 +115,10 @@ class ProntuarioController extends Controller
         $anotacao->descricao = $validatedData['descricao'];
         $anotacao->unidade_atendimento = $validatedData['unidade_atendimento'];
         $anotacao->pressao_arterial = $validatedData['pressao_arterial'];
-        $anfermeiro->temperatura = $validatedData['temperatura'];
+        
+        // CORREÇÃO AQUI: Trocado $anfermeiro por $anotacao
+        $anotacao->temperatura = $validatedData['temperatura'];
+        
         $anotacao->frequencia_cardiaca = $validatedData['frequencia_cardiaca'];
         $anotacao->frequencia_respiratoria = $validatedData['frequencia_respiratoria'];
         $anotacao->saturacao = $validatedData['saturacao'] ? str_replace('%', '', $validatedData['saturacao']) : null;
