@@ -56,15 +56,13 @@ class LoginController extends Controller
         ]);
     }
 
-    /**
-     * Processa o logout.
-     */
-    public function logout(Request $request)
+
+       public function logout(Request $request)
     {
         Auth::guard('recepcionista')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('recepcionista.login');
+        return redirect()->route('home')->with('success', 'Logout realizado com sucesso.');
     }
 }
