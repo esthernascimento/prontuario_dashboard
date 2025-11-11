@@ -54,8 +54,8 @@ Route::get('/pacientes', [PacienteController::class, 'index']);
 | O app mobile deve enviar o Bearer Token no header Authorization.
 |
 */
-Route::middleware(['auth:sanctum', 'auth:paciente'])->group(function () {
 
+Route::middleware(['auth:sanctum', 'auth:paciente'])->group(function () {
     // Perfil do paciente logado
     Route::get('/pacientes/{id}', [PacienteController::class, 'show']);
     Route::delete('/pacientes/{id}', [PacienteController::class, 'destroy']);
@@ -66,6 +66,10 @@ Route::middleware(['auth:sanctum', 'auth:paciente'])->group(function () {
     Route::get('/paciente/alergias', [PacienteController::class, 'getAlergias']);
     Route::get('/paciente/medicamentos', [PacienteController::class, 'getMedicamentos']);
     Route::get('/paciente/exames', [PacienteController::class, 'getExames']);
+
+    // Novas rotas específicas por ID
+    Route::get('/paciente/consultas/{consulta_id}', [ConsultaController::class, 'showConsultaById']);
+    Route::get('/paciente/exames/{exame_id}', [ExameController::class, 'showExameById']);
 });
 
 /*
