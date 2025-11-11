@@ -37,17 +37,11 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/enfermeiro/login/check', [EnfermeiroLoginController::class, 'checkLogin'])->name('api.enfermeiro.login.check');
 Route::post('/enfermeiro/profile/complete', [EnfermeiroLoginController::class, 'completeProfile'])->name('api.enfermeiro.profile.complete');
 
-// Rotas de login e registo de Pacientes (via tbPaciente, para a app mobile)
+// Rotas públicas (para cadastro e primeiro update)
 Route::post('/pacientes/login', [PacienteController::class, 'login']);
 Route::post('/pacientes', [PacienteController::class, 'store']);
-
-// Rota pública de index (Mantida, como no seu arquivo)
+Route::put('/pacientes/{id}', [PacienteController::class, 'update']);
 Route::get('/pacientes', [PacienteController::class, 'index']);
-
-// (Rotas de show, update e delete foram MOVIDAS para o grupo protegido abaixo)
-// Route::get('/pacientes/{id}', [PacienteController::class, 'show']);
-// Route::put('/pacientes/{id}', [PacienteController::class, 'update']);
-// Route::delete('/pacientes/{id}', [PacienteController::class, 'destroy']);
 
 
 
@@ -57,32 +51,22 @@ Route::get('/pacientes', [PacienteController::class, 'index']);
 |--------------------------------------------------------------------------
 |
 | Essas rotas usam o guard 'paciente' definido no config/auth.php
-| O app mobile deve enviar o Bearer Token no header Authorization
+| O app mobile deve enviar o Bearer Token no header Authorization.
 |
 */
 Route::middleware(['auth:sanctum', 'auth:paciente'])->group(function () {
 
-    // Dados do paciente logado
-    Route::get('/paciente/me', [PacienteController::class, 'me']);
-
-    // Logout (revoga token)
-    Route::post('/paciente/logout', [PacienteController::class, 'logout']);
+    // Perfil do paciente logado
+    Route::get('/pacientes/{id}', [PacienteController::class, 'show']);
+    Route::delete('/pacientes/{id}', [PacienteController::class, 'destroy']);
+    Route::post('/pacientes/logout', [PacienteController::class, 'logout']);
 
     // Prontuário do paciente
     Route::get('/paciente/consultas', [PacienteController::class, 'getConsultas']);
     Route::get('/paciente/alergias', [PacienteController::class, 'getAlergias']);
     Route::get('/paciente/medicamentos', [PacienteController::class, 'getMedicamentos']);
     Route::get('/paciente/exames', [PacienteController::class, 'getExames']);
-
-    // --- CORREÇÃO DE SEGURANÇA ---
-    // Perfil do paciente (ver/atualizar)
-    // Estas rotas agora exigem que o paciente esteja logado
-    Route::get('/pacientes/{id}', [PacienteController::class, 'show']);
-    Route::put('/pacientes/{id}', [PacienteController::class, 'update']);
-    Route::delete('/pacientes/{id}', [PacienteController::class, 'destroy']);
 });
-
-
 
 /*
 |--------------------------------------------------------------------------
