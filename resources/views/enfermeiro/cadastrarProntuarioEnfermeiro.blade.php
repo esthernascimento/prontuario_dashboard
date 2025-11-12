@@ -112,7 +112,7 @@
             {{-- Campo Data e Hora --}}
             <div class="input-group">
                 <label for="data_hora">
-                    <i class="bi bi-calendar-check"></i> Data e Hora do Registro *
+                    <i class="bi bi-calendar-check"></i> Data e Hora do Registro 
                 </label>
                 <input 
                     type="datetime-local" 

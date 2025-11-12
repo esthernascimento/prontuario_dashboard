@@ -1171,219 +1171,714 @@ input:focus {
     background: var(--bg-gray-50);
 }
 
-/* Opções de PDF */
-.pdf-modal-option {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding: 20px;
-    background: white;
-    border: 2px solid var(--border-color);
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
+
+:root {
+    --primary-red: #DC2626;
+    --primary-red-dark: #991B1B;
+    --primary-red-light: #EF4444;
+    --accent-pink: #EC4899;
+    --bg-white: #FFFFFF;
+    --bg-gray-50: #F9FAFB;
+    --bg-gray-100: #F3F4F6;
+    --text-primary: #111827;
+    --text-secondary: #6B7280;
+    --text-muted: #9CA3AF;
+    --border-color: #E5E7EB;
+    --border-focus: #EF4444;
+    --success-green: #10B981;
+    --error-red: #DC2626;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.main-dashboard {
+    padding: 40px;
+    background: linear-gradient(135deg, #FFF1F2 0%, #F9FAFB 100%);
+    min-height: 100vh;
+}
+
+/* ===== SEÇÃO DE ANOTAÇÕES DA ENFERMAGEM ===== */
+.anotacoes-enfermagem-container {
+    margin: 32px 36px;
+    padding: 28px;
+    background-color: #f0f9ff;
+    border: 1px solid #cce5ff;
+    border-left: 5px solid #0d6efd;
     border-radius: var(--radius-md);
-    margin-bottom: 16px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
+    box-shadow: var(--shadow-sm);
 }
 
-.pdf-modal-option:last-child {
-    margin-bottom: 0;
-}
-
-.pdf-modal-option:hover:not(.disabled) {
-    background: #f0f9ff;
-    border-color: #0d6efd;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px -4px rgba(13, 110, 253, 0.3);
-}
-
-.pdf-modal-option.disabled {
-    opacity: 0.6;
-    background: var(--bg-gray-100);
-    cursor: not-allowed;
-    border-color: var(--text-muted);
-}
-
-.pdf-modal-option.disabled:hover {
-    transform: none;
-    box-shadow: none;
-}
-
-/* Ícone da opção */
-.pdf-modal-option .option-icon {
-    font-size: 2.8rem;
-    color: #0d6efd;
-    flex-shrink: 0;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #e7f3ff 0%, #f0f9ff 100%);
-    border-radius: var(--radius-md);
-    transition: all 0.3s ease;
-}
-
-.pdf-modal-option:hover:not(.disabled) .option-icon {
-    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
-    color: white;
-    transform: rotate(5deg) scale(1.1);
-}
-
-.pdf-modal-option.disabled .option-icon {
-    color: var(--text-muted);
-    background: var(--bg-gray-100);
-}
-
-/* Info da opção */
-.pdf-modal-info {
-    flex: 1;
-    min-width: 0;
-}
-
-.pdf-modal-info h3 {
-    margin: 0 0 4px 0;
+.anotacoes-enfermagem-container h3 {
+    color: #0a58ca;
     font-size: 1.15rem;
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-weight: 700;
+}
+
+.anotacoes-enfermagem-container h3 i {
+    font-size: 1.3rem;
+}
+
+.anotacao-item {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed var(--border-color);
+}
+
+.anotacao-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.anotacao-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.anotacao-header strong {
+    font-weight: 600;
     color: var(--text-primary);
 }
 
-.pdf-modal-info p {
-    margin: 0;
+.anotacao-body p {
+    margin: 5px 0;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+
+.anotacao-body strong {
+    font-weight: 600;
+}
+
+.sinais-vitais-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px 20px;
+    margin-top: 10px;
     font-size: 0.9rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
 }
 
-.pdf-modal-option.disabled .pdf-modal-info h3 {
-    color: var(--text-muted);
+.sinal-vital-item {
+    background-color: #e6f7ff;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid #b3e0ff;
 }
 
-.pdf-modal-option.disabled .pdf-modal-info p {
-    color: var(--text-muted);
+.sinal-vital-item strong {
+    color: #0056b3;
 }
 
-/* Status badge */
-.pdf-status-badge {
-    padding: 6px 14px;
-    border-radius: 20px;
+/* ===== STATUS BADGES ===== */
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
     font-size: 0.8rem;
     font-weight: 700;
+    border-radius: 20px;
     text-transform: uppercase;
-    white-space: nowrap;
-    display: inline-flex;
+    color: white;
+    min-width: 100px;
+    text-align: center;
+}
+
+.status-vermelho { background-color: #dc3545; }
+.status-laranja { background-color: #fd7e14; }
+.status-amarelo { background-color: #ffc107; color: #000; }
+.status-verde { background-color: #198754; }
+.status-azul { background-color: #0d6efd; }
+
+/* ===== CONTAINER PRINCIPAL ===== */
+.cadastrar-container {
+    max-width: 950px;
+    margin: 0 auto;
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== HEADER ===== */
+.cadastrar-header {
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+    padding: 32px 36px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.cadastrar-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.cadastrar-header .icon {
+    font-size: 2.5rem;
+    color: white;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    animation: iconBounce 2s ease-in-out infinite;
+    z-index: 1;
+}
+
+@keyframes iconBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.cadastrar-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.5px;
+    z-index: 1;
+}
+
+/* ===== INFO DO PACIENTE ===== */
+.paciente-info {
+    margin: 32px 36px;
+    padding: 28px;
+    background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+    border: 2px solid #FECACA;
+    border-left: 6px solid var(--primary-red);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    animation: fadeIn 0.6s ease-out 0.2s backwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.paciente-info h3 {
+    color: var(--primary-red-dark);
+    font-size: 1.15rem;
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+}
+
+.paciente-info h3 i {
+    font-size: 1.3rem;
+    color: var(--primary-red);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-item strong {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-item span {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* ===== FORMULÁRIO ===== */
+form {
+    padding: 0 36px 36px 36px;
+}
+
+.form-section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 28px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid var(--primary-red);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    animation: fadeIn 0.6s ease-out 0.3s backwards;
+}
+
+.form-section-title::before {
+    content: '';
+    width: 6px;
+    height: 26px;
+    background: linear-gradient(180deg, var(--primary-red) 0%, var(--accent-pink) 100%);
+    border-radius: 3px;
+}
+
+/* ===== INPUT GROUPS ===== */
+.input-group {
+    margin-bottom: 26px;
+    animation: fadeIn 0.6s ease-out backwards;
+}
+
+.input-group:nth-child(2) { animation-delay: 0.4s; }
+.input-group:nth-child(3) { animation-delay: 0.45s; }
+.input-group:nth-child(4) { animation-delay: 0.5s; }
+.input-group:nth-child(5) { animation-delay: 0.55s; }
+.input-group:nth-child(6) { animation-delay: 0.6s; }
+
+.input-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+}
+
+.input-group label i {
+    color: var(--primary-red);
+    font-size: 1.1rem;
+}
+
+/* ===== INPUTS E TEXTAREAS ===== */
+.input-group input.input-date,
+.input-group input.input-text,
+.input-group input.input-datetime,
+.input-group textarea {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    background: var(--bg-gray-50);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    box-sizing: border-box;
+}
+
+.input-group input.input-date,
+.input-group input.input-datetime {
+    max-width: 300px;
+}
+
+.input-group textarea {
+    resize: vertical;
+    line-height: 1.6;
+    min-height: 100px;
+}
+
+.input-group input::placeholder,
+.input-group textarea::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.input-group input:hover,
+.input-group textarea:hover {
+    border-color: var(--primary-red-light);
+    background: white;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+    border-color: var(--border-focus);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+    transform: translateY(-2px);
+}
+
+.input-group input:not(:placeholder-shown):valid,
+.input-group textarea:not(:placeholder-shown):valid {
+    background: white;
+    border-color: var(--success-green);
+}
+
+/* ===== CAMPO descExame (DESTAQUE) ===== */
+#descExame {
+    border: 2px solid var(--border-color);
+    background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
+    min-height: 150px;
+}
+
+#descExame:focus {
+    background: white;
+    border-color: var(--border-focus);
+}
+
+#descExame:not(:placeholder-shown) {
+    background: white;
+}
+
+/* ===== TEXTO DE AJUDA (HELPER) ===== */
+.input-helper {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    display: flex;
     align-items: center;
     gap: 6px;
 }
 
-.pdf-status-badge.disponivel {
-    background: #d1fae5;
-    color: #065f46;
+.input-helper i {
+    color: var(--primary-red-light);
+    font-size: 1rem;
 }
 
-.pdf-status-badge.indisponivel {
-    background: #fee2e2;
-    color: #991b1b;
+/* ===== MENSAGENS DE ERRO ===== */
+.input-group .error {
+    display: block;
+    color: var(--error-red);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 6px;
+    animation: shakeError 0.4s ease-out;
 }
 
-/* Footer do Modal */
-.modal-footer-pdf {
-    padding: 20px 32px;
+@keyframes shakeError {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
+
+/* ===== FILTROS ===== */
+.input-filtro {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    background: var(--bg-gray-50);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    box-sizing: border-box;
+    margin-top: 8px;
+}
+
+.input-filtro:hover {
+    border-color: var(--primary-red-light);
     background: white;
-    border-top: 2px solid var(--bg-gray-100);
+}
+
+.input-filtro:focus {
+    border-color: var(--border-focus);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+}
+
+.input-filtro::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* ===== LISTAS DE CHECKBOX ===== */
+.checkbox-list {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+    max-height: 250px;
+    overflow-y: auto;
+    padding: 12px;
+    background: var(--bg-gray-50);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.checkbox-list:focus-within {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+}
+
+.checkbox-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.checkbox-list::-webkit-scrollbar-track {
+    background: var(--bg-gray-100);
+    border-radius: 4px;
+}
+
+.checkbox-list::-webkit-scrollbar-thumb {
+    background: var(--primary-red);
+    border-radius: 4px;
+}
+
+.checkbox-list::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-red-dark);
+}
+
+/* ===== CHECKBOX ITEMS ===== */
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.2s ease;
+    user-select: none;
+}
+
+.checkbox-item:hover {
+    background-color: white;
+}
+
+.checkbox-item input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    background: white;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.checkbox-item input[type="checkbox"]:hover {
+    border-color: var(--primary-red);
+}
+
+.checkbox-item input[type="checkbox"]:checked {
+    background: var(--primary-red);
+    border-color: var(--primary-red);
+}
+
+.checkbox-item input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.checkbox-item input[type="checkbox"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.3);
+}
+
+.checkbox-item:has(input:checked) {
+    background: #fef2f2;
+    font-weight: 600;
+    color: var(--primary-red-dark);
+}
+
+/* ===== DETALHES DE EXAMES E MEDICAMENTOS ===== */
+.exame-item, .medicamento-item {
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 12px;
+}
+
+.exame-item:last-child, .medicamento-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.exame-details, .medicamento-details {
+    margin-top: 10px;
+    padding: 12px;
+    background-color: var(--bg-gray-50);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--primary-red-light);
+}
+
+.exame-detail-row, .medicamento-detail-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
     gap: 12px;
 }
 
-.modal-footer-pdf .btn-fechar {
-    padding: 12px 32px;
+.exame-detail-row:last-child, .medicamento-detail-row:last-child {
+    margin-bottom: 0;
+}
+
+.exame-detail-row label, .medicamento-detail-row label {
+    min-width: 80px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+    color: var(--text-secondary);
+}
+
+.exame-select, .medicamento-select, .medicamento-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background-color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.exame-select:focus, .medicamento-select:focus, .medicamento-input:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+/* ===== BOTÕES ===== */
+.button-group {
+    display: flex;
+    gap: 16px;
+    margin-top: 40px;
+    justify-content: flex-end;
+    padding-top: 32px;
+    border-top: 2px solid var(--bg-gray-100);
+    animation: fadeIn 0.6s ease-out 0.7s backwards;
+}
+
+.btn-cancelar,
+.save-button,
+.btn-pdf-download {
+    padding: 14px 32px;
     font-size: 1rem;
     font-weight: 700;
-    background: var(--bg-gray-100);
-    color: var(--text-secondary);
-    border: 2px solid var(--border-color);
+    border: none;
     border-radius: var(--radius-md);
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
+    text-decoration: none;
 }
 
-.modal-footer-pdf .btn-fechar:hover {
-    background: white;
+.btn-cancelar {
+    background: var(--bg-gray-100);
+    color: var(--text-secondary);
+    border: 2px solid var(--border-color);
+}
+
+.btn-cancelar:hover {
+    background: var(--bg-gray-50);
     border-color: var(--text-secondary);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
 
-/* Responsividade do Modal */
-@media (max-width: 768px) {
-    .modal-content-pdf {
-        width: 95%;
-        margin: 20px;
-    }
-
-    .modal-header-pdf {
-        padding: 24px 20px;
-    }
-
-    .modal-header-pdf i {
-        font-size: 3rem;
-    }
-
-    .modal-header-pdf h2 {
-        font-size: 1.4rem;
-    }
-
-    .modal-body-pdf {
-        padding: 24px 20px;
-    }
-
-    .pdf-modal-option {
-        flex-direction: column;
-        text-align: center;
-        padding: 20px 16px;
-    }
-
-    .pdf-modal-option .option-icon {
-        width: 70px;
-        height: 70px;
-        font-size: 3rem;
-    }
-
-    .modal-footer-pdf {
-        padding:16px 20px;
-    }
-
-    .modal-footer-pdf .btn-fechar {
-        width: 100%;
-        justify-content: center;
-    }
+.save-button {
+    color: white;
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+    box-shadow: var(--shadow-lg);
 }
 
-@media (max-width: 480px) {
-    .modal-header-pdf i {
-        font-size: 2.5rem;
-    }
-
-    .modal-header-pdf h2 {
-        font-size: 1.25rem;
-    }
-
-    .modal-header-pdf p {
-        font-size: 0.9rem;
-    }
-
-    .pdf-modal-option {
-        padding: 16px;
-    }
-
-    .pdf-modal-info h3 {
-        font-size: 1.05rem;
-    }
-
-    .pdf-modal-info p {
-        font-size: 0.85rem;
-    }
+.save-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
 }
+
+.save-button:hover::before {
+    left: 100%;
+}
+
+.save-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 35px -5px rgba(220, 38, 38, 0.4);
+}
+
+
+.save-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%);
+}
+
+.save-button:disabled:hover {
+    transform: none;
+    box-shadow: var(--shadow-md);
+}
+

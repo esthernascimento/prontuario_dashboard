@@ -26,18 +26,15 @@ class Consulta extends Model
         'observacoes',
         'examesSolicitados',
         'medicamentosPrescritos',
-        
-        // --- ADICIONADO: Campos do novo fluxo ---
         'idPacienteFK', 
         'idRecepcionistaFK',
         'queixa_principal',
         'classificacao_risco',
         'status_atendimento',
-        // --- FIM DA ADIÇÃO ---
     ];
 
     protected $casts = [
-        'dataConsulta' => 'datetime', // Use datetime se incluir hora, ou date se for só data
+        'dataConsulta' => 'datetime',
     ];
 
     /**
@@ -45,20 +42,15 @@ class Consulta extends Model
      */
     public function prontuario()
     {
-        // Chave estrangeira 'idProntuarioFK' na tbConsulta
-        // Chave primária 'idProntuarioPK' na tbProntuario
         return $this->belongsTo(Prontuario::class, 'idProntuarioFK', 'idProntuarioPK');
     }
 
     /**
-     * Relacionamento com Paciente (Ligação Direta)
-     * --- FUNÇÃO CORRIGIDA ---
+     * Relacionamento com Paciente
      */
     public function paciente()
     {
-        // Chave estrangeira 'idPacienteFK' na tbConsulta
-        // Chave primária 'idPaciente' na tbPaciente (Confirmar se é 'idPaciente' ou 'idPacientePK')
-        return $this->belongsTo(Paciente::class, 'idPacienteFK', 'idPacientePK'); 
+        return $this->belongsTo(Paciente::class, 'idPacienteFK', 'idPaciente');
     }
 
     /**
@@ -66,8 +58,6 @@ class Consulta extends Model
      */
     public function medico()
     {
-         // Chave estrangeira 'idMedicoFK' na tbConsulta
-         // Chave primária 'idMedicoPK' na tbMedico
         return $this->belongsTo(Medico::class, 'idMedicoFK', 'idMedicoPK');
     }
 
@@ -76,8 +66,6 @@ class Consulta extends Model
      */
     public function enfermeiro()
     {
-         // Chave estrangeira 'idEnfermeiroFK' na tbConsulta
-         // Chave primária 'idEnfermeiroPK' na tbEnfermeiro
         return $this->belongsTo(Enfermeiro::class, 'idEnfermeiroFK', 'idEnfermeiroPK');
     }
 
@@ -86,29 +74,36 @@ class Consulta extends Model
      */
     public function unidade()
     {
-         // Chave estrangeira 'idUnidadeFK' na tbConsulta
-         // Chave primária 'idUnidadePK' na tbUnidade
         return $this->belongsTo(Unidade::class, 'idUnidadeFK', 'idUnidadePK');
     }
 
     /**
      * Relacionamento com Recepcionista
-     * --- ADICIONADO ---
      */
     public function recepcionista()
     {
-         // Chave estrangeira 'idRecepcionistaFK' na tbConsulta
-         // Chave primária 'idRecepcionistaPK' na tbRecepcionista
         return $this->belongsTo(Recepcionista::class, 'idRecepcionistaFK', 'idRecepcionistaPK');
     }
 
-
-        public function setDataConsultaAttribute($value)
+    /**
+     * 🔗 RELAÇÃO COM EXAMES 
+     */
+    public function exames()
     {
-  
+        return $this->hasMany(Exame::class, 'idConsultaFK', 'idConsultaPK');
+    }
+
+    /**
+     * 🔗 RELAÇÃO COM MEDICAMENTOS 
+     */
+    public function medicamentos()
+    {
+        return $this->hasMany(Medicamento::class, 'idConsultaFK', 'idConsultaPK');
+    }
+
+    public function setDataConsultaAttribute($value)
+    {
         $date = $value ? Carbon::parse($value) : Carbon::now('America/Sao_Paulo');
-        
         $this->attributes['dataConsulta'] = $date->format('Y-m-d H:i:s');
     }
 }
-

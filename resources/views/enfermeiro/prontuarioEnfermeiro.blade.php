@@ -13,7 +13,7 @@
         <div class="enfermeiro-header">
             <h1>
                 <i class="bi bi-journal-medical"></i> 
-                    Prontuário dos Pacientes
+                Prontuário dos Pacientes
             </h1>
         </div>
 
@@ -31,11 +31,11 @@
         <!-- Abas para separar pacientes -->
         <div class="tabs-container">
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('fila')">
+                <button class="tab-btn active" data-tab="fila">
                     <i class="bi bi-clock-history"></i> Pacientes na Fila
                     <span class="badge badge-fila">{{ $pacientes_na_fila->count() }}</span>
                 </button>
-                <button class="tab-btn" onclick="switchTab('atendidos')">
+                <button class="tab-btn" data-tab="atendidos">
                     <i class="bi bi-check-circle"></i> Pacientes Atendidos
                     <span class="badge badge-atendidos">{{ $pacientes_atendidos->count() }}</span>
                 </button>
@@ -109,23 +109,33 @@
                         <tbody>
                             @forelse ($pacientes_atendidos as $paciente)
                                 @php
-                                    // Busca a última anotação de enfermagem
+                                    // Busca a última anotação de enfermagem deste paciente
                                     $ultimaAnotacao = $paciente->anotacoesEnfermagem->sortByDesc('data_hora')->first();
                                     
-                                    // Busca a última consulta finalizada
-                                    $ultimaConsulta = $paciente->consultas()->where('status_atendimento', 'FINALIZADO')->latest()->first();
-                                    $medicoResponsavel = $ultimaConsulta && $ultimaConsulta->medico ? $ultimaConsulta->medico->nomeMedico : 'N/A';
+                                    // Busca a última consulta do paciente
+                                    $ultimaConsulta = $paciente->consultas->sortByDesc('dataConsulta')->first();
+                                    $medicoResponsavel = 'N/A';
+                                    
+                                    if ($ultimaConsulta && $ultimaConsulta->medico) {
+                                        $medicoResponsavel = $ultimaConsulta->medico->nomeMedico;
+                                    }
                                 @endphp
                                 <tr>
                                     <td>{{ $paciente->nomePaciente }}</td>
                                     <td>{{ $paciente->cpfPaciente }}</td>
-                                    <td>{{ $ultimaAnotacao ? \Carbon\Carbon::parse($ultimaAnotacao->data_hora)->format('d/m/Y H:i') : 'N/A' }}</td>
+                                    <td>
+                                        @if($ultimaAnotacao)
+                                            {{ \Carbon\Carbon::parse($ultimaAnotacao->data_hora)->format('d/m/Y H:i') }}
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
                                     <td>{{ $medicoResponsavel }}</td>
                                     <td class="actions">
                                         <a href="{{ route('enfermeiro.visualizarProntuario', $paciente->idPaciente) }}"
-                                               class="btn-action btn-view"
-                                               title="Ver Histórico Completo">
-                                               <i class="bi bi-eye-fill"></i>
+                                           class="btn-action btn-view"
+                                           title="Ver Histórico Completo">
+                                           <i class="bi bi-eye-fill"></i>
                                         </a>
                                     </td>
                                 </tr>
@@ -145,9 +155,54 @@
 </main>
 
 <script>
+// Função para alternar entre abas - VERSÃO CORRIGIDA
+function switchTab(tabName) {
+    console.log('Tentando mudar para aba:', tabName);
+    
+    // Remove classe active de todos os botões
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Remove classe active de todos os painéis
+    document.querySelectorAll('.tab-pane').forEach(pane => {
+        pane.classList.remove('active');
+    });
+    
+    // Adiciona classe active ao botão clicado
+    const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
+    if (activeBtn) {
+        activeBtn.classList.add('active');
+    }
+    
+    // Adiciona classe active ao painel correspondente
+    const activePane = document.getElementById(`${tabName}-tab`);
+    if (activePane) {
+        activePane.classList.add('active');
+    }
+    
+    // Reaplica o filtro de pesquisa na aba ativa
+    filterPatients();
+}
+
+// Adiciona event listeners aos botões das abas
+document.addEventListener('DOMContentLoaded', function() {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const tabName = this.getAttribute('data-tab');
+            switchTab(tabName);
+        });
+    });
+});
+
 function filterPatients() {
     const searchInput = document.getElementById('searchInput').value.toLowerCase();
     const activeTab = document.querySelector('.tab-pane.active');
+    
+    if (!activeTab) return;
+    
     const rows = activeTab.querySelectorAll('tbody tr');
 
     rows.forEach(row => {
@@ -169,14 +224,16 @@ function filterPatients() {
     });
 }
 
-// Função para alternar entre abas
-function switchTab(tabName) {
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+// Função para debug - verificar se os dados estão carregando
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Pacientes na fila:', {{ $pacientes_na_fila->count() }});
+    console.log('Pacientes atendidos:', {{ $pacientes_atendidos->count() }});
     
-    document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
-    document.getElementById(`${tabName}-tab`).classList.add('active');
-}
+    // Verifica o conteúdo das variáveis
+    @foreach($pacientes_atendidos as $paciente)
+        console.log('Paciente atendido:', '{{ $paciente->nomePaciente }}');
+    @endforeach
+});
 </script>
 
 @endsection

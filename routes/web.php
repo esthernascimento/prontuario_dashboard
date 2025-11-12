@@ -180,10 +180,12 @@ Route::middleware('auth:medico')->prefix('medico')->name('medico.')->group(funct
     Route::get('/prontuario/{id}', [MedicoProntuarioController::class, 'show'])->name('paciente.prontuario');
 });
 
+
 // ===================================================================================
 // --- ROTAS DE PDF DO MÉDICO (CORRIGIDAS) ---
 // ===================================================================================
-Route::middleware('auth:medico')->prefix('medico/prontuario')->group(function () {
+
+Route::middleware('auth:medico')->prefix('medico')->group(function () {
      
     Route::get('/pdf-exames/{idConsulta}', [MedicoPdfController::class, 'gerarPdfExames'])
          ->name('gerarPdfExames');
@@ -195,6 +197,7 @@ Route::middleware('auth:medico')->prefix('medico/prontuario')->group(function ()
 // ===================================================================================
 // --- ROTAS PROTEGIDAS DO ENFERMEIRO ---
 // ===================================================================================
+
 Route::middleware('auth:enfermeiro')->prefix('enfermeiro')->name('enfermeiro.')->group(function () {
     Route::get('/dashboard', [EnfermeiroDashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [EnfermeiroLoginController::class, 'logout'])->name('logout');

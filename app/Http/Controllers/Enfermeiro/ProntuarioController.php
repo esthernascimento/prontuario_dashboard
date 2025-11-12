@@ -33,19 +33,24 @@ class ProntuarioController extends Controller
         ->orderBy('nomePaciente', 'asc')
         ->get();
 
-        // --- NOVO: Busca pacientes ATENDIDOS ---
+        // --- CORREÇÃO: Busca pacientes ATENDIDOS pelo enfermeiro logado ---
         $pacientes_atendidos = $this->getPacientesAtendidos($enfermeiro->idEnfermeiroPK);
 
         return view('enfermeiro.prontuarioEnfermeiro', compact('pacientes_na_fila', 'pacientes_atendidos', 'enfermeiro', 'unidadeEnfermeiro'));
     }
 
     /**
-     * Busca pacientes que já tiveram atendimento finalizado.
+     * Busca pacientes que foram atendidos (triados) pelo enfermeiro logado
      */
     private function getPacientesAtendidos($idEnfermeiro)
     {
-        // Busca IDs de pacientes únicos que já tiveram consulta finalizada
-        $pacientes_ids = Consulta::where('status_atendimento', 'FINALIZADO')
+        // CORREÇÃO: Busca pacientes únicos que foram triados pelo enfermeiro logado
+        // e estão aguardando consulta ou já foram finalizados
+        $pacientes_ids = Consulta::where(function($query) use ($idEnfermeiro) {
+                $query->where('status_atendimento', 'AGUARDANDO_CONSULTA')
+                      ->orWhere('status_atendimento', 'FINALIZADO');
+            })
+            ->where('idEnfermeiroFK', $idEnfermeiro) // Apenas pacientes triados por este enfermeiro
             ->whereNotNull('idEnfermeiroFK') // Garante que a triagem foi feita
             ->pluck('idPacienteFK')
             ->unique()
@@ -53,6 +58,9 @@ class ProntuarioController extends Controller
 
         // Busca os dados desses pacientes
         return Paciente::whereIn('idPaciente', $pacientes_ids)
+            ->with(['anotacoesEnfermagem' => function($query) {
+                $query->orderBy('data_hora', 'desc');
+            }])
             ->orderBy('nomePaciente', 'asc')
             ->get();
     }
@@ -72,7 +80,7 @@ class ProntuarioController extends Controller
              return redirect()->route('enfermeiro.prontuario')->with('error', 'Enfermeiro não encontrado.');
         }
 
-        // NOVO: Obter a primeira unidade associada a este enfermeiro
+        // Obter a primeira unidade associada a este enfermeiro
         $unidadeEnfermeiro = $enfermeiro->unidades()->first();
 
         return view('enfermeiro.cadastrarProntuarioEnfermeiro', compact('paciente', 'unidades', 'consulta', 'enfermeiro', 'unidadeEnfermeiro'));
@@ -115,15 +123,11 @@ class ProntuarioController extends Controller
         $anotacao->descricao = $validatedData['descricao'];
         $anotacao->unidade_atendimento = $validatedData['unidade_atendimento'];
         $anotacao->pressao_arterial = $validatedData['pressao_arterial'];
-        
-        // CORREÇÃO AQUI: Trocado $anfermeiro por $anotacao
         $anotacao->temperatura = $validatedData['temperatura'];
-        
         $anotacao->frequencia_cardiaca = $validatedData['frequencia_cardiaca'];
         $anotacao->frequencia_respiratoria = $validatedData['frequencia_respiratoria'];
         $anotacao->saturacao = $validatedData['saturacao'] ? str_replace('%', '', $validatedData['saturacao']) : null;
         $anotacao->dor = $validatedData['dor'];
-        
         $anotacao->alergias = $alergias_str;
         $anotacao->medicacoes_ministradas = $medicacoes_str;
         
@@ -151,7 +155,6 @@ class ProntuarioController extends Controller
                     $tipo = $alergia_tipos[$alergia] ?? 'Não especificado';
                     $severidade = $alergia_severidades[$alergia] ?? 'Não especificado';
                     
-                    // CORREÇÃO: Usar 'descAlergia' para encontrar o registro e os campos corretos
                     Alergia::updateOrCreate(
                         [
                             'idPacienteFK' => $anotacao->idPacienteFK,

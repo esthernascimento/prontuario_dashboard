@@ -158,7 +158,12 @@
                                         <a href="{{ route('medico.prontuario.edit', $consulta->idConsultaPK) }}" class="dropdown-item">
                                             <i class="bi bi-pencil-square"></i> Editar
                                         </a>
-                                        {{-- Substituído confirm() por um alerta customizado, mas mantendo a lógica com confirm simples para garantir a funcionalidade em navegadores --}}
+                                        
+                                        {{-- NOVA OPÇÃO: Gerar PDFs --}}
+                                        <button type="button" class="dropdown-item" onclick="openPdfModal({{ $consulta->idConsultaPK }})">
+                                            <i class="bi bi-file-earmark-pdf-fill"></i> Gerar PDFs
+                                        </button>
+                                        
                                         <form action="{{ route('medico.prontuario.destroy', $consulta->idConsultaPK) }}" 
                                               method="POST" 
                                               onsubmit="return confirm('Deseja realmente excluir esta consulta?')"> 
@@ -192,7 +197,6 @@
 
                             <!-- Detalhes da Consulta -->
                             <div class="consulta-details">
-                                {{-- CORRIGIDO: Usa a estrutura de blocos para formatar os detalhes --}}
                                 @if($consulta->observacoes)
                                 <div class="detail-block">
                                     <div class="detail-header">
@@ -259,45 +263,226 @@
 
 </main>
 
-<!-- Scripts para o menu dropdown -->
+{{-- MODAL CUSTOMIZADO DE PDF --}}
+@if(isset($consultas) && $consultas->isNotEmpty())
+<div id="pdfOptionsModal" class="modal-overlay-pdf">
+    <div class="modal-content-pdf">
+        <div class="modal-header-pdf">
+            <i class="bi bi-file-earmark-pdf-fill"></i>
+            <h2>Selecione o Documento para Baixar</h2>
+            <p>Escolha qual PDF você deseja gerar</p>
+        </div>
+
+        <div class="modal-body-pdf">
+            {{-- OPÇÃO 1: Pedido de Exames --}}
+            <div id="examesPdfOption" class="pdf-modal-option">
+                <div class="option-icon">
+                    <i class="bi bi-clipboard2-pulse"></i>
+                </div>
+                <div class="pdf-modal-info">
+                    <h3>Pedido de Exames</h3>
+                    <p id="examesStatusText">Documento com a lista de exames solicitados para o paciente.</p>
+                </div>
+                <span class="pdf-status-badge disponivel">
+                    <i class="bi bi-check-circle-fill"></i> Disponível
+                </span>
+            </div>
+
+            {{-- OPÇÃO 2: Receita Médica --}}
+            <div id="receitaPdfOption" class="pdf-modal-option">
+                <div class="option-icon">
+                    <i class="bi bi-prescription2"></i>
+                </div>
+                <div class="pdf-modal-info">
+                    <h3>Receita Médica</h3>
+                    <p id="receitaStatusText">Documento com a lista de medicamentos prescritos e instruções.</p>
+                </div>
+                <span class="pdf-status-badge disponivel">
+                    <i class="bi bi-check-circle-fill"></i> Disponível
+                </span>
+            </div>
+        </div>
+
+        <div class="modal-footer-pdf">
+            <button type="button" onclick="closePdfModal()" class="btn-fechar">
+                <i class="bi bi-x-circle"></i> Fechar
+            </button>
+        </div>
+    </div>
+</div>
+@endif
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-// Toggle dos menus dropdown
-const menuToggles = document.querySelectorAll('.btn-menu-toggle');
+// Variável global para armazenar o ID da consulta atual
+let currentConsultaId = null;
 
-menuToggles.forEach(toggle =&gt; {
-    toggle.addEventListener(&#39;click&#39;, function(e) {
-        e.stopPropagation();
-        const dropdown = this.nextElementSibling;
+// ===== FUNÇÕES DO MODAL DE PDF =====
+function openPdfModal(consultaId) {
+    currentConsultaId = consultaId;
+    const modal = document.getElementById('pdfOptionsModal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
         
-        // Fecha outros dropdowns
-        document.querySelectorAll(&#39;.dropdown-menu&#39;).forEach(menu =&gt; {
-            if (menu !== dropdown) {
-                menu.classList.remove(&#39;show&#39;);
-            }
+        // Fecha o dropdown menu
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            menu.classList.remove('show');
         });
-        
-        dropdown.classList.toggle(&#39;show&#39;);
+    }
+}
+
+function closePdfModal() {
+    const modal = document.getElementById('pdfOptionsModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    currentConsultaId = null;
+}
+
+// download do PDF
+function downloadPdf(type) {
+    if (!currentConsultaId) {
+        showNotification('Erro: ID da consulta não encontrado.', 'error');
+        return;
+    }
+
+    const optionElement = type === 'exames' ? document.getElementById('examesPdfOption') : document.getElementById('receitaPdfOption');
+    const statusBadge = optionElement.querySelector('.pdf-status-badge');
+    const optionIcon = optionElement.querySelector('.option-icon');
+
+    // Efeito de loading
+    optionIcon.innerHTML = '<i class="bi bi-hourglass-split"></i>';
+    statusBadge.innerHTML = '<i class="bi bi-hourglass-split"></i> Gerando...';
+    statusBadge.style.background = '#fef3c7';
+    statusBadge.style.color = '#92400e';
+
+    let url = '';
+    if (type === 'exames') {
+        url = "{{ route('gerarPdfExames', '') }}/" + currentConsultaId;
+    } else if (type === 'receita') {
+        url = "{{ route('consulta.receita.pdf', '') }}/" + currentConsultaId;
+    }
+
+    window.location.href = url;
+
+    setTimeout(() => {
+        closePdfModal();
+        showNotification(`${type === 'exames' ? 'Pedido de Exames' : 'Receita Médica'} gerado com sucesso!`, 'success');
+
+        setTimeout(() => {
+            if (type === 'exames') {
+                optionIcon.innerHTML = '<i class="bi bi-clipboard2-pulse"></i>';
+            } else if (type === 'receita') {
+                optionIcon.innerHTML = '<i class="bi bi-prescription2"></i>';
+            }
+            statusBadge.innerHTML = '<i class="bi bi-check-circle-fill"></i> Disponível';
+            statusBadge.style.background = '';
+            statusBadge.style.color = '';
+        }, 2000);
+    }, 1000);
+}
+
+// Sistema de notificações
+function showNotification(message, type) {
+    const existingNotification = document.querySelector('.notification');
+    if (existingNotification) {
+        document.body.removeChild(existingNotification);
+    }
+
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="bi bi-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+            <span>${message}</span>
+        </div>
+    `;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 100);
+
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+
+// Event listeners para o modal
+document.addEventListener('DOMContentLoaded', function() {
+    // Configura os eventos de clique nas opções de PDF
+    const examesPdfOption = document.getElementById('examesPdfOption');
+    const receitaPdfOption = document.getElementById('receitaPdfOption');
+
+    if (examesPdfOption) {
+        examesPdfOption.onclick = function() {
+            downloadPdf('exames');
+        };
+    }
+
+    if (receitaPdfOption) {
+        receitaPdfOption.onclick = function() {
+            downloadPdf('receita');
+        };
+    }
+
+    // Fecha modal ao clicar fora
+    document.addEventListener('click', function(event) {
+        const modal = document.getElementById('pdfOptionsModal');
+        if (modal && event.target === modal) {
+            closePdfModal();
+        }
+    });
+
+    // Fecha modal com ESC
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closePdfModal();
+        }
     });
 });
 
-// Fecha dropdown ao clicar fora
-document.addEventListener(&#39;click&#39;, function() {
-    document.querySelectorAll(&#39;.dropdown-menu&#39;).forEach(menu =&gt; {
-        menu.classList.remove(&#39;show&#39;);
+// ===== CÓDIGO EXISTENTE DO DROPDOWN =====
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle dos menus dropdown
+    const menuToggles = document.querySelectorAll('.btn-menu-toggle');
+
+    menuToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const dropdown = this.nextElementSibling;
+            
+            // Fecha outros dropdowns
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                if (menu !== dropdown) {
+                    menu.classList.remove('show');
+                }
+            });
+            
+            dropdown.classList.toggle('show');
+        });
+    });
+
+    // Fecha dropdown ao clicar fora
+    document.addEventListener('click', function() {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            menu.classList.remove('show');
+        });
     });
 });
 
-});
-
-// Mensagens de sucesso/erro (Manter o estilo com alert() até ter um modal customizado)
+// Mensagens de sucesso/erro
 @if(session('success'))
-alert('{{ session('success') }}');
+    showNotification('{{ session('success') }}', 'success');
 @endif
 
 @if(session('error'))
-alert('{{ session('error') }}');
+    showNotification('{{ session('error') }}', 'error');
 @endif
 </script>
 
