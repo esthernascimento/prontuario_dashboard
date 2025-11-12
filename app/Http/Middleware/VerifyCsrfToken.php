@@ -13,5 +13,6 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         'medico/alterar-senha-primeiro-login',
+        'enfermeiro/alterar-senha-primeiro-login',
     ];
 }

@@ -68,6 +68,9 @@ Route::middleware('web')->group(function () {
     // ----------------- LOGIN ENFERMEIRO -----------------
     Route::get('/enfermeiro/login', [EnfermeiroLoginController::class, 'showLoginForm'])->name('enfermeiro.login');
     Route::post('/enfermeiro/login', [EnfermeiroLoginController::class, 'login'])->name('enfermeiro.login.submit');
+    Route::post('/enfermeiro/profile/complete', [EnfermeiroLoginController::class, 'completarPerfil'])->name('api.enfermeiro.profile.complete');
+    Route::post('/enfermeiro/login-check', [EnfermeiroLoginController::class, 'login'])->name('api.enfermeiro.login.check');
+    Route::post('/enfermeiro/alterar-senha-primeiro-login', [EnfermeiroLoginController::class, 'alterarSenhaPrimeiroLogin'])->name('api.enfermeiro.alterarSenhaPrimeiroLogin');
 
     // ----------------- LOGIN RECEPCIONISTA -----------------
     Route::get('/loginRecepcionista', [RecepcionistaLoginController::class, 'showLoginForm'])->name('recepcionista.login');
