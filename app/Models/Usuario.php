@@ -24,6 +24,7 @@ class Usuario extends Authenticatable // MUDANÇA IMPORTANTE
         'senhaUsuario',
         'statusAtivoUsuario',
         'foto',
+        'statusSenhaUsuario',
 
     ];
 
