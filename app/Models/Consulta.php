@@ -58,7 +58,7 @@ class Consulta extends Model
     {
         // Chave estrangeira 'idPacienteFK' na tbConsulta
         // Chave primária 'idPaciente' na tbPaciente (Confirmar se é 'idPaciente' ou 'idPacientePK')
-        return $this->belongsTo(Paciente::class, 'idPacienteFK', 'idPaciente'); 
+        return $this->belongsTo(Paciente::class, 'idPacienteFK', 'idPacientePK'); 
     }
 
     /**

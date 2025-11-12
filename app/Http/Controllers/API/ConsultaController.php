@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Validator;
 
 class ConsultaController extends Controller
 {
-  
+
     public function index(Request $request)
     {
-        $query = Consulta::with(['medico', 'enfermeiro', 'unidade']); 
+        $query = Consulta::with(['medico', 'enfermeiro', 'unidade']);
 
         if ($request->has('paciente_id')) {
             $query->whereHas('prontuario', function ($q) use ($request) {
@@ -23,7 +23,7 @@ class ConsultaController extends Controller
         return $query->orderBy('dataConsulta', 'desc')->paginate(15);
     }
 
- 
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -44,10 +44,10 @@ class ConsultaController extends Controller
         return response()->json($consulta, 201);
     }
 
-    
+
     public function show($id)
     {
-        
+
         $consulta = Consulta::with(['prontuario.paciente', 'medico', 'enfermeiro', 'unidade', 'medicamentos', 'exames'])->find($id);
 
         if (!$consulta) {
@@ -57,7 +57,7 @@ class ConsultaController extends Controller
         return response()->json($consulta);
     }
 
-   
+
     public function update(Request $request, $id)
     {
         $consulta = Consulta::find($id);
@@ -68,7 +68,7 @@ class ConsultaController extends Controller
         $data = $request->validate([
             'dataConsulta' => 'sometimes|date',
             'obsConsulta' => 'sometimes|nullable|string',
-            
+
         ]);
 
         $consulta->update($data);
@@ -76,7 +76,7 @@ class ConsultaController extends Controller
         return response()->json($consulta->fresh());
     }
 
-    
+
     public function destroy($id)
     {
         $consulta = Consulta::find($id);
@@ -86,6 +86,41 @@ class ConsultaController extends Controller
 
         $consulta->delete();
 
-        return response()->noContent(); 
+        return response()->noContent();
+    }
+
+    public function showConsultaById($consulta_id)
+    {
+        $paciente = auth('sanctum')->user();
+
+        if (!$paciente) {
+            return response()->json(['message' => 'Paciente não autenticado.'], 401);
+        }
+
+        $consulta = Consulta::with(['medico', 'enfermeiro', 'unidade'])
+            ->where('idConsultaPK', $consulta_id)
+            ->where('idPacienteFK', $paciente->idPaciente)
+            ->first();
+
+        if (!$consulta) {
+            return response()->json(['message' => 'Consulta não encontrada para este paciente.'], 404);
+        }
+
+        $dados = [
+            'idConsulta' => $consulta->idConsultaPK,
+            'dataConsulta' => $consulta->dataConsulta,
+            'observacoes' => $consulta->observacoes,
+            'examesSolicitados' => preg_split("/\r\n|\n|\r/", trim($consulta->examesSolicitados)),
+            'medicamentosPrescritos' => !empty($consulta->medicamentosPrescritos)
+                ? preg_split('/\r\n|\r|\n/', trim($consulta->medicamentosPrescritos))
+                : [],
+            'nomeMedico' => $consulta->nomeMedico,
+            'crmMedico' => $consulta->crmMedico,
+            'enfermeiro' => $consulta->enfermeiro,
+            'unidade' => $consulta->unidade,
+        ];
+
+
+        return response()->json($dados);
     }
 }

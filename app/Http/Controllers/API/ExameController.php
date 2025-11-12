@@ -66,7 +66,7 @@ class ExameController extends Controller
         return response()->json($exame);
     }
 
-    
+
     public function update(Request $request, $id)
     {
         $exame = Exame::find($id);
@@ -98,5 +98,40 @@ class ExameController extends Controller
         $exame->delete();
 
         return response()->noContent();
+    }
+
+    public function showExameById($exame_id)
+    {
+        $paciente = auth('sanctum')->user();
+
+        if (!$paciente) {
+            return response()->json(['message' => 'Paciente não autenticado.'], 401);
+        }
+
+        $exame = Exame::with(['consulta.medico', 'consulta.unidade'])
+            ->where('idExamePK', $exame_id)
+            ->where('idPacienteFK', $paciente->idPaciente)
+            ->first();
+
+        if (!$exame) {
+            return response()->json(['message' => 'Exame não encontrado para este paciente.'], 404);
+        }
+
+        $consulta = $exame->consulta;
+
+        $dados = [
+            'idExame' => $exame->idExamePK,
+            'nomeExame' => $exame->nomeExame ?? $exame->tipoExame,
+            'dataExame' => $exame->dataExame,
+            'descricao' => $exame->descExame ?? null,
+            'resultado' => $exame->resultadoExame ?? null,
+
+            'nomeMedico' => $consulta?->nomeMedico ?? $consulta?->medico?->nomeMedico,
+            'crmMedico' => $consulta?->crmMedico ?? $consulta?->medico?->crmMedico,
+            'especialidade' => $consulta?->medico?->especialidadeMedico ?? null,
+            'unidade' => $consulta?->unidade ?? 'Não informado',
+        ];
+
+        return response()->json($dados);
     }
 }
