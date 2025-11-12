@@ -63,6 +63,7 @@ Route::middleware('web')->group(function () {
     Route::post('/loginMedico', [MedicoLoginController::class, 'login'])->name('medico.login.submit');
     Route::post('/medico/profile/complete', [MedicoLoginController::class, 'completarPerfil'])->name('api.medico.profile.complete');
     Route::post('/medico/login/check', [MedicoLoginController::class, 'login'])->name('api.medico.login.check');
+    Route::post('/medico/alterar-senha-primeiro-login', [MedicoLoginController::class, 'alterarSenhaPrimeiroLogin'])->name('api.medico.alterarSenhaPrimeiroLogin');
 
     // ----------------- LOGIN ENFERMEIRO -----------------
     Route::get('/enfermeiro/login', [EnfermeiroLoginController::class, 'showLoginForm'])->name('enfermeiro.login');

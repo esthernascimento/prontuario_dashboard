@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Prontuário+ :: Login Médico</title>
 
@@ -74,81 +74,135 @@
             const submitButton = document.getElementById('submit-button');
             const crmInput = document.getElementById('crm');
             const senhaInput = document.getElementById('senha');
-            const especialidadeInput = document.getElementById('especialidade');
 
-            let isCompletingProfile = false;
-
-            form.addEventListener('submit', async function (event) {
+form.addEventListener('submit', async function (event) {
                 event.preventDefault();
 
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-                let url = isCompletingProfile
-                    ? "{{ route('api.medico.profile.complete') }}"
-                    : "{{ route('api.medico.login.check') }}";
-
-                let body = isCompletingProfile
-                    ? { crm: crmInput.value, especialidade: especialidadeInput.value }
-                    : { crm: crmInput.value, senha: senhaInput.value };
-
+                let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                
                 submitButton.disabled = true;
                 submitButton.textContent = 'Aguarde...';
                 notification.style.display = 'none';
 
                 try {
-                    const response = await fetch(url, {
+                    const response = await fetch("{{ route('api.medico.login.check') }}", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': csrfToken,
                             'Accept': 'application/json'
                         },
-                        body: JSON.stringify(body)
+                        body: JSON.stringify({
+                            crm: crmInput.value,
+                            senha: senhaInput.value
+                        })
                     });
 
-                    const responseData = await response.json();
+                    const data = await response.json();
 
                     if (response.ok) {
-                        if (responseData.profile_complete) {
-                            notification.textContent = 'Login realizado com sucesso!';
-                            notification.className = 'notification success';
-                            notification.style.display = 'block';
-                            window.location.href = responseData.redirect_url;
-                        } else {
-                            isCompletingProfile = true;
-                            notification.textContent = 'Perfil incompleto. Informe sua especialidade para continuar.';
+                        if (data.need_password_change) {
+                            if (data.new_csrf_token) {
+                                csrfToken = data.new_csrf_token;
+                                document.querySelector('meta[name="csrf-token"]').setAttribute('content', csrfToken);
+                            }
+                            
+                            notification.textContent = data.message;
                             notification.className = 'notification info';
                             notification.style.display = 'block';
 
                             document.getElementById('login-fields').style.display = 'none';
-                            especialidadeWrapper.style.display = 'block';
-                            especialidadeInput.required = true;
-                            crmInput.readOnly = true;
+                            especialidadeWrapper.innerHTML = `
+                                <div class="input-group">
+                                    <label for="nova_senha">Nova Senha</label>
+                                    <div class="input-wrapper">
+                                        <input type="password" id="nova_senha" name="nova_senha" required />
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label for="nova_senha_confirmation">Confirme a Nova Senha</label>
+                                    <div class="input-wrapper">
+                                        <input type="password" id="nova_senha_confirmation" name="nova_senha_confirmation" required />
+                                    </div>
+                                </div>
+                            `;
 
-                            submitButton.textContent = 'FINALIZAR CADASTRO';
+                            especialidadeWrapper.style.display = 'block';
+                            submitButton.textContent = 'ALTERAR SENHA';
                             submitButton.disabled = false;
+                            form.onsubmit = async function (e) {
+                                e.preventDefault();
+                                
+                                submitButton.disabled = true;
+                                submitButton.textContent = 'Aguarde...';
+                                notification.style.display = 'none';
+                                
+                                const novaSenha = document.getElementById('nova_senha').value;
+                                const confirmarSenha = document.getElementById('nova_senha_confirmation').value;
+
+                                if (novaSenha !== confirmarSenha) {
+                                    notification.textContent = 'As senhas não coincidem.';
+                                    notification.className = 'notification error';
+                                    notification.style.display = 'block';
+                                    submitButton.disabled = false;
+                                    submitButton.textContent = 'ALTERAR SENHA';
+                                    return;
+                                }
+                                const formData = new FormData();
+                                formData.append('crm', crmInput.value);
+                                formData.append('nova_senha', novaSenha);
+                                formData.append('nova_senha_confirmation', confirmarSenha);
+                                formData.append('_token', csrfToken); 
+
+                                try {
+                                    const resp = await fetch("{{ route('api.medico.alterarSenhaPrimeiroLogin') }}", {
+                                        method: 'POST',
+                                        body: formData
+                                    });
+                                    if (resp.status === 419) {
+                                         throw new Error('CSRF Token Expirado/Inválido.');
+                                    }
+
+                                    const respData = await resp.json();
+
+                                    if (resp.ok && respData.success) {
+                                        notification.textContent = respData.message;
+                                        notification.className = 'notification success';
+                                        notification.style.display = 'block';
+                                        window.location.href = respData.redirect_url;
+                                    } else {
+                                        notification.textContent = respData.message || 'Erro ao alterar senha.';
+                                        notification.className = 'notification error';
+                                        notification.style.display = 'block';
+                                        submitButton.disabled = false;
+                                        submitButton.textContent = 'ALTERAR SENHA';
+                                    }
+                                } catch (err) {
+                                    notification.textContent = 'Erro de conexão ou token inválido. Tente novamente.';
+                                    notification.className = 'notification error';
+                                    notification.style.display = 'block';
+                                    submitButton.disabled = false;
+                                    submitButton.textContent = 'ALTERAR SENHA';
+                                }
+                            };
+                        } else {
+                            window.location.href = data.redirect_url;
                         }
                     } else {
-                        let errorMessage = responseData.message || 'Ocorreu um erro.';
-                        if (responseData.errors) {
-                            errorMessage = Object.values(responseData.errors)[0][0];
-                        }
-                        notification.textContent = errorMessage;
+                        notification.textContent = data.message || 'Erro ao efetuar login.';
                         notification.className = 'notification error';
                         notification.style.display = 'block';
                         submitButton.disabled = false;
-                        submitButton.textContent = isCompletingProfile ? 'FINALIZAR CADASTRO' : 'ENTRAR';
+                        submitButton.textContent = 'ENTRAR';
                     }
                 } catch (error) {
                     notification.textContent = 'Erro de conexão. Tente novamente.';
                     notification.className = 'notification error';
                     notification.style.display = 'block';
                     submitButton.disabled = false;
-                    submitButton.textContent = isCompletingProfile ? 'FINALIZAR CADASTRO' : 'ENTRAR';
+                    submitButton.textContent = 'ENTRAR';
                 }
             });
-
-            // Mostrar/ocultar senha
             const togglePassword = document.getElementById("togglePassword");
             if (togglePassword && senhaInput) {
                 togglePassword.addEventListener("click", () => {
@@ -158,17 +212,11 @@
                     togglePassword.classList.toggle("fa-eye-slash");
                 });
             }
-
-            // Efeito de foco nos inputs
             const inputs = document.querySelectorAll(".input-wrapper input");
             inputs.forEach(input => {
-                input.addEventListener("focus", () => {
-                    input.parentElement.classList.add("focused");
-                });
+                input.addEventListener("focus", () => input.parentElement.classList.add("focused"));
                 input.addEventListener("blur", () => {
-                    if (input.value === "") {
-                        input.parentElement.classList.remove("focused");
-                    }
+                    if (input.value === "") input.parentElement.classList.remove("focused");
                 });
             });
         });
