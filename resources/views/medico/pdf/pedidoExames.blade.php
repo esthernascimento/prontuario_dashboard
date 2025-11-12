@@ -24,7 +24,6 @@
         border-radius: 8px;
     }
 
-    /* ===== HEADER ===== */
     .header {
         text-align: center;
         border-bottom: 3px solid #e11d48;
@@ -48,7 +47,6 @@
         margin: 6px 0 0 0;
     }
 
-    /* ===== BLOCO PADRÃO ===== */
     .info-block,
     .clinical-reason,
     .exames-section {
@@ -70,7 +68,6 @@
         border-color: #f87171;
     }
 
-    /* ===== TÍTULOS DOS BLOCOS ===== */
     .info-block h2,
     .clinical-reason h3,
     .exames-section h2 {
@@ -83,7 +80,6 @@
         margin-bottom: 14px;
     }
 
-    /* ===== PACIENTE / MÉDICO ===== */
     .patient-info {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -97,7 +93,6 @@
         color: #111827;
     }
 
-    /* ===== INDICAÇÃO CLÍNICA ===== */
     .clinical-reason {
         background: #fff;
     }
@@ -106,7 +101,6 @@
         color: #1f2937;
     }
 
-    /* ===== EXAMES ===== */
     .exames-section {
         border: 2px solid #ef4444;
         background: #fff5f5;
@@ -145,7 +139,6 @@
         top: -2px;
     }
 
-    /* ===== DATA ===== */
     .date-section {
         text-align: right;
         margin-top: 35px;
@@ -154,7 +147,6 @@
         color: #374151;
     }
 
-    /* ===== ASSINATURA ===== */
     .signature {
         margin-top: 55px;
         text-align: center;
@@ -174,7 +166,6 @@
         line-height: 1.4;
     }
 
-    /* ===== RODAPÉ ===== */
     .footer {
         text-align: center;
         font-size: 18px;
@@ -185,7 +176,6 @@
         font-style: italic;
     }
 
-    /* ===== AJUSTES PDF ===== */
     @media print {
         body {
             background: none;
@@ -203,8 +193,6 @@
         }
     }
 </style>
-
-
 </head>
 <body>
      <div class="container">
@@ -238,15 +226,10 @@
         <div class="exames-section no-break">
             <h2>EXAMES SOLICITADOS</h2>
             <div class="exames-content">
-                @php
-                    $examesArray = !empty($exames) && $exames !== 'Nenhum exame solicitado.' 
-                        ? array_filter(explode("\n", $exames), fn($e) => trim($e) !== '')
-                        : [];
-                @endphp
-                @if(count($examesArray) > 0)
+                @if(isset($examesArray) && count($examesArray) > 0)
                     <ul class="exames-list">
                         @foreach($examesArray as $exame)
-                            <li>{{ trim($exame) }}</li>
+                            <li>{{ $exame }}</li>
                         @endforeach
                     </ul>
                 @else

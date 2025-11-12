@@ -17,21 +17,15 @@ use Illuminate\Support\Facades\DB;
 
 class MedicoProntuarioController extends Controller
 {
-    /**
-     * Exibe a FILA DE ATENDIMENTO do médico (tela principal)
-     */
     public function index()
     {
-        // Busca o médico logado
         $medico = Medico::where('id_usuarioFK', Auth::user()->idUsuarioPK)->first();
         if (!$medico) {
             return redirect()->route('medico.login')->with('error', 'Médico não encontrado.');
         }
 
-        // Obter a primeira unidade associada a este médico
         $unidadeMedico = $medico->unidades()->first();
 
-        // Busca consultas AGUARDANDO (fila de espera)
         $consultas_na_fila = Consulta::where('status_atendimento', 'AGUARDANDO_CONSULTA')
             ->with('paciente')
             ->orderByRaw("
@@ -47,11 +41,10 @@ class MedicoProntuarioController extends Controller
             ->orderBy('dataConsulta', 'asc')
             ->get();
 
-        // Busca consultas FINALIZADAS (atendidos)
         $consultas_finalizadas = Consulta::where('status_atendimento', 'FINALIZADO')
             ->with('paciente')
             ->orderBy('dataConsulta', 'desc')
-            ->limit(30) // Limitar para não sobrecarregar a view
+            ->limit(30) 
             ->get();
 
         $pacientes_historico = Paciente::orderBy('nomePaciente', 'asc')->get();
@@ -65,9 +58,6 @@ class MedicoProntuarioController extends Controller
         ]);
     }
 
-    /**
-     * Exibe o prontuário completo de um paciente (histórico)
-     */
     public function show($id)
     {
         $paciente = Paciente::findOrFail($id);
@@ -91,9 +81,6 @@ class MedicoProntuarioController extends Controller
         return view('medico.visualizarProntuario', compact('paciente', 'prontuario', 'consultas', 'anotacoesEnfermagem'));
     }
 
-    /**
-     * Exibe o formulário para CRIAR nova consulta (Médico inicia do zero)
-     */
     public function create($id)
     {
         $paciente = Paciente::findOrFail($id);
@@ -107,7 +94,6 @@ class MedicoProntuarioController extends Controller
             return redirect()->route('medico.prontuario')->with('error', 'Médico não encontrado.');
         }
         
-        // Obter a primeira unidade associada a este médico
         $unidadeMedico = $medico->unidades()->first();
 
         Prontuario::firstOrCreate(
@@ -124,14 +110,12 @@ class MedicoProntuarioController extends Controller
         ]);
     }
 
-    /**
-     * Armazena uma NOVA consulta/prontuário (Médico inicia do zero)
-     */
     public function store(Request $request, $id)
     {
         $validated = $request->validate([
             'dataConsulta' => 'required|date',
             'observacoes' => 'nullable|string|max:2000',
+            'descExame' => 'nullable|string|max:2000',
             'exames_solicitados' => 'nullable|array', 
             'exames_solicitados.*' => 'string|max:255',
             'exame_tipos' => 'nullable|array',
@@ -165,7 +149,7 @@ class MedicoProntuarioController extends Controller
         $consulta->status_atendimento = 'FINALIZADO';
         $consulta->idPacienteFK = $paciente->idPaciente;
 
-        DB::transaction(function () use ($consulta, $paciente, $prontuario, $request) {
+        DB::transaction(function () use ($consulta, $paciente, $prontuario, $request, $validated) {
             $consulta->save();
 
             // Salvar MEDICAMENTOS com detalhes nas tabelas corretas
@@ -202,7 +186,7 @@ class MedicoProntuarioController extends Controller
                         'idProntuarioFK' => $prontuario->idProntuarioPK,
                         'idPacienteFK' => $paciente->idPaciente,
                         'nomeExame' => $exame,
-                        'descExame' => $exame,
+                        'descExame' => $validated['descExame'] ?? null,
                         'dataExame' => $consulta->dataConsulta ?? now(),
                         'statusExame' => 'SOLICITADO',
                         'tipoExame' => $exame_tipos[$exame] ?? null,
@@ -216,9 +200,6 @@ class MedicoProntuarioController extends Controller
             ->with('success', 'Consulta registrada com sucesso!');
     }
 
-    /**
-     * Exibe o formulário para ATENDER/EDITAR uma consulta vinda da fila
-     */
     public function edit($idConsulta)
     {
         $consulta = Consulta::with(['paciente', 'prontuario'])->findOrFail($idConsulta);
@@ -226,7 +207,6 @@ class MedicoProntuarioController extends Controller
         $prontuario = $consulta->prontuario;
         $medico = Auth::user()->medico;
         
-        // Obter a primeira unidade associada a este médico
         $unidadeMedico = $medico->unidades()->first();
 
         if (!$medico) {
@@ -250,9 +230,6 @@ class MedicoProntuarioController extends Controller
         return view('medico.cadastrarProntuario', compact('consulta', 'paciente', 'medico', 'unidadeMedico', 'anotacoesEnfermagem'));
     }
 
-    /**
-     * Atualiza e FINALIZA uma consulta vinda da fila
-     */
     public function update(Request $request, $idConsulta)
     {
         $consulta = Consulta::findOrFail($idConsulta);
@@ -265,6 +242,7 @@ class MedicoProntuarioController extends Controller
         $validated = $request->validate([
             'dataConsulta' => 'required|date',
             'observacoes' => 'nullable|string|max:2000',
+            'descExame' => 'nullable|string|max:2000',
             'exames_solicitados' => 'nullable|array',
             'exames_solicitados.*' => 'string|max:255',
             'exame_tipos' => 'nullable|array',
@@ -291,7 +269,7 @@ class MedicoProntuarioController extends Controller
             $consulta->idProntuarioFK = $prontuario->idProntuarioPK;
         }
 
-        DB::transaction(function () use ($consulta, $request) {
+        DB::transaction(function () use ($consulta, $request, $validated) {
             $consulta->save();
 
             // Apagar registros antigos para evitar duplicatas
@@ -332,7 +310,7 @@ class MedicoProntuarioController extends Controller
                         'idProntuarioFK' => $consulta->idProntuarioFK,
                         'idPacienteFK' => $consulta->idPacienteFK,
                         'nomeExame' => $exame,
-                        'descExame' => $exame,
+                        'descExame' => $validated['descExame'] ?? null,
                         'dataExame' => $consulta->dataConsulta ?? now(),
                         'statusExame' => 'SOLICITADO',
                         'tipoExame' => $exame_tipos[$exame] ?? null,
@@ -341,37 +319,12 @@ class MedicoProntuarioController extends Controller
             }
         });
 
-        // REDIRECIONAMENTO CORRIGIDO PARA A TELA DO ENFERMEIRO
         return redirect()
             ->route('medico.prontuario')
             ->with('success', 'Atendimento finalizado com sucesso!');
     }
     
-    /**
-     * Gera o PDF de Pedido de Exames.
-     */
-    public function gerarPdfExames($idConsulta)
-    {
-        $consulta = Consulta::findOrFail($idConsulta);
-        $paciente = $consulta->paciente;
-        
-        return response("PDF de Exames para (Consulta ID: $idConsulta) do Paciente: $paciente->nomePaciente");
-    }
 
-    /**
-     * Gera o PDF de Receita Médica.
-     */
-    public function gerarPdfReceita($idConsulta)
-    {
-        $consulta = Consulta::findOrFail($idConsulta);
-        $paciente = $consulta->paciente;
-
-        return response("PDF de Receita para (Consulta ID: $idConsulta) do Paciente: $paciente->nomePaciente");
-    }
-
-    /**
-     * Remove uma consulta (soft delete)
-     */
     public function destroy($idConsulta) 
     {
         $consulta = Consulta::findOrFail($idConsulta);

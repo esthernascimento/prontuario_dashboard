@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Medico;
 use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Consulta;
+use App\Models\Exame;
+use App\Models\Medicamento;
 use Carbon\Carbon;
 
 class MedicoPdfController extends Controller
@@ -25,17 +27,37 @@ class MedicoPdfController extends Controller
     public function gerarPdfExames($idConsulta)
     {
         try {
-            $consulta = Consulta::with(['paciente', 'medico', 'prontuario'])
-                ->where('idConsultaPK', $idConsulta)
-                ->firstOrFail();
+            $consulta = Consulta::with([
+                'paciente', 
+                'medico', 
+                'prontuario',
+                'exames'
+            ])->where('idConsultaPK', $idConsulta)->firstOrFail();
 
             $medicoInfo = $this->getMedicoData($consulta);
+
+            // Buscar exames da tabela tbExame usando a relação
+            $exames = $consulta->exames;
+            
+            // Formatar exames para exibição
+            $examesFormatados = [];
+            foreach ($exames as $exame) {
+                $exameInfo = $exame->nomeExame;
+                if ($exame->tipoExame) {
+                    $exameInfo .= " ({$exame->tipoExame})";
+                }
+                if ($exame->descExame) {
+                    $exameInfo .= " - {$exame->descExame}";
+                }
+                $examesFormatados[] = $exameInfo;
+            }
 
             $data = [
                 'paciente' => $consulta->paciente,
                 'medico' => $medicoInfo,
                 'consulta' => $consulta,
-                'exames' => $consulta->examesSolicitados ?? 'Nenhum exame solicitado.',
+                'exames' => !empty($examesFormatados) ? implode("\n", $examesFormatados) : 'Nenhum exame solicitado.',
+                'examesArray' => $examesFormatados,
                 'numProntuario' => $consulta->prontuario 
                     ? str_pad($consulta->prontuario->idProntuarioPK, 6, '0', STR_PAD_LEFT) 
                     : 'N/A',
@@ -75,17 +97,45 @@ class MedicoPdfController extends Controller
     public function gerarPdfReceita($idConsulta)
     {
         try {
-            $consulta = Consulta::with(['paciente', 'medico', 'prontuario'])
-                ->where('idConsultaPK', $idConsulta)
-                ->firstOrFail();
+            $consulta = Consulta::with([
+                'paciente', 
+                'medico', 
+                'prontuario',
+                'medicamentos'
+            ])->where('idConsultaPK', $idConsulta)->firstOrFail();
 
             $medicoInfo = $this->getMedicoData($consulta);
+
+            // Buscar medicamentos da tabela tbMedicamento usando a relação
+            $medicamentos = $consulta->medicamentos;
+            
+            // Formatar medicamentos para exibição
+            $medicamentosFormatados = [];
+            foreach ($medicamentos as $med) {
+                $medInfo = "• {$med->nomeMedicamento}";
+                
+                if ($med->dosagemMedicamento) {
+                    $medInfo .= " - {$med->dosagemMedicamento}";
+                }
+                if ($med->frequenciaMedicamento) {
+                    $medInfo .= " ({$med->frequenciaMedicamento})";
+                }
+                if ($med->periodoMedicamento) {
+                    $medInfo .= " por {$med->periodoMedicamento}";
+                }
+                if ($med->tipoMedicamento) {
+                    $medInfo .= " [{$med->tipoMedicamento}]";
+                }
+                
+                $medicamentosFormatados[] = $medInfo;
+            }
 
             $data = [
                 'paciente' => $consulta->paciente,
                 'medico' => $medicoInfo,
                 'consulta' => $consulta,
-                'medicamentos' => $consulta->medicamentosPrescritos ?? 'Nenhum medicamento prescrito.',
+                'medicamentos' => !empty($medicamentosFormatados) ? implode("\n", $medicamentosFormatados) : 'Nenhum medicamento prescrito.',
+                'medicamentosArray' => $medicamentosFormatados,
                 'numProntuario' => $consulta->prontuario 
                     ? str_pad($consulta->prontuario->idProntuarioPK, 6, '0', STR_PAD_LEFT) 
                     : 'N/A',

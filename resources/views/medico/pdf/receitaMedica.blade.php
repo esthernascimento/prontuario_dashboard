@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
   <meta charset="UTF-8">
   <title>Receita Médica</title>
@@ -25,7 +24,6 @@
       border-radius: 8px;
     }
 
-    /* ===== HEADER ===== */
     .header {
       text-align: center;
       border-bottom: 3px solid #e11d48;
@@ -49,7 +47,6 @@
       margin-top: 6px;
     }
 
-    /* ===== BLOCO PADRÃO ===== */
     .info-block,
     .clinical-reason.no-break,
     .exames-section {
@@ -96,7 +93,6 @@
       color: #111827;
     }
 
-    /* ===== QUEIXA CLÍNICA ===== */
     .clinical-reason {
       background: #f9fafb;
     }
@@ -105,7 +101,6 @@
       color: #1f2937;
     }
 
-    /* ===== PRESCRIÇÃO ===== */
     .exames-section {
       border: 2px solid #ef4444;
       background: #fff5f5;
@@ -150,7 +145,6 @@
       top: -2px;
     }
 
-    /* ===== DATA ===== */
     .date-section {
       text-align: right;
       margin-top: 35px;
@@ -159,7 +153,6 @@
       color: #374151;
     }
 
-    /* ===== ASSINATURA ===== */
     .signature {
       margin-top: 55px;
       text-align: center;
@@ -179,7 +172,6 @@
       line-height: 1.4;
     }
 
-    /* ===== RODAPÉ ===== */
     .footer {
       text-align: center;
       font-size: 18px;
@@ -190,18 +182,15 @@
       font-style: italic;
     }
 
-    /* ===== AJUSTES PDF ===== */
     @media print {
       body {
         background: none;
       }
-
       .container {
         box-shadow: none;
         border-radius: 0;
         padding: 30px 50px;
       }
-
       .info-block:hover,
       .clinical-reason:hover,
       .exames-section:hover {
@@ -211,7 +200,6 @@
     }
   </style>
 </head>
-
 <body>
   <div class="container">
     <div class="header no-break">
@@ -244,7 +232,15 @@
     <div class="exames-section no-break">
       <h2>Prescrição Médica</h2>
       <div class="exames-content">
-        <p>{!! nl2br(e($medicamentos)) !!}</p>
+        @if(isset($medicamentosArray) && count($medicamentosArray) > 0)
+            <ul class="exames-list">
+                @foreach($medicamentosArray as $medicamento)
+                    <li>{{ $medicamento }}</li>
+                @endforeach
+            </ul>
+        @else
+            <p>Nenhum medicamento prescrito.</p>
+        @endif
       </div>
     </div>
 
@@ -266,5 +262,4 @@
     </div>
   </div>
 </body>
-
 </html>
