@@ -49,7 +49,7 @@
                     </div>
 
                     <div id="password-change-wrapper" style="display: none;">
-                        </div>
+                    </div>
 
                     <button class="btn-login" type="submit" id="submit-button">ENTRAR</button>
                 </form>
@@ -63,7 +63,7 @@
             const notification = document.getElementById('notification');
             const passwordChangeWrapper = document.getElementById('password-change-wrapper');
             const submitButton = document.getElementById('submit-button');
-            const coremInput = document.getElementById('corem'); 
+            const coremInput = document.getElementById('corem');
             const senhaInput = document.getElementById('senha');
 
             form.addEventListener('submit', async function (event) {
@@ -106,17 +106,22 @@
 
                             document.getElementById('login-fields').style.display = 'none';
 
+                            // 🛠️ Alteração 1: Adicionando ícones de toggle nos novos campos
                             passwordChangeWrapper.innerHTML = `
                                 <div class="input-group">
                                     <label for="nova_senha">Nova Senha</label>
                                     <div class="input-wrapper">
+                                        <i class="fa-solid fa-lock icon-left"></i>
                                         <input type="password" id="nova_senha" name="nova_senha" required />
+                                        <i data-target="nova_senha" class="fa-solid fa-eye-slash icon-right toggle-new-password"></i>
                                     </div>
                                 </div>
                                 <div class="input-group">
                                     <label for="nova_senha_confirmation">Confirme a Nova Senha</label>
                                     <div class="input-wrapper">
+                                        <i class="fa-solid fa-lock icon-left"></i>
                                         <input type="password" id="nova_senha_confirmation" name="nova_senha_confirmation" required />
+                                        <i data-target="nova_senha_confirmation" class="fa-solid fa-eye-slash icon-right toggle-new-password"></i>
                                     </div>
                                 </div>
                             `;
@@ -124,6 +129,29 @@
                             passwordChangeWrapper.style.display = 'block';
                             submitButton.textContent = 'ALTERAR SENHA';
                             submitButton.disabled = false;
+                            
+                            // 🛠️ Alteração 2: Adicionando a funcionalidade de toggle nos novos campos
+                            document.querySelectorAll('.toggle-new-password').forEach(toggleIcon => {
+                                toggleIcon.addEventListener('click', function() {
+                                    const targetId = this.getAttribute('data-target');
+                                    const targetInput = document.getElementById(targetId);
+
+                                    const isPassword = targetInput.type === "password";
+                                    targetInput.type = isPassword ? "text" : "password";
+                                    
+                                    this.classList.toggle("fa-eye");
+                                    this.classList.toggle("fa-eye-slash");
+                                });
+                            });
+                            
+                            // Restaura o foco para os novos campos
+                            const newInputs = passwordChangeWrapper.querySelectorAll("input");
+                            newInputs.forEach(input => {
+                                input.addEventListener("focus", () => input.parentElement.classList.add("focused"));
+                                input.addEventListener("blur", () => {
+                                    if (input.value === "") input.parentElement.classList.remove("focused");
+                                });
+                            });
 
                             form.onsubmit = async function (e) {
                                 e.preventDefault();
@@ -155,7 +183,7 @@
                                         body: formData
                                     });
                                     if (resp.status === 419) {
-                                         throw new Error('CSRF Token Expirado/Inválido.');
+                                        throw new Error('CSRF Token Expirado/Inválido.');
                                     }
 
                                     const respData = await resp.json();
@@ -199,6 +227,7 @@
                 }
             });
 
+            // Lógica de toggle para o campo de senha inicial ('#senha')
             const togglePassword = document.getElementById("togglePassword");
             if (togglePassword && senhaInput) {
                 togglePassword.addEventListener("click", () => {
@@ -208,6 +237,8 @@
                     togglePassword.classList.toggle("fa-eye-slash");
                 });
             }
+            
+            // Lógica de foco/blur para todos os inputs
             const inputs = document.querySelectorAll(".input-wrapper input");
             inputs.forEach(input => {
                 input.addEventListener("focus", () => input.parentElement.classList.add("focused"));

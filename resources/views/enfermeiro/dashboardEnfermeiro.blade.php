@@ -8,14 +8,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-@php
-    $atendimentosDia = 25;
-    $pacientesProprios = 150;
-    $unidadeAtuacao = 'UBS Central';
-    $agendamentosHoje = 8;
-    $dadosGeneroEnfermeiro = ['Homens' => 40, 'Mulheres' => 60];
-@endphp
-
 <div class="main-dashboard">
     <div class="overview-container">
 
@@ -44,7 +36,7 @@
                 </div>
                 <div class="banner-center">
                
-                    <h2>Bem-vindo(a), <span class="name">{{ $nome ?? 'Enfermeiro(a)' }}</span></h2>
+                    <h2>Bem-vindo(a), <span class="name">{{ $enfermeiro->nomeEnfermeiro ?? 'Enfermeiro(a)' }}</span></h2>
                     <p><i class="bi bi-heart-pulse"></i>O Prontuário+ fica feliz com a sua presença e dedicação à saúde.</p>
                 </div>
                 <div class="banner-right">
