@@ -435,24 +435,7 @@
                         </div>
                     </div>
                     
-                    <div class="quick-view-stats">
-                        <div class="stat-item">
-                            <i class="bi bi-calendar-check"></i>
-                            <span class="stat-number">45</span>
-                            <p>Consultas Realizadas</p>
-                        </div>
-                        <div class="stat-item">
-                            <i class="bi bi-clock-history"></i>
-                            <span class="stat-number">230h</span>
-                            <p>Total de Horas</p>
-                        </div>
-                        <div class="stat-item">
-                            <i class="bi bi-star-fill"></i>
-                            <span class="stat-number">4.8</span>
-                            <p>Avaliação Média</p>
-                        </div>
-                    </div>
-                    
+                
                     <div class="quick-view-actions">
                         <a href="/unidade/medicos/edit/${medicoId}" class="btn-quick-edit">
                             <i class="bi bi-pencil"></i> Editar Perfil Completo
