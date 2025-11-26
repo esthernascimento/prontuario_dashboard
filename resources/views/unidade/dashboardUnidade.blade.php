@@ -10,19 +10,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-@php 
-    // Variáveis de exemplo (substituídas pelo Controller)
-    // $medicosCount = 15;
-    // $nursesCount = 20;
-    // $recepcionistasCount = 10; 
-    // $dadosGenero = ['Homens' => 45, 'Mulheres' => 55];
-    // $medicosPorEspecialidade = collect([
-    //     (object)['especialidadeMedico' => 'Cardio', 'total' => 12],
-    //     (object)['especialidadeMedico' => 'Pediatria', 'total' => 8],
-    // ]);
-    // $dadosLinha = ['meses' => ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'], 'pacientes' => [45, 52, 61, 58, 70, 78]];
-@endphp
-
 <div class="dashboard-container">
     <div class="dashboard-header fade-in" style="animation-delay: 0s;">
         <div class="header-content">
@@ -46,7 +33,6 @@
                 <img src="{{ asset('img/unidade-logo2.png') }}" alt="Logo Prontuário+" class="banner-logo">
             </div>
             <div class="banner-center">
-                {{-- Usa a variável $nomeUnidade enviada pelo Controller --}}
                 <h2>Bem-vindo(a),<span class="highlight">{{ $nomeUnidade ?? 'Usuário' }}</span></h2> 
                 <p><i class="bi bi-heart-pulse"></i> O Prontuário+ fica feliz com a sua presença e dedicação à saúde.</p>
             </div>
@@ -77,30 +63,22 @@
             </div>
         </div>
 
-        {{-- ============================================= --}}
-        {{-- --- CORREÇÃO AQUI --- --}}
-        {{-- ============================================= --}}
         <div class="metric-card slide-up" style="animation-delay: 0.4s;">
             <div class="metric-icon purple">
                 <i class="bi bi-person-check"></i>
             </div>
             <div class="metric-content">
                 <span class="metric-label">Recepcionistas Cadastrados</span>
-                {{-- Trocado de $patientsCount para $recepcionistasCount --}}
                 <strong class="metric-value">{{ $recepcionistasCount ?? 0 }}</strong>
             </div>
         </div>
 
-        {{-- ============================================= --}}
-        {{-- --- CORREÇÃO AQUI --- --}}
-        {{-- ============================================= --}}
         <div class="metric-card slide-up" style="animation-delay: 0.5s;">
             <div class="metric-icon orange">
                 <i class="bi bi-people-fill"></i>
             </div>
             <div class="metric-content">
                 <span class="metric-label">Total de Profissionais</span>
-                {{-- Trocado de $patientsCount para $recepcionistasCount --}}
                 <strong class="metric-value">{{ ($medicosCount ?? 0) + ($nursesCount ?? 0) + ($recepcionistasCount ?? 0) }}</strong>
             </div>
         </div>

@@ -17,6 +17,7 @@
                 </div>
                 <div class="metric-info">
                     <span class="metric-label">Total de Enfermeiros</span>
+                    <span class="metric-value" id="metric-total">{{ $enfermeiros->count() }}</span>
                 </div>
             </div>
 

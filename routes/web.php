@@ -146,7 +146,10 @@ Route::middleware('auth:unidade')->prefix('unidade')->name('unidade.')->group(fu
     Route::put('/recepcionistas/{recepcionista}', [RecepcionistaController::class, 'update'])->name('recepcionistas.update');
     Route::delete('/recepcionistas/{recepcionista}', [RecepcionistaController::class, 'destroy'])->name('recepcionistas.destroy');
     
-    // Rotas AJAX para Recepcionistas (sem status)
+    // --- ROTA ADICIONADA PARA ATIVAR/INATIVAR ---
+    Route::post('/recepcionistas/{id}/toggle-status', [RecepcionistaController::class, 'toggleStatus'])->name('recepcionistas.toggleStatus');
+    
+    // Rotas AJAX para Recepcionistas
     Route::get('/recepcionistas/{recepcionista}/quick-view', [RecepcionistaController::class, 'quickView'])->name('recepcionistas.quickView');
     Route::get('/recepcionistas/export', [RecepcionistaController::class, 'export'])->name('recepcionistas.export');
 });

@@ -18,7 +18,14 @@ class EnfermeiroController extends Controller
 {
     public function index()
     {
-        $enfermeiros = Enfermeiro::with('usuario')->get();
+        // Filtra apenas enfermeiros vinculados à unidade autenticada
+        $unidadeLogada = auth()->guard('unidade')->user();
+
+        $enfermeiros = Enfermeiro::with('usuario')
+            ->whereHas('unidades', function ($q) use ($unidadeLogada) {
+                $q->where('idUnidadePK', $unidadeLogada->idUnidadePK);
+            })
+            ->get();
         return view('unidade.manutencaoEnfermeiro', compact('enfermeiros'));
     }
 
