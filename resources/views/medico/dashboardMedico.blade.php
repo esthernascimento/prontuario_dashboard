@@ -77,7 +77,7 @@
                         <img src="{{ asset('img/icon-prontuario.png') }}" alt="Ícone Prontuários" class="icon-metric-img">
                     </div>
                     <div class="metric-content">
-                        <span class="metric-label">Prontuários registrados</span>
+                        <span class="metric-label">Consultas realizadas</span>
                         <strong class="metric-value">{{ $prontuariosCount ?? 0 }}</strong>
                     </div>
                 </div>
