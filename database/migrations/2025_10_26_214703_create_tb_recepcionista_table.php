@@ -17,12 +17,15 @@ return new class extends Migration
             $table->string('emailRecepcionista')->unique();
             $table->string('senhaRecepcionista');
             
-            // --- CORREÇÃO (Voltando à sua lógica correta) ---
+            // --- LINHA ADICIONADA ---
+            $table->boolean('statusAtivoRecepcionista')->default(1);
+            // --- FIM DA LINHA ADICIONADA ---
+            
             // Chave estrangeira para ligar à Unidade que o cadastrou
             $table->foreignId('idUnidadeFK')
-                  ->nullable() // Deixei nulo por segurança, mas pode ser obrigatório
-                  ->constrained('tbUnidade', 'idUnidadePK') // Assumindo PK da tbUnidade
-                  ->nullOnDelete(); // Se a unidade for deletada, o recepcionista fica "sem unidade"
+                  ->nullable() 
+                  ->constrained('tbUnidade', 'idUnidadePK')
+                  ->nullOnDelete();
             
             $table->timestamps(); 
             $table->softDeletes(); 
@@ -34,7 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Método robusto para apagar
         Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('tbRecepcionista');
         Schema::enableForeignKeyConstraints();
