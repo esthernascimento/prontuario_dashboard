@@ -46,25 +46,6 @@
         </div>
 
         <div class="metrics">
-            <div class="metric-card slide-up" style="animation-delay: 0.6s;">
-                <div class="metric-icon red">
-                    <i class="bi bi-person-fill-gear"></i>
-                </div>
-                <div class="metric-content">
-                    <span class="metric-label">Atendimentos no Dia</span>
-                    <strong class="metric-value">{{ $atendimentosDia ?? 0 }}</strong>
-                </div>
-            </div>
-
-            <div class="metric-card slide-up" style="animation-delay: 0.8s;">
-                <div class="metric-icon purple">
-                    <i class="bi bi-people-fill"></i>
-                </div>
-                <div class="metric-content">
-                    <span class="metric-label">Pacientes Próprios</span>
-                    <strong class="metric-value">{{ $pacientesProprios ?? 0 }}</strong>
-                </div>
-            </div>
 
             <div class="metric-card slide-up" style="animation-delay: 1.0s;">
                 <div class="metric-icon green">
@@ -82,12 +63,12 @@
                 </div>
                 <div class="metric-content">
                     <span class="metric-label">Agendamentos Hoje</span>
-                    <strong class="metric-value">{{ $agendamentosHoje ?? 0 }}</strong>
+                    <strong class="metric-value">{{ $ultimaAnotacao ?? 0 }}</strong>
                 </div>
             </div>
         </div>
 
-
+    
         <div class="charts-section">
             <div class="section-header slide-up" style="animation-delay: 1.4s;">
                 <h2><i class="bi bi-bar-chart-fill"></i> Estatísticas e Análises</h2>
