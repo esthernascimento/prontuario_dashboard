@@ -216,15 +216,18 @@ Route::middleware('auth:enfermeiro')->prefix('enfermeiro')->name('enfermeiro.')-
 // --- ROTAS DO RECEPCIONISTA (PROTEGIDAS) ---
 // ===================================================================================
 Route::middleware('auth:recepcionista')->prefix('recepcionista')->name('recepcionista.')->group(function () {
-    
     Route::get('/dashboard', [RecepcionistaDashboardController::class, 'index'])->name('dashboard');
-    
     Route::post('/acolhimento/salvar', [RecepcionistaDashboardController::class, 'store'])->name('acolhimento.store');
-    
     Route::get('/pacientes/buscar', [AdminPacienteController::class, 'buscar'])->name('pacientes.buscar');
-    
     Route::post('/logout', [RecepcionistaLoginController::class, 'logout'])->name('logout');
+    
+    // Perfil
     Route::get('/perfil', [RecepcionistaConfiguracaoController::class, 'perfil'])->name('perfil');
     Route::post('/perfil/atualizar', [RecepcionistaConfiguracaoController::class, 'atualizarPerfil'])->name('atualizarPerfil');
     Route::post('/trocar-senha', [RecepcionistaConfiguracaoController::class, 'trocarSenha'])->name('trocarSenha');
+    
+    // Segurança (página dedicada)
+    Route::get('/seguranca', [RecepcionistaConfiguracaoController::class, 'showAlterarSenhaForm'])->name('seguranca');
+    Route::post('/alterar-senha', [RecepcionistaConfiguracaoController::class, 'alterarSenha'])->name('alterarSenha');
+
 });

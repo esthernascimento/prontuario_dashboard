@@ -13,11 +13,17 @@
     <form action="{{ route('recepcionista.atualizarPerfil') }}" method="POST">
         @csrf
         
+        {{-- Mensagens de Sucesso --}}
         @if (session('success'))
-            <div class="alert alert-success mt-3">{{ session('success') }}</div>
+            <div class="alert alert-success mt-3">
+                <i class="bi bi-check-circle-fill"></i> {{ session('success') }}
+            </div>
         @endif
+        
+        {{-- Mensagens de Erro --}}
         @if ($errors->any())
             <div class="alert alert-danger mt-3">
+                <i class="bi bi-exclamation-triangle-fill"></i>
                 @foreach ($errors->all() as $error)
                     {{ $error }}<br>
                 @endforeach
@@ -36,75 +42,30 @@
 
         <div class="button-group">
             <button type="submit" class="save-button">
-                Salvar Alterações
+                <i class="bi bi-check-circle"></i> Salvar Alterações
             </button>
             
-            <button type="button" id="openModalBtn" class="btn-trocar-senha">
+            <a href="{{ route('recepcionista.seguranca') }}" class="btn-trocar-senha">
                 <i class="bi bi-key-fill"></i> Trocar Senha
-            </button>
+            </a>
         </div>
     </form>
-</div>
-
-{{-- ESTRUTURA DO MODAL (Deve estar fora do form principal) --}}
-<div id="passwordModal" class="modal-overlay">
-    <div class="modal-box">
-        <i class="bi bi-shield-lock-fill modal-icon icon-warning"></i>
-        <h2>Confirmação de Senha</h2>
-        <p>Para sua segurança, confirme a senha atual antes de definir uma nova.</p>
-
-        <form id="trocaSenhaForm" action="{{ route('recepcionista.trocarSenha') }}" method="POST">
-            @csrf
-            
-            <div class="input-group">
-                <label for="current_password">Senha Atual:</label>
-                <input type="password" name="current_password" id="current_password" required>
-            </div>
-
-            <div class="input-group">
-                <label for="new_password">Nova Senha:</label>
-                <input type="password" name="new_password" id="new_password" required>
-            </div>
-            
-            <div class="input-group">
-                <label for="new_password_confirmation">Confirmar Nova Senha:</label>
-                <input type="password" name="new_password_confirmation" id="new_password_confirmation" required>
-            </div>
-
-            <div class="modal-buttons">
-                <button type="button" id="closeModalBtn" class="modal-btn modal-btn-cancel">
-                    Cancelar
-                </button>
-                <button type="submit" class="modal-btn modal-btn-confirm">
-                    Confirmar Troca
-                </button>
-            </div>
-        </form>
-    </div>
 </div>
 
 @endsection
 
 @section('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.getElementById('passwordModal');
-    const openBtn = document.getElementById('openModalBtn');
-    const closeBtn = document.getElementById('closeModalBtn');
-
-    openBtn.addEventListener('click', () => {
-        modal.classList.add('show');
+// ===================================================
+// AUTO-HIDE DE ALERTAS
+// ===================================================
+setTimeout(function() {
+    const alerts = document.querySelectorAll('.alert-success');
+    alerts.forEach(alert => {
+        alert.style.transition = 'opacity 0.5s';
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
     });
-
-    closeBtn.addEventListener('click', () => {
-        modal.classList.remove('show');
-    });
-
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.classList.remove('show');
-        }
-    });
-});
+}, 5000);
 </script>
 @endsection
