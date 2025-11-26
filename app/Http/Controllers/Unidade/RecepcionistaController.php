@@ -13,7 +13,15 @@ class RecepcionistaController extends Controller
 {
     public function index()
     {
-        $recepcionistas = Recepcionista::all();
+        $unidadeLogada = Auth::guard('unidade')->user();
+
+        if (!$unidadeLogada) {
+            return redirect()->route('unidade.login')->with('error', 'Você precisa estar logado.');
+        }
+
+        // CORREÇÃO: Filtra apenas os recepcionistas da unidade logada
+        $recepcionistas = $unidadeLogada->recepcionistas;
+
         return view('unidade.manutencaoRecepcionista', compact('recepcionistas'));
     }
 
@@ -31,53 +39,26 @@ class RecepcionistaController extends Controller
                 'senhaRecepcionista' => 'required|string|min:6',
             ]);
 
-            $data['senhaRecepcionista'] = Hash::make($data['senhaRecepcionista']);
-            $data['statusAtivoRecepcionista'] = 1; // Define como ativo por padrão
-            
             $unidade = Auth::guard('unidade')->user();
-            
             if (!$unidade) {
-                if ($request->expectsJson()) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Unidade não autenticada.'
-                    ], 401);
-                }
-                return back()->withErrors(['auth' => 'Unidade não autenticada.']);
+                return response()->json(['success' => false, 'message' => 'Unidade não autenticada.'], 401);
             }
 
-            $data['idUnidadeFK'] = $unidade->idUnidadePK;
+            $data['senhaRecepcionista'] = Hash::make($data['senhaRecepcionista']);
+            $data['statusAtivoRecepcionista'] = 1; // Agora este campo existe na tabela
+            $data['idUnidadeFK'] = $unidade->idUnidadePK; // Pega o ID da unidade logada
 
             $recepcionista = Recepcionista::create($data);
 
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Recepcionista cadastrado com sucesso!',
-                    'idRecepcionistaPK' => $recepcionista->idRecepcionistaPK
-                ], 201);
-            }
-
-            return redirect()->route('unidade.manutencaoRecepcionista')->with('success', 'Recepcionista cadastrado com sucesso!');
-
+            return response()->json([
+                'success' => true,
+                'message' => 'Recepcionista cadastrado com sucesso!',
+                'idRecepcionistaPK' => $recepcionista->idRecepcionistaPK
+            ], 201);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Erro de validação',
-                    'errors' => $e->errors()
-                ], 422);
-            }
-            return back()->withErrors($e->errors());
-            
+            return response()->json(['success' => false, 'message' => 'Erro de validação', 'errors' => $e->errors()], 422);
         } catch (\Exception $e) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Erro ao cadastrar recepcionista: ' . $e->getMessage()
-                ], 500);
-            }
-            return back()->withErrors(['error' => 'Erro ao cadastrar recepcionista: ' . $e->getMessage()]);
+            return response()->json(['success' => false, 'message' => 'Erro ao cadastrar: ' . $e->getMessage()], 500);
         }
     }
 
@@ -115,49 +96,62 @@ class RecepcionistaController extends Controller
         $recepcionista->delete();
         return redirect()->route('unidade.manutencaoRecepcionista')->with('success', 'Recepcionista excluído com sucesso!');
     }
-    
-    /**
-     * Visualização rápida de um recepcionista (para AJAX)
-     */
+
     public function quickView(Recepcionista $recepcionista)
     {
-        // Formata a data para exibição
         $createdAt = $recepcionista->created_at->format('d/m/Y');
-        
+
         return response()->json([
             'id' => $recepcionista->idRecepcionistaPK,
             'nome' => $recepcionista->nomeRecepcionista,
             'email' => $recepcionista->emailRecepcionista,
             'status' => $recepcionista->statusAtivoRecepcionista,
             'created_at' => $createdAt,
-            // Estes campos podem ser adicionados se existirem na tabela
             'atendimentos' => $recepcionista->atendimentos ?? 0,
             'horas_trabalhadas' => $recepcionista->horas_trabalhadas ?? 0,
             'avaliacao' => $recepcionista->avaliacao ?? 'N/A'
         ]);
     }
-    
-    /**
-     * Exporta recepcionistas para Excel
-     */
+
     public function export()
     {
-        // Implementação básica - você pode usar uma biblioteca como Laravel Excel
-        $recepcionistas = Recepcionista::all();
-        
+        // CORREÇÃO: Filtra apenas os recepcionistas da unidade logada
+        $unidadeLogada = Auth::guard('unidade')->user();
+        if (!$unidadeLogada) {
+            return redirect()->route('unidade.login')->with('error', 'Você precisa estar logado.');
+        }
+        $recepcionistas = $unidadeLogada->recepcionistas;
+
         $csv = "Nome,Email,Status,Cadastrado em\n";
-        
+
         foreach ($recepcionistas as $recepcionista) {
             $status = $recepcionista->statusAtivoRecepcionista == 1 ? 'Ativo' : 'Inativo';
             $dataCadastro = $recepcionista->created_at->format('d/m/Y');
             $csv .= "{$recepcionista->nomeRecepcionista},{$recepcionista->emailRecepcionista},{$status},{$dataCadastro}\n";
         }
-        
+
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="recepcionistas.csv"',
         ];
-        
+
         return response($csv, 200, $headers);
+    }
+
+
+    public function toggleStatus($id)
+    {
+        $recepcionista = Recepcionista::findOrFail($id);
+        $mensagem = '';
+
+        // Inverte o status atual
+        $novoStatus = !$recepcionista->statusAtivoRecepcionista;
+        $recepcionista->statusAtivoRecepcionista = $novoStatus;
+        $recepcionista->save();
+
+        $acao = $novoStatus ? 'ativado' : 'desativado';
+        $mensagem = "O recepcionista foi {$acao} com sucesso!";
+
+        return redirect()->route('unidade.manutencaoRecepcionista')->with('success', $mensagem);
     }
 }

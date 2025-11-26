@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Medico;
 use App\Models\Enfermeiro;
+use App\Models\Recepcionista;
 use App\Models\Unidade;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -27,9 +28,9 @@ class DashboardController extends Controller
         // --- CONTAGEM DE PROFISSIONAIS ---
         $medicosCount = $unidade->medicos()->count();
         $nursesCount = $unidade->enfermeiros()->count();
-        $patientsCount = 0;
+        $recepcionistasCount = $unidade->recepcionistas()->count(); // Adicionado
 
-        // --- MÉDICOS POR ESPECIALIDADE (CONSULTA CORRIGIDA) ---
+        // --- MÉDICOS POR ESPECIALIDADE ---
         $medicosPorEspecialidade = DB::table('tbMedico')
             ->join('tbMedicoUnidade', 'tbMedico.idMedicoPK', '=', 'tbMedicoUnidade.idMedicoFK')
             ->where('tbMedicoUnidade.idUnidadeFK', $unidade->idUnidadePK)
@@ -52,8 +53,8 @@ class DashboardController extends Controller
         return view('unidade.dashboardUnidade', compact(
             'nomeUnidade',
             'medicosCount',
-            'patientsCount',
             'nursesCount',
+            'recepcionistasCount', 
             'medicosPorEspecialidade',
             'dadosLinha',
             'dadosGenero'

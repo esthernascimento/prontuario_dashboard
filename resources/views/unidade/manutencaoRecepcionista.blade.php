@@ -153,13 +153,18 @@
                                 <i class="bi bi-pencil"></i>
                             </a>
 
-                            <form action="{{ route('unidade.recepcionistas.destroy', $recepcionista->idRecepcionistaPK) }}" method="POST" style="display: inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn-action btn-delete" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir este recepcionista?')">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </form>
+                            <!-- Botão de Toggle Status (Adicionado) -->
+                            <button onclick="openStatusModal('{{ $recepcionista->idRecepcionistaPK }}', '{{ $recepcionista->nomeRecepcionista }}', {{ $recepcionista->statusAtivoRecepcionista }})" 
+                                    class="btn-action btn-toggle" 
+                                    title="{{ $recepcionista->statusAtivoRecepcionista == 1 ? 'Desativar' : 'Ativar' }}">
+                                @if($recepcionista->statusAtivoRecepcionista == 1)
+                                    <i class="bi bi-toggle-on text-success"></i>
+                                @else
+                                    <i class="bi bi-toggle-off text-danger"></i>
+                                @endif
+                            </button>
+
+                          
                         </td>
                     </tr>
                     @endforeach
@@ -212,6 +217,16 @@
                     <a href="{{ route('unidade.recepcionistas.edit', $recepcionista->idRecepcionistaPK) }}" class="btn-action btn-edit">
                         <i class="bi bi-pencil"></i>
                     </a>
+                    
+                    <!-- Botão de Toggle Status (Adicionado) -->
+                    <button onclick="openStatusModal('{{ $recepcionista->idRecepcionistaPK }}', '{{ $recepcionista->nomeRecepcionista }}', {{ $recepcionista->statusAtivoRecepcionista }})" class="btn-action btn-toggle">
+                        @if($recepcionista->statusAtivoRecepcionista == 1)
+                            <i class="bi bi-toggle-on text-success"></i>
+                        @else
+                            <i class="bi bi-toggle-off text-danger"></i>
+                        @endif
+                    </button>
+                    
                     <form action="{{ route('unidade.recepcionistas.destroy', $recepcionista->idRecepcionistaPK) }}" method="POST" style="display: inline;">
                         @csrf
                         @method('DELETE')
@@ -249,6 +264,26 @@
                 <i class="bi bi-hourglass-split"></i> Carregando...
             </div>
         </div>
+    </div>
+</div>
+
+{{-- MODAL DE ALTERAÇÃO DE STATUS (Adicionado) --}}
+<div id="statusRecepcionistaModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <i class="bi bi-toggle-on"></i>
+            <h2>Alterar Status</h2>
+        </div>
+        
+        <p>Tem certeza que deseja <span id="statusAction"></span> o(a) recepcionista <strong><span id="statusRecepcionistaNome"></span></strong>?</p>
+
+        <form id="statusRecepcionistaForm" method="POST" action="{{ route('unidade.recepcionistas.toggleStatus', ':id:') }}">
+            @csrf
+            <div class="modal-buttons">
+                <button type="button" onclick="closeStatusModal()" class="btn-cancelar">Cancelar</button>
+                <button type="submit" class="btn-excluir">Sim, <span id="confirmStatusText"></span></button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -319,23 +354,6 @@
                         </div>
                     </div>
                     
-                    <div class="quick-view-stats">
-                        <div class="stat-item">
-                            <i class="bi bi-calendar-check"></i>
-                            <span class="stat-number">${data.atendimentos || 0}</span>
-                            <p>Atendimentos Realizados</p>
-                        </div>
-                        <div class="stat-item">
-                            <i class="bi bi-clock-history"></i>
-                            <span class="stat-number">${data.horas_trabalhadas || 0}h</span>
-                            <p>Total de Horas</p>
-                        </div>
-                        <div class="stat-item">
-                            <i class="bi bi-star-fill"></i>
-                            <span class="stat-number">${data.avaliacao || 'N/A'}</span>
-                            <p>Avaliação Média</p>
-                        </div>
-                    </div>
                     
                     <div class="quick-view-actions">
                         <a href="/unidade/recepcionistas/${recepcionistaId}/edit" class="btn-quick-edit">
@@ -353,6 +371,24 @@
 
     function closeQuickView() {
         document.getElementById('quickViewModal').style.display = 'none';
+    }
+
+    // ===== MODAL DE STATUS (Adicionado) =====
+    function openStatusModal(recepcionistaId, recepcionistaNome, currentStatus) {
+        const modal = document.getElementById('statusRecepcionistaModal');
+        const form = document.getElementById('statusRecepcionistaForm');
+        const action = currentStatus == 1 ? 'desativar' : 'ativar';
+        
+        document.getElementById('statusRecepcionistaNome').textContent = recepcionistaNome;
+        document.getElementById('statusAction').textContent = action;
+        document.getElementById('confirmStatusText').textContent = action;
+        
+        form.action = form.action.replace(':id:', recepcionistaId);
+        modal.style.display = 'flex';
+    }
+
+    function closeStatusModal() {
+        document.getElementById('statusRecepcionistaModal').style.display = 'none';
     }
 
     // ===== EXPORTAR PARA EXCEL =====
@@ -480,6 +516,10 @@
 
     document.getElementById('quickViewModal').addEventListener('click', (e) => {
         if (e.target.id === 'quickViewModal') closeQuickView();
+    });
+
+    document.getElementById('statusRecepcionistaModal').addEventListener('click', (e) => {
+        if (e.target.id === 'statusRecepcionistaModal') closeStatusModal();
     });
 
     document.getElementById('statusSuccessModal').addEventListener('click', (e) => {
