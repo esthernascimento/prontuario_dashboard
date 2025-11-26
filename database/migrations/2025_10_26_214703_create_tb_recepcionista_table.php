@@ -13,15 +13,12 @@ return new class extends Migration
     {
         Schema::create('tbRecepcionista', function (Blueprint $table) {
             $table->id('idRecepcionistaPK');
+            $table->string('foto')->nullable();
             $table->string('nomeRecepcionista');
             $table->string('emailRecepcionista')->unique();
             $table->string('senhaRecepcionista');
-            
-            // --- LINHA ADICIONADA ---
             $table->boolean('statusAtivoRecepcionista')->default(1);
-            // --- FIM DA LINHA ADICIONADA ---
-            
-            // Chave estrangeira para ligar à Unidade que o cadastrou
+
             $table->foreignId('idUnidadeFK')
                   ->nullable() 
                   ->constrained('tbUnidade', 'idUnidadePK')

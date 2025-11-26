@@ -18,11 +18,14 @@ class Recepcionista extends Authenticatable
     public $timestamps = true; 
 
     protected $fillable = [
+        'foto',
         'nomeRecepcionista',
         'emailRecepcionista',
         'senhaRecepcionista',
-        'idUnidadeFK',
-        'statusAtivoRecepcionista', // <-- ADICIONADO
+        'statusAtivoRecepcionista',
+        'idUnidadeFK'
+        
+        
     ];
 
     protected $hidden = [ 'senhaRecepcionista', 'remember_token' ];
@@ -32,9 +35,6 @@ class Recepcionista extends Authenticatable
         return $this->senhaRecepcionista;
     }
 
-    /**
-     * RELAÇÃO ADICIONADA: Um Recepcionista pertence a uma Unidade
-     */
     public function unidade()
     {
         return $this->belongsTo(Unidade::class, 'idUnidadeFK', 'idUnidadePK');

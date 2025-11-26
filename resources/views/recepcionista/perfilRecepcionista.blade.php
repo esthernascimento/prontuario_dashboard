@@ -10,17 +10,15 @@
         <h1>Meu Perfil (Recepcionista)</h1>
     </div>
 
-    <form action="{{ route('recepcionista.atualizarPerfil') }}" method="POST">
+    <form action="{{ route('recepcionista.atualizarPerfil') }}" method="POST" enctype="multipart/form-data"> 
         @csrf
         
-        {{-- Mensagens de Sucesso --}}
         @if (session('success'))
             <div class="alert alert-success mt-3">
                 <i class="bi bi-check-circle-fill"></i> {{ session('success') }}
             </div>
         @endif
         
-        {{-- Mensagens de Erro --}}
         @if ($errors->any())
             <div class="alert alert-danger mt-3">
                 <i class="bi bi-exclamation-triangle-fill"></i>
@@ -29,6 +27,26 @@
                 @endforeach
             </div>
         @endif
+
+        <div class="foto-upload-container">
+            @php $recepcionista = auth()->guard('recepcionista')->user(); @endphp 
+
+            <label for="foto" class="foto-upload-label">
+
+                <div class="box-foto">
+                    <img id="preview-img"
+                         src="{{ $recepcionista->foto ? asset('storage/' . $recepcionista->foto) : asset('img/usuario-de-perfil.png') }}" 
+                         alt="Foto atual">
+                </div>
+
+                <div class="overlay">
+                    <i class="bi bi-camera"></i>
+                    <span>Alterar Foto</span>
+                </div>
+            </label>
+            
+            <input type="file" id="foto" name="foto" accept="image/*" hidden onchange="previewFoto(event)">
+        </div>
 
         <div class="input-group">
             <label for="nomeRecepcionista">Nome:</label>
@@ -56,9 +74,25 @@
 
 @section('scripts')
 <script>
-// ===================================================
-// AUTO-HIDE DE ALERTAS
-// ===================================================
+function previewFoto(event) {
+    const input = event.target;
+    const preview = document.getElementById('preview-img');
+    
+    if (input.files && input.files[0] && preview) { 
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+        };
+        
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        if (!preview) {
+             console.error("Elemento 'preview-img' não encontrado.");
+        }
+    }
+}
+
 setTimeout(function() {
     const alerts = document.querySelectorAll('.alert-success');
     alerts.forEach(alert => {
