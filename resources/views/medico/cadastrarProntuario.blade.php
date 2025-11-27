@@ -743,11 +743,10 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // ===== INICIALIZAÇÃO =====
+ 
     initializeForm();
     setupTextareaCounters();
 
-    // ===== FUNÇÕES DO MODAL =====
     window.openConfirmModal = function() {
         const modal = document.getElementById('confirmModal');
         if (modal) {
@@ -843,7 +842,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ===== FUNÇÕES DE BUSCA =====
     function filterItems(inputId) {
         const searchTerm = document.getElementById(inputId).value.toLowerCase();
         const isExames = inputId === 'filtroExames';
@@ -905,7 +903,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ===== INICIALIZAÇÃO DO FORMULÁRIO =====
     function initializeForm() {
         // Configurar eventos de busca
         const filtroExames = document.getElementById('filtroExames');

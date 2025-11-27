@@ -11,9 +11,6 @@ use App\Models\Recepcionista;
 
 class RecepcionistaConfiguracaoController extends Controller
 {
-    /**
-     * Exibe o perfil do recepcionista
-     */
     public function perfil()
     {
         $recepcionista = Auth::guard('recepcionista')->user();
@@ -25,48 +22,44 @@ class RecepcionistaConfiguracaoController extends Controller
         return view('recepcionista.perfilRecepcionista', compact('recepcionista'));
     }
 
-    /**
-     * Atualiza o perfil do recepcionista
-     */
     public function atualizarPerfil(Request $request)
-    {
-        $recepcionista = Auth::guard('recepcionista')->user();
+{
+    $recepcionista = Auth::guard('recepcionista')->user();
 
-        if (!$recepcionista) {
-            return redirect()->route('recepcionista.login')->with('error', 'Sessão expirada. Faça login novamente.');
+    $request->validate([
+        'nomeRecepcionista' => 'required|string|max:255',
+        'emailRecepcionista' => [
+            'required',
+            'email',
+            'max:255',
+            Rule::unique('tbRecepcionista', 'emailRecepcionista')
+                ->ignore($recepcionista->idRecepcionistaPK, 'idRecepcionistaPK'),
+        ],
+    ]);
+
+    $recepcionista->nomeRecepcionista = $request->nomeRecepcionista;
+    $recepcionista->emailRecepcionista = $request->emailRecepcionista;
+
+    if ($request->hasFile('foto')) {
+
+        if ($recepcionista->foto && \Storage::exists('public/' . $recepcionista->foto)) {
+            \Storage::delete('public/' . $recepcionista->foto);
         }
 
-        $request->validate([
-            'nomeRecepcionista' => 'required|string|max:255',
-            'emailRecepcionista' => [
-                'required',
-                'email',
-                'max:255',
-                Rule::unique('tbRecepcionista', 'emailRecepcionista')
-                    ->ignore($recepcionista->idRecepcionistaPK, 'idRecepcionistaPK'),
-            ],
-        ], [
-            'emailRecepcionista.unique' => 'Este e-mail já está cadastrado em outra conta.',
-        ]);
-
-        $recepcionista->nomeRecepcionista = $request->nomeRecepcionista;
-        $recepcionista->emailRecepcionista = $request->emailRecepcionista;
-        $recepcionista->save();
-
-        return redirect()->route('recepcionista.perfil')->with('success', 'Perfil atualizado com sucesso!');
+        $path = $request->file('foto')->store('recepcionistas', 'public');
+        $recepcionista->foto = $path;
     }
 
-    /**
-     * Exibe a página de segurança (trocar senha)
-     */
+    $recepcionista->save();
+
+    return redirect()->route('recepcionista.perfil')->with('success', 'Perfil atualizado com sucesso!');
+}
+
     public function showAlterarSenhaForm()
     {
         return view('recepcionista.segurancaRecepcionista');
     }
 
-    /**
-     * Altera a senha do recepcionista (página de segurança)
-     */
     public function alterarSenha(Request $request)
     {
         $recepcionista = Auth::guard('recepcionista')->user();
@@ -85,12 +78,10 @@ class RecepcionistaConfiguracaoController extends Controller
             'nova_senha.confirmed' => 'A confirmação da senha não confere.',
         ]);
 
-        // Verifica se a senha atual está correta
         if (!Hash::check($request->senha_atual, $recepcionista->senhaRecepcionista)) {
             return back()->withErrors(['senha_atual' => 'Senha atual incorreta.']);
         }
 
-        // Atualiza a senha
         $recepcionista->senhaRecepcionista = Hash::make($request->nova_senha);
         $recepcionista->save();
 

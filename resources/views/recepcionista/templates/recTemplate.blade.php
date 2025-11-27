@@ -1,3 +1,8 @@
+@php
+    $r = auth()->guard('recepcionista')->user();
+@endphp
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -34,7 +39,7 @@
                 </a>
             </li>
         </ul>
-        
+
         <div class="logout-container-recepcionista">
             <form action="{{ route('recepcionista.logout') }}" method="POST">
                 @csrf
@@ -45,21 +50,23 @@
             </form>
         </div>
     </div>
-    
+
     <header class="navbar-recepcionista">
         <div class="user-info-recepcionista">
-            <a href="{{ route('recepcionista.perfil') }}" class="user-info" style="text-decoration: none; color: inherit;">
+            <a href="{{ route('recepcionista.perfil') }}" class="user-info"
+                style="text-decoration: none; color: inherit;">
                 <span>{{ Auth::user()->name ?? 'Recepcionista' }}</span>
-                <img src="{{ Auth::user()->foto_perfil_url ?? asset('img/usuario-de-perfil.png') }}"
-                    alt="Avatar Recepcionista">
+                <img id="sidebar-foto"
+                    src="{{ $r->foto ? asset('storage/' . $r->foto) : asset('img/usuario-de-perfil.png') }}"
+                    class="logo-recepcionista" alt="Foto Recepcionista">
             </a>
         </div>
     </header>
-    
+
     <main class="main-content">
         @yield('content')
     </main>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     @stack('scripts')

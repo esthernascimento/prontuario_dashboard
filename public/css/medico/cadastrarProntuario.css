@@ -292,7 +292,6 @@ body {
     font-weight: 700;
 }
 
-/* ===== CARD DE INFORMAÇÕES ===== */
 .info-card-container,
 .paciente-info {
     background: white;
@@ -1000,12 +999,10 @@ textarea {
     75% { transform: translateX(8px); }
 }
 
-/* ===== BUSCA E SELEÇÃO ===== */
 .input-filtro {
     margin-bottom: 12px;
 }
 
-/* ===== LISTA DE CHECKBOXES ===== */
 .checkbox-list {
     max-height: 400px;
     overflow-y: auto;
@@ -1071,7 +1068,6 @@ textarea {
     accent-color: var(--primary-red);
 }
 
-/* ===== DETALHES DE EXAMES ===== */
 .exame-details {
     padding: 20px;
     margin-top: 12px;
@@ -1412,17 +1408,41 @@ textarea {
     font-size: 1rem;
 }
 
-/* ===== MODAL DE CONFIRMAÇÃO ===== */
 .modal-overlay {
     display: none;
     position: fixed;
     inset: 0;
     z-index: 9999;
-    justify-content: center;
-    align-items: center;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(8px);
-    animation: fadeInOverlay var(--transition-base);
+    justify-content: center !important;
+    align-items: center !important;
+    
+}
+
+.modal-overlay.active {
+    display: flex !important;
+}
+
+.modal-container {
+    margin: 0 !important;
+    position: relative;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    transform: none !important;
+}
+
+.modal-container,
+.modal-content {
+    align-self: center !important;
+    justify-self: center !important;
+}
+
+.modal-content {
+    width: 100% !important;
+    padding: 50px !important;
+    margin: 0 !important;
 }
 
 .modal-overlay.active {
