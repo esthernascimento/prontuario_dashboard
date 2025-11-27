@@ -8,24 +8,10 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-@php
-    $nome = auth()->user()->medico->nomeMedico ?? 'Médico(a)';
-    $patientsCount = 120;
-    $prontuariosCount = 350;
-    $atendimentosPorMes = ['Jan' => 45, 'Fev' => 52, 'Mar' => 61, 'Abr' => 58, 'Mai' => 70, 'Jun' => 65];
-    $evolucaoAtendimentos = [
-        (object)['label' => 'Jan', 'total' => 45],
-        (object)['label' => 'Fev', 'total' => 52],
-        (object)['label' => 'Mar', 'total' => 61],
-        (object)['label' => 'Abr', 'total' => 58],
-        (object)['label' => 'Mai', 'total' => 70],
-        (object)['label' => 'Jun', 'total' => 78],
-        (object)['label' => 'Jul', 'total' => 85],
-    ];
-@endphp
 
 <div class="main-dashboard">
     <div class="overview-container">
+
         <div class="dashboard-header fade-in" style="animation-delay: 0s;">
             <div class="header-content">
                 <div class="header-left">
@@ -50,7 +36,8 @@
                     </div>
                 </div>
                 <div class="banner-center">
-                    <h2>Bem-vindo(a), <span class="doctor-name">Dr(a). {{ $nome }}</span></h2>
+
+                    <h2>Bem-vindo(a), <span class="doctor-name">Dr(a). {{ $nome ?? 'Médico(a)' }}</span></h2>
                     <p><i class="bi bi-heart-pulse"></i>O Prontuário+ fica feliz com a sua presença e dedicação à saúde.</p>
                 </div>
                 <div class="banner-right">
@@ -67,6 +54,7 @@
                     </div>
                     <div class="metric-content">
                         <span class="metric-label">Pacientes ativos</span>
+
                         <strong class="metric-value">{{ $patientsCount ?? 0 }}</strong>
                     </div>
                 </div>
@@ -76,7 +64,8 @@
                         <img src="{{ asset('img/icon-prontuario.png') }}" alt="Ícone Prontuários" class="icon-metric-img">
                     </div>
                     <div class="metric-content">
-                        <span class="metric-label">Consultas realizadas</span>
+                        <span class="metric-label">Total de Prontuários</span>
+
                         <strong class="metric-value">{{ $prontuariosCount ?? 0 }}</strong>
                     </div>
                 </div>
@@ -89,7 +78,6 @@
             </div>
         </div>
 
-      
         <div class="charts-section">
             <div class="section-header fade-in" style="animation-delay: 0.5s;">
                 <h2><i class="bi bi-bar-chart-fill"></i> Estatísticas e Análises</h2>
@@ -97,7 +85,7 @@
             </div>
 
             <div class="charts-grid">
-       
+        
                 <div class="chart-card slide-up" style="animation-delay: 0.6s;">
                     <div class="chart-header">
                         <div class="chart-title">
@@ -114,12 +102,11 @@
                     <div class="chart-footer">
                         <span class="chart-info">
                             <i class="bi bi-info-circle"></i>
-                            Distribuição mensal de consultas
+                            Distribuição mensal de consultas (apenas suas)
                         </span>
                     </div>
                 </div>
 
-                {{-- GRÁFICO 2: EVOLUÇÃO DE ATENDIMENTOS --}}
                 <div class="chart-card slide-up" style="animation-delay: 0.7s;">
                     <div class="chart-header">
                         <div class="chart-title">
@@ -136,12 +123,11 @@
                     <div class="chart-footer">
                         <span class="chart-info">
                             <i class="bi bi-info-circle"></i>
-                            Crescimento ao longo do tempo
+                            Crescimento ao longo do último ano (apenas seus)
                         </span>
                     </div>
                 </div>
 
-                {{-- GRÁFICO 3: TIPOS DE ATENDIMENTO --}}
                 <div class="chart-card chart-card-small slide-up" style="animation-delay: 0.8s;">
                     <div class="chart-header">
                         <div class="chart-title">
@@ -157,14 +143,23 @@
                     </div>
                     <div class="chart-footer">
                         <div class="legend-row">
-                            <div class="legend-item">
-                                <span class="legend-color" style="background: #8c1007;"></span>
-                                <span>Consultas</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-color" style="background: #a33e38;"></span>
-                                <span>Retornos</span>
-                            </div>
+                            @if(isset($tiposAtendimento) && count($tiposAtendimento) > 0)
+                                @foreach($tiposAtendimento as $index => $item)
+                                    @php
+                                        // Define as cores para consistência
+                                        $color = $index == 0 ? '#8c1007' : ($index == 1 ? '#a33e38' : '#333');
+                                    @endphp
+                                    <div class="legend-item">
+                                        <span class="legend-color" style="background: {{ $color }};"></span>
+                                        <span>{{ $item->label ?? 'N/D' }} ({{ $item->total ?? 0 }})</span>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="legend-item">
+                                    <span class="legend-color" style="background: #ccc;"></span>
+                                    <span>Nenhum dado de atendimento.</span>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -180,19 +175,13 @@
     const primaryColor = '#8c1007';
     const secondaryColor = '#a33e38';
     
-    // Verificação segura dos dados dos gráficos
     const atendimentosData = @json($atendimentosPorMes ?? []);
     const evolucaoData = @json($evolucaoAtendimentos ?? []);
+    const tiposAtendimentoData = @json($tiposAtendimento ?? []); 
 
-    // GRÁFICO DE BARRAS (Atendimentos por Mês)
     if (document.getElementById('graficoBarras')) {
-        const labelsBarras = Object.keys(atendimentosData).length > 0 
-            ? Object.keys(atendimentosData)
-            : ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'];
-        
-        const dataBarras = Object.values(atendimentosData).length > 0
-            ? Object.values(atendimentosData)
-            : [45, 52, 61, 58, 70, 65];
+        const labelsBarras = Object.keys(atendimentosData);
+        const dataBarras = Object.values(atendimentosData);
 
         const ctxBarras = document.getElementById('graficoBarras').getContext('2d');
         new Chart(ctxBarras, {
@@ -253,13 +242,8 @@
     }
 
     if (document.getElementById('graficoLinha')) {
-        const labelsLinha = evolucaoData.length > 0
-            ? evolucaoData.map(item => item.label || '')
-            : ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-        
-        const dataLinha = evolucaoData.length > 0
-            ? evolucaoData.map(item => item.total || 0)
-            : [45, 52, 61, 58, 70, 78, 85, 92, 88, 95, 102, 110];
+        const labelsLinha = evolucaoData.map(item => item.label);
+        const dataLinha = evolucaoData.map(item => item.total);
 
         const ctxLinha = document.getElementById('graficoLinha').getContext('2d');
         new Chart(ctxLinha, {
@@ -321,16 +305,18 @@
         });
     }
 
-    // GRÁFICO DONUT (Tipos de Atendimento)
     if (document.getElementById('graficoDonut')) {
+        const labelsDonut = tiposAtendimentoData.map(item => item.label);
+        const dataDonut = tiposAtendimentoData.map(item => item.total);
+        
         const ctxDonut = document.getElementById('graficoDonut').getContext('2d');
         new Chart(ctxDonut, {
             type: 'doughnut',
             data: {
-                labels: ['Consultas', 'Retornos'],
+                labels: labelsDonut,
                 datasets: [{
-                    data: [65, 35],
-                    backgroundColor: [primaryColor, secondaryColor],
+                    data: dataDonut,
+                    backgroundColor: [primaryColor, secondaryColor, '#d0655d', '#c24545'],
                     borderWidth: 3,
                     borderColor: '#fff',
                     hoverOffset: 10
@@ -351,7 +337,7 @@
                             label: function(context) {
                                 const total = context.dataset.data.reduce((a, b) => a + b, 0);
                                 const percentage = ((context.parsed / total) * 100).toFixed(1);
-                                return context.label + ': ' + percentage + '%';
+                                return context.label + ': ' + percentage + '% (' + context.parsed + ')';
                             }
                         }
                     }
@@ -359,6 +345,7 @@
             }
         });
     }
+
     document.addEventListener('DOMContentLoaded', function() {
         const animatedElements = document.querySelectorAll('.slide-up, .fade-in, .zoom-in-banner');
         
@@ -369,8 +356,8 @@
             setTimeout(() => {
                 
                 element.style.animationName = element.classList.contains('slide-up') ? 'fadeInSlideUp' : 
-                                               element.classList.contains('fade-in') ? 'fadeIn' : 
-                                               'zoomIn'; // Nome do keyframe relevante
+                                             element.classList.contains('fade-in') ? 'fadeIn' : 
+                                             'zoomIn'; 
                 
                 element.style.animationDuration = '0.8s'; 
                 element.style.animationTimingFunction = 'ease-out'; 
@@ -381,4 +368,4 @@
     });
 </script>
 
-@endsection 
+@endsection
