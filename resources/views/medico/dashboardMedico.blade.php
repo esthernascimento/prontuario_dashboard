@@ -26,7 +26,6 @@
 
 <div class="main-dashboard">
     <div class="overview-container">
-        {{-- HEADER DO DASHBOARD --}}
         <div class="dashboard-header fade-in" style="animation-delay: 0s;">
             <div class="header-content">
                 <div class="header-left">

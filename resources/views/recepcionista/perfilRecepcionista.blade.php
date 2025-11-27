@@ -76,20 +76,20 @@
 <script>
 function previewFoto(event) {
     const input = event.target;
-    const preview = document.getElementById('preview-img');
-    
-    if (input.files && input.files[0] && preview) { 
+
+    if (input.files && input.files[0]) {
         const reader = new FileReader();
-        
+
         reader.onload = function(e) {
-            preview.src = e.target.result;
+
+            const preview = document.getElementById('preview-img');
+            if (preview) preview.src = e.target.result;
+
+            const sidebarFoto = document.getElementById('sidebar-foto');
+            if (sidebarFoto) sidebarFoto.src = e.target.result;
         };
-        
+
         reader.readAsDataURL(input.files[0]);
-    } else {
-        if (!preview) {
-             console.error("Elemento 'preview-img' não encontrado.");
-        }
     }
 }
 
