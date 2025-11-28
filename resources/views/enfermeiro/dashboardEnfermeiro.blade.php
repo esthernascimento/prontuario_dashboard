@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="banner-center">
-               
+                
                     <h2>Bem-vindo(a), <span class="name">{{ $enfermeiro->nomeEnfermeiro ?? 'Enfermeiro(a)' }}</span></h2>
                     <p><i class="bi bi-heart-pulse"></i>O Prontuário+ fica feliz com a sua presença e dedicação à saúde.</p>
                 </div>
@@ -46,43 +46,54 @@
         </div>
 
         <div class="metrics">
-
-            <div class="metric-card slide-up" style="animation-delay: 1.0s;">
-                <div class="metric-icon green">
-                    <i class="bi bi-hospital-fill"></i>
-                </div>
-                <div class="metric-content">
-                    <span class="metric-label">Unidade de Atuação</span>
-                    <strong class="metric-value metric-text-small">{{ $unidadeAtuacao ?? 'N/A' }}</strong>
-                </div>
-            </div>
-
-            <div class="metric-card slide-up" style="animation-delay: 1.2s;">
-                <div class="metric-icon orange">
-                    <i class="bi bi-calendar-check-fill"></i>
-                </div>
-                <div class="metric-content">
-                    <span class="metric-label">Agendamentos Hoje</span>
-                    <strong class="metric-value">{{ $ultimaAnotacao ?? 0 }}</strong>
-                </div>
-            </div>
+    
+    <div class="metric-card slide-up" style="animation-delay: 1.0s;">
+        <div class="metric-icon green">
+            <i class="bi bi-hospital-fill"></i>
         </div>
+        <div class="metric-content">
+            <span class="metric-label">Unidade de Atuação</span>
+            <strong class="metric-value metric-text-small">{{ $unidadeAtuacao ?? 'N/A' }}</strong>
+        </div>
+    </div>
+
+    <div class="metric-card slide-up" style="animation-delay: 1.2s;">
+        <div class="metric-icon orange">
+            <i class="bi bi-person-fill-gear"></i>
+        </div>
+        <div class="metric-content">
+            <span class="metric-label">Total Pacientes Próprios</span>
+            <strong class="metric-value">{{ $pacientesProprios ?? 0 }}</strong>
+        </div>
+    </div>
+
+    <div class="metric-card slide-up" style="animation-delay: 1.4s;">
+        <div class="metric-icon blue">
+            <i class="bi bi-clipboard2-check-fill"></i>
+        </div>
+        <div class="metric-content">
+            <span class="metric-label">Triagens Concluídas Hoje</span>
+            <strong class="metric-value">{{ $atendimentosDia ?? 0 }}</strong>
+        </div>
+    </div>
+    
+</div>
 
     
         <div class="charts-section">
-            <div class="section-header slide-up" style="animation-delay: 1.4s;">
+            <div class="section-header slide-up" style="animation-delay: 1.8s;">
                 <h2><i class="bi bi-bar-chart-fill"></i> Estatísticas e Análises</h2>
                 <p>Monitore seus pacientes e atendimentos em tempo real</p>
             </div>
             <div class="content-wrapper"> 
                 <div class="charts"> 
-                 
-                    <div class="chart-container slide-up" style="animation-delay: 1.6s;">
+                    
+                    <div class="chart-container slide-up" style="animation-delay: 2.0s;">
                         <canvas id="graficoPacientesMes"></canvas>
                     </div>
 
                     {{-- GRÁFICO DE DONUT ENFERMEIRO --}}
-                    <div class="chart-container info-card slide-up" style="animation-delay: 1.8s;">
+                    <div class="chart-container info-card slide-up" style="animation-delay: 2.2s;">
                         <h3>Índice de Gênero</h3>
                         <div class="donut-chart">
                             <canvas id="graficoDonutEnfermeiro"></canvas>
@@ -90,21 +101,8 @@
                     </div>
                     
                     {{-- GRÁFICO DE BARRAS DE SERVIÇOS --}}
-                    <div class="chart-container slide-up" style="animation-delay: 2.0s;">
+                    <div class="chart-container slide-up" style="animation-delay: 2.4s;">
                         <canvas id="graficoVazio"></canvas>
-                    </div>
-                </div>
-
-                <div class="info-cards-container">
-                    <div class="info-card slide-up" style="animation-delay: 2.2s;">
-                        <h3>Taxa de Acolhimento</h3>
-                        <strong style="font-size: 3rem;">92%</strong>
-                        <p>Pacientes atendidos no tempo correto</p>
-                    </div>
-                    <div class="info-card slide-up" style="animation-delay: 2.4s;">
-                        <h3>Média de Espera</h3>
-                        <strong style="font-size: 3rem;">15 min</strong>
-                        <p>Tempo médio até o primeiro atendimento</p>
                     </div>
                 </div>
             </div>
@@ -117,21 +115,27 @@
     // Definição das cores para o tema verde
     const greenPrimary = '#2e7d32'; // Verde Escuro Principal
     const greenLightBackground = '#E8F5E9'; // Fundo suave para linha/área
+    const magentaSecondary = '#ff0066'; // Cor de contraste para o gráfico de gênero
 
     Chart.defaults.font.family = 'Montserrat, sans-serif';
     Chart.defaults.color = '#4b5563';
 
-    // Gráfico de Pacientes por Mês (Linhas)
+    // Gráfico de Pacientes por Mês (Linhas) - AGORA COM DADOS REAIS
     const ctxPacientes = document.getElementById('graficoPacientesMes').getContext('2d');
+    
+    // Puxando dados dinâmicos do Laravel
+    const triagensLabels = @json($dadosTriagensMes['labels']) || ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'];
+    const triagensData = @json($dadosTriagensMes['data']) || [12, 19, 8, 15, 10, 13];
+
     new Chart(ctxPacientes, {
         type: 'line',
         data: {
-            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+            labels: triagensLabels, // RÓTULOS REAIS
             datasets: [{
-                label: 'Atendimentos',
-                data: [12, 19, 8, 15, 10, 13],
-                borderColor: greenPrimary, // Verde
-                backgroundColor: 'rgba(46, 125, 50, 0.1)', // Fundo suave verde
+                label: 'Triagens Realizadas',
+                data: triagensData, // DADOS REAIS
+                borderColor: greenPrimary, 
+                backgroundColor: 'rgba(46, 125, 50, 0.1)',
                 fill: true,
                 tension: 0.3
             }]
@@ -146,8 +150,8 @@
                 legend: { display: false },
                 title: {
                     display: true,
-                    text: 'Evolução de Atendimentos nos Últimos Meses',
-                    color: greenPrimary, // Verde
+                    text: 'Evolução de Triagens Realizadas (Últimos 6 Meses)', // TÍTULO ATUALIZADO
+                    color: greenPrimary,
                     font: { size: 16, weight: 'bold' }
                 }
             }
@@ -165,8 +169,7 @@
                     {{ $dadosGeneroEnfermeiro['Homens'] ?? 40 }},
                     {{ $dadosGeneroEnfermeiro['Mulheres'] ?? 60 }}
                 ],
-                // Cores de gênero ajustadas: um verde (homens) e um rosa/magenta (mulheres) para contraste
-                backgroundColor: [greenPrimary, '#ff0066'], 
+                backgroundColor: [greenPrimary, magentaSecondary], 
                 borderColor: '#fff',
                 borderWidth: 3,
                 hoverOffset: 10
@@ -194,7 +197,7 @@
             datasets: [{
                 label: 'Frequência de Serviços',
                 data: [10, 25, 15, 30],
-                backgroundColor: greenPrimary, // Verde
+                backgroundColor: greenPrimary, 
                 borderRadius: 5,
             }]
         },
@@ -209,7 +212,7 @@
                 title: {
                     display: true,
                     text: 'Serviços Mais Realizados (Exemplo)',
-                    color: greenPrimary, // Verde
+                    color: greenPrimary,
                     font: { size: 16, weight: 'bold' }
                 }
             }
