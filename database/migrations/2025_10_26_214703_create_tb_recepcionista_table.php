@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('foto')->nullable();
             $table->string('nomeRecepcionista');
             $table->string('emailRecepcionista')->unique();
+            $table->string('genero')->nullable();
+
             $table->string('senhaRecepcionista');
             $table->boolean('statusAtivoRecepcionista')->default(1);
 

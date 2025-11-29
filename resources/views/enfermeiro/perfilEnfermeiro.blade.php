@@ -14,7 +14,7 @@
     
 
         @if ($enfermeiro)
-            {{-- Adicionado um ID ao formulário para o JavaScript poder encontrá-lo --}}
+
             <form id="profileForm" action="{{ route('enfermeiro.perfil.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
@@ -22,7 +22,7 @@
                 <div class="foto-upload-container">
                     <label for="foto" class="foto-upload-label">
                         <div class="box-foto">
-                            {{-- 🔥 CORREÇÃO: Foto vem do usuário, não do enfermeiro --}}
+
                             <img id="preview-img"
                                  src="{{ $enfermeiro->usuario && $enfermeiro->usuario->foto ? asset('storage/fotos/' . $enfermeiro->usuario->foto) : asset('img/usuario-de-perfil.png') }}"
                                  alt="Foto atual">
@@ -54,7 +54,7 @@
 
                 <div class="button-group">
                     <a href="{{ route('enfermeiro.seguranca') }}" class="btn-trocar-senha">Trocar Senha</a>
-                    {{-- Botão alterado: type="button" para não enviar o form, e chama a função JS --}}
+
                     <button type="button" class="save-button" onclick="showConfirmationModal()">Salvar Alterações</button>
                 </div>
             </form>
@@ -67,7 +67,6 @@
     </div>
 </main>
 
-{{-- Modal de Confirmação --}}
 <div id="confirmationModal" class="modal-overlay">
     <div class="modal-box">
         <i class="bi bi-exclamation-triangle-fill modal-icon icon-warning"></i>
@@ -80,7 +79,6 @@
     </div>
 </div>
 
-{{-- Modal de Sucesso --}}
 @if(session('success'))
 <div id="successModal" class="modal-overlay show">
     <div class="modal-box">
@@ -95,7 +93,7 @@
 @endif
 
 <script>
-    // Função para preview da imagem
+
     function previewFoto(event) {
         const input = event.target;
         const preview = document.getElementById('preview-img');
@@ -108,12 +106,10 @@
         }
     }
 
-    // Pega os elementos do DOM para os modais
     const profileForm = document.getElementById('profileForm');
     const confirmationModal = document.getElementById('confirmationModal');
     const successModal = document.getElementById('successModal');
 
-    // --- Funções para o Modal de Confirmação ---
     function showConfirmationModal() {
         if (confirmationModal) confirmationModal.classList.add('show');
     }
@@ -125,12 +121,10 @@
         if (profileForm) profileForm.submit();
     }
 
-    // --- Funções para o Modal de Sucesso ---
     function hideSuccessModal() {
         if (successModal) successModal.classList.remove('show');
     }
 
-    // Fechar o modal clicando fora da caixa
     window.onclick = function(event) {
         if (event.target == confirmationModal) {
             hideConfirmationModal();
@@ -140,12 +134,12 @@
         }
     }
 
-    // Fechar modal de sucesso automaticamente após 5 segundos
     @if(session('success'))
     setTimeout(function() {
         hideSuccessModal();
     }, 5000);
     @endif
+    
 </script>
 
 @endsection

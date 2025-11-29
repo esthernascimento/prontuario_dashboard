@@ -11,18 +11,14 @@ use App\Models\Recepcionista;
 
 class RecepcionistaConfiguracaoController extends Controller
 {
-    /**
-     * Mostra o formulário de perfil
-     */
+   
     public function perfil()
     {
         $recepcionista = Auth::guard('recepcionista')->user();
         return view('recepcionista.perfil', compact('recepcionista'));
     }
 
-    /**
-     * Atualiza o perfil do recepcionista
-     */
+  
     public function atualizarPerfil(Request $request)
     {
         $request->validate([
@@ -38,9 +34,7 @@ class RecepcionistaConfiguracaoController extends Controller
         return redirect()->back()->with('success', 'Perfil atualizado com sucesso!');
     }
 
-    /**
-     * Troca a senha do recepcionista (chamado via modal no perfil)
-     */
+
     public function trocarSenha(Request $request)
     {
         $request->validate([
@@ -59,29 +53,22 @@ class RecepcionistaConfiguracaoController extends Controller
             return back()->withErrors(['auth' => 'Não foi possível identificar o recepcionista logado.']);
         }
 
-        // Verifica se a senha atual está correta
         if (!Hash::check($request->current_password, $recepcionista->senhaRecepcionista)) {
             return back()->withErrors(['current_password' => 'A senha atual está incorreta.']);
         }
 
-        // Atualiza a senha
         $recepcionista->senhaRecepcionista = Hash::make($request->new_password);
         $recepcionista->save();
 
         return back()->with('success', 'Senha alterada com sucesso!');
     }
 
-    /**
-     * Mostra o formulário de segurança
-     */
     public function showAlterarSenhaForm()
     {
         return view('recepcionista.segurancaRecepcionista');
     }
 
-    /**
-     * Altera a senha do recepcionista (página de segurança dedicada)
-     */
+
     public function alterarSenha(Request $request)
     {
         $request->validate([
@@ -100,12 +87,10 @@ class RecepcionistaConfiguracaoController extends Controller
             return back()->withErrors(['auth' => 'Não foi possível identificar o recepcionista logado.']);
         }
 
-        // Verifica se a senha atual está correta
         if (!Hash::check($request->senha_atual, $recepcionista->senhaRecepcionista)) {
             return back()->withErrors(['senha_atual' => 'Senha atual incorreta.']);
         }
 
-        // Atualiza a senha
         $recepcionista->senhaRecepcionista = Hash::make($request->nova_senha);
         $recepcionista->save();
 

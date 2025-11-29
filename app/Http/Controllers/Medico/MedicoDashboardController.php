@@ -30,12 +30,23 @@ class MedicoDashboardController extends Controller
 
         $medicoId = $medico->idMedicoPK;
 
-        
         $patientsCount = Paciente::where('statusPaciente', 1)->count();
         $prontuariosCount = Prontuario::count();
         $totalExamsCount = Exame::count();
 
-        $atendimentosPorMes = Consulta::select(
+        $consultasEmAberto = Consulta::where('idMedicoFK', $medicoId)
+            ->whereIn('status_atendimento', ['aguardando', 'triagem', 'em_atendimento'])
+            ->with(['paciente', 'unidade'])
+            ->orderBy('dataConsulta', 'asc')
+            ->take(5) 
+            ->get();
+
+        $totalConsultasEmAberto = Consulta::where('idMedicoFK', $medicoId)
+            ->whereIn('status_atendimento', ['aguardando', 'triagem', 'em_atendimento'])
+            ->count();
+
+
+            $atendimentosPorMes = Consulta::select(
                 DB::raw('MONTH(dataConsulta) as mes'),
                 DB::raw('COUNT(*) as total')
             )
@@ -46,17 +57,16 @@ class MedicoDashboardController extends Controller
             ->get()
             ->mapWithKeys(function ($item) {
                 Carbon::setLocale('pt_BR');
-
                 return [ucfirst(Carbon::create()->month($item->mes)->translatedFormat('M')) => $item->total];
             });
         
-        $evolucaoAtendimentos = Consulta::select(
+
+            $evolucaoAtendimentos = Consulta::select(
                 DB::raw('YEAR(dataConsulta) as ano'),
                 DB::raw('MONTH(dataConsulta) as mes'),
                 DB::raw('COUNT(*) as total')
             )
             ->where('idMedicoFK', $medicoId)
-
             ->where('dataConsulta', '>=', Carbon::now()->subYear())
             ->groupBy('ano', 'mes')
             ->orderBy('ano')
@@ -69,6 +79,28 @@ class MedicoDashboardController extends Controller
                     'total' => $item->total,
                 ];
             });
+
+     
+        $atendimentosPorRisco = Consulta::select(
+                'classificacao_risco',
+                DB::raw('COUNT(*) as total')
+            )
+            ->where('idMedicoFK', $medicoId)
+            ->whereNotNull('classificacao_risco')
+            ->groupBy('classificacao_risco')
+            ->get()
+            ->map(function ($item) {
+                $labels = [
+                    'vermelho' => 'Emergência',
+                    'laranja' => 'Urgência',
+                    'amarelo' => 'Pouco Urgente',
+                    'verde' => 'Não Urgente',
+                    'azul' => 'Eletivo'
+                ];
+                $item->label = $labels[$item->classificacao_risco] ?? 'Sem Classificação';
+                return $item;
+            });
+
 
         $tiposAtendimento = Consulta::select(
                 'pacientes.statusPaciente as label',
@@ -83,20 +115,37 @@ class MedicoDashboardController extends Controller
                 return $item;
             });
 
+
+            $mediaDiaria = Consulta::where('idMedicoFK', $medicoId)
+            ->where('dataConsulta', '>=', Carbon::now()->subDays(30))
+            ->count() / 30;
+
+      
+            $consultasHoje = Consulta::where('idMedicoFK', $medicoId)
+            ->whereDate('dataConsulta', Carbon::today())
+            ->count();
+
         return view('medico.dashboardMedico', [
-            // Dados do médico
+
             'nome' => $medico->nomeMedico, 
             'crm' => $medico->crmMedico,
             
-            // Contadores
+
             'patientsCount' => $patientsCount,
             'prontuariosCount' => $prontuariosCount,
             'totalExamsCount' => $totalExamsCount,
             
-            // Dados para Gráficos
+
+            'consultasEmAberto' => $consultasEmAberto,
+            'totalConsultasEmAberto' => $totalConsultasEmAberto,
+            'consultasHoje' => $consultasHoje,
+            'mediaDiaria' => round($mediaDiaria, 1),
+            
+
             'atendimentosPorMes' => $atendimentosPorMes,
             'evolucaoAtendimentos' => $evolucaoAtendimentos,
             'tiposAtendimento' => $tiposAtendimento,
+            'atendimentosPorRisco' => $atendimentosPorRisco,
         ]);
     }
 }

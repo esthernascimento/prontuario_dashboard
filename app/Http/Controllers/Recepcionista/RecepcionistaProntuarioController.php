@@ -36,7 +36,7 @@ class ProntuarioController extends Controller
             
                  $statusPaciente = $paciente->status;
             } elseif ($paciente) {
-                 Log::warning("Coluna 'status' não encontrada ou nula no Paciente ID: " . optional($paciente)->idPaciente); // Usando optional() para segurança
+                 Log::warning("Coluna 'status' não encontrada ou nula no Paciente ID: " . optional($paciente)->idPaciente); 
           
                  $statusPaciente = 'Status Desconhecido';
             } else {
