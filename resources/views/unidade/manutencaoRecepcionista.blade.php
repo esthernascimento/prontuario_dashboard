@@ -9,7 +9,7 @@
 
 <main class="main-dashboard">
     <div class="recepcionista-container">
-        <!-- DASHBOARD DE MÉTRICAS -->
+
         <div class="metrics-dashboard">
             <div class="metric-card total">
                 <div class="metric-icon">
@@ -52,7 +52,7 @@
             </div>
         </div>
 
-        <!-- HEADER COM TÍTULO E AÇÕES -->
+
         <div class="recepcionista-header">
             <div class="header-title">
                 <h1><i class="bi bi-person-vcard"></i> Gerenciamento de Recepcionistas</h1>
@@ -69,7 +69,7 @@
             </div>
         </div>
 
-        <!-- FILTROS AVANÇADOS -->
+
         <div class="search-filters">
             <div class="search-box">
                 <i class="bi bi-search"></i>
@@ -102,7 +102,7 @@
             </button>
         </div>
 
-        <!-- VISUALIZAÇÃO EM LISTA -->
+
         <div class="box-table" id="listView">
             <table>
                 <thead>
@@ -145,7 +145,7 @@
                             @endif
                         </td>
                         <td class="actions">
-                            <button onclick="quickView({{ $recepcionista->idRecepcionistaPK }})" class="btn-action btn-view" title="Visualizar Rápido">
+                            <button onclick="quickView({{ $recepcionista->idRecepcionistaPK }}, event)" class="btn-action btn-view" title="Visualizar Rápido">
                                 <i class="bi bi-eye"></i>
                             </button>
                             
@@ -153,8 +153,7 @@
                                 <i class="bi bi-pencil"></i>
                             </a>
 
-                            <!-- Botão de Toggle Status (Adicionado) -->
-                            <button onclick="openStatusModal('{{ $recepcionista->idRecepcionistaPK }}', '{{ $recepcionista->nomeRecepcionista }}', {{ $recepcionista->statusAtivoRecepcionista }})" 
+                            <button onclick="openStatusModal('{{ $recepcionista->idRecepcionistaPK }}', '{{ $recepcionista->nomeRecepcionista }}', {{ $recepcionista->statusAtivoRecepcionista }}, event)" 
                                     class="btn-action btn-toggle" 
                                     title="{{ $recepcionista->statusAtivoRecepcionista == 1 ? 'Desativar' : 'Ativar' }}">
                                 @if($recepcionista->statusAtivoRecepcionista == 1)
@@ -164,7 +163,7 @@
                                 @endif
                             </button>
 
-                          
+                           
                         </td>
                     </tr>
                     @endforeach
@@ -181,7 +180,7 @@
             </table>
         </div>
 
-        <!-- VISUALIZAÇÃO EM CARDS -->
+
         <div class="grid-view" id="gridView" style="display: none;">
             @foreach ($recepcionistas as $recepcionista)
             <div class="recepcionista-card" data-status="{{ $recepcionista->statusAtivoRecepcionista == 1 ? 'ativo' : 'inativo' }}">
@@ -211,15 +210,14 @@
                 </div>
                 
                 <div class="card-actions">
-                    <button onclick="quickView({{ $recepcionista->idRecepcionistaPK }})" class="btn-action btn-view">
+                    <button onclick="quickView({{ $recepcionista->idRecepcionistaPK }}, event)" class="btn-action btn-view" title="Visualizar Rápido">
                         <i class="bi bi-eye"></i>
                     </button>
-                    <a href="{{ route('unidade.recepcionistas.edit', $recepcionista->idRecepcionistaPK) }}" class="btn-action btn-edit">
+                    <a href="{{ route('unidade.recepcionistas.edit', $recepcionista->idRecepcionistaPK) }}" class="btn-action btn-edit" title="Editar">
                         <i class="bi bi-pencil"></i>
                     </a>
                     
-                    <!-- Botão de Toggle Status (Adicionado) -->
-                    <button onclick="openStatusModal('{{ $recepcionista->idRecepcionistaPK }}', '{{ $recepcionista->nomeRecepcionista }}', {{ $recepcionista->statusAtivoRecepcionista }})" class="btn-action btn-toggle">
+                    <button onclick="openStatusModal('{{ $recepcionista->idRecepcionistaPK }}', '{{ $recepcionista->nomeRecepcionista }}', {{ $recepcionista->statusAtivoRecepcionista }}, event)" class="btn-action btn-toggle" title="{{ $recepcionista->statusAtivoRecepcionista == 1 ? 'Desativar' : 'Ativar' }}">
                         @if($recepcionista->statusAtivoRecepcionista == 1)
                             <i class="bi bi-toggle-on text-success"></i>
                         @else
@@ -227,13 +225,7 @@
                         @endif
                     </button>
                     
-                    <form action="{{ route('unidade.recepcionistas.destroy', $recepcionista->idRecepcionistaPK) }}" method="POST" style="display: inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn-action btn-delete" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir este recepcionista?')">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </form>
+                    
                 </div>
             </div>
             @endforeach
@@ -267,7 +259,7 @@
     </div>
 </div>
 
-{{-- MODAL DE ALTERAÇÃO DE STATUS (Adicionado) --}}
+{{-- MODAL DE ALTERAÇÃO DE STATUS --}}
 <div id="statusRecepcionistaModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -303,11 +295,11 @@
     </div>
 </div>
 
+@push('scripts')
 <script>
-    // ===== VARIÁVEIS GLOBAIS =====
+
     let currentView = 'list';
 
-    // ===== VISUALIZAÇÃO (LISTA/CARDS) =====
     function changeView(view) {
         currentView = view;
         const listView = document.getElementById('listView');
@@ -330,15 +322,15 @@
         }
     }
 
-    // ===== VISUALIZAÇÃO RÁPIDA =====
-    function quickView(recepcionistaId) {
+    function quickView(recepcionistaId, event) {
+        if (event) event.stopPropagation();
+        
         const modal = document.getElementById('quickViewModal');
         const content = document.getElementById('quickViewContent');
         
         modal.style.display = 'flex';
         content.innerHTML = '<div class="loading-spinner"><i class="bi bi-hourglass-spin"></i> Carregando...</div>';
         
-        // Busca dados do recepcionista via AJAX
         fetch(`/unidade/recepcionistas/${recepcionistaId}/quick-view`)
         .then(response => response.json())
         .then(data => {
@@ -353,8 +345,6 @@
                             <p><i class="bi bi-calendar-plus"></i> <strong>Cadastrado em:</strong> ${data.created_at}</p>
                         </div>
                     </div>
-                    
-                    
                     <div class="quick-view-actions">
                         <a href="/unidade/recepcionistas/${recepcionistaId}/edit" class="btn-quick-edit">
                             <i class="bi bi-pencil"></i> Editar Perfil Completo
@@ -373,8 +363,9 @@
         document.getElementById('quickViewModal').style.display = 'none';
     }
 
-    // ===== MODAL DE STATUS (Adicionado) =====
-    function openStatusModal(recepcionistaId, recepcionistaNome, currentStatus) {
+    function openStatusModal(recepcionistaId, recepcionistaNome, currentStatus, event) {
+        if (event) event.stopPropagation();
+        
         const modal = document.getElementById('statusRecepcionistaModal');
         const form = document.getElementById('statusRecepcionistaForm');
         const action = currentStatus == 1 ? 'desativar' : 'ativar';
@@ -391,22 +382,16 @@
         document.getElementById('statusRecepcionistaModal').style.display = 'none';
     }
 
-    // ===== EXPORTAR PARA EXCEL =====
-    function exportToExcel() {
-        window.location.href = '/unidade/recepcionistas/export';
-    }
+   
 
-    // ===== ORDENAÇÃO =====
     let sortDirection = {};
     function sortTable(column) {
         const table = document.querySelector('#listView table');
         const tbody = table.querySelector('tbody');
         const rows = Array.from(tbody.querySelectorAll('tr:not([data-status="empty-list"])'));
         
-        // Inverte a direção se a mesma coluna for clicada novamente
         sortDirection[column] = sortDirection[column] === 'asc' ? 'desc' : 'asc';
         
-        // Ordena as linhas
         rows.sort((a, b) => {
             let aValue, bValue;
             
@@ -428,16 +413,13 @@
             }
         });
         
-        // Reinsere as linhas ordenadas na tabela
         rows.forEach(row => tbody.appendChild(row));
     }
 
-    // ===== FILTROS =====
     function filterRecepcionistas() {
         const searchInput = document.getElementById('searchInput').value.toLowerCase();
         const filterStatus = document.getElementById('filterStatus').value;
         
-        // Filtrar tabela
         document.querySelectorAll('#listView tbody tr').forEach(row => {
             if (row.dataset.status === 'empty-list') return;
             
@@ -451,7 +433,6 @@
             row.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
         });
         
-        // Filtrar cards
         document.querySelectorAll('.recepcionista-card').forEach(card => {
             const name = card.querySelector('h3')?.textContent.toLowerCase() || '';
             const email = card.querySelector('.card-email')?.textContent.toLowerCase() || '';
@@ -460,11 +441,10 @@
             const matchesSearch = name.includes(searchInput) || email.includes(searchInput);
             const matchesStatus = !filterStatus || status === filterStatus;
             
-            card.style.display = (matchesSearch && matchesStatus) ? 'block' : 'none';
+            card.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
         });
     }
 
-    // ===== MODAL DE SUCESSO =====
     function openSuccessModal(message) {
         document.getElementById('successMessage').textContent = message;
         document.getElementById('statusSuccessModal').style.display = 'flex';
@@ -475,7 +455,6 @@
         window.location.reload();
     }
 
-    // ===== CUSTOM SELECT =====
     function initializeCustomSelect(containerId) {
         const customSelect = document.getElementById(containerId);
         const selected = customSelect.querySelector(".selected");
@@ -505,7 +484,6 @@
         });
     }
 
-    // ===== EVENT LISTENERS =====
     document.addEventListener("DOMContentLoaded", () => {
         initializeCustomSelect("customStatus");
         
@@ -526,4 +504,6 @@
         if (e.target.id === 'statusSuccessModal') closeSuccessModal();
     });
 </script>
+
+@endpush
 @endsection

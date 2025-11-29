@@ -18,7 +18,7 @@ class EnfermeiroController extends Controller
 {
     public function index()
     {
-        // Filtra apenas enfermeiros vinculados à unidade autenticada
+
         $unidadeLogada = auth()->guard('unidade')->user();
 
         $enfermeiros = Enfermeiro::with('usuario')
@@ -48,7 +48,7 @@ class EnfermeiroController extends Controller
    public function store(Request $request)
 {
     try {
-        // Pega a unidade logada
+
         $unidadeLogada = auth()->guard('unidade')->user();
         
         $validated = $request->validate([
@@ -57,7 +57,7 @@ class EnfermeiroController extends Controller
             'emailEnfermeiro' => 'required|email|max:255|unique:tbUsuario,emailUsuario',
             'especialidadeEnfermeiro' => 'nullable|string|max:100',
             'genero' => 'required|string|in:Masculino,Feminino,Outro',
-            'unidade_id' => 'required|exists:tbUnidade,idUnidadePK', // Valida a unidade
+            'unidade_id' => 'required|exists:tbUnidade,idUnidadePK', 
         ], [
             'nomeEnfermeiro.required' => 'O nome do enfermeiro é obrigatório.',
             'corenEnfermeiro.required' => 'O COREN é obrigatório.',
@@ -86,7 +86,6 @@ class EnfermeiroController extends Controller
         $enfermeiro->genero = $request->genero;
         $enfermeiro->save();
 
-        // Associa o enfermeiro apenas à unidade logada
         $enfermeiro->unidades()->attach($request->unidade_id);
 
         Mail::to($usuario->emailUsuario)->send(new EmailEnfermeiro($usuario, $senhaTemporaria));

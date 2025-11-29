@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Medico;
 use App\Models\Usuario;
-use App\Models\Unidade;
 use Illuminate\Validation\ValidationException;
 use App\Mail\emailMedico;
 use Illuminate\Support\Str;
@@ -17,23 +16,23 @@ class MedicoController extends Controller
 {
     public function index(Request $request)
     {
-        // Pega a unidade logada
+
         $unidade = auth()->guard('unidade')->user();
 
-        // --- 1. Prepara a Query Base com Filtros ---
+
         $query = $unidade->medicos()->with('usuario');
 
-        // Filtro de busca por nome, CRM ou email
+
         if ($request->filled('search')) {
             $searchTerm = $request->get('search');
             $query->where('nomeMedico', 'LIKE', "%{$searchTerm}%")
-                ->orWhere('crmMedico', 'LIKE', "%{$searchTerm}%")
-                ->orWhereHas('usuario', function ($q) use ($searchTerm) {
-                    $q->where('emailUsuario', 'LIKE', "%{$searchTerm}%");
-                });
+                  ->orWhere('crmMedico', 'LIKE', "%{$searchTerm}%")
+                  ->orWhereHas('usuario', function ($q) use ($searchTerm) {
+                      $q->where('emailUsuario', 'LIKE', "%{$searchTerm}%");
+                  });
         }
 
-        // Filtro de status (ativo/inativo)
+
         if ($request->filled('status')) {
             $status = $request->get('status');
             if ($status === 'ativo') {
@@ -47,64 +46,70 @@ class MedicoController extends Controller
             }
         }
 
-        // --- 2. Busca TODOS os médicos (sem paginação) ---
+
         $medicos = $query->orderBy('nomeMedico', 'ASC')->get();
 
-        // --- 3. Calcula as métricas baseadas na lista completa ---
+
         $totalMedicos = $medicos->count();
-        $ativosCount = $medicos->where('usuario.statusAtivoUsuario', 1)->count();
+        $ativosCount   = $medicos->where('usuario.statusAtivoUsuario', 1)->count();
         $inativosCount = $medicos->where('usuario.statusAtivoUsuario', 0)->count();
-        $novosCount = $medicos->where('created_at', '>=', now()->startOfMonth())->count();
+        $novosCount    = $medicos->where('created_at', '>=', now()->startOfMonth())->count();
 
-        return view('unidade.manutencaoMedicos', compact('medicos', 'totalMedicos', 'ativosCount', 'inativosCount', 'novosCount'));
+        return view('unidade.manutencaoMedicos', compact(
+            'medicos',
+            'totalMedicos',
+            'ativosCount',
+            'inativosCount',
+            'novosCount'
+        ));
     }
-
 
     public function create()
     {
         $unidadeLogada = auth()->guard('unidade')->user();
-
         return view('unidade.cadastroMedico', compact('unidadeLogada'));
     }
 
     public function store(Request $request)
     {
         try {
-            // Pega a unidade logada
+
             $unidadeLogada = auth()->guard('unidade')->user();
 
             $validated = $request->validate([
-                'nomeMedico'      => 'required|string|max:255',
-                'crmMedico'       => 'required|string|max:20|unique:tbMedico,crmMedico',
-                'emailUsuario'    => 'required|email|max:255|unique:tbUsuario,emailUsuario',
+                'nomeMedico'          => 'required|string|max:255',
+                'crmMedico'           => 'required|string|max:20|unique:tbMedico,crmMedico',
+                'emailUsuario'        => 'required|email|max:255|unique:tbUsuario,emailUsuario',
                 'especialidadeMedico' => 'nullable|string|max:100',
-                'unidade_id'      => 'required|exists:tbUnidade,idUnidadePK', // Valida a unidade
+                'genero'              => 'required|string|in:Masculino,Feminino,Outro',
+                'unidade_id'          => 'required|exists:tbUnidade,idUnidadePK',
             ], [
-                'nomeMedico.required' => 'O nome do médico é obrigatório.',
-                'crmMedico.required' => 'O CRM é obrigatório.',
-                'emailUsuario.required' => 'O e-mail é obrigatório.',
-                'emailUsuario.unique' => 'Este e-mail já está cadastrado.',
-                'unidade_id.required' => 'Unidade é obrigatória.',
+                'nomeMedico.required'  => 'O nome do médico é obrigatório.',
+                'crmMedico.required'   => 'O CRM é obrigatório.',
+                'emailUsuario.required'=> 'O e-mail é obrigatório.',
+                'emailUsuario.unique'  => 'Este e-mail já está cadastrado.',
+                'genero.required'      => 'O gênero é obrigatório.',
+                'unidade_id.required'  => 'Unidade é obrigatória.',
             ]);
 
             $senhaTemporaria = Str::random(10);
 
             $usuario = new Usuario();
-            $usuario->nomeUsuario = $request->nomeMedico;
-            $usuario->emailUsuario = $request->emailUsuario;
-            $usuario->senhaUsuario = Hash::make($senhaTemporaria);
+            $usuario->nomeUsuario        = $request->nomeMedico;
+            $usuario->emailUsuario       = $request->emailUsuario;
+            $usuario->senhaUsuario       = Hash::make($senhaTemporaria);
             $usuario->statusAtivoUsuario = 1;
             $usuario->statusSenhaUsuario = true;
             $usuario->save();
 
             $medico = new Medico();
-            $medico->id_usuarioFK = $usuario->idUsuarioPK;
-            $medico->nomeMedico = $request->nomeMedico;
-            $medico->crmMedico = $request->crmMedico;
-            $medico->especialidadeMedico = $request->input('especialidadeMedico', '');
+            $medico->id_usuarioFK       = $usuario->idUsuarioPK;
+            $medico->nomeMedico         = $request->nomeMedico;
+            $medico->crmMedico          = $request->crmMedico;
+            $medico->especialidadeMedico= $request->input('especialidadeMedico', '');
+            $medico->genero             = $request->genero;
             $medico->save();
 
-            // Associa o médico apenas à unidade logada
             $medico->unidades()->attach($request->unidade_id);
 
             Mail::to($usuario->emailUsuario)->send(new emailMedico($usuario, $senhaTemporaria));
@@ -113,11 +118,13 @@ class MedicoController extends Controller
                 'success' => true,
                 'message' => 'Médico cadastrado com sucesso!'
             ]);
+
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
                 'errors' => $e->errors()
             ], 422);
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -135,19 +142,21 @@ class MedicoController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nomeMedico' => 'required|string|max:255',
-            'nomeUsuario' => 'required|string|max:255',
+            'nomeMedico'   => 'required|string|max:255',
+            'nomeUsuario'  => 'required|string|max:255',
             'emailUsuario' => 'required|email|max:255',
+            'genero'       => 'required|string|max:20',
         ]);
 
         $medico = Medico::with('usuario')->findOrFail($id);
 
         $medico->update([
             'nomeMedico' => $request->nomeMedico,
+            'genero'     => $request->genero,
         ]);
 
         $usuario = $medico->usuario;
-        $usuario->nomeUsuario = $request->nomeUsuario;
+        $usuario->nomeUsuario  = $request->nomeUsuario;
         $usuario->emailUsuario = $request->emailUsuario;
 
         if ($request->filled('senhaUsuario')) {
@@ -161,27 +170,33 @@ class MedicoController extends Controller
 
         $usuario->save();
 
-        return redirect()->route('unidade.manutencaoMedicos')->with('success', 'Dados atualizados com sucesso!');
+        return redirect()
+            ->route('unidade.manutencaoMedicos')
+            ->with('success', 'Dados atualizados com sucesso!');
     }
 
-    // 🔥 CORREÇÃO: Rota de redirecionamento é da 'unidade'
     public function toggleStatus($id)
     {
         $medico = Medico::with('usuario')->findOrFail($id);
-        $mensagem = '';
 
         if (!$medico->usuario) {
-            return redirect()->route('unidade.manutencaoMedicos')->with('error', 'Este médico não está vinculado a um usuário.');
+            return redirect()
+                ->route('unidade.manutencaoMedicos')
+                ->with('error', 'Este médico não está vinculado a um usuário.');
         }
 
         $usuario = $medico->usuario;
         $novoStatus = !$usuario->statusAtivoUsuario;
+
         $usuario->statusAtivoUsuario = $novoStatus;
         $usuario->save();
 
         $acao = $novoStatus ? 'ativado' : 'desativado';
-        $mensagem = "O médico foi {$acao} com sucesso!";
 
-        return redirect()->route('unidade.manutencaoMedicos')->with('success', $mensagem);
+        return redirect()
+            ->route('unidade.manutencaoMedicos')
+            ->with('success', "O médico foi {$acao} com sucesso!");
     }
+
+    
 }

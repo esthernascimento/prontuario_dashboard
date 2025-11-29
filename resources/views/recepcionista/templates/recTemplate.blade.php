@@ -21,7 +21,8 @@
 <body>
     <div class="sidebar-recepcionista d-flex flex-column">
         <div class="logo-recepcionista-container">
-            <img src="{{ asset('img/recepcionista-logo2.png') }}" class="logo-recepcionista"
+           <a href="{{ route('recepcionista.dashboard') }}">
+                <img src="{{ asset('img/recepcionista-logo2.png') }}" class="logo-recepcionista"
                 alt="Logo Recepcionista(a)">
         </div>
 

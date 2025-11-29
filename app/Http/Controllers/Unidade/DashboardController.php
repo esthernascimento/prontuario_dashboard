@@ -16,7 +16,6 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Pega a unidade logada
         $unidade = Auth::guard('unidade')->user();
 
         if (!$unidade) {
@@ -24,31 +23,134 @@ class DashboardController extends Controller
         }
 
         $nomeUnidade = $unidade->nomeUnidade ?? 'Unidade';
+        $unidadeId = $unidade->idUnidadePK;
+        $periodoMeses = 6; 
 
-        // --- CONTAGEM DE PROFISSIONAIS ---
+
         $medicosCount = $unidade->medicos()->count();
         $nursesCount = $unidade->enfermeiros()->count();
-        $recepcionistasCount = $unidade->recepcionistas()->count(); // Adicionado
+        $recepcionistasCount = $unidade->recepcionistas()->count();
 
-        // --- MÉDICOS POR ESPECIALIDADE ---
+
         $medicosPorEspecialidade = DB::table('tbMedico')
             ->join('tbMedicoUnidade', 'tbMedico.idMedicoPK', '=', 'tbMedicoUnidade.idMedicoFK')
-            ->where('tbMedicoUnidade.idUnidadeFK', $unidade->idUnidadePK)
+            ->where('tbMedicoUnidade.idUnidadeFK', $unidadeId)
             ->select('tbMedico.especialidadeMedico', DB::raw('COUNT(*) as total'))
             ->groupBy('tbMedico.especialidadeMedico')
             ->orderBy('total', 'desc')
             ->get();
 
-        // --- DADOS PARA OS GRÁFICOS ---
-        $dadosLinha = [
-            'meses' => ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-            'pacientes' => [45, 52, 61, 58, 70, 78],
+        
+            $mesesData = collect();
+        for ($i = $periodoMeses - 1; $i >= 0; $i--) {
+            $mes = Carbon::now()->subMonths($i);
+
+            $mes->locale('pt_BR');
+            $mesesData->put($mes->format('Y-m'), $mes->shortMonthName);
+        }
+
+      
+        $consultasMensais = DB::table('tbConsulta') 
+            ->where('idUnidadeFK', $unidadeId)
+            ->where('status_atendimento', 'FINALIZADO')
+            ->where('dataConsulta', '>=', Carbon::now()->subMonths($periodoMeses)->startOfMonth()) 
+            ->select(
+                DB::raw("DATE_FORMAT(dataConsulta, '%Y-%m') as mes_ano"), 
+                DB::raw('COUNT(*) as total_consultas') 
+            )
+            ->groupBy('mes_ano')
+            ->get()
+            ->keyBy('mes_ano');
+
+
+            $consultasMensal = [ 
+            'meses' => $mesesData->values()->toArray(), 
+            'totais' => [], 
         ];
 
+        foreach ($mesesData->keys() as $chaveMes) {
+            $consultasMensal['totais'][] = $consultasMensais->get($chaveMes)->total_consultas ?? 0;
+        } 
+
+
+        
+        $generoMedicos = $unidade->medicos()
+            ->select('genero', DB::raw('COUNT(*) as total'))
+            ->groupBy('genero')
+            ->pluck('total', 'genero')
+            ->toArray();
+
+        $generoEnfermeiros = $unidade->enfermeiros()
+            ->select('genero', DB::raw('COUNT(*) as total'))
+            ->groupBy('genero')
+            ->pluck('total', 'genero')
+            ->toArray();
+
+
+            $generoRecepcionistas = $unidade->recepcionistas()
+            ->select('genero', DB::raw('COUNT(*) as total'))
+            ->groupBy('genero')
+            ->pluck('total', 'genero')
+            ->toArray();
+
+
+            $totalHomens = ($generoMedicos['Masculino'] ?? 0) + 
+                        ($generoEnfermeiros['Masculino'] ?? 0) + 
+                        ($generoRecepcionistas['Masculino'] ?? 0);
+
+        $totalMulheres = ($generoMedicos['Feminino'] ?? 0) + 
+                            ($generoEnfermeiros['Feminino'] ?? 0) + 
+                            ($generoRecepcionistas['Feminino'] ?? 0);
+               
+          $totaloutros = ($generoMedicos['Outro'] ?? 0) + 
+                            ($generoEnfermeiros['Outro'] ?? 0) + 
+                            ($generoRecepcionistas['Outro'] ?? 0);                  
+
         $dadosGenero = [
-            'Homens' => 45,
-            'Mulheres' => 55,
+            'Homens' => $totalHomens,
+            'Mulheres' => $totalMulheres,
+            'Outros' => $totaloutros
         ];
+
+        
+
+        $medicosDaUnidade = $unidade->medicos()->get(['idMedicoPK', 'nomeMedico']);
+
+        $medicosData = [];
+        if ($medicosDaUnidade->isNotEmpty()) {
+
+
+            $dataInicial = Carbon::now()->startOfMonth()->toDateString(); 
+            $dataFinal = Carbon::now()->endOfMonth()->toDateString();   
+
+
+            $consultasPorMedicoQuery = DB::table('tbConsulta')
+                ->where('idUnidadeFK', $unidadeId)
+                ->where('status_atendimento', 'FINALIZADO') 
+                ->whereBetween('dataConsulta', [$dataInicial, $dataFinal])
+                ->select('idMedicoFK', DB::raw('COUNT(*) as total_consultas'))
+                ->groupBy('idMedicoFK')
+                ->get()
+                ->keyBy('idMedicoFK');
+
+
+                foreach ($medicosDaUnidade as $medico) {
+                $consultas = $consultasPorMedicoQuery->get($medico->idMedicoPK)->total_consultas ?? 0;
+                
+                $diasUteisNoMes = 22; 
+
+                $media = $diasUteisNoMes > 0 ? round($consultas / $diasUteisNoMes, 1) : 0;
+                
+                $medicosData[] = [
+                    'nome' => $medico->nomeMedico,
+                    'media' => $media,
+                    'totalConsultas' => $consultas
+                ];
+            }
+        }
+        
+        $consultasPorMedico = collect($medicosData)->sortByDesc('media')->values()->toArray();
+
 
         return view('unidade.dashboardUnidade', compact(
             'nomeUnidade',
@@ -56,8 +158,9 @@ class DashboardController extends Controller
             'nursesCount',
             'recepcionistasCount', 
             'medicosPorEspecialidade',
-            'dadosLinha',
-            'dadosGenero'
+            'consultasMensal', 
+            'dadosGenero',
+            'consultasPorMedico'
         ));
     }
 }

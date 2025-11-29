@@ -21,6 +21,7 @@ class Recepcionista extends Authenticatable
         'foto',
         'nomeRecepcionista',
         'emailRecepcionista',
+        'genero',
         'senhaRecepcionista',
         'statusAtivoRecepcionista',
         'idUnidadeFK'

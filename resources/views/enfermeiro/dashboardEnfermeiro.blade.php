@@ -81,14 +81,7 @@
                         <canvas id="graficoPacientesMes"></canvas>
                     </div>
 
-                    {{-- GRÁFICO DE DONUT ENFERMEIRO --}}
-                    <div class="chart-container info-card slide-up" style="animation-delay: 1.8s;">
-                        <h3>Índice de Gênero</h3>
-                        <div class="donut-chart">
-                            <canvas id="graficoDonutEnfermeiro"></canvas>
-                        </div>
-                    </div>
-                    
+              
                     {{-- GRÁFICO DE BARRAS DE SERVIÇOS --}}
                     <div class="chart-container slide-up" style="animation-delay: 2.0s;">
                         <canvas id="graficoVazio"></canvas>
@@ -154,37 +147,7 @@
         }
     });
 
-    // Gráfico de Donut - Gênero dos Enfermeiros 
-    const ctxEnfermeiro = document.getElementById('graficoDonutEnfermeiro').getContext('2d');
-    new Chart(ctxEnfermeiro, {
-        type: 'doughnut',
-        data: {
-            labels: ['Homens', 'Mulheres'],
-            datasets: [{
-                data: [
-                    {{ $dadosGeneroEnfermeiro['Homens'] ?? 40 }},
-                    {{ $dadosGeneroEnfermeiro['Mulheres'] ?? 60 }}
-                ],
-                // Cores de gênero ajustadas: um verde (homens) e um rosa/magenta (mulheres) para contraste
-                backgroundColor: [greenPrimary, '#ff0066'], 
-                borderColor: '#fff',
-                borderWidth: 3,
-                hoverOffset: 10
-            }]
-        },
-        options: {
-            responsive: true,
-            cutout: '70%',
-            plugins: { 
-                legend: { 
-                    position: 'top', 
-                    align: 'center',
-                    labels: { usePointStyle: true }
-                }
-            }
-        }
-    });
-
+   
     // Gráfico Vazio (Exemplo de Gráfico de Barras)
     const ctxVazio = document.getElementById('graficoVazio').getContext('2d');
     new Chart(ctxVazio, {
