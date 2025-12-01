@@ -92,15 +92,12 @@
                         <canvas id="graficoPacientesMes"></canvas>
                     </div>
 
-                    {{-- GRÁFICO DE DONUT ENFERMEIRO --}}
+                   {{-- GRÁFICO DE CLASSIFICAÇÕES DE RISCO --}}
                     <div class="chart-container info-card slide-up" style="animation-delay: 1.8s;">
-                        <h3>Índice de Gênero</h3>
-                        <div class="donut-chart">
-                            <canvas id="graficoDonutEnfermeiro"></canvas>
-                        </div>
+                        <canvas id="graficoClassificacoesRisco"></canvas>
                     </div>
                     
-                    {{-- GRÁFICO DE BARRAS DE SERVIÇOS --}}
+                    {{-- GRÁFICO DE TIPOS DE ALERGIA (BARRAS) --}}
                     <div class="chart-container slide-up" style="animation-delay: 2.4s;">
                         <canvas id="graficoVazio"></canvas>
                     </div>
@@ -158,67 +155,148 @@
         }
     });
 
-    // Gráfico de Donut - Gênero dos Enfermeiros 
-    const ctxEnfermeiro = document.getElementById('graficoDonutEnfermeiro').getContext('2d');
-    new Chart(ctxEnfermeiro, {
-        type: 'doughnut',
-        data: {
-            labels: ['Homens', 'Mulheres'],
-            datasets: [{
-                data: [
-                    {{ $dadosGeneroEnfermeiro['Homens'] ?? 40 }},
-                    {{ $dadosGeneroEnfermeiro['Mulheres'] ?? 60 }}
-                ],
-                // Cores de gênero ajustadas: um verde (homens) e um rosa/magenta (mulheres) para contraste
-                backgroundColor: [greenPrimary, '#ff0066'], 
-                borderColor: '#fff',
-                borderWidth: 3,
-                hoverOffset: 10
-            }]
-        },
-        options: {
-            responsive: true,
-            cutout: '70%',
-            plugins: { 
-                legend: { 
-                    position: 'top', 
-                    align: 'center',
-                    labels: { usePointStyle: true }
-                }
-            }
-        }
-    });
+   // Gráfico de Classificações de Risco (Linhas)
+const ctxClassificacoes = document.getElementById('graficoClassificacoesRisco').getContext('2d');
+const dadosClassificacoes = @json($dadosClassificacoesRisco);
 
-    // Gráfico Vazio (Exemplo de Gráfico de Barras)
-    const ctxVazio = document.getElementById('graficoVazio').getContext('2d');
-    new Chart(ctxVazio, {
-        type: 'bar',
-        data: {
-            labels: ['Maniçoba', 'Vacinação', 'Curativos', 'Triagem'],
-            datasets: [{
-                label: 'Frequência de Serviços',
-                data: [10, 25, 15, 30],
-                backgroundColor: greenPrimary, 
-                borderRadius: 5,
-            }]
+new Chart(ctxClassificacoes, {
+    type: 'line',
+    data: {
+        labels: dadosClassificacoes.labels,
+        datasets: dadosClassificacoes.datasets
+    },
+    options: {
+        responsive: true,
+        interaction: {
+            mode: 'index',
+            intersect: false,
         },
-        options: {
-            responsive: true,
-            scales: {
-                y: { beginAtZero: true, max: 40, ticks: { stepSize: 5 } },
-                x: { grid: { display: false } }
+        scales: {
+            y: { 
+                beginAtZero: true,
+                ticks: { 
+                    stepSize: 1,
+                    font: { size: 11 }
+                },
+                grid: { color: 'rgba(0,0,0,0.05)' }
             },
-            plugins: {
-                legend: { display: false },
-                title: {
-                    display: true,
-                    text: 'Serviços Mais Realizados (Exemplo)',
-                    color: greenPrimary,
-                    font: { size: 16, weight: 'bold' }
+            x: { 
+                grid: { display: false },
+                ticks: { font: { size: 11 } }
+            }
+        },
+        plugins: {
+            legend: { 
+                display: true,
+                position: 'top',
+                labels: { 
+                    usePointStyle: true,
+                    padding: 12,
+                    font: { size: 11, weight: '500' },
+                    boxWidth: 8,
+                    boxHeight: 8
+                }
+            },
+            title: {
+                display: true,
+                text: 'Classificações de Risco (Últimos 6 Meses)',
+                color: greenPrimary,
+                font: { size: 16, weight: 'bold' },
+                padding: { bottom: 20 }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                padding: 12,
+                titleFont: { size: 13, weight: 'bold' },
+                bodyFont: { size: 12 },
+                callbacks: {
+                    label: function(context) {
+                        return context.dataset.label + ': ' + context.parsed.y + ' registro(s)';
+                    }
                 }
             }
         }
-    });
+    }
+});
+
+    // Gráfico de Tipos de Alergia (Barras Simples)
+const ctxTiposAlergia = document.getElementById('graficoVazio').getContext('2d');
+const dadosTiposAlergia = @json($dadosTiposAlergia);
+
+new Chart(ctxTiposAlergia, {
+    type: 'bar',
+    data: {
+        labels: dadosTiposAlergia.labels,
+        datasets: [{
+            label: 'Quantidade de Registros',
+            data: dadosTiposAlergia.data,
+            borderColor: greenPrimary, 
+            backgroundColor: 'rgba(46, 125, 50, 0.1)',
+            borderWidth: 2,
+            borderRadius: 8,
+            barThickness: 40,
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        indexAxis: 'x', // Barras verticais
+        scales: {
+            y: { 
+                beginAtZero: true,
+                ticks: { 
+                    stepSize: 1,
+                    font: { size: 11 }
+                },
+                grid: { 
+                    color: 'rgba(0,0,0,0.05)',
+                    drawBorder: false
+                },
+                border: {
+                    display: false
+                }
+            },
+            x: { 
+                grid: { 
+                    display: false,
+                    drawBorder: false
+                },
+                ticks: { 
+                    font: { size: 11 },
+                    autoSkip: false,
+                    maxRotation: 45,
+                    minRotation: 0
+                },
+                border: {
+                    display: false
+                }
+            }
+        },
+        plugins: {
+            legend: { 
+                display: false // Não precisa de legenda para barras simples
+            },
+            title: {
+                display: true,
+                text: 'Tipos de Alergia Mais Registrados',
+                color: greenPrimary,
+                font: { size: 16, weight: 'bold' },
+                padding: { bottom: 15, top: 10 }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                padding: 12,
+                titleFont: { size: 13, weight: 'bold' },
+                bodyFont: { size: 12 },
+                callbacks: {
+                    label: function(context) {
+                        return ' Total: ' + context.parsed.y + ' registro(s)';
+                    }
+                }
+            }
+        }
+    }
+});
 </script>
 
 @endsection
