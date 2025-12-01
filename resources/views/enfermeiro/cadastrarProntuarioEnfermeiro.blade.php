@@ -183,25 +183,31 @@
                 <input type="text" id="filtroAlergias" class="input-filtro" placeholder="Pesquisar alergia...">
 
                 <div id="listaAlergias" class="checkbox-list">
-                    @php
-                        $alergias = [
-                            'Dipirona', 'Penicilina', 'Amoxicilina', 'Iodo', 'Látex', 'Glúten', 'Lactose', 
-                            'Mariscos', 'Amendoim', 'Ovos', 'Soja', 'Frutos do mar', 'Frutas cítricas',
-                            'Corantes', 'Conservantes', 'Inseticidas', 'Perfumes', 'Anestésicos', 
-                            'Ibuprofeno', 'Aspirina', 'Cloro', 'Frio intenso', 'Poeira', 'Ácaros', 
-                            'Pólen', 'Pelagem animal', 'Fungos', 'Produtos de limpeza', 'Antibióticos diversos',
-                            'Outros'
-                        ];
-                        
-                        $tiposAlergia = [
-                            'Alimentar', 'Medicamentosa', 'Ambiental', 'Contato', 'Outra'
-                        ];
-                        
-                        $severidadesAlergia = [
-                            'Baixa', 'Média', 'Alta'
-                        ];
-                    @endphp
-
+                @php
+                    $alergias = [
+                        'Dipirona', 'Penicilina', 'Amoxicilina', 'Iodo', 'Látex', 'Glúten', 'Lactose', 
+                        'Mariscos', 'Amendoim', 'Ovos', 'Soja', 'Frutos do mar', 'Frutas cítricas',
+                        'Corantes', 'Conservantes', 'Inseticidas', 'Perfumes', 'Anestésicos', 
+                        'Ibuprofeno', 'Aspirina', 'Cloro', 'Frio intenso', 'Poeira', 'Ácaros', 
+                        'Pólen', 'Pelagem animal', 'Fungos', 'Produtos de limpeza', 'Antibióticos diversos',
+                        'Outros'
+                    ];
+                    
+                    $tiposAlergia = [
+                        'Alimentar', 
+                        'Medicamentosa', 
+                        'Ambiental', 
+                        'Contato', 
+                        'Respiratória', // Novo tipo
+                        'Cutânea',      // Novo tipo
+                        'Ocular',       // Novo tipo
+                        'Outra'
+                    ];
+                    
+                    $severidadesAlergia = [
+                        'Baixa', 'Média', 'Alta'
+                    ];
+                @endphp
                     @foreach($alergias as $alergia)
                         <div class="alergia-item" data-alergia="{{ $alergia }}">
                             <label class="checkbox-item">
