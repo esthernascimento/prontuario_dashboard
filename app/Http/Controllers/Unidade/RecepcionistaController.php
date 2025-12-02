@@ -124,9 +124,6 @@ class RecepcionistaController extends Controller
             'genero' => $recepcionista->genero,
             'status' => $recepcionista->statusAtivoRecepcionista,
             'created_at' => $recepcionista->created_at->format('d/m/Y'),
-            'atendimentos' => $recepcionista->atendimentos ?? 0,
-            'horas_trabalhadas' => $recepcionista->horas_trabalhadas ?? 0,
-            'avaliacao' => $recepcionista->avaliacao ?? 'N/A'
         ]);
     }
 

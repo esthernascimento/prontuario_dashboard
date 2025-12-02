@@ -342,7 +342,6 @@
                             <h3>${data.nome}</h3>
                             <p><i class="bi bi-envelope"></i> <strong>Email:</strong> ${data.email}</p>
                             <p><i class="bi bi-circle-fill ${data.status == 1 ? 'text-success' : 'text-danger'}"></i> <strong>Status:</strong> ${data.status == 1 ? 'Ativo' : 'Inativo'}</p>
-                            <p><i class="bi bi-calendar-plus"></i> <strong>Cadastrado em:</strong> ${data.created_at}</p>
                         </div>
                     </div>
                     <div class="quick-view-actions">
