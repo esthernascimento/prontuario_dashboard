@@ -9,15 +9,15 @@
 
 <main class="main-dashboard">
     <div class="medico-container">
-        <!-- DASHBOARD DE MÉTRICAS -->
+
         <div class="metrics-dashboard">
             <div class="metric-card total">
                 <div class="metric-icon">
                     <i class="bi bi-people-fill"></i>
                 </div>
                 <div class="metric-info">
-                    <span class="metric-label">Total de Médicos</span>
-                    <span class="metric-value" id="metric-total">{{ $totalMedicos ?? 0 }}</span>
+                    <span class="metric-label">TOTAL DE MÉDICOS</span>
+                    <span class="metric-value">{{ $totalMedicos ?? 0 }}</span>
                 </div>
             </div>
 
@@ -26,7 +26,7 @@
                     <i class="bi bi-check-circle-fill"></i>
                 </div>
                 <div class="metric-info">
-                    <span class="metric-label">Ativos</span>
+                    <span class="metric-label">ATIVOS</span>
                     <span class="metric-value">{{ $medicos->where('usuario.statusAtivoUsuario', 1)->count() }}</span>
                 </div>
             </div>
@@ -36,7 +36,7 @@
                     <i class="bi bi-x-circle-fill"></i>
                 </div>
                 <div class="metric-info">
-                    <span class="metric-label">Inativos</span>
+                    <span class="metric-label">INATIVOS</span>
                     <span class="metric-value">{{ $medicos->where('usuario.statusAtivoUsuario', 0)->count() }}</span>
                 </div>
             </div>
@@ -46,12 +46,12 @@
                     <i class="bi bi-star-fill"></i>
                 </div>
                 <div class="metric-info">
-                    <span class="metric-label">Novos este Mês</span>
-                    <span class="metric-value" id="metric-novos">{{ $medicos->where('created_at', '>=', now()->subMonth())->count() }}</span>
-                    
+                    <span class="metric-label">NOVOS ESTE MÊS</span>
+                    <span class="metric-value">{{ $medicos->where('created_at', '>=', now()->subMonth())->count() }}</span>
                 </div>
             </div>
         </div>
+
 
         <div class="medico-header">
             <div class="header-title">
@@ -68,6 +68,7 @@
                 </a>
             </div>
         </div>
+
 
         <div class="search-filters">
             <div class="search-box">
@@ -101,16 +102,15 @@
             </button>
         </div>
 
+
         <div class="box-table" id="listView">
             <table>
                 <thead>
                     <tr>
                         <th onclick="sortTable('nome')" style="cursor: pointer;">
-                            Nome Médico <i class="bi bi-arrow-down-up sort-icon"></i>
+                            NOME MÉDICO <i class="bi bi-arrow-down-up sort-icon"></i>
                         </th>
-                        <th onclick="sortTable('crm')" style="cursor: pointer;">
-                            CRM <i class="bi bi-arrow-down-up sort-icon"></i>
-                        </th>
+                        <th>CRM</th>
                         <th>Email</th>
                         <th>Status</th>
                         <th style="text-align: center;">Ações</th>
@@ -174,7 +174,7 @@
                     
                     @if($medicos->isEmpty())
                         <tr data-status="empty-list">
-                            <td colspan="5" class="no-doctors">
+                            <td colspan="5" class="no-medicos">
                                 <i class="bi bi-inbox"></i>
                                 <p>Nenhum médico cadastrado.</p>
                             </td>
@@ -183,6 +183,7 @@
                 </tbody>
             </table>
         </div>
+
 
         <div class="grid-view" id="gridView" style="display: none;">
             @foreach ($medicos as $medico)
@@ -242,6 +243,7 @@
     </div>
 </main>
 
+{{-- MODAL DE VISUALIZAÇÃO RÁPIDA --}}
 <div id="quickViewModal" class="modal-overlay">
     <div class="modal-content modal-large">
         <button class="modal-close" onclick="closeQuickView()">
@@ -261,6 +263,7 @@
     </div>
 </div>
 
+{{-- MODAL DE ALTERAÇÃO DE STATUS --}}
 <div id="statusMedicoModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -280,6 +283,7 @@
     </div>
 </div>
 
+{{-- MODAL DE SUCESSO --}}
 <div id="statusSuccessModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -297,7 +301,6 @@
 
 @push('scripts')
 <script>
-
     let currentView = 'list';
 
     function changeView(view) {
@@ -334,7 +337,6 @@
         fetch(`/unidade/medicos/${medicoId}/quick-view`)
         .then(response => response.json())
         .then(data => {
-
             content.innerHTML = `
                 <div class="quick-view-grid">
                     <div class="quick-view-header">
@@ -345,11 +347,10 @@
                             <p><i class="bi bi-card-text"></i> <strong>CRM:</strong> ${data.crm}</p>
                             <p><i class="bi bi-envelope"></i> <strong>Email:</strong> ${data.email}</p>
                             <p><i class="bi bi-circle-fill ${data.status == 1 ? 'text-success' : 'text-danger'}"></i> <strong>Status:</strong> ${data.status == 1 ? 'Ativo' : 'Inativo'}</p>
-                            <p><i class="bi bi-calendar-plus"></i> <strong>Cadastrado em:</strong> ${data.created_at}</p>
                         </div>
                     </div>
                     <div class="quick-view-actions">
-                        <a href="/unidade/medicos/${medicoId}/edit" class="btn-quick-edit">
+                        <a href="/unidade/medicos/${medicoId}/editar" class="btn-quick-edit">
                             <i class="bi bi-pencil"></i> Editar Perfil Completo
                         </a>
                     </div>
@@ -366,13 +367,58 @@
         document.getElementById('quickViewModal').style.display = 'none';
     }
 
-    function exportToExcel() {
-        alert('Exportando para Excel...\n\nImplementar no backend:\n- Rota GET /unidade/medicos/export\n- Usar Laravel Excel (maatwebsite/excel)\n- Retornar arquivo .xlsx com filtros aplicados');
+    function openStatusModal(medicoId, medicoNome, currentStatus, event) {
+        if (event) event.stopPropagation();
+        
+        const modal = document.getElementById('statusMedicoModal');
+        const form = document.getElementById('statusMedicoForm');
+        const action = currentStatus == 1 ? 'desativar' : 'ativar';
+        
+        document.getElementById('statusMedicoNome').textContent = medicoNome;
+        document.getElementById('statusAction').textContent = action;
+        document.getElementById('confirmStatusText').textContent = action;
+        
+        form.action = form.action.replace(':id:', medicoId);
+        modal.style.display = 'flex';
+    }
+
+    function closeStatusModal() {
+        document.getElementById('statusMedicoModal').style.display = 'none';
     }
 
     let sortDirection = {};
     function sortTable(column) {
-        alert(`Ordenando por ${column}...\n\nImplementar ordenação via JavaScript ou AJAX com backend.`);
+        const table = document.querySelector('#listView table');
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr:not([data-status="empty-list"])'));
+        
+        sortDirection[column] = sortDirection[column] === 'asc' ? 'desc' : 'asc';
+        
+        rows.sort((a, b) => {
+            let aValue, bValue;
+            
+            if (column === 'nome') {
+                aValue = a.querySelector('.medico-name-cell .name').textContent.trim();
+                bValue = b.querySelector('.medico-name-cell .name').textContent.trim();
+            } else if (column === 'crm') {
+                aValue = a.children[1].textContent.trim();
+                bValue = b.children[1].textContent.trim();
+            } else if (column === 'email') {
+                aValue = a.children[2].textContent.trim();
+                bValue = b.children[2].textContent.trim();
+            } else if (column === 'status') {
+                aValue = a.dataset.status;
+                bValue = b.dataset.status;
+            }
+            
+            if (sortDirection[column] === 'asc') {
+                return aValue.localeCompare(bValue);
+            } else {
+                return bValue.localeCompare(aValue);
+            }
+        });
+        
+        rows.forEach(row => tbody.appendChild(row));
     }
 
     function filterMedicos() {
@@ -404,25 +450,6 @@
             
             card.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
         });
-    }
-
-    function openStatusModal(medicoId, medicoNome, currentStatus, event) {
-        if (event) event.stopPropagation();
-        
-        const modal = document.getElementById('statusMedicoModal');
-        const form = document.getElementById('statusMedicoForm');
-        const action = currentStatus == 1 ? 'desativar' : 'ativar';
-        
-        document.getElementById('statusMedicoNome').textContent = medicoNome;
-        document.getElementById('statusAction').textContent = action;
-        document.getElementById('confirmStatusText').textContent = action;
-        
-        form.action = form.action.replace(':id:', medicoId);
-        modal.style.display = 'flex';
-    }
-
-    function closeStatusModal() {
-        document.getElementById('statusMedicoModal').style.display = 'none';
     }
 
     function openSuccessModal(message) {
@@ -472,17 +499,21 @@
         @endif
     });
 
-    document.getElementById('statusMedicoModal').addEventListener('click', (e) => {
-        if (e.target.id === 'statusMedicoModal') closeStatusModal();
-    });
-
     document.getElementById('quickViewModal').addEventListener('click', (e) => {
         if (e.target.id === 'quickViewModal') closeQuickView();
+    });
+
+    document.getElementById('statusMedicoModal').addEventListener('click', (e) => {
+        if (e.target.id === 'statusMedicoModal') closeStatusModal();
     });
 
     document.getElementById('statusSuccessModal').addEventListener('click', (e) => {
         if (e.target.id === 'statusSuccessModal') closeSuccessModal();
     });
+
+    function exportToExcel() {
+        alert('Exportando para Excel...\n\nImplementar no backend:\n- Rota GET /unidade/medicos/export\n- Usar Laravel Excel (maatwebsite/excel)\n- Retornar arquivo .xlsx com filtros aplicados');
+    }
 </script>
 @endpush
 @endsection

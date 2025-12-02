@@ -26,10 +26,10 @@ class MedicoController extends Controller
         if ($request->filled('search')) {
             $searchTerm = $request->get('search');
             $query->where('nomeMedico', 'LIKE', "%{$searchTerm}%")
-                  ->orWhere('crmMedico', 'LIKE', "%{$searchTerm}%")
-                  ->orWhereHas('usuario', function ($q) use ($searchTerm) {
-                      $q->where('emailUsuario', 'LIKE', "%{$searchTerm}%");
-                  });
+                ->orWhere('crmMedico', 'LIKE', "%{$searchTerm}%")
+                ->orWhereHas('usuario', function ($q) use ($searchTerm) {
+                    $q->where('emailUsuario', 'LIKE', "%{$searchTerm}%");
+                });
         }
 
 
@@ -86,7 +86,7 @@ class MedicoController extends Controller
             ], [
                 'nomeMedico.required'  => 'O nome do médico é obrigatório.',
                 'crmMedico.required'   => 'O CRM é obrigatório.',
-                'emailUsuario.required'=> 'O e-mail é obrigatório.',
+                'emailUsuario.required' => 'O e-mail é obrigatório.',
                 'emailUsuario.unique'  => 'Este e-mail já está cadastrado.',
                 'genero.required'      => 'O gênero é obrigatório.',
                 'unidade_id.required'  => 'Unidade é obrigatória.',
@@ -106,7 +106,7 @@ class MedicoController extends Controller
             $medico->id_usuarioFK       = $usuario->idUsuarioPK;
             $medico->nomeMedico         = $request->nomeMedico;
             $medico->crmMedico          = $request->crmMedico;
-            $medico->especialidadeMedico= $request->input('especialidadeMedico', '');
+            $medico->especialidadeMedico = $request->input('especialidadeMedico', '');
             $medico->genero             = $request->genero;
             $medico->save();
 
@@ -118,13 +118,11 @@ class MedicoController extends Controller
                 'success' => true,
                 'message' => 'Médico cadastrado com sucesso!'
             ]);
-
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
                 'errors' => $e->errors()
             ], 422);
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -198,5 +196,37 @@ class MedicoController extends Controller
             ->with('success', "O médico foi {$acao} com sucesso!");
     }
 
-    
+    public function quickView(Medico $medico)
+    {
+        try {
+            $unidade = auth()->guard('unidade')->user();
+
+            if (!$medico->unidades->contains($unidade->idUnidadePK)) {
+                return response()->json([
+                    'error' => 'Acesso não autorizado',
+                    'message' => 'Este médico não está associado à sua unidade'
+                ], 403);
+            }
+
+            $data = [
+                'id' => $medico->idMedicoPK,
+                'nome' => $medico->nomeMedico ?? 'Não informado',
+                'crm' => $medico->crmMedico ?? 'Não informado',
+                'especialidade' => $medico->especialidadeMedico ?? 'Não informado',
+                'genero' => $medico->genero ?? 'Não informado',
+                'email' => $medico->usuario->emailUsuario ?? 'Não informado',
+                'status' => $medico->usuario->statusAtivoUsuario ?? 0,
+                'created_at' => $medico->created_at ? $medico->created_at->format('d/m/Y H:i') : 'Não informado',
+                'updated_at' => $medico->updated_at ? $medico->updated_at->format('d/m/Y H:i') : 'Não informado',
+                'foto' => $medico->usuario->foto ?? null,
+            ];
+
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Erro ao carregar informações do médico',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

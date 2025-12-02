@@ -41,72 +41,71 @@ class EnfermeiroController extends Controller
     {
         $enfermeiro = Enfermeiro::with(['usuario', 'unidades'])->findOrFail($id);
         $unidades = Unidade::orderBy('nomeUnidade')->get();
-        
+
         return view('unidade.editarEnfermeiro', compact('enfermeiro', 'unidades'));
     }
 
-   public function store(Request $request)
-{
-    try {
+    public function store(Request $request)
+    {
+        try {
 
-        $unidadeLogada = auth()->guard('unidade')->user();
-        
-        $validated = $request->validate([
-            'nomeEnfermeiro' => 'required|string|max:255',
-            'corenEnfermeiro' => 'required|string|max:20|unique:tbEnfermeiro,corenEnfermeiro',
-            'emailEnfermeiro' => 'required|email|max:255|unique:tbUsuario,emailUsuario',
-            'especialidadeEnfermeiro' => 'nullable|string|max:100',
-            'genero' => 'required|string|in:Masculino,Feminino,Outro',
-            'unidade_id' => 'required|exists:tbUnidade,idUnidadePK', 
-        ], [
-            'nomeEnfermeiro.required' => 'O nome do enfermeiro é obrigatório.',
-            'corenEnfermeiro.required' => 'O COREN é obrigatório.',
-            'emailEnfermeiro.required' => 'O e-mail é obrigatório.',
-            'emailEnfermeiro.unique' => 'Este e-mail já está cadastrado.',
-            'genero.required' => 'O gênero é obrigatório.',
-            'unidade_id.required' => 'Unidade é obrigatória.',
-        ]);
+            $unidadeLogada = auth()->guard('unidade')->user();
 
-        $senhaTemporaria = Str::random(10);
+            $validated = $request->validate([
+                'nomeEnfermeiro' => 'required|string|max:255',
+                'corenEnfermeiro' => 'required|string|max:20|unique:tbEnfermeiro,corenEnfermeiro',
+                'emailEnfermeiro' => 'required|email|max:255|unique:tbUsuario,emailUsuario',
+                'especialidadeEnfermeiro' => 'nullable|string|max:100',
+                'genero' => 'required|string|in:Masculino,Feminino,Outro',
+                'unidade_id' => 'required|exists:tbUnidade,idUnidadePK',
+            ], [
+                'nomeEnfermeiro.required' => 'O nome do enfermeiro é obrigatório.',
+                'corenEnfermeiro.required' => 'O COREN é obrigatório.',
+                'emailEnfermeiro.required' => 'O e-mail é obrigatório.',
+                'emailEnfermeiro.unique' => 'Este e-mail já está cadastrado.',
+                'genero.required' => 'O gênero é obrigatório.',
+                'unidade_id.required' => 'Unidade é obrigatória.',
+            ]);
 
-        $usuario = new Usuario();
-        $usuario->nomeUsuario = $request->nomeEnfermeiro;
-        $usuario->emailUsuario = $request->emailEnfermeiro;
-        $usuario->senhaUsuario = Hash::make($senhaTemporaria);
-        $usuario->statusAtivoUsuario = 1;
-        $usuario->statusSenhaUsuario = true;
-        $usuario->save();
+            $senhaTemporaria = Str::random(10);
 
-        $enfermeiro = new Enfermeiro();
-        $enfermeiro->id_usuario = $usuario->idUsuarioPK; 
-        $enfermeiro->nomeEnfermeiro = $request->nomeEnfermeiro;
-        $enfermeiro->corenEnfermeiro = $request->corenEnfermeiro;
-        $enfermeiro->emailEnfermeiro = $request->emailEnfermeiro;
-        $enfermeiro->especialidadeEnfermeiro = $request->input('especialidadeEnfermeiro', '');
-        $enfermeiro->genero = $request->genero;
-        $enfermeiro->save();
+            $usuario = new Usuario();
+            $usuario->nomeUsuario = $request->nomeEnfermeiro;
+            $usuario->emailUsuario = $request->emailEnfermeiro;
+            $usuario->senhaUsuario = Hash::make($senhaTemporaria);
+            $usuario->statusAtivoUsuario = 1;
+            $usuario->statusSenhaUsuario = true;
+            $usuario->save();
 
-        $enfermeiro->unidades()->attach($request->unidade_id);
+            $enfermeiro = new Enfermeiro();
+            $enfermeiro->id_usuario = $usuario->idUsuarioPK;
+            $enfermeiro->nomeEnfermeiro = $request->nomeEnfermeiro;
+            $enfermeiro->corenEnfermeiro = $request->corenEnfermeiro;
+            $enfermeiro->emailEnfermeiro = $request->emailEnfermeiro;
+            $enfermeiro->especialidadeEnfermeiro = $request->input('especialidadeEnfermeiro', '');
+            $enfermeiro->genero = $request->genero;
+            $enfermeiro->save();
 
-        Mail::to($usuario->emailUsuario)->send(new EmailEnfermeiro($usuario, $senhaTemporaria));
+            $enfermeiro->unidades()->attach($request->unidade_id);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Enfermeiro cadastrado com sucesso!'
-        ]);
+            Mail::to($usuario->emailUsuario)->send(new EmailEnfermeiro($usuario, $senhaTemporaria));
 
-    } catch (ValidationException $e) {
-        return response()->json([
-            'success' => false,
-            'errors' => $e->errors()
-        ], 422);
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Erro interno ao cadastrar enfermeiro: ' . $e->getMessage()
-        ], 500);
+            return response()->json([
+                'success' => true,
+                'message' => 'Enfermeiro cadastrado com sucesso!'
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro interno ao cadastrar enfermeiro: ' . $e->getMessage()
+            ], 500);
+        }
     }
-}
     public function update(Request $request, $id)
     {
         $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
@@ -196,5 +195,36 @@ class EnfermeiroController extends Controller
             'message' => 'Unidades do enfermeiro atualizadas com sucesso!',
             'enfermeiro' => $enfermeiro->load('unidades')
         ]);
+    }
+
+    public function quickView($id)
+    {
+        try {
+            $enfermeiro = Enfermeiro::with('usuario')->findOrFail($id);
+
+            // Verificar se o enfermeiro pertence à unidade logada
+            $unidadeLogada = auth()->guard('unidade')->user();
+            if (!$enfermeiro->unidades->contains($unidadeLogada->idUnidadePK)) {
+                return response()->json([
+                    'error' => 'Acesso não autorizado',
+                    'message' => 'Este enfermeiro não está associado à sua unidade'
+                ], 403);
+            }
+
+            $data = [
+                'id' => $enfermeiro->idEnfermeiroPK,
+                'nome' => $enfermeiro->nomeEnfermeiro ?? 'Não informado',
+                'coren' => $enfermeiro->corenEnfermeiro ?? 'Não informado',
+                'email' => $enfermeiro->usuario->emailUsuario ?? 'Não informado',
+                'status' => $enfermeiro->usuario->statusAtivoUsuario ?? 0,
+            ];
+
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Erro ao carregar informações do enfermeiro',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }

@@ -127,6 +127,7 @@ Route::middleware('auth:unidade')->prefix('unidade')->name('unidade.')->group(fu
     Route::delete('/medicos/{id}', [MedicoController::class, 'excluir'])->name('medicos.excluir');
     Route::post('/medicos/{id}/toggle-status', [MedicoController::class, 'toggleStatus'])->name('medicos.toggleStatus');
     Route::post('/medicos/{medico}/unidades', [MedicoController::class, 'syncUnidades'])->name('medicos.syncUnidades');
+    Route::get('/medicos/{medico}/quick-view', [MedicoController::class, 'quickView'])->name('medicos.quick-view');
     
     // ----------------- ENFERMEIROS -----------------
     Route::get('/manutencaoEnfermeiro', [EnfermeiroController::class, 'index'])->name('manutencaoEnfermeiro');
@@ -138,6 +139,8 @@ Route::middleware('auth:unidade')->prefix('unidade')->name('unidade.')->group(fu
     Route::delete('/enfermeiro/{id}', [EnfermeiroController::class, 'excluir'])->name('enfermeiro.excluir');
     Route::post('/enfermeiro/{id}/toggle-status', [EnfermeiroController::class, 'toggleStatus'])->name('enfermeiro.toggleStatus');
     Route::post('/enfermeiro/{enfermeiro}/unidades', [EnfermeiroController::class, 'syncUnidades'])->name('enfermeiro.syncUnidades');
+    Route::get('/enfermeiros/{id}/quick-view', [EnfermeiroController::class, 'quickView'])->name('unidade.enfermeiro.quickView');
+
     
     // ----------------- RECEPCIONISTAS -----------------
     Route::get('/manutencaoRecepcionista', [RecepcionistaController::class, 'index'])->name('manutencaoRecepcionista');
