@@ -384,38 +384,56 @@
                             Pesquisar Exames
                         </label>
                         <input type="text" id="filtroExames" class="input-filtro" placeholder="Pesquisar exame...">
-                        
+
                         <div id="listaExames" class="checkbox-list">
                             @php
                             $tiposExame = [
-                                'Análises Clínicas', 'Imagem', 'Endoscopia', 'Biopsia', 'Testes Funcionais', 'Outros'
+                            'Análises Clínicas',
+                            'Anatomia Patológica',
+                            'Biologia Molecular',
+                            'Endoscopia',
+                            'Eletrofisiologia',
+                            'Imagem',
+                            'Medicina Nuclear',
+                            'Procedimentos Invasivos',
+                            'Testes Alérgicos',
+                            'Testes Funcionais',
+                            'Outros'
                             ];
 
                             $exames = [
-                                'Hemograma Completo', 'Glicemia de Jejum', 'Colesterol Total e Frações', 'Triglicerídeos',
-                                'Creatinina', 'Ureia', 'Ácido Úrico', 'TGO (AST)', 'TGP (ALT)', 'Bilirrubinas',
-                                'Electroforese de Proteínas', 'Proteína C-Reativa (PCR)', 'VHS', 'Urinalise',
-                                'Eletrocardiograma (ECG)', 'Radiografia de Tórax', 'Ultrassom Abdominal',
-                                'Ultrassom Ginecológico', 'Ultrassom Obstétrico', 'Mamografia',
-                                'Citologia Oncótica (Papanicolau)', 'Teste Rápido HIV', 'Teste Rápido Sífilis',
-                                'Teste Rápido Hepatite B e C', 'Teste de Gravidez', 'Coagulograma', 'TP/INR',
-                                'TSH', 'T4 Livre', 'FT3', 'Anticorpos Anti-TPO', 'HbA1c', 'Microalbuminúria',
-                                'Cultura de Urina', 'Cultura de Fezes', 'Parasitológico de Fezes', 'Exame de Fezes',
-                                'Exame de Sangue Oculto nas Fezes', 'Beta-HCG', 'FSH', 'LH', 'Prolactina',
-                                'Testosterona', 'Estradiol', 'Progesterona', 'PSA Total', 'Vitaminas (B12, D)',
-                                'Ferro Sérico', 'Ferritina', 'Transferrina', 'Ácido Fólico', 'Calcium Iônico',
-                                'Magnésio', 'Fósforo', 'Sódio', 'Potássio', 'Cloro', 'Bicarbonato',
-                                'Gasometria Arterial', 'Gasometria Venosa', 'Ecocardiograma', 'Doppler Venoso',
-                                'Doppler Arterial', 'Endoscopia Digestiva Alta', 'Colonoscopia', 'Colposcopia',
-                                'Biopsia de Pele', 'Biopsia de Mama', 'Biopsia de Colo Uterino', 'Teste de Esforço',
-                                'Holter 24h', 'Mapa 24h', 'Polissonografia', 'Teste de Função Pulmonar',
-                                'Teste de Audição', 'Teste de Visão', 'Teste de Glicose Tolerância Oral (OGTT)',
-                                'Teste de Estresse', 'Teste de Esforço Cardíaco', 'Teste de Função Hepática',
-                                'Teste de Função Renal', 'Teste de Função Tireoidiana', 'Teste de Função Adrenal',
-                                'Teste de Função Gonadal', 'Teste de Função Pancreática', 'Outros'
+                            'Hemograma Completo','Raio X', 'Glicemia de Jejum', 'Colesterol Total e Frações', 'Triglicerídeos',
+                            'Creatinina', 'Ureia', 'Ácido Úrico', 'TGO (AST)', 'TGP (ALT)', 'Bilirrubinas',
+                            'Electroforese de Proteínas', 'Proteína C-Reativa (PCR)', 'VHS', 'Urinalise',
+                            'Eletrocardiograma (ECG)', 'Radiografia de Tórax', 'Ultrassom Abdominal',
+                            'Ultrassom Ginecológico', 'Ultrassom Obstétrico', 'Mamografia',
+                            'Citologia Oncótica (Papanicolau)', 'Teste Rápido HIV', 'Teste Rápido Sífilis',
+                            'Teste Rápido Hepatite B e C', 'Teste de Gravidez', 'Coagulograma', 'TP/INR',
+                            'TSH', 'T4 Livre', 'FT3', 'Anticorpos Anti-TPO', 'HbA1c', 'Microalbuminúria',
+                            'Cultura de Urina', 'Cultura de Fezes', 'Parasitológico de Fezes', 'Exame de Fezes',
+                            'Exame de Sangue Oculto nas Fezes', 'Beta-HCG', 'FSH', 'LH', 'Prolactina',
+                            'Testosterona', 'Estradiol', 'Progesterona', 'PSA Total', 'Vitaminas (B12, D)',
+                            'Ferro Sérico', 'Ferritina', 'Transferrina', 'Ácido Fólico', 'Calcium Iônico',
+                            'Magnésio', 'Fósforo', 'Sódio', 'Potássio', 'Cloro', 'Bicarbonato',
+                            'Gasometria Arterial', 'Gasometria Venosa', 'Ecocardiograma', 'Doppler Venoso',
+                            'Doppler Arterial', 'Endoscopia Digestiva Alta', 'Colonoscopia', 'Colposcopia',
+                            'Biopsia de Pele', 'Biopsia de Mama', 'Biopsia de Colo Uterino', 'Teste de Esforço',
+                            'Holter 24h', 'Mapa 24h', 'Polissonografia', 'Teste de Função Pulmonar',
+                            'Teste de Audição', 'Teste de Visão', 'Teste de Glicose Tolerância Oral (OGTT)',
+                            'Teste de Estresse', 'Teste de Esforço Cardíaco', 'Teste de Função Hepática',
+                            'Teste de Função Renal', 'Teste de Função Tireoidiana', 'Teste de Função Adrenal',
+                            'Teste de Função Gonadal', 'Teste de Função Pancreática', 'Tomografia Computadorizada (TC)',
+                            'Ressonância Magnética (RM)', 'Cintilografia (Miocárdica, Óssea, Pulmonar)', 'Densitometria Óssea',
+                            'Marcadores Tumorais (CEA, CA-125, PSA, AFP)', 'Anticorpos Antinucleares (FAN)', 'Tempo de Tromboplastina Parcial Ativado (TTPA)',
+                            'Tempo de Sangria', 'Reticulócitos', 'Desidrogenase Lática (DHL)', 'Amilase',
+                            'Lipase', 'Imunoglobulinas (IgA, IgG, IgM)', 'Fator Reumatoide', 'Proteína S',
+                            'Proteína C', 'Eletroencefalograma (EEG)', 'Cateterismo Cardíaco', 'Broncoscopia',
+                            'Uretrocistoscopia', 'Teste Alérgico (Prick Test)', 'Eletroneuromiografia (ENMG)', 'Mapeamento de Retina',
+                            'Tonometria', 'Análise de Líquor', 'Cultura de Secreções (Vaginal, Uretral, Ferida)', 'PCR (Reação em Cadeia da Polimerase)',
+                            'Teste Genético', 'Dosagem Sérica de Medicamentos (ex: Lítio, Fenobarbital)', 'Biópsia Hepática', 'Outros'
                             ];
                             @endphp
-                            
+
                             @foreach($exames as $exame)
                             <div class="exame-item" data-exame="{{ $exame }}">
                                 <label class="checkbox-item">
@@ -505,21 +523,72 @@
                         <div id="listaMedicamentos" class="checkbox-list">
                             @php
                             $tiposMedicamento = [
-                                'Analgésico', 'Anti-inflamatório', 'Antibiótico', 'Antiviral', 'Antifúngico',
-                                'Antihistamínico', 'Broncodilatador', 'Corticosteroide', 'Anti-hipertensivo',
-                                'Diurético', 'Antidiabético', 'Anticonvulsivante', 'Antidepressivo', 'Ansiolítico',
-                                'Vitamina', 'Suplemento', 'Outros'
+                            'Analgésico',
+                            'Anestésico',
+                            'Antiagregante Plaquetário',
+                            'Anticoncepcional',
+                            'Anticonvulsivante',
+                            'Antidiabético',
+                            'Antidiarreico',
+                            'Antiemético',
+                            'Antiespasmódico',
+                            'Antifúngico',
+                            'Antihistamínico',
+                            'Anti-hipertensivo',
+                            'Anti-inflamatório',
+                            'Antimigranoso',
+                            'Antiparasitário',
+                            'Antiparkinsoniano',
+                            'Antipsicótico',
+                            'Antiviral',
+                            'Betabloqueador',
+                            'Bloqueador dos Canais de Cálcio',
+                            'Broncodilatador',
+                            'BRA (Bloqueador do Receptor da Angiotensina)',
+                            'Corticosteroide',
+                            'Corticoide Inalatório',
+                            'Diurético',
+                            'Estabilizador de Humor',
+                            'Expectorante',
+                            'Fitoterápico',
+                            'Hormônio Tireoidiano',
+                            'IECA (Inibidor da ECA)',
+                            'Imunossupressor',
+                            'Insulina',
+                            'Laxante',
+                            'Mucolítico',
+                            'Protetor Gástrico',
+                            'Relaxante Muscular',
+                            'Solução para Hidratação',
+                            'Soro Antiveneno',
+                            'Statinas (para controle de colesterol)',
+                            'Suplemento',
+                            'Terapia de Reposição Hormonal',
+                            'Tópico Dermatológico',
+                            'Vacina',
+                            'Vasodilatador',
+                            'Vitamina',
+                            'Outros'
                             ];
 
                             $medicamentos = [
-                                'Paracetamol', 'Dipirona', 'Ibuprofeno', 'Amoxicilina', 'Azitromicina',
-                                'Cefalexina', 'Ciprofloxacino', 'Omeprazol', 'Pantoprazol', 'Ranitidina',
-                                'Metoclopramida', 'Bromoprida', 'Domperidona', 'Diclofenaco', 'Nimesulida',
-                                'Prednisona', 'Dexametasona', 'Loratadina', 'Desloratadina', 'Cetirizina',
-                                'Captopril', 'Losartana', 'Enalapril', 'Sinvastatina', 'Atorvastatina',
-                                'Metformina', 'Glibenclamida', 'Levotiroxina', 'Sulfato Ferroso',
-                                'Vitamina C', 'Complexo B', 'Soro Fisiológico', 'Glicose 5%', 'Ringer Lactato',
-                                'Outros'
+                                'Aciclovir', 'Acetilcisteína', 'Ácido Valproico', 'Ácido Acetilsalicílico (AAS)', 'Alprazolam', 'Amitriptilina', 'Amoxicilina', 'Anlodipino',
+                                'Atenolol', 'Atorvastatina', 'Azatioprina', 'Azitromicina', 'Beclometasona', 'Biperideno', 'Budesonida', 'Buspirona',
+                                'Buscopam (Butilbrometo de Escopolamina)', 'Bupivacaína', 'Carbamazepina', 'Carvedilol', 'Captopril', 'Cetirizina', 'Cetoprofeno',
+                                'Cetoconazol', 'Ciclobenzaprina', 'Ciclosporina', 'Ciprofloxacino', 'Citalopram', 'Clindamicina', 'Clonazepam', 'Clopidogrel',
+                                'Clobetasol', 'Codeína', 'Coenzima Q10', 'Colecalciferol (Vitamina D)', 'Complexo B', 'Desloratadina', 'Desmopressina', 'Dexametasona',
+                                'Diazepam', 'Diclofenaco', 'Digoxina', 'Dimeticona', 'Dipirona', 'Doxiciclina', 'Domperidona', 'Enalapril',
+                                'Escitalopram', 'Esomeprazol', 'Espironolactona', 'Fenoterol', 'Fexofenadina', 'Fluconazol', 'Fluoxetina', 'Formoterol',
+                                'Furosemida', 'Gabapentina', 'Ginkgo Biloba', 'Ginseng', 'Glibenclamida', 'Gliclazida', 'Glucosamina', 'Hidroclorotiazida',
+                                'Hidrocortisona', 'Hioscina', 'Ibuprofeno', 'Insulina Glargina', 'Insulina NPH', 'Itraconazol', 'Lactulose', 'Lidocaína',
+                                'Loperamida', 'Loratadina', 'Losartana', 'Luteína', 'Magnésio', 'Metformina', 'Metoclopramida', 'Metotrexato',
+                                'Midazolam', 'Mirtazapina', 'Mupirocina', 'Naproxeno', 'Nistatina', 'Nitrofurantoína', 'Nimesulida', 'Olanzapina',
+                                'Omeprazol', 'Ondansetrona', 'Oseltamivir (Tamiflu)', 'Pantoprazol', 'Paracetamol', 'Piroxicam', 'Pregabalina', 'Prednisona',
+                                'Propranolol', 'Ranitidina', 'Risperidona', 'Rivabactam', 'Rivaroxabana', 'Salbutamol', 'Selegilina', 'Sertralina',
+                                'Sildenafil (Viagra)', 'Simeticona', 'Sinvastatina', 'Soro Fisiológico', 'Sulfato Ferroso', 'Topiramato', 'Tramadol', 'Trazodona',
+                                'Tiotrópio', 'Vacina BCG', 'Vacina contra COVID-19', 'Vacina contra Gripe', 'Vacina contra Hepatite B', 'Vacina Tríplice Viral', 'Valsartana',
+                                'Varfarina', 'Vitamina A', 'Vitamina C', 'Vitamina E', 'Zinco', 'Ômega-3', 'Outros'
+                            ];
                             ];
                             @endphp
 
@@ -553,11 +622,11 @@
                                             <i class="bi bi-droplet"></i>
                                             Dosagem:
                                         </label>
-                                        <input 
-                                            type="text" 
-                                            name="medicamento_dosagens[{{ $medicamento }}]" 
-                                            id="dosagem-medicamento-{{ str_replace(' ', '-', $medicamento) }}" 
-                                            class="medicamento-input" 
+                                        <input
+                                            type="text"
+                                            name="medicamento_dosagens[{{ $medicamento }}]"
+                                            id="dosagem-medicamento-{{ str_replace(' ', '-', $medicamento) }}"
+                                            class="medicamento-input"
                                             placeholder="Ex: 500mg"
                                             value="{{ old('medicamento_dosagens.'.$medicamento) }}">
                                     </div>
@@ -567,11 +636,11 @@
                                             <i class="bi bi-clock"></i>
                                             Frequência:
                                         </label>
-                                        <input 
-                                            type="text" 
-                                            name="medicamento_frequencias[{{ $medicamento }}]" 
-                                            id="frequencia-medicamento-{{ str_replace(' ', '-', $medicamento) }}" 
-                                            class="medicamento-input" 
+                                        <input
+                                            type="text"
+                                            name="medicamento_frequencias[{{ $medicamento }}]"
+                                            id="frequencia-medicamento-{{ str_replace(' ', '-', $medicamento) }}"
+                                            class="medicamento-input"
                                             placeholder="Ex: 8/8 horas"
                                             value="{{ old('medicamento_frequencias.'.$medicamento) }}">
                                     </div>
@@ -581,11 +650,11 @@
                                             <i class="bi bi-calendar"></i>
                                             Período:
                                         </label>
-                                        <input 
-                                            type="text" 
-                                            name="medicamento_periodos[{{ $medicamento }}]" 
-                                            id="periodo-medicamento-{{ str_replace(' ', '-', $medicamento) }}" 
-                                            class="medicamento-input" 
+                                        <input
+                                            type="text"
+                                            name="medicamento_periodos[{{ $medicamento }}]"
+                                            id="periodo-medicamento-{{ str_replace(' ', '-', $medicamento) }}"
+                                            class="medicamento-input"
                                             placeholder="Ex: 5 dias"
                                             value="{{ old('medicamento_periodos.'.$medicamento) }}">
                                     </div>
@@ -625,8 +694,7 @@
                                 name="orientacoes"
                                 rows="4"
                                 class="form-textarea"
-                                placeholder="Descreva orientações gerais, cuidados especiais, restrições alimentares, atividades recomendadas ou outras instruções importantes para o paciente..."
-                            >{{ old('orientacoes', $consulta->orientacoes ?? '') }}</textarea>
+                                placeholder="Descreva orientações gerais, cuidados especiais, restrições alimentares, atividades recomendadas ou outras instruções importantes para o paciente...">{{ old('orientacoes', $consulta->orientacoes ?? '') }}</textarea>
                             <div class="textarea-counter">
                                 <i class="bi bi-text-paragraph"></i>
                                 <span id="orientacoesCounter">0</span> caracteres
@@ -742,208 +810,208 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
- 
-    initializeForm();
-    setupTextareaCounters();
+    document.addEventListener('DOMContentLoaded', function() {
 
-    window.openConfirmModal = function() {
-        const modal = document.getElementById('confirmModal');
-        if (modal) {
-            modal.style.display = 'block';
-            setTimeout(() => modal.classList.add('active'), 10);
-            document.body.style.overflow = 'hidden';
-        }
-    }
+        initializeForm();
+        setupTextareaCounters();
 
-    window.closeConfirmModal = function() {
-        const modal = document.getElementById('confirmModal');
-        if (modal) {
-            modal.classList.remove('active');
-            setTimeout(() => modal.style.display = 'none', 300);
-            document.body.style.overflow = '';
-        }
-    }
-
-    window.submitForm = function() {
-        // Mostrar loading
-        const loading = document.getElementById('loadingOverlay');
-        if (loading) {
-            loading.style.display = 'block';
-            setTimeout(() => loading.classList.add('active'), 10);
-        }
-
-        // Processar dados dos exames
-        const examesSelecionados = [];
-        document.querySelectorAll('input[name="exames_solicitados[]"]:checked').forEach(ex => {
-            examesSelecionados.push(ex.value);
-        });
-        document.getElementById('examesSolicitadosHidden').value = examesSelecionados.join("\n");
-
-        // Processar dados dos medicamentos
-        const medicamentosSelecionados = [];
-        document.querySelectorAll('input[name="medicamentos_prescritos[]"]:checked').forEach(md => {
-            medicamentosSelecionados.push(md.value);
-        });
-        document.getElementById('medicamentosPrescritosHidden').value = medicamentosSelecionados.join("\n");
-
-        // Enviar formulário
-        setTimeout(() => {
-            document.getElementById('prontuarioForm').submit();
-        }, 1000);
-    }
-
-    // ===== FUNÇÕES DE DETALHES =====
-    window.toggleExameDetails = function(exame, isChecked) {
-        const detailsId = 'exame-details-' + exame.replace(/\s+/g, '-');
-        const detailsElement = document.getElementById(detailsId);
-        
-        if (detailsElement) {
-            if (isChecked) {
-                detailsElement.style.display = 'block';
-                // Focar no primeiro campo quando abrir
-                const firstInput = detailsElement.querySelector('select, input');
-                if (firstInput) {
-                    setTimeout(() => firstInput.focus(), 300);
-                }
-            } else {
-                detailsElement.style.display = 'none';
-                // Limpar campos quando desmarcar (opcional)
-                detailsElement.querySelectorAll('input, select').forEach(field => {
-                    if (field.type !== 'checkbox') {
-                        field.value = '';
-                    }
-                });
-            }
-        }
-    }
-
-    window.toggleMedicamentoDetails = function(medicamento, isChecked) {
-        const detailsId = 'medicamento-details-' + medicamento.replace(/\s+/g, '-');
-        const detailsElement = document.getElementById(detailsId);
-        
-        if (detailsElement) {
-            if (isChecked) {
-                detailsElement.style.display = 'block';
-                // Focar no primeiro campo quando abrir
-                const firstInput = detailsElement.querySelector('select, input');
-                if (firstInput) {
-                    setTimeout(() => firstInput.focus(), 300);
-                }
-            } else {
-                detailsElement.style.display = 'none';
-                // Limpar campos quando desmarcar (opcional)
-                detailsElement.querySelectorAll('input, select').forEach(field => {
-                    if (field.type !== 'checkbox') {
-                        field.value = '';
-                    }
-                });
-            }
-        }
-    }
-
-    function filterItems(inputId) {
-        const searchTerm = document.getElementById(inputId).value.toLowerCase();
-        const isExames = inputId === 'filtroExames';
-        const containerId = isExames ? 'listaExames' : 'listaMedicamentos';
-        
-        const items = document.querySelectorAll(`#${containerId} .${isExames ? 'exame-item' : 'medicamento-item'}`);
-        
-        items.forEach(item => {
-            const text = item.textContent.toLowerCase();
-            if (text.includes(searchTerm)) {
-                item.style.display = '';
-            } else {
-                item.style.display = 'none';
-            }
-        });
-    }
-
-    // ===== CONTADORES =====
-    function setupTextareaCounters() {
-        const textareas = {
-            'observacoes': 'observacoesCounter',
-            'descExame': 'descExameCounter',
-            'orientacoes': 'orientacoesCounter'
-        };
-
-        Object.keys(textareas).forEach(textareaId => {
-            const textarea = document.getElementById(textareaId);
-            const counter = document.getElementById(textareas[textareaId]);
-            
-            if (textarea && counter) {
-                // Atualizar contador inicial
-                counter.textContent = textarea.value.length;
-                
-                // Atualizar contador durante a digitação
-                textarea.addEventListener('input', function() {
-                    counter.textContent = this.value.length;
-                });
-            }
-        });
-    }
-
-    // ===== TRIAGEM EXPANDIR/RECOLHER =====
-    window.toggleTriagem = function() {
-        const container = document.getElementById('triagemContainer');
-        const button = document.querySelector('.btn-expand-triagem');
-        
-        if (container && button) {
-            container.classList.toggle('expanded');
-            const icon = button.querySelector('i');
-            const text = button.querySelector('span');
-            
-            if (container.classList.contains('expanded')) {
-                icon.className = 'bi bi-arrows-collapse';
-                text.textContent = 'Recolher';
-            } else {
-                icon.className = 'bi bi-arrows-expand';
-                text.textContent = 'Expandir';
-            }
-        }
-    }
-
-    function initializeForm() {
-        // Configurar eventos de busca
-        const filtroExames = document.getElementById('filtroExames');
-        if (filtroExames) {
-            filtroExames.addEventListener('input', function() {
-                filterItems('filtroExames');
-            });
-        }
-
-        const filtroMedicamentos = document.getElementById('filtroMedicamentos');
-        if (filtroMedicamentos) {
-            filtroMedicamentos.addEventListener('input', function() {
-                filterItems('filtroMedicamentos');
-            });
-        }
-
-        // Inicializar detalhes de itens já marcados
-        document.querySelectorAll('input[name="exames_solicitados[]"]:checked').forEach(checkbox => {
-            toggleExameDetails(checkbox.value, true);
-        });
-
-        document.querySelectorAll('input[name="medicamentos_prescritos[]"]:checked').forEach(checkbox => {
-            toggleMedicamentoDetails(checkbox.value, true);
-        });
-
-        // Event listeners para fechar modal
-        document.addEventListener('click', function(event) {
+        window.openConfirmModal = function() {
             const modal = document.getElementById('confirmModal');
-            if (modal && event.target === modal.querySelector('.modal-backdrop')) {
-                closeConfirmModal();
+            if (modal) {
+                modal.style.display = 'block';
+                setTimeout(() => modal.classList.add('active'), 10);
+                document.body.style.overflow = 'hidden';
             }
-        });
+        }
 
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeConfirmModal();
+        window.closeConfirmModal = function() {
+            const modal = document.getElementById('confirmModal');
+            if (modal) {
+                modal.classList.remove('active');
+                setTimeout(() => modal.style.display = 'none', 300);
+                document.body.style.overflow = '';
             }
-        });
-    }
+        }
 
-    console.log('✅ Sistema de Prontuário carregado com sucesso!');
-});
+        window.submitForm = function() {
+            // Mostrar loading
+            const loading = document.getElementById('loadingOverlay');
+            if (loading) {
+                loading.style.display = 'block';
+                setTimeout(() => loading.classList.add('active'), 10);
+            }
+
+            // Processar dados dos exames
+            const examesSelecionados = [];
+            document.querySelectorAll('input[name="exames_solicitados[]"]:checked').forEach(ex => {
+                examesSelecionados.push(ex.value);
+            });
+            document.getElementById('examesSolicitadosHidden').value = examesSelecionados.join("\n");
+
+            // Processar dados dos medicamentos
+            const medicamentosSelecionados = [];
+            document.querySelectorAll('input[name="medicamentos_prescritos[]"]:checked').forEach(md => {
+                medicamentosSelecionados.push(md.value);
+            });
+            document.getElementById('medicamentosPrescritosHidden').value = medicamentosSelecionados.join("\n");
+
+            // Enviar formulário
+            setTimeout(() => {
+                document.getElementById('prontuarioForm').submit();
+            }, 1000);
+        }
+
+        // ===== FUNÇÕES DE DETALHES =====
+        window.toggleExameDetails = function(exame, isChecked) {
+            const detailsId = 'exame-details-' + exame.replace(/\s+/g, '-');
+            const detailsElement = document.getElementById(detailsId);
+
+            if (detailsElement) {
+                if (isChecked) {
+                    detailsElement.style.display = 'block';
+                    // Focar no primeiro campo quando abrir
+                    const firstInput = detailsElement.querySelector('select, input');
+                    if (firstInput) {
+                        setTimeout(() => firstInput.focus(), 300);
+                    }
+                } else {
+                    detailsElement.style.display = 'none';
+                    // Limpar campos quando desmarcar (opcional)
+                    detailsElement.querySelectorAll('input, select').forEach(field => {
+                        if (field.type !== 'checkbox') {
+                            field.value = '';
+                        }
+                    });
+                }
+            }
+        }
+
+        window.toggleMedicamentoDetails = function(medicamento, isChecked) {
+            const detailsId = 'medicamento-details-' + medicamento.replace(/\s+/g, '-');
+            const detailsElement = document.getElementById(detailsId);
+
+            if (detailsElement) {
+                if (isChecked) {
+                    detailsElement.style.display = 'block';
+                    // Focar no primeiro campo quando abrir
+                    const firstInput = detailsElement.querySelector('select, input');
+                    if (firstInput) {
+                        setTimeout(() => firstInput.focus(), 300);
+                    }
+                } else {
+                    detailsElement.style.display = 'none';
+                    // Limpar campos quando desmarcar (opcional)
+                    detailsElement.querySelectorAll('input, select').forEach(field => {
+                        if (field.type !== 'checkbox') {
+                            field.value = '';
+                        }
+                    });
+                }
+            }
+        }
+
+        function filterItems(inputId) {
+            const searchTerm = document.getElementById(inputId).value.toLowerCase();
+            const isExames = inputId === 'filtroExames';
+            const containerId = isExames ? 'listaExames' : 'listaMedicamentos';
+
+            const items = document.querySelectorAll(`#${containerId} .${isExames ? 'exame-item' : 'medicamento-item'}`);
+
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // ===== CONTADORES =====
+        function setupTextareaCounters() {
+            const textareas = {
+                'observacoes': 'observacoesCounter',
+                'descExame': 'descExameCounter',
+                'orientacoes': 'orientacoesCounter'
+            };
+
+            Object.keys(textareas).forEach(textareaId => {
+                const textarea = document.getElementById(textareaId);
+                const counter = document.getElementById(textareas[textareaId]);
+
+                if (textarea && counter) {
+                    // Atualizar contador inicial
+                    counter.textContent = textarea.value.length;
+
+                    // Atualizar contador durante a digitação
+                    textarea.addEventListener('input', function() {
+                        counter.textContent = this.value.length;
+                    });
+                }
+            });
+        }
+
+        // ===== TRIAGEM EXPANDIR/RECOLHER =====
+        window.toggleTriagem = function() {
+            const container = document.getElementById('triagemContainer');
+            const button = document.querySelector('.btn-expand-triagem');
+
+            if (container && button) {
+                container.classList.toggle('expanded');
+                const icon = button.querySelector('i');
+                const text = button.querySelector('span');
+
+                if (container.classList.contains('expanded')) {
+                    icon.className = 'bi bi-arrows-collapse';
+                    text.textContent = 'Recolher';
+                } else {
+                    icon.className = 'bi bi-arrows-expand';
+                    text.textContent = 'Expandir';
+                }
+            }
+        }
+
+        function initializeForm() {
+            // Configurar eventos de busca
+            const filtroExames = document.getElementById('filtroExames');
+            if (filtroExames) {
+                filtroExames.addEventListener('input', function() {
+                    filterItems('filtroExames');
+                });
+            }
+
+            const filtroMedicamentos = document.getElementById('filtroMedicamentos');
+            if (filtroMedicamentos) {
+                filtroMedicamentos.addEventListener('input', function() {
+                    filterItems('filtroMedicamentos');
+                });
+            }
+
+            // Inicializar detalhes de itens já marcados
+            document.querySelectorAll('input[name="exames_solicitados[]"]:checked').forEach(checkbox => {
+                toggleExameDetails(checkbox.value, true);
+            });
+
+            document.querySelectorAll('input[name="medicamentos_prescritos[]"]:checked').forEach(checkbox => {
+                toggleMedicamentoDetails(checkbox.value, true);
+            });
+
+            // Event listeners para fechar modal
+            document.addEventListener('click', function(event) {
+                const modal = document.getElementById('confirmModal');
+                if (modal && event.target === modal.querySelector('.modal-backdrop')) {
+                    closeConfirmModal();
+                }
+            });
+
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    closeConfirmModal();
+                }
+            });
+        }
+
+        console.log('✅ Sistema de Prontuário carregado com sucesso!');
+    });
 </script>
 @endsection
