@@ -45,8 +45,7 @@
                 </div>
             </div>
         </div>
-
-        {{-- MÉTRICAS E SUS --}}
+        
         <div class="content-wrapper">
             <div class="metrics">
                 <div class="metric-card slide-up" style="animation-delay: 0.2s;">
@@ -69,7 +68,6 @@
                     </div>
                 </div>
 
-                {{-- CONSULTAS HOJE --}}
                 <div class="metric-card metric-card-highlight slide-up" style="animation-delay: 0.35s;">
                     <div class="metric-icon">
                         <i class="bi bi-calendar-check"></i>
@@ -80,7 +78,6 @@
                     </div>
                 </div>
 
-                {{-- MÉDIA DIÁRIA --}}
                 <div class="metric-card metric-card-info slide-up" style="animation-delay: 0.4s;">
                     <div class="metric-icon">
                         <i class="bi bi-graph-up-arrow"></i>
@@ -92,14 +89,8 @@
                 </div>
             </div>
 
-            <div class="sus-logo-container slide-up" style="animation-delay: 0.45s;">
-                <i class="bi bi-hospital sus-icon"></i>
-                <span class="sus-text">SUS</span>
-                <p>Sistema Único de Saúde</p>
-            </div>
         </div>
 
-        {{-- 🆕 SEÇÃO DE AÇÕES RÁPIDAS --}}
         <div class="quick-actions-section slide-up" style="animation-delay: 0.5s;">
             <div class="section-header">
                 <div class="header-title-group">
@@ -292,39 +283,6 @@
                                 <div class="legend-item">
                                     <span class="legend-color" style="background: #ccc;"></span>
                                     <span>Nenhum dado disponível</span>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-
-                {{-- GRÁFICO DE TIPOS DE ATENDIMENTO --}}
-                <div class="chart-card chart-card-small slide-up" style="animation-delay: 1.1s;">
-                    <div class="chart-header">
-                        <div class="chart-title">
-                            <i class="bi bi-pie-chart-fill"></i>
-                            <h3>Tipos de Atendimento</h3>
-                        </div>
-                    </div>
-                    <div class="chart-body chart-body-donut">
-                        <canvas id="graficoDonut"></canvas>
-                    </div>
-                    <div class="chart-footer">
-                        <div class="legend-row">
-                            @if(isset($tiposAtendimento) && count($tiposAtendimento) > 0)
-                                @foreach($tiposAtendimento as $index => $item)
-                                    @php
-                                        $color = $index == 0 ? '#8c1007' : '#a33e38';
-                                    @endphp
-                                    <div class="legend-item">
-                                        <span class="legend-color" style="background: {{ $color }};"></span>
-                                        <span>{{ $item->label ?? 'N/D' }} ({{ $item->total ?? 0 }})</span>
-                                    </div>
-                                @endforeach
-                            @else
-                                <div class="legend-item">
-                                    <span class="legend-color" style="background: #ccc;"></span>
-                                    <span>Nenhum dado de atendimento</span>
                                 </div>
                             @endif
                         </div>

@@ -40,16 +40,6 @@
                     <span class="metric-value">{{ $enfermeiros->where('usuario.statusAtivoUsuario', 0)->count() }}</span>
                 </div>
             </div>
-
-            <div class="metric-card new">
-                <div class="metric-icon">
-                    <i class="bi bi-star-fill"></i>
-                </div>
-                <div class="metric-info">
-                    <span class="metric-label">Novos este Mês</span>
-                    <span class="metric-value">{{ $enfermeiros->where('created_at', '>=', now()->startOfMonth())->count() }}</span>
-                </div>
-            </div>
         </div>
 
         <!-- HEADER COM TÍTULO E AÇÕES -->
@@ -60,9 +50,6 @@
             </div>
             
             <div class="header-actions">
-                <button onclick="exportToExcel()" class="btn-export" title="Exportar para Excel">
-                    <i class="bi bi-file-earmark-spreadsheet"></i> Exportar
-                </button>
                 <a href="{{ route('unidade.enfermeiro.create') }}" class="btn-add-enfermeiro">
                     <i class="bi bi-plus-circle"></i> Cadastrar Enfermeiro
                 </a>

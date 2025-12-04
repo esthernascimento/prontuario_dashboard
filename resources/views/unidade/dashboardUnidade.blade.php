@@ -6,37 +6,10 @@
 
 @php
 $unidade = auth()->guard('unidade')->user();
-
 $nomeUnidade = $unidade->nomeUnidade ?? 'Unidade de Saúde';
-
 $medicosCount = $medicosCount ?? 15;
 $nursesCount = $nursesCount ?? 22;
 $recepcionistasCount = $recepcionistasCount ?? 8;
-
-$medicosPorEspecialidade = $medicosPorEspecialidade ?? [
-['especialidadeMedico' => 'Clínica Geral', 'total' => 5],
-['especialidadeMedico' => 'Pediatria', 'total' => 3],
-['especialidadeMedico' => 'Cardiologia', 'total' => 4],
-['especialidadeMedico' => 'Ginecologia', 'total' => 3],
-];
-
-$consultasMensal = $consultasMensal ?? [
-'meses' => ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-'totais' => [120, 155, 180, 200, 235, 260],
-];
-
-$dadosGenero = $dadosGenero ?? [
-'Homens' => 45,
-'Mulheres' => 55,
-];
-
-$consultasPorMedico = $consultasPorMedico ?? [
-['nome' => 'Dr. Gregory House', 'media' => 8.5, 'totalConsultas' => 187],
-['nome' => 'Dra. Meredith Grey', 'media' => 7.2, 'totalConsultas' => 158],
-['nome' => 'Dr. Doug Ross', 'media' => 6.8, 'totalConsultas' => 149],
-['nome' => 'Dra. Cristina Yang', 'media' => 6.5, 'totalConsultas' => 143],
-['nome' => 'Dr. John Carter', 'media' => 5.9, 'totalConsultas' => 129],
-];
 @endphp
 
 <link rel="stylesheet" href="{{ asset('css/unidade/dashboardUnidade.css') }}">
@@ -193,7 +166,6 @@ $consultasPorMedico = $consultasPorMedico ?? [
                             <span class="legend-color" style="background: #DC2626;"></span>
                             <span>Mulheres: {{ $dadosGenero['Mulheres'] ?? 0 }}</span>
                         </div>
-
                         <div class="legend-item">
                             <span class="legend-color" style="background: #FFA500;"></span>
                             <span>Outros: {{ $dadosGenero['Outros'] ?? 0 }}</span>
@@ -223,11 +195,65 @@ $consultasPorMedico = $consultasPorMedico ?? [
                 </div>
             </div>
 
+            {{-- GRÁFICO NOVO 1: Produtividade por Especialidade --}}
+            <div class="chart-card slide-up" style="animation-delay: 1.1s;">
+                <div class="chart-header">
+                    <div class="chart-title">
+                        <i class="bi bi-lightning-charge"></i>
+                        <h3>Produtividade por Especialidade</h3>
+                    </div>
+                    <button class="chart-options" title="Opções do Gráfico">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                </div>
+                <div class="chart-body">
+                    <canvas id="graficoProdutividade" role="img" aria-label="Gráfico de Produtividade por Especialidade"></canvas>
+                </div>
+                <div class="chart-footer">
+                    <span class="chart-info">
+                        <i class="bi bi-info-circle"></i>
+                        Consultas realizadas por especialidade no mês atual
+                    </span>
+                </div>
+            </div>
+
+            {{-- GRÁFICO NOVO 2: Composição da Equipe --}}
+            <div class="chart-card chart-card-small slide-up" style="animation-delay: 1.2s;">
+                <div class="chart-header">
+                    <div class="chart-title">
+                        <i class="bi bi-pie-chart-fill"></i>
+                        <h3>Composição da Equipe</h3>
+                    </div>
+                    <button class="chart-options" title="Opções do Gráfico">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                </div>
+                <div class="chart-body chart-body-donut">
+                    <canvas id="graficoComposicao" role="img" aria-label="Gráfico de Composição da Equipe"></canvas>
+                </div>
+                <div class="chart-footer">
+                    <div class="legend-row" aria-label="Legenda da Equipe">
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #8c1007;"></span>
+                            <span>Médicos: {{ $composicaoEquipe['totais'][0] }} ({{ $composicaoEquipe['percentuais'][0] ?? 0 }}%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #0a400c';"></span>
+                            <span>Enfermeiros: {{ $composicaoEquipe['totais'][1] }} ({{ $composicaoEquipe['percentuais'][1] ?? 0 }}%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #606060;"></span>
+                            <span>Recepcionistas: {{ $composicaoEquipe['totais'][2] }} ({{ $composicaoEquipe['percentuais'][2] ?? 0 }}%)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <div class="info-section">
-        <div class="info-card-large slide-up" style="animation-delay: 1.1s;">
+        <div class="info-card-large slide-up" style="animation-delay: 1.3s;">
             <div class="info-icon">
                 <i class="bi bi-info-circle-fill"></i>
             </div>
@@ -243,7 +269,7 @@ $consultasPorMedico = $consultasPorMedico ?? [
             </div>
         </div>
 
-        <div class="info-card-small slide-up" style="animation-delay: 1.2s;">
+        <div class="info-card-small slide-up" style="animation-delay: 1.4s;">
             <div class="support-content">
                 <i class="bi bi-headset"></i>
                 <h4>Precisa de Ajuda?</h4>
@@ -278,6 +304,7 @@ $consultasPorMedico = $consultasPorMedico ?? [
         return colors;
     };
 
+    // Gráfico: Médicos por Especialidade
     const ctxEspecialidade = document.getElementById('graficoEspecialidades');
     if (ctxEspecialidade) {
         const especialidadesData = @json($medicosPorEspecialidade);
@@ -304,9 +331,7 @@ $consultasPorMedico = $consultasPorMedico ?? [
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        display: false
-                    },
+                    legend: { display: false },
                     tooltip: {
                         backgroundColor: '#111827',
                         callbacks: {
@@ -317,20 +342,17 @@ $consultasPorMedico = $consultasPorMedico ?? [
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: {
-                            color: 'rgba(0,0,0,0.08)'
-                        }
+                        grid: { color: 'rgba(0,0,0,0.08)' }
                     },
                     x: {
-                        grid: {
-                            display: false
-                        }
+                        grid: { display: false }
                     }
                 }
             }
         });
     }
 
+    // Gráfico: Evolução de Consultas
     const ctxLinha = document.getElementById('graficoLinha');
     if (ctxLinha) {
         const consultasMensal = @json($consultasMensal);
@@ -359,9 +381,7 @@ $consultasPorMedico = $consultasPorMedico ?? [
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        display: false
-                    },
+                    legend: { display: false },
                     tooltip: {
                         backgroundColor: '#111827',
                         callbacks: {
@@ -372,20 +392,17 @@ $consultasPorMedico = $consultasPorMedico ?? [
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: {
-                            color: 'rgba(0,0,0,0.08)'
-                        }
+                        grid: { color: 'rgba(0,0,0,0.08)' }
                     },
                     x: {
-                        grid: {
-                            display: false
-                        }
+                        grid: { display: false }
                     }
                 }
             }
         });
     }
 
+    // Gráfico: Distribuição por Gênero
     const ctxGenero = document.getElementById('graficoDonutGenero');
     if (ctxGenero) {
         const dadosGenero = @json($dadosGenero);
@@ -414,9 +431,7 @@ $consultasPorMedico = $consultasPorMedico ?? [
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        display: false
-                    },
+                    legend: { display: false },
                     tooltip: {
                         backgroundColor: '#111827',
                         callbacks: {
@@ -433,6 +448,7 @@ $consultasPorMedico = $consultasPorMedico ?? [
         });
     }
 
+    // Gráfico: Consultas por Médico
     const ctxConsultasMedico = document.getElementById('graficoConsultasPorMedico');
     if (ctxConsultasMedico) {
         const consultasPorMedicoData = @json($consultasPorMedico);
@@ -460,9 +476,7 @@ $consultasPorMedico = $consultasPorMedico ?? [
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        display: false
-                    },
+                    legend: { display: false },
                     tooltip: {
                         backgroundColor: '#111827',
                         callbacks: {
@@ -473,13 +487,143 @@ $consultasPorMedico = $consultasPorMedico ?? [
                 scales: {
                     x: {
                         beginAtZero: true,
-                        grid: {
-                            color: 'rgba(0,0,0,0.08)'
-                        }
+                        grid: { color: 'rgba(0,0,0,0.08)' }
                     },
                     y: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    }
+
+    const ctxProdutividade = document.getElementById('graficoProdutividade');
+    if (ctxProdutividade) {
+        const produtividadeData = @json($produtividadeEspecialidade);
+        const labels = produtividadeData.map(item => item.especialidade);
+        const consultas = produtividadeData.map(item => item.consultas);
+        const mediaPorMedico = produtividadeData.map(item => item.mediaPorMedico);
+
+        new Chart(ctxProdutividade, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Total de Consultas',
+                        data: consultas,
+                        backgroundColor: '#0a400c',
+                        borderColor: '#0a400c',
+                        borderWidth: 2,
+                        borderRadius: 6,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Média por Médico',
+                        data: mediaPorMedico,
+                        backgroundColor: '#8c1007',
+                        borderColor: '#8c1007',
+                        borderWidth: 2,
+                        borderRadius: 6,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        backgroundColor: '#111827',
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += context.parsed.y;
+                                if (context.datasetIndex === 0) {
+                                    label += ' consultas';
+                                } else {
+                                    label += ' consultas/médico';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Total de Consultas'
+                        },
+                        grid: { color: 'rgba(0,0,0,0.08)' }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Média por Médico'
+                        },
                         grid: {
-                            display: false
+                            drawOnChartArea: false,
+                        }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    }
+
+    const ctxComposicao = document.getElementById('graficoComposicao');
+    if (ctxComposicao) {
+        const composicaoData = @json($composicaoEquipe);
+        const total = composicaoData.totais.reduce((a, b) => a + b, 0);
+
+        new Chart(ctxComposicao, {
+            type: 'doughnut',
+            data: {
+                labels: composicaoData.categorias,
+                datasets: [{
+                    data: composicaoData.totais,
+                    backgroundColor: ['#8c1007', '#0a400c', '#606060'],
+                    borderColor: '#fff',
+                    borderWidth: 4,
+                    hoverOffset: 12
+                }]
+            },
+            options: {
+                cutout: '65%',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#111827',
+                        callbacks: {
+                            label: context => {
+                                const value = context.parsed;
+                                const perc = ((value / total) * 100).toFixed(1);
+                                return `${context.label}: ${value} profissionais (${perc}%)`;
+                            }
                         }
                     }
                 }
@@ -487,7 +631,7 @@ $consultasPorMedico = $consultasPorMedico ?? [
         });
     }
 
-
+    // Animações de Scroll
     const observerOptions = {
         root: null,
         rootMargin: '0px',

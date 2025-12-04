@@ -41,15 +41,6 @@
                 </div>
             </div>
 
-            <div class="metric-card new">
-                <div class="metric-icon">
-                    <i class="bi bi-star-fill"></i>
-                </div>
-                <div class="metric-info">
-                    <span class="metric-label">NOVOS ESTE MÊS</span>
-                    <span class="metric-value">{{ $medicos->where('created_at', '>=', now()->subMonth())->count() }}</span>
-                </div>
-            </div>
         </div>
 
 
@@ -60,9 +51,6 @@
             </div>
             
             <div class="header-actions">
-                <button onclick="exportToExcel()" class="btn-export" title="Exportar para Excel">
-                    <i class="bi bi-file-earmark-spreadsheet"></i> Exportar
-                </button>
                 <a href="{{ route('unidade.medicos.create') }}" class="btn-add-medico">
                     <i class="bi bi-plus-circle"></i> Cadastrar Médico
                 </a>

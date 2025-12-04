@@ -26,11 +26,9 @@ class DashboardController extends Controller
         $unidadeId = $unidade->idUnidadePK;
         $periodoMeses = 6; 
 
-
         $medicosCount = $unidade->medicos()->count();
         $nursesCount = $unidade->enfermeiros()->count();
         $recepcionistasCount = $unidade->recepcionistas()->count();
-
 
         $medicosPorEspecialidade = DB::table('tbMedico')
             ->join('tbMedicoUnidade', 'tbMedico.idMedicoPK', '=', 'tbMedicoUnidade.idMedicoFK')
@@ -40,16 +38,13 @@ class DashboardController extends Controller
             ->orderBy('total', 'desc')
             ->get();
 
-        
-            $mesesData = collect();
+        $mesesData = collect();
         for ($i = $periodoMeses - 1; $i >= 0; $i--) {
             $mes = Carbon::now()->subMonths($i);
-
             $mes->locale('pt_BR');
             $mesesData->put($mes->format('Y-m'), $mes->shortMonthName);
         }
 
-      
         $consultasMensais = DB::table('tbConsulta') 
             ->where('idUnidadeFK', $unidadeId)
             ->where('status_atendimento', 'FINALIZADO')
@@ -62,8 +57,7 @@ class DashboardController extends Controller
             ->get()
             ->keyBy('mes_ano');
 
-
-            $consultasMensal = [ 
+        $consultasMensal = [ 
             'meses' => $mesesData->values()->toArray(), 
             'totais' => [], 
         ];
@@ -72,8 +66,6 @@ class DashboardController extends Controller
             $consultasMensal['totais'][] = $consultasMensais->get($chaveMes)->total_consultas ?? 0;
         } 
 
-
-        
         $generoMedicos = $unidade->medicos()
             ->select('genero', DB::raw('COUNT(*) as total'))
             ->groupBy('genero')
@@ -86,25 +78,23 @@ class DashboardController extends Controller
             ->pluck('total', 'genero')
             ->toArray();
 
-
-            $generoRecepcionistas = $unidade->recepcionistas()
+        $generoRecepcionistas = $unidade->recepcionistas()
             ->select('genero', DB::raw('COUNT(*) as total'))
             ->groupBy('genero')
             ->pluck('total', 'genero')
             ->toArray();
 
-
-            $totalHomens = ($generoMedicos['Masculino'] ?? 0) + 
-                        ($generoEnfermeiros['Masculino'] ?? 0) + 
-                        ($generoRecepcionistas['Masculino'] ?? 0);
+        $totalHomens = ($generoMedicos['Masculino'] ?? 0) + 
+                    ($generoEnfermeiros['Masculino'] ?? 0) + 
+                    ($generoRecepcionistas['Masculino'] ?? 0);
 
         $totalMulheres = ($generoMedicos['Feminino'] ?? 0) + 
-                            ($generoEnfermeiros['Feminino'] ?? 0) + 
-                            ($generoRecepcionistas['Feminino'] ?? 0);
-               
-          $totaloutros = ($generoMedicos['Outro'] ?? 0) + 
-                            ($generoEnfermeiros['Outro'] ?? 0) + 
-                            ($generoRecepcionistas['Outro'] ?? 0);                  
+                        ($generoEnfermeiros['Feminino'] ?? 0) + 
+                        ($generoRecepcionistas['Feminino'] ?? 0);
+           
+        $totaloutros = ($generoMedicos['Outro'] ?? 0) + 
+                        ($generoEnfermeiros['Outro'] ?? 0) + 
+                        ($generoRecepcionistas['Outro'] ?? 0);                  
 
         $dadosGenero = [
             'Homens' => $totalHomens,
@@ -112,17 +102,12 @@ class DashboardController extends Controller
             'Outros' => $totaloutros
         ];
 
-        
-
         $medicosDaUnidade = $unidade->medicos()->get(['idMedicoPK', 'nomeMedico']);
 
         $medicosData = [];
         if ($medicosDaUnidade->isNotEmpty()) {
-
-
             $dataInicial = Carbon::now()->startOfMonth()->toDateString(); 
             $dataFinal = Carbon::now()->endOfMonth()->toDateString();   
-
 
             $consultasPorMedicoQuery = DB::table('tbConsulta')
                 ->where('idUnidadeFK', $unidadeId)
@@ -133,12 +118,9 @@ class DashboardController extends Controller
                 ->get()
                 ->keyBy('idMedicoFK');
 
-
-                foreach ($medicosDaUnidade as $medico) {
+            foreach ($medicosDaUnidade as $medico) {
                 $consultas = $consultasPorMedicoQuery->get($medico->idMedicoPK)->total_consultas ?? 0;
-                
                 $diasUteisNoMes = 22; 
-
                 $media = $diasUteisNoMes > 0 ? round($consultas / $diasUteisNoMes, 1) : 0;
                 
                 $medicosData[] = [
@@ -151,6 +133,49 @@ class DashboardController extends Controller
         
         $consultasPorMedico = collect($medicosData)->sortByDesc('media')->values()->toArray();
 
+        // ============================================================
+        // GRÁFICO 1: Produtividade por Especialidade
+        // Mostra quantas consultas cada especialidade realizou
+        // ============================================================
+        $produtividadeEspecialidade = [];
+        foreach ($medicosPorEspecialidade as $especialidade) {
+            $consultasDaEspecialidade = DB::table('tbConsulta')
+                ->join('tbMedico', 'tbConsulta.idMedicoFK', '=', 'tbMedico.idMedicoPK')
+                ->where('tbConsulta.idUnidadeFK', $unidadeId)
+                ->where('tbConsulta.status_atendimento', 'FINALIZADO')
+                ->where('tbMedico.especialidadeMedico', $especialidade->especialidadeMedico)
+                ->whereBetween('tbConsulta.dataConsulta', [
+                    Carbon::now()->startOfMonth()->toDateString(),
+                    Carbon::now()->endOfMonth()->toDateString()
+                ])
+                ->count();
+
+            $produtividadeEspecialidade[] = [
+                'especialidade' => $especialidade->especialidadeMedico,
+                'consultas' => $consultasDaEspecialidade,
+                'medicos' => $especialidade->total,
+                'mediaPorMedico' => $especialidade->total > 0 ? round($consultasDaEspecialidade / $especialidade->total, 1) : 0
+            ];
+        }
+
+        // ============================================================
+        // GRÁFICO 2: Distribuição da Equipe por Categoria
+        // Mostra composição do time: Médicos, Enfermeiros, Recepcionistas
+        // ============================================================
+        $composicaoEquipe = [
+            'categorias' => ['Médicos', 'Enfermeiros', 'Recepcionistas'],
+            'totais' => [$medicosCount, $nursesCount, $recepcionistasCount],
+            'percentuais' => []
+        ];
+
+        $totalProfissionais = $medicosCount + $nursesCount + $recepcionistasCount;
+        if ($totalProfissionais > 0) {
+            $composicaoEquipe['percentuais'] = [
+                round(($medicosCount / $totalProfissionais) * 100, 1),
+                round(($nursesCount / $totalProfissionais) * 100, 1),
+                round(($recepcionistasCount / $totalProfissionais) * 100, 1)
+            ];
+        }
 
         return view('unidade.dashboardUnidade', compact(
             'nomeUnidade',
@@ -160,7 +185,9 @@ class DashboardController extends Controller
             'medicosPorEspecialidade',
             'consultasMensal', 
             'dadosGenero',
-            'consultasPorMedico'
+            'consultasPorMedico',
+            'produtividadeEspecialidade',
+            'composicaoEquipe'
         ));
     }
 }
