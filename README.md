@@ -1,66 +1,53 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🏥 Prontuário+ | Sistema de Unificação de Prontuários do SUS
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Trabalho de Conclusão de Curso (TCC) desenvolvido pela Wisys na ETEC de Guaianazes (Fev/2025 – Dez/2025), com foco na integração, unificação e segurança dos prontuários médicos do Sistema Único de Saúde (SUS).
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🛠️ Tecnologias e Ferramentas
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+O projeto foi construído utilizando uma stack robusta para suportar o ecossistema web e mobile, seguindo metodologias ágeis de desenvolvimento:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* **Backend:** PHP / Laravel
+* **Banco de Dados:** MySQL
+* **Mobile:** React Native (App do Paciente)
+* **Frontend Web:** HTML5, CSS3, JavaScript
+* **Testes e Documentação:** Postman (Testes de API)
+* **Gestão de Projeto:** Metodologia Ágil (SCRUM)
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 💡 Sobre o Projeto
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+O Prontuário+ nasceu a partir da identificação de um dos maiores gargalos da saúde pública brasileira: a fragmentação das informações médicas entre diferentes unidades de saúde, o que impacta diretamente a eficiência do atendimento, a continuidade do cuidado e a segurança do paciente.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Mais do que um sistema, a plataforma representa uma proposta de modernização, integração tecnológica e humanização do atendimento no SUS, demonstrando como a engenharia de software pode gerar impacto social real, mantendo total conformidade com as diretrizes da LGPD.
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## 👥 Dashboards e Perfis de Acesso (Sistema Web)
 
-### Premium Partners
+A versão web da plataforma foi estruturada com 5 dashboards específicos, desenhados sob medida para otimizar os fluxos operacionais e a tomada de decisão de cada interveniente do sistema de saúde:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+* 🏛️ **Ministério da Saúde:** Visão macro e analítica para acompanhamento de indicadores epidemiológicos, fluxo de atendimento nacional e tomada de decisões estratégicas.
+* 🏥 **Unidade de Saúde:** Gestão administrativa do posto ou hospital, controle de leito, fluxo de pacientes e organização geral da unidade.
+* 👨‍⚕️ **Médico:** Acesso rápido ao prontuário unificado do paciente, histórico de exames, prescrições e registro de novas evoluções clínicas.
+* 🩺 **Enfermeiro:** Ferramentas de triagem, acompanhamento de sinais vitais, administração de cuidados e suporte direto à equipe médica.
+* 👩‍💼 **Recepcionista:** Gestão da fila de espera, confirmação de chegada, cadastro ágil de pacientes e direcionamento para os consultórios.
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 📱 Aplicativo Mobile (App do Paciente)
 
-## Code of Conduct
+Desenvolvido em React Native, o aplicativo foca na autonomia e no empoderamento do cidadão perante o seu próprio histórico de saúde:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+* Acesso facilitado ao próprio prontuário unificado.
+* Visualização de histórico de consultas, vacinas e exames realizados na rede pública.
+* Notificações e acompanhamento de agendamentos.
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 🔗 Links e Recursos do Projeto
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+* 📹 [Vídeo Pitch - Wisys](https://www.youtube.com/watch?v=R4VpaClc-nc)
+* 💻 [Repositório da Parte WEB](https://github.com/esthernascimento/prontuario_dashboard)
